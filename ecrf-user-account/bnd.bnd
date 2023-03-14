@@ -1,0 +1,5 @@
+Bundle-Name: ecrf-user-account
+Bundle-SymbolicName: ecrf.user.account
+Bundle-Version: 1.0.0
+Export-Package: ecrf.user.account.constants
+-privatepackage: selab.ecrf.user.constants
