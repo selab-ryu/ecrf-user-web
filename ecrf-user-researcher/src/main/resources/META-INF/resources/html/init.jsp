@@ -53,8 +53,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Iterator" %>
 
-<%@ page import="org.slf4j.Logger" %>
-<%@ page import="org.slf4j.LoggerFactory" %>
+<%@ page import="java.util.logging.Logger" %>
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 

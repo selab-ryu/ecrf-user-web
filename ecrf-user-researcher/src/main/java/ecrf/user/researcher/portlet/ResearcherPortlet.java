@@ -14,9 +14,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import selab.ecrf.user.constants.ECRFUserConstants;
-import selab.ecrf.user.constants.ECRFUserPortletKeys;
-import selab.ecrf.user.service.ResearcherLocalService;
+import ecrf.user.constants.ECRFUserConstants;
+import ecrf.user.constants.ECRFUserPortletKeys;
+import ecrf.user.service.ResearcherLocalService;
 
 /**
  * @author Ryu

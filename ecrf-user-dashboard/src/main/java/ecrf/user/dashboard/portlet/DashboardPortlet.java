@@ -6,7 +6,7 @@ import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
 
-import selab.ecrf.user.constants.ECRFUserPortletKeys;
+import ecrf.user.constants.ECRFUserPortletKeys;
 
 /**
  * @author Ryu

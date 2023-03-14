@@ -1,12 +1,12 @@
 package ecrf.user.patient.portlet;
 
-import ecrf.user.patient.constants.PatientPortletKeys;
-
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
+
+import ecrf.user.patient.constants.PatientPortletKeys;
 
 /**
  * @author Ryu

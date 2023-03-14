@@ -1,12 +1,20 @@
-<%@page import="selab.ecrf.user.constants.ECRFUserResearcherAttributes"%>
-<%@page import="selab.ecrf.user.constants.ECRFUserAttributes"%>
-<%@page import="selab.ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
+<%@page import="ecrf.user.constants.ECRFUserResearcherAttributes"%>
+<%@page import="ecrf.user.constants.ECRFUserAttributes"%>
+<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@page import="ecrf.user.model.Researcher" %>
 <%@ include file="../init.jsp" %>
 
 <%
-Logger _logger = LoggerFactory.getLogger(this.getClass().getName());
+Logger _logger = Logger.getLogger(this.getClass().getName());
 boolean isUpdate = false;
 
+long researcherId = ParamUtil.getLong(renderRequest, ECRFUserResearcherAttributes.RESEARCHER_ID);
+
+Researcher researcher = null;
+if(researcherId > 0) {
+	researcher = ResearcherLocalServiceUtil.getResearcher(researcherId);
+}
 
 %>
 
