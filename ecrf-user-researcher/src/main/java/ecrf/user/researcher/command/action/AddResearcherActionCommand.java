@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.service.MembershipRequestLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
@@ -20,6 +21,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.Calendar;
+import java.util.logging.Logger;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -30,8 +32,6 @@ import javax.servlet.http.HttpSession;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
@@ -52,7 +52,7 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		_logger = LoggerFactory.getLogger(this.getClass().getName());
+		_logger = Logger.getLogger(this.getClass().getName());
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -113,14 +113,21 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 		String position = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.POSITION);
 		
 		_logger.info("add Researcher with User");
-		Researcher researcher = _researcherLocalService.addResarcherWithUser(
+		Researcher researcher = null;
+		try {
+		researcher = _researcherLocalService.addResarcherWithUser(
 				company.getCompanyId(), facebookId, openId, languageId,
 				male, jobTitle, prefixId, suffixId,
 				email, password1, password2, screenName, firstName, lastName,
 				birthYear, birthMonth, birthDay, phone, 
 				institution, officeContact, position, 0,
 				userServiceContext, researcherServiceContext);
-		
+			SessionMessages.add(actionRequest, "researcherWithUserAdded");
+		} catch(PortalException e) {
+			System.out.println(e);
+			SessionErrors.add(actionRequest, e.getClass().getName());
+			
+		}
 		User user = null;
 		
 		if(Validator.isNotNull(researcher)) {

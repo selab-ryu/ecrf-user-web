@@ -19,9 +19,7 @@ dependencies {
 	
 	compile project(":modules:ecrf-user:ecrf-user-api")
 	compile project(":modules:ecrf-user:ecrf-user-service")
-	
-	compileOnly group: "org.slf4j", name: "jcl-over-slf4j"
-	
+		
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
 	compileOnly group: 'com.liferay', name: 'com.liferay.trash.api'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.string'

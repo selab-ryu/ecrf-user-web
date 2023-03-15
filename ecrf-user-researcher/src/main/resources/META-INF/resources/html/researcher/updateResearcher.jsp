@@ -5,6 +5,8 @@
 <%@page import="ecrf.user.model.Researcher" %>
 <%@ include file="../init.jsp" %>
 
+<liferay-ui:success key="researcherWithUserAdded" message="researcher-with-user-added" />
+
 <%
 Logger _logger = Logger.getLogger(this.getClass().getName());
 boolean isUpdate = false;

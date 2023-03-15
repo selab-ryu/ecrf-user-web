@@ -57,6 +57,10 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
+<%@ page import="ecrf.user.researcher.internal.security.permission.resource.ResearcherModelPermission" %>
+<%@ page import="ecrf.user.researcher.internal.security.permission.resource.ResearcherPermission" %>
+<%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
+<%@ page import="com.liferay.portal.kernel.security.permission.ActionKeys" %>
 
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
