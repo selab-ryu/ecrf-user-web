@@ -1,9 +1,10 @@
 package ecrf.user.researcher.portlet;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -29,7 +30,7 @@ import ecrf.user.service.ResearcherLocalService;
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Researcher",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/html/researcher/listResearcher.jsp",
+		"javax.portlet.init-param.view-template=/html/view.jsp",
 		"javax.portlet.name=" + ECRFUserPortletKeys.RESEARCHER,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
@@ -40,16 +41,16 @@ public class ResearcherPortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-		_logger = Logger.getLogger(this.getClass().getName());
-		_logger.info("Start");
+		_log = LogFactoryUtil.getLog(this.getClass().getName());
+		_log.info("Start");
 		
 		renderRequest.setAttribute(ECRFUserConstants.RESEARCHER_LOCAL_SERVICE, _researcherLocalService);
 		
-		_logger.info("End");
+		_log.info("End");
 		super.render(renderRequest, renderResponse);
 	}
 
-	private Logger _logger;
+	private Log _log;
 	
 	@Reference
 	private ResearcherLocalService _researcherLocalService;
