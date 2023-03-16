@@ -2,4 +2,3 @@ Bundle-Name: ecrf-user-approve
 Bundle-SymbolicName: ecrf.user.approve
 Bundle-Version: 1.0.0
 Export-Package: ecrf.user.approve.constants
--privatepackage: selab.ecrf.user.constants
