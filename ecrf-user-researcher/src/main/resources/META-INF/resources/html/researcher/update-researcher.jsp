@@ -8,7 +8,6 @@
 <liferay-ui:success key="researcherWithUserAdded" message="researcher-with-user-added" />
 
 <%
-Logger _logger = Logger.getLogger(this.getClass().getName());
 boolean isUpdate = false;
 
 long researcherId = ParamUtil.getLong(renderRequest, ECRFUserResearcherAttributes.RESEARCHER_ID);

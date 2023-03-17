@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.Calendar;
-import java.util.logging.Logger;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -52,8 +51,6 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		_logger = Logger.getLogger(this.getClass().getName());
-		
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 		
@@ -71,15 +68,10 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 				PortletRequest.RENDER_PHASE);
 		
 		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, renderCommand);
-		_logger.info("Render URL : " + renderURL.toString());
 		actionResponse.sendRedirect(renderURL.toString());
-		
-		_logger.info("End");
 	}
 	
-	public void addResearcherWithUser(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException {
-		_logger.info("Add Researcher With User Start");
-		
+	public void addResearcherWithUser(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException {		
 		HttpServletRequest httpServletRequest = _portal.getHttpServletRequest(actionRequest);
 		HttpSession session = httpServletRequest.getSession();
 
@@ -88,7 +80,7 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 		ServiceContext userServiceContext = ServiceContextFactory.getInstance(User.class.getName(), actionRequest);
 		Company company = themeDisplay.getCompany();
 		
-		_logger.info("get data from request parameter");
+		//_log.info("get data from request parameter");
 		String email = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.EMAIL);
 		String password1 = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.PASSWORD1);
 		String password2 = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.PASSWORD2);
@@ -112,7 +104,6 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 		String officeContact = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.OFFICE_CONTACT);
 		String position = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.POSITION);
 		
-		_logger.info("add Researcher with User");
 		Researcher researcher = null;
 		try {
 		researcher = _researcherLocalService.addResarcherWithUser(
@@ -134,15 +125,13 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 			user = _userLocalService.getUser(researcher.getResearcherUserId());
 		}
 		if(Validator.isNotNull(user)) {
-			_logger.info("add user to membership");
 			SessionMessages.add(httpServletRequest, "userAdded", user.getEmailAddress());
 			ServiceContext membershipServiceContext = ServiceContextFactory.getInstance(MembershipRequest.class.getName(), actionRequest);
 			_membershipRequestLocalService.addMembershipRequest(user.getUserId(), themeDisplay.getScopeGroupId(), "Add Researcher to Site Membership", membershipServiceContext);
 		} else {
-			_logger.info("user is null");
+			//_log.info("user is null");
 		}
 		
-		_logger.info("Add Researcher With User End");
 	}
 	
 	public void updateResearcherWithUser(ActionRequest actionRequest, ActionResponse actionResponse) {
@@ -152,8 +141,6 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 	public void sendRedirect() {
 		
 	}
-	
-	private Logger _logger;
 	
 	@Reference
 	private Portal _portal;

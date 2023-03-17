@@ -1,4 +1,7 @@
 dependencies {
+	compile project(":modules:ecrf-user:ecrf-user-api")
+	compile project(":modules:ecrf-user:ecrf-user-service")
+	
 	compileOnly group: "com.liferay", name: "com.liferay.asset.taglib"
 	compileOnly group: "com.liferay", name: "com.liferay.comment.taglib"
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib"
@@ -16,9 +19,6 @@ dependencies {
 	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
 
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.1.0"
-	
-	compile project(":modules:ecrf-user:ecrf-user-api")
-	compile project(":modules:ecrf-user:ecrf-user-service")
 		
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
 	compileOnly group: 'com.liferay', name: 'com.liferay.trash.api'
@@ -27,4 +27,6 @@ dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.petra.function"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.model.adapter"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.reflect"
+	
+		compileOnly group: "org.slf4j", name: "jcl-over-slf4j"
 }

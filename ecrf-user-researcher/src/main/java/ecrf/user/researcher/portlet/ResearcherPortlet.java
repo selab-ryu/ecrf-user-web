@@ -1,6 +1,5 @@
 package ecrf.user.researcher.portlet;
 
-import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
@@ -41,16 +40,11 @@ public class ResearcherPortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-		_log = LogFactoryUtil.getLog(this.getClass().getName());
-		_log.info("Start");
 		
 		renderRequest.setAttribute(ECRFUserConstants.RESEARCHER_LOCAL_SERVICE, _researcherLocalService);
 		
-		_log.info("End");
 		super.render(renderRequest, renderResponse);
 	}
-
-	private Log _log;
 	
 	@Reference
 	private ResearcherLocalService _researcherLocalService;

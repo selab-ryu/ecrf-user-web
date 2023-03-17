@@ -9,7 +9,7 @@
 <liferay-ui:success key="researcherWithUserAdded" message="researcher-with-user-added" />
 
 <%
-Logger _logger = Logger.getLogger(this.getClass().getName());
+
 
 SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
 

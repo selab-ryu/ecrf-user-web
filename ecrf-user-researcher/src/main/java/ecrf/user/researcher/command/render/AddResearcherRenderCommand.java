@@ -1,3 +1,4 @@
+package ecrf.user.researcher.command.render;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 
 import javax.portlet.PortletException;
