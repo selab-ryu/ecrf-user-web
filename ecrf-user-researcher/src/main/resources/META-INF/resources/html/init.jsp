@@ -41,6 +41,9 @@
 <%@ page import="com.liferay.portal.kernel.model.Role" %>
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
 
+<%@ page import="com.liferay.portal.kernel.log.Log" %>
+<%@ page import="com.liferay.portal.kernel.log.LogFactoryUtil" %>
+
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
@@ -52,8 +55,6 @@
 <%@ page import="java.util.Comparator" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Iterator" %>
-
-<%@ page import="java.util.logging.Logger" %>
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 

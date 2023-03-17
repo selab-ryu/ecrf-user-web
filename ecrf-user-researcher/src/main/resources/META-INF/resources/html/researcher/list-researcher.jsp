@@ -9,14 +9,44 @@
 <liferay-ui:success key="researcherWithUserAdded" message="researcher-with-user-added" />
 
 <%
-
-
 SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
 
 List<Researcher> researcherList = ResearcherLocalServiceUtil.getResearcherByGroupId(scopeGroupId);
 int totalCount = ResearcherLocalServiceUtil.getResearcherCount(scopeGroupId);
 
 String keywords = ParamUtil.getString(request, "keywords");
+
+SearchContext searchContext = SearchContextFactory.getInstance(request);
+searchContext.setKeywords(keywords);
+searchContext.setAttribute("paginationType", "more");
+searchContext.setStart(0);
+searchContext.setEnd(10);
+
+Indexer<Researcher> indexer = IndexerRegistryUtil.getIndexer(Researcher.class);
+
+Hits hits = indexer.search(searchContext);
+
+List<Researcher> researchers = new ArrayList<Researcher>();
+
+for(int i=0; i<hits.getDocs().length; i++) {
+	Document doc = hits.doc(i);
+	
+	long researcherId = GetterUtil.getLong(doc.get(Field.ENTRY_CLASS_PK));
+	
+	Researcher researcher = null;
+	
+	try {
+		researcher = ResearcherLocalServiceUtil.getResearcher(researcherId);
+	} catch (PortalException pe) {
+		_log.error(pe.getLocalizedMessage());
+    } catch (SystemException se) {
+        _log.error(se.getLocalizedMessage());
+    }
+	
+	researchers.add(researcher);
+}
+
+_log.info("hits researcher size : "+researchers.size());
 
 %>
 
@@ -117,3 +147,6 @@ String keywords = ParamUtil.getString(request, "keywords");
 	
 </liferay-ui:search-container>
 
+<%!
+    private static Log _log = LogFactoryUtil.getLog("html.researcher.list_researcher_jsp");
+%>
