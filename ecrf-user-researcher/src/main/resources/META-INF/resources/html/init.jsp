@@ -1,3 +1,4 @@
+<%@page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
@@ -68,6 +69,6 @@
 
 <%
 	String currentURL = themeDisplay.getURLCurrent();
-	String backURL = ParamUtil.getString(renderRequest, "backURL", "");
-	String redirect = ParamUtil.getString(renderRequest, "redirect", "");;
+	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
+	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");;
 %>
