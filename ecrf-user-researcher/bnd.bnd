@@ -3,3 +3,5 @@ Bundle-SymbolicName: ecrf.user.researcher
 Bundle-Version: 1.0.0
 
 -privatepackage: ecrf.user.constants
+
+Web-ContextPath: /ecrf-user-researcher

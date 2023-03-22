@@ -8,19 +8,24 @@
 
 <liferay-ui:success key="researcherWithUserAdded" message="researcher-with-user-added" />
 
+<%!
+    private static Log _log = LogFactoryUtil.getLog("html.researcher.list_researcher_jsp");
+%>
+
 <%
 SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
 
 List<Researcher> researcherList = ResearcherLocalServiceUtil.getResearcherByGroupId(scopeGroupId);
 int totalCount = ResearcherLocalServiceUtil.getResearcherCount(scopeGroupId);
 
+_log.info("all researcher size : "+totalCount);
+
 String keywords = ParamUtil.getString(request, "keywords");
+_log.info("search keywords : " + keywords);
 
 SearchContext searchContext = SearchContextFactory.getInstance(request);
 searchContext.setKeywords(keywords);
 searchContext.setAttribute("paginationType", "more");
-searchContext.setStart(0);
-searchContext.setEnd(10);
 
 Indexer<Researcher> indexer = IndexerRegistryUtil.getIndexer(Researcher.class);
 
@@ -50,8 +55,6 @@ _log.info("hits researcher size : "+researchers.size());
 
 %>
 
-
-
 <portlet:renderURL var="searchURL">
 	<portlet:param name="mvcPath" value="/html/researcher/list-researcher.jsp" />
 </portlet:renderURL>
@@ -60,9 +63,14 @@ _log.info("hits researcher size : "+researchers.size());
 	<portlet:param name="mvcPath" value="/html/view.jsp" />
 </portlet:renderURL>
 
-<aui:form action="${searchURL}" name="fm">
-	<liferay-ui:header backURL="${viewURL}" title="back" />
-	
+<portlet:renderURL var="addResearcherURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_ADD_RESEARCHER %>" />
+	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+</portlet:renderURL>
+
+<liferay-ui:header title="Researcher List" />
+
+<aui:form action="${searchURL}" name="fm" autocomplete="off" >
 	<div class="row">
 		<div class="col-md-8">
 			<aui:input inlineLabel="left" label="" name="keywords" placeholder="search-entries" size="256" />
@@ -74,23 +82,19 @@ _log.info("hits researcher size : "+researchers.size());
 </aui:form>
 
 <aui:button-row>
-	<portlet:renderURL var="addResearcherURL">
-		<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_ADD_RESEARCHER %>" />
-		<portlet:param name="<%=ECRFUserWebKeys.REDIRECT %>" value="<%=redirect %>" />
-	</portlet:renderURL>
-	
 	<aui:button onClick="<%=addResearcherURL.toString() %>" value="Add Researcher" />
 </aui:button-row>
 
 <liferay-ui:search-container 
-	total="<%=totalCount %>"
 	delta="10"
+	total="<%=researchers.size() %>"
 	emptyResultsMessage="No Researchers were found"
 	emptyResultsMessageCssClass="taglib-empty-result-message-header"
 	var ="searchContainer" 
 >
 <liferay-ui:search-container-results
-	results="<%=ResearcherLocalServiceUtil.getResearcherByGroupId(scopeGroupId.longValue(), searchContainer.getStart(), searchContainer.getEnd()) %>" />
+	results="<%=ListUtil.subList(researchers, searchContainer.getStart(), searchContainer.getEnd()) %>"
+	 />
 	
 	<% int count = searchContainer.getStart(); %>
 	
@@ -108,6 +112,7 @@ _log.info("hits researcher size : "+researchers.size());
 		<portlet:renderURL var="rowURL">
 			<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_RESEARCHER %>" />
 			<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
+			<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 		</portlet:renderURL>
 		
 		<liferay-ui:search-container-column-text
@@ -121,32 +126,33 @@ _log.info("hits researcher size : "+researchers.size());
 		/>
 		
 		<liferay-ui:search-container-column-text
+			name="ecrf-user.list.screen-name"
+			value="<%=Validator.isNull(researcherUser.getScreenName()) ? "-" : researcherUser.getScreenName() %>"
+		/>
+		
+		<liferay-ui:search-container-column-text
 			href="<%=rowURL.toString() %>"
 			name="ecrf-user.list.name"
 			value="<%=Validator.isNull(researcherUser.getFullName()) ? "-" : researcherUser.getFullName() %>"
 		/>
 		
 		<liferay-ui:search-container-column-text
-			name="ecrf-user.birth"
+			name="ecrf-user.list.birth"
 			value="<%=Validator.isNull(researcher.getBirth()) ? "-" : sdf.format(researcher.getBirth()) %>"
 		/>
 		
 		<liferay-ui:search-container-column-text
-			name="ecrf-user.position"
+			name="ecrf-user.list.position"
 			value="<%=Validator.isNull(researcher.getPosition()) ? "-" : researcher.getPosition() %>"
 		/>
 		
 		<liferay-ui:search-container-column-text
-			name="ecrf-user.institution"
+			name="ecrf-user.list.institution"
 			value="<%=Validator.isNull(researcher.getInstitution()) ? "-" : researcher.getInstitution() %>"
 		/>
 		
 	</liferay-ui:search-container-row>
 	
 <liferay-ui:search-iterator />
-	
-</liferay-ui:search-container>
 
-<%!
-    private static Log _log = LogFactoryUtil.getLog("html.researcher.list_researcher_jsp");
-%>
+</liferay-ui:search-container>

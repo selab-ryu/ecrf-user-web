@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -35,22 +36,21 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import ecrf.user.constants.ECRFUserMVCCommand;
-import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserResearcherAttributes;
 import ecrf.user.constants.ECRFUserWebKeys;
 import ecrf.user.model.Researcher;
-import ecrf.user.search.researcher.ResearcherModelDocumentContributor;
 import ecrf.user.service.ResearcherLocalService;
 
 @Component
 (
-		property = {
-				"javax.portlet.name="+ECRFUserPortletKeys.RESEARCHER,
-				"mvc.command.name="+ECRFUserMVCCommand.ACTION_ADD_RESEARCHER
-		},
-		service = MVCActionCommand.class
+	property = {
+			"javax.portlet.name="+PortletKeys.LOGIN,
+			"mvc.command.name="+ECRFUserMVCCommand.ACTION_ADD_RESEARCHER,
+			"service.ranking:Integer=100"
+	},
+	service = MVCActionCommand.class
 )
-public class AddResearcherActionCommand extends BaseMVCActionCommand {
+public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -73,6 +73,7 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 		
 		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, renderCommand);
 		actionResponse.sendRedirect(renderURL.toString());
+ 
 	}
 	
 	public void addResearcherWithUser(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException {		

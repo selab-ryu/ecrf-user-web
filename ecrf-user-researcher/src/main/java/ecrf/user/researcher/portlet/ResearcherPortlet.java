@@ -29,7 +29,7 @@ import ecrf.user.service.ResearcherLocalService;
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Researcher",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/html/view.jsp",
+		"javax.portlet.init-param.view-template=/html/researcher/list-researcher.jsp",
 		"javax.portlet.name=" + ECRFUserPortletKeys.RESEARCHER,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"

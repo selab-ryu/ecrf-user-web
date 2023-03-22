@@ -93,8 +93,6 @@ public class ResearcherAssetRendererFactory extends BaseAssetRendererFactory<Res
 		return portletURL;
 	}
 	
-	
-	
 	@Override
 	public boolean isLinkable() {
 	    return _LINKABLE;

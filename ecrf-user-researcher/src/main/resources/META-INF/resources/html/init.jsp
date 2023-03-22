@@ -12,6 +12,9 @@
 <%@ taglib prefix="clay" uri="http://liferay.com/tld/clay" %>
 <%@ taglib prefix="chart" uri="http://liferay.com/tld/chart" %>
 
+<%@ taglib uri="http://liferay.com/tld/asset" prefix="liferay-asset" %>
+<%@ taglib uri="http://liferay.com/tld/comment" prefix="liferay-comment" %>
+
 <%@ page import="javax.portlet.PortletURL" %>
 
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
@@ -42,6 +45,15 @@
 <%@ page import="com.liferay.portal.kernel.model.Role" %>
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
 
+<%@ page import="com.liferay.asset.kernel.service.AssetEntryLocalServiceUtil" %>
+<%@ page import="com.liferay.asset.kernel.service.AssetTagLocalServiceUtil" %>
+<%@ page import="com.liferay.asset.kernel.model.AssetEntry" %>
+<%@ page import="com.liferay.asset.kernel.model.AssetTag" %>
+<%@ page import="com.liferay.portal.kernel.util.ListUtil" %>
+<%@ page import="com.liferay.portal.kernel.comment.Discussion" %>
+<%@ page import="com.liferay.portal.kernel.comment.CommentManagerUtil" %>
+<%@ page import="com.liferay.portal.kernel.service.ServiceContextFunction" %>
+
 <%@ page import="com.liferay.portal.kernel.log.Log" %>
 <%@ page import="com.liferay.portal.kernel.log.LogFactoryUtil" %>
 
@@ -70,5 +82,5 @@
 <%
 	String currentURL = themeDisplay.getURLCurrent();
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
-	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");;
+	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
 %>

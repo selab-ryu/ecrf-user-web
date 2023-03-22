@@ -5,6 +5,10 @@
 <%@page import="ecrf.user.model.Researcher" %>
 <%@ include file="../init.jsp" %>
 
+<%!
+    private static Log _log = LogFactoryUtil.getLog("html.researcher.update_researcher_jsp");
+%>
+
 <liferay-ui:success key="researcherWithUserAdded" message="researcher-with-user-added" />
 
 <%
@@ -22,17 +26,10 @@ if(researcherId > 0) {
 <portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_ADD_RESEARCHER %>" var="addResearcherURL">
 </portlet:actionURL>
 
+<liferay-ui:header backURL="<%=redirect %>" title="ecrf.user.researcher.title.add-resarcher" />
+
 <div class="ecrf-user-researcher">
 	<aui:container cssClass="radius-shadow-container">
-		<!-- subject info title -->
-		<aui:row cssClass="marBrh">
-			<aui:col md="12">
-				<span class="title-span">
-					<liferay-ui:message key="ecrf.user.researcher.title.add-resarcher" />
-				</span>
-			</aui:col>
-		</aui:row>
-		
 		<aui:form name="updateResearhcerFm" action="<%=addResearcherURL %>" method="post" autocomplete="off">
 		<aui:input type="hidden" name="<%=Constants.CMD %>" value="<%=Constants.ADD %>"/>
 		<aui:row>
@@ -40,7 +37,7 @@ if(researcherId > 0) {
 		<!-- user info -->
 		<aui:container>
 			<aui:row>
-				<aui:col md="12">
+				<aui:col md="12" cssClass="sub-title-bottom-border">
 					<span class="sub-title-span">
 						<liferay-ui:message key="ecrf.user.researcher.title.user-info" />
 					</span>
@@ -49,7 +46,7 @@ if(researcherId > 0) {
 			<aui:row>
 				<aui:col md="6">
 					<aui:input autofocus="true" name="<%=ECRFUserResearcherAttributes.EMAIL %>"/>
-					<aui:input name="<%=ECRFUserResearcherAttributes.PASSWORD1 %>" />					
+					<aui:input name="<%=ECRFUserResearcherAttributes.PASSWORD1 %>" />			
 					<aui:input name="<%=ECRFUserResearcherAttributes.PASSWORD2 %>" />
 					
 				</aui:col>
@@ -63,7 +60,7 @@ if(researcherId > 0) {
 		<!-- resarcher info -->
 		<aui:container>
 			<aui:row>
-				<aui:col md="12">
+				<aui:col md="12" cssClass="sub-title-bottom-border">
 					<span class="sub-title-span">
 						<liferay-ui:message key="ecrf.user.researcher.title.researcher-info" />
 					</span>
@@ -79,14 +76,11 @@ if(researcherId > 0) {
 				</aui:col>
 			</aui:row>
 		</aui:container>
+		<aui:button-row>
+			<aui:button name="addResearcher" type="submit" value="Add" />
+			<aui:button name="back" type="button" value="Back" onClick="<%=redirect %>"/>
+		</aui:button-row>
 		</aui:col>
-		</aui:row>
-		<aui:row>
-			<aui:col md="12">
-				<aui:button-row>
-					<aui:button name="addResearcher" type="submit" value="Add" />
-				</aui:button-row>
-			</aui:col>
 		</aui:row>
 		</aui:form>
 	</aui:container>
