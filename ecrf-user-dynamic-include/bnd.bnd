@@ -1,0 +1,5 @@
+Bundle-Name: ecrf-user-dynamic-include
+Bundle-SymbolicName: ecrf.user.dynamic.include
+Bundle-Version: 1.0.0
+Export-Package: ecrf.user.dynamic.include.constants
+Web-ContextPath: /ecrf.user.dynamic.include

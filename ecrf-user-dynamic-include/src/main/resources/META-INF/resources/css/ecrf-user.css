@@ -1,0 +1,45 @@
+.padTr { padding-top: 1rem; }
+.padBr { padding-bottom: 1rem; }
+   
+.padV5 { padding-top:5px; padding-bottom:5px; }
+.padVr { padding-top:1rem; padding-bottom:1rem; }
+   
+.marTr { margin-top: 1rem; }
+.marBr { margin-bottom: 1rem; }
+.marTrh { margin-top:0.5rem; }
+.marBrh { margin-bottom:0.5rem; }
+
+.marT10 { margin-top:10px; }
+.marT20 { margin-top:20px;}
+.marT25 { margin-top:25px;}
+.marT30 { margin-top:30px; }
+.marB10 { margin-bottom:10px; }
+.marB20 { margin-bottom: 20px; }
+.marL10 { margin-left:10px; }
+
+.marV5 { margin-top:5px; margin-bottom:5px; }
+.marVr { margin-top:1rem; margin-bottom:1rem; }
+
+.marH0 { margin-right:0px; margin-left:0px; }
+.mar0 {margin:0px;}
+
+.h35 {height:35px;}
+
+.round-container { border: 1px solid #aaaaaa; border-radius:3px; }
+.title-span { font-size:20px; font-weight:bold; }
+.header-title-span { font-size:20px; font-weight:bold; }
+.sub-title-span { font-size:15px; font-weight:bold; }
+
+.sub-title-bottom-border { border-bottom: 1px solid #dcdcde; margin-bottom: 6px; }
+
+.title-cell { background-color: #f9f9f9; border-right: 1px solid #dcdcde; font-weight:bold; }
+.title-middle-cell { background-color: #f9f9f9; border-left: 1px solid #dcdcde; border-right: 1px solid #dcdcde; font-weight:bold; }
+
+.radius-shadow-container {
+	padding: 16px;
+	background-color:white;
+	
+	border: 1px solid #E7E7ED;
+       border-radius: 4px;
+       box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
