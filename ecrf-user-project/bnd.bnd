@@ -1,4 +1,5 @@
 Bundle-Name: ecrf-user-project
 Bundle-SymbolicName: ecrf.user.project
 Bundle-Version: 1.0.0
-Export-Package: ecrf.user.project.constants
+
+-privatepackage: ecrf.user.constants
