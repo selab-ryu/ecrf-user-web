@@ -19,7 +19,6 @@
 			<guest-unsupported>
 				<action-key>ADD_TO_PAGE</action-key>
 				<action-key>CONFIGURATION</action-key>
-				<action-key>ADD_RESEARCHER</action-key>
 			</guest-unsupported>
 		</permissions>
 	</portlet-resource>
