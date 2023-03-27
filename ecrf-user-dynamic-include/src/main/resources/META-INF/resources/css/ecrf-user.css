@@ -40,6 +40,19 @@
 	background-color:white;
 	
 	border: 1px solid #E7E7ED;
-       border-radius: 4px;
-       box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border-radius: 4px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
+
+.search-input {
+	background-color:white;
+	border-color:#72aee6;
+}
+
+.search-input:disabled {
+	background-color: #f1f2f5;
+	border-color: #f1f2f5;
+}
+
+.hide {	display:none; }
+.show {	display:block; }
