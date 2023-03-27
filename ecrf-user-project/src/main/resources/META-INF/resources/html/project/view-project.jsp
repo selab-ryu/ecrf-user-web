@@ -35,44 +35,105 @@ if(projectId > 0) {
 <!-- Project info -->
 <c:choose>
 <c:when test="<%=Validator.isNull(project) %>">
-	<aui:container cssClass="radius-shadow-container">
-		<aui:row>
-			<aui:col md="12" cssClass="sub-title-bottom-border">
-				<span class="sub-title-span">
-					<liferay-ui:message key="ecrf.user.project.title.project-info" />
-				</span>
-			</aui:col>
-		</aui:row>
-		<aui:row>
-			<aui:col>
-				<span>
-					<liferay-ui:message key="ecrf.user.project.info.no-project" />
-				</span>
-			</aui:col>
-		</aui:row>
-	</aui:container>
+<aui:container cssClass="radius-shadow-container">
+	<aui:row>
+		<aui:col md="12" cssClass="sub-title-bottom-border">
+			<span class="sub-title-span">
+				<liferay-ui:message key="ecrf.user.project.title.project-info" />
+			</span>
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col>
+			<span>
+				<liferay-ui:message key="ecrf.user.project.info.no-project" />
+			</span>
+		</aui:col>
+	</aui:row>
+</aui:container>
 </c:when>
 <c:otherwise>
-	<aui:container cssClass="radius-shadow-container">
-		<aui:row>
-			<aui:col md="12" cssClass="sub-title-bottom-border">
-				<span class="sub-title-span">
-					<liferay-ui:message key="ecrf.user.project.title.project-info" />
-				</span>
-			</aui:col>
-		</aui:row>
-		<aui:row>
-			<aui:col md="12">
-				<aui:input
-					autoFocus="true"
-					inlineLabel="true"
-					name="<%=ECRFUserProjectAttributes.TITLE %>"
-					value="<%=project.getTitle() %>"
-					readOnly="true"
-				/>			
-			</aui:col>
-		</aui:row>
-	</aui:container>
+<aui:form name="fm" autocomplete="off">
+<aui:model-context bean="<%=project %>" model="<%= Project.class %>" />
+<aui:container cssClass="radius-shadow-container">
+	<aui:row>
+		<aui:col md="12" cssClass="sub-title-bottom-border">
+			<span class="sub-title-span">
+				<liferay-ui:message key="ecrf.user.project.title.project-info" />
+			</span>
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col md="12">
+			<aui:input
+				autoFocus="true"
+				name="<%=ECRFUserProjectAttributes.TITLE %>" 
+				label="ecrf.user.project.title"
+				cssClass="search-input" 
+				readOnly="true" />
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col md="12">
+			<aui:input 
+				name="<%=ECRFUserProjectAttributes.SHORT_TITLE %>" 
+				label="ecrf.user.project.short-title"
+				cssClass="search-input" 
+				readOnly="true" />
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col md="12">
+			<aui:input 
+				name="<%=ECRFUserProjectAttributes.PURPOSE %>"
+				cssClass="search-input" 
+				label="ecrf.user.project.purpose"
+				readOnly="true" />
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col md="6">
+			<aui:input 
+				name="startDate" 
+				label="ecrf.user.project.start-date"
+				cssClass="search-input" 
+				readOnly="true" />
+		</aui:col>
+		<aui:col md="6">
+			<aui:input 
+				name="endDate" 
+				label="ecrf.user.project.end-date"
+				cssClass="search-input" 
+				readOnly="true" />
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col md="12" cssClass="sub-title-bottom-border">
+			<span class="sub-title-span">
+				<liferay-ui:message key="ecrf.user.project.title.project-manager-info" />
+			</span>
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col md="6">
+			<aui:input
+				type="hidden"
+				name="<%=ECRFUserProjectAttributes.PRINCIPAL_RESEARCHER_ID %>"
+			/>
+			<aui:select
+				name="principleResearcher"
+				bean="<%=Researcher.class %>"
+				listType=""
+				showEmptyOption="true"
+			>
+			</aui:select>
+		</aui:col>
+		<aui:col md="6">
+			
+		</aui:col>
+	</aui:row>
+</aui:container>
+</aui:form>
 </c:otherwise>
 </c:choose>
 

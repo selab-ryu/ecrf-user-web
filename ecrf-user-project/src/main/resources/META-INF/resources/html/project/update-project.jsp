@@ -1,3 +1,4 @@
+<%@page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
 <%@page import="ecrf.user.model.Researcher"%>
 <%@page import="com.liferay.portal.kernel.util.CalendarFactoryUtil"%>
 <%@page import="ecrf.user.project.internal.security.permission.resource.ProjectPermission"%>
@@ -15,6 +16,12 @@ Project project = null;
 if(projectId > 0) {
 	project = (Project)renderRequest.getAttribute(ECRFUserProjectAttributes.PROJECT);
 }
+
+List<Researcher> leadResearcherList = new ArrayList<Researcher>();
+List<Researcher> manageResearcherList = new ArrayList<Researcher>();
+
+leadResearcherList = ResearcherLocalServiceUtil.getResearcherByG_P(scopeGroupId, "lead");
+manageResearcherList = ResearcherLocalServiceUtil.getResearcherByGroupId(scopeGroupId);
 
 Date date = new Date();
 Calendar startDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
@@ -101,20 +108,38 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 	</aui:row>
 	<aui:row>
 		<aui:col md="6">
-			<aui:input
-				type="hidden"
-				name="<%=ECRFUserProjectAttributes.PRINCIPAL_RESEARCHER_ID %>"
-			/>
 			<aui:select
 				name="principleResearcher"
 				bean="<%=Researcher.class %>"
-				listType=""
 				showEmptyOption="true"
 			>
+			<%
+			for(int i=0; i<leadResearcherList.size(); i++) {
+				Researcher researcher = leadResearcherList.get(i);
+				String label = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
+			%>
+			<aui:option value=""><c:out value="${label}" escapeXml="true"/></aui:option>
+			<%
+			}
+			%>
 			</aui:select>
 		</aui:col>
 		<aui:col md="6">
-			
+			<aui:select
+				name="manageResearcher"
+				bean="<%=Researcher.class %>"
+				showEmptyOption="true"
+			>
+			<%
+			for(int i=0; i<manageResearcherList.size(); i++) {
+				Researcher researcher = leadResearcherList.get(i);
+				String label = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
+			%>
+			<aui:option value=""><c:out value="${label}" escapeXml="true"/></aui:option>
+			<%
+			}
+			%>
+			</aui:select>
 		</aui:col>
 	</aui:row>
 </aui:container>
