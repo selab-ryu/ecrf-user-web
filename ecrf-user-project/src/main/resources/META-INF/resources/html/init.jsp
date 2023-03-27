@@ -49,6 +49,10 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
+<%@page import="ecrf.user.service.ProjectLocalServiceUtil"%>
+<%@page import="ecrf.user.constants.ECRFUserProjectAttributes"%>
+<%@page import="ecrf.user.model.Project"%>
+
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />
