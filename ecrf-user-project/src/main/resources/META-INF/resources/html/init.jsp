@@ -52,6 +52,11 @@
 <%@page import="ecrf.user.service.ProjectLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.ECRFUserProjectAttributes"%>
 <%@page import="ecrf.user.model.Project"%>
+<%@page import="ecrf.user.project.internal.security.permission.resource.ProjectPermission"%>
+<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+
+<%@page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
+<%@page import="ecrf.user.model.Researcher"%>
 
 <liferay-theme:defineObjects />
 

@@ -1,4 +1,3 @@
-<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 <%@ include file="../init.jsp" %>
 
 <%!
@@ -6,12 +5,32 @@
 %>
 
 <%
-long projectId = ParamUtil.getLong(renderRequest, ECRFUserProjectAttributes.PROJECT_ID, 0);
 Project project = null;
+long projectId = 0;
+int projectCount = ProjectLocalServiceUtil.getProjectCount(scopeGroupId);
 
-if(projectId > 0) {
-	project = ProjectLocalServiceUtil.getProject(projectId);
+long principalResearcherId = 0;
+String principalResearcherText = StringPool.DASH;
+long manageResearcherId = 0;
+String manageResearcherText = StringPool.DASH;
+
+if(projectCount > 0) {
+	List<Project> projectList = ProjectLocalServiceUtil.getProjectByGroupId(scopeGroupId);
+	project = projectList.get(0);
+	projectId = project.getProjectId();
+	principalResearcherId = project.getPrincipalResearcherId();
+	if(principalResearcherId > 0) {
+		Researcher researcher = ResearcherLocalServiceUtil.getResearcher(principalResearcherId);
+		principalResearcherText = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
+	}
+	manageResearcherId = project.getManageResearcherId();
+	if(manageResearcherId > 0) {
+		Researcher researcher = ResearcherLocalServiceUtil.getResearcher(manageResearcherId);
+		manageResearcherText = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
+	}
 }
+
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 %>
 
@@ -28,21 +47,26 @@ if(projectId > 0) {
 	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
+<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_PROJECT %>" var="deleteProjectURL" >
+	<portlet:param name="<%=ECRFUserProjectAttributes.PROJECT_ID %>" value="<%=String.valueOf(projectId) %>" />
+</liferay-portlet:actionURL>
+
 <liferay-ui:header title="ecrf.user.project.title.view-project" />
 
 <div class="ecrf-user-project">
 
 <!-- Project info -->
-<c:choose>
-<c:when test="<%=Validator.isNull(project) %>">
 <aui:container cssClass="radius-shadow-container">
 	<aui:row>
-		<aui:col md="12" cssClass="sub-title-bottom-border">
-			<span class="sub-title-span">
+		<aui:col md="12">
+			<span class="title-span">
 				<liferay-ui:message key="ecrf.user.project.title.project-info" />
 			</span>
+			<hr align="center" class="marV5"></hr>
 		</aui:col>
 	</aui:row>
+<c:choose>
+<c:when test="<%=Validator.isNull(project) %>">
 	<aui:row>
 		<aui:col>
 			<span>
@@ -50,92 +74,57 @@ if(projectId > 0) {
 			</span>
 		</aui:col>
 	</aui:row>
-</aui:container>
 </c:when>
 <c:otherwise>
-<aui:form name="fm" autocomplete="off">
-<aui:model-context bean="<%=project %>" model="<%= Project.class %>" />
-<aui:container cssClass="radius-shadow-container">
 	<aui:row>
-		<aui:col md="12" cssClass="sub-title-bottom-border">
-			<span class="sub-title-span">
-				<liferay-ui:message key="ecrf.user.project.title.project-info" />
-			</span>
+		<aui:col md="12">
+			<strong><liferay-ui:message key="ecrf.user.project.title"/></strong>
+			<p><%=Validator.isNull(project.getTitle()) ? StringPool.DASH : project.getTitle() %></p>
 		</aui:col>
 	</aui:row>
 	<aui:row>
 		<aui:col md="12">
-			<aui:input
-				autoFocus="true"
-				name="<%=ECRFUserProjectAttributes.TITLE %>" 
-				label="ecrf.user.project.title"
-				cssClass="search-input" 
-				readOnly="true" />
+			<strong><liferay-ui:message key="ecrf.user.project.short-title"/></strong>
+			<p><%=Validator.isNull(project.getShortTitle()) ? StringPool.DASH : project.getShortTitle() %></p>
 		</aui:col>
 	</aui:row>
 	<aui:row>
 		<aui:col md="12">
-			<aui:input 
-				name="<%=ECRFUserProjectAttributes.SHORT_TITLE %>" 
-				label="ecrf.user.project.short-title"
-				cssClass="search-input" 
-				readOnly="true" />
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col md="12">
-			<aui:input 
-				name="<%=ECRFUserProjectAttributes.PURPOSE %>"
-				cssClass="search-input" 
-				label="ecrf.user.project.purpose"
-				readOnly="true" />
+			<strong><liferay-ui:message key="ecrf.user.project.purpose"/></strong>
+			<p><%=Validator.isNull(project.getPurpose()) ? StringPool.BLANK : project.getPurpose() %></p>
 		</aui:col>
 	</aui:row>
 	<aui:row>
 		<aui:col md="6">
-			<aui:input 
-				name="startDate" 
-				label="ecrf.user.project.start-date"
-				cssClass="search-input" 
-				readOnly="true" />
+			<strong><liferay-ui:message key="ecrf.user.project.start-date"/></strong>
+			<p><%=Validator.isNull(project.getStartDate()) ? StringPool.DASH : dateFormat.format(project.getStartDate()) %></p>
 		</aui:col>
 		<aui:col md="6">
-			<aui:input 
-				name="endDate" 
-				label="ecrf.user.project.end-date"
-				cssClass="search-input" 
-				readOnly="true" />
+			<strong><liferay-ui:message key="ecrf.user.project.end-date"/></strong>
+			<p><%=Validator.isNull(project.getEndDate()) ? StringPool.DASH : dateFormat.format(project.getEndDate()) %></p>
 		</aui:col>
 	</aui:row>
 	<aui:row>
-		<aui:col md="12" cssClass="sub-title-bottom-border">
-			<span class="sub-title-span">
+		<aui:col md="12">
+			<span class="title-span">
 				<liferay-ui:message key="ecrf.user.project.title.project-manager-info" />
 			</span>
+			<hr align="center" class="marV5"></hr>
 		</aui:col>
 	</aui:row>
 	<aui:row>
 		<aui:col md="6">
-			<aui:input
-				type="hidden"
-				name="<%=ECRFUserProjectAttributes.PRINCIPAL_RESEARCHER_ID %>"
-			/>
-			<aui:select
-				name="principleResearcher"
-				bean="<%=Researcher.class %>"
-				listType=""
-				showEmptyOption="true"
-			>
-			</aui:select>
+			<strong><liferay-ui:message key="ecrf.user.project.principal-researcher"/></strong>
+			<p><%=principalResearcherText %></p>
 		</aui:col>
 		<aui:col md="6">
-			
+			<strong><liferay-ui:message key="ecrf.user.project.manage-researcher"/></strong>
+			<p><%=manageResearcherText %></p>
 		</aui:col>
 	</aui:row>
-</aui:container>
-</aui:form>
 </c:otherwise>
 </c:choose>
+</aui:container>
 
 <!-- buttons -->
 <aui:container>
@@ -146,9 +135,10 @@ if(projectId > 0) {
 				<c:when test="<%=Validator.isNull(project) %>">
 					<aui:button type="button" value="Add Project Info" onClick="<%=addProjectURL.toString() %>" />	
 				</c:when>
-				<c:otherwise>
-					<aui:button type="button" value="Update Project Info" onClick="<%=updateProjectURL.toString() %>" />
-				</c:otherwise>
+				<c:when test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, "ADD_PROJECT") %>">
+					<aui:button type="button" value="Go to Update Project Info" onClick="<%=updateProjectURL.toString() %>" />
+					<aui:button type="button" value="Delete" onClick="<%=deleteProjectURL.toString() %>" />
+				</c:when>
 				</c:choose>
 			</aui:button-row>
 		</aui:col>

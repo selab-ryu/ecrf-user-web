@@ -1,8 +1,4 @@
-<%@page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
-<%@page import="ecrf.user.model.Researcher"%>
 <%@page import="com.liferay.portal.kernel.util.CalendarFactoryUtil"%>
-<%@page import="ecrf.user.project.internal.security.permission.resource.ProjectPermission"%>
-<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 <%@ include file="../init.jsp" %>
 
 <%!
@@ -13,8 +9,13 @@
 long projectId = ParamUtil.getLong(renderRequest, ECRFUserProjectAttributes.PROJECT_ID, 0);
 Project project = null;
 
+long principalResearchId = 0;
+long manageResearcherId = 0;
+
 if(projectId > 0) {
 	project = (Project)renderRequest.getAttribute(ECRFUserProjectAttributes.PROJECT);
+	principalResearchId = project.getPrincipalResearcherId();
+	manageResearcherId = project.getManageResearcherId();
 }
 
 List<Researcher> leadResearcherList = new ArrayList<Researcher>();
@@ -22,6 +23,12 @@ List<Researcher> manageResearcherList = new ArrayList<Researcher>();
 
 leadResearcherList = ResearcherLocalServiceUtil.getResearcherByG_P(scopeGroupId, "lead");
 manageResearcherList = ResearcherLocalServiceUtil.getResearcherByGroupId(scopeGroupId);
+
+int leadResearcherCount = ResearcherLocalServiceUtil.getResearcherCountByG_P(scopeGroupId, "lead");
+int manageResearcherCount = ResearcherLocalServiceUtil.getResearcherCount(scopeGroupId);
+
+_log.info("lead researcher count : " + leadResearcherCount);
+_log.info("manage researcher count : " + manageResearcherCount);
 
 Date date = new Date();
 Calendar startDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
@@ -50,10 +57,11 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 <!-- Project info -->
 <aui:container cssClass="radius-shadow-container">
 	<aui:row>
-		<aui:col md="12" cssClass="sub-title-bottom-border">
+		<aui:col md="12">
 			<span class="sub-title-span">
 				<liferay-ui:message key="ecrf.user.project.title.project-info" />
 			</span>
+			<hr align="center" class="marV5"></hr>
 		</aui:col>
 	</aui:row>
 	<aui:row>
@@ -100,25 +108,26 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 		</aui:col>
 	</aui:row>
 	<aui:row>
-		<aui:col md="12" cssClass="sub-title-bottom-border">
-			<span class="sub-title-span">
+		<aui:col md="12">
+			<span class="title-span">
 				<liferay-ui:message key="ecrf.user.project.title.project-manager-info" />
 			</span>
+			<hr align="center" class="marV5"></hr>
 		</aui:col>
 	</aui:row>
 	<aui:row>
 		<aui:col md="6">
 			<aui:select
-				name="principleResearcher"
-				bean="<%=Researcher.class %>"
+				name="<%=ECRFUserProjectAttributes.PRINCIPAL_RESEARCHER_ID %>"
 				showEmptyOption="true"
+				cssClass="search-input" 
 			>
 			<%
-			for(int i=0; i<leadResearcherList.size(); i++) {
+			for(int i=0; i<leadResearcherCount; i++) {
 				Researcher researcher = leadResearcherList.get(i);
 				String label = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
 			%>
-			<aui:option value=""><c:out value="${label}" escapeXml="true"/></aui:option>
+			<aui:option value="<%=String.valueOf(researcher.getResearcherId()) %>" selected="<%=(researcher.getResearcherId() == principalResearchId) %>"><%=label %></aui:option>
 			<%
 			}
 			%>
@@ -126,16 +135,16 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 		</aui:col>
 		<aui:col md="6">
 			<aui:select
-				name="manageResearcher"
-				bean="<%=Researcher.class %>"
+				name="<%=ECRFUserProjectAttributes.MANAGE_RESEARCHER_ID %>"
 				showEmptyOption="true"
+				cssClass="search-input" 
 			>
 			<%
-			for(int i=0; i<manageResearcherList.size(); i++) {
-				Researcher researcher = leadResearcherList.get(i);
+			for(int i=0; i<manageResearcherCount; i++) {
+				Researcher researcher = manageResearcherList.get(i);
 				String label = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
 			%>
-			<aui:option value=""><c:out value="${label}" escapeXml="true"/></aui:option>
+			<aui:option value="<%=String.valueOf(researcher.getResearcherId()) %>" selected="<%=(researcher.getResearcherId() == manageResearcherId) %>"><%=label %></aui:option>
 			<%
 			}
 			%>
@@ -165,10 +174,11 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 
 <aui:container cssClass="radius-shadow-container">
 	<aui:row>
-		<aui:col md="12" cssClass="sub-title-bottom-border">
+		<aui:col md="12">
 			<span class="sub-title-span">
 				<liferay-ui:message key="ecrf.user.project.title.project-info" />
 			</span>
+			<hr align="center" class="marV5"></hr>
 		</aui:col>
 	</aui:row>
 	<aui:row>
