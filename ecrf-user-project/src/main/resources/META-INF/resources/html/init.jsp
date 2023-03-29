@@ -1,4 +1,3 @@
-<%@page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
@@ -51,9 +50,10 @@
 
 <%@page import="ecrf.user.service.ProjectLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.ECRFUserProjectAttributes"%>
+<%@page import="ecrf.user.constants.ECRFUserWebKeys"%>
+<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 <%@page import="ecrf.user.model.Project"%>
 <%@page import="ecrf.user.project.internal.security.permission.resource.ProjectPermission"%>
-<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 
 <%@page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
 <%@page import="ecrf.user.model.Researcher"%>
