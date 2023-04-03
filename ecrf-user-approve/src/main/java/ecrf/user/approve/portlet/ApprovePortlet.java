@@ -20,7 +20,7 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Approve",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/view.jsp",
+		"javax.portlet.init-param.view-template=/html/approve/view-membership.jsp",
 		"javax.portlet.name=" + ECRFUserPortletKeys.APPROVE,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
