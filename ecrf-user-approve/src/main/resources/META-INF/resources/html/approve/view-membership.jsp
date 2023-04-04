@@ -1,3 +1,4 @@
+<%@page import="ecrf.user.constants.ECRFUserApproveAttibutes"%>
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html/approve/view-membership_jsp"); %>
@@ -31,6 +32,8 @@ if(membershipRequestCount <= 0) {
 }
 
 %>
+
+<aui:button cssClass="hide" name="call" value="Call" />
 
 <liferay-ui:header title="ecrf-user.approve.title.view-membership" />
 
@@ -145,6 +148,17 @@ if(membershipRequestCount <= 0) {
 			value="<%=membershipRequest.getCreateDate() %>"
 		/>
 		
+		<portlet:renderURL var="approveURL">
+			<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_APPROVE_MEMBERSHIP %>" />
+			<portlet:param name="<%=ECRFUserApproveAttibutes.MEMBERSHIP_REQUEST_ID %>" value="<%=String.valueOf(membershipRequest.getMembershipRequestId()) %>" />
+			<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+		</portlet:renderURL>
+		
+		<liferay-ui:search-container-column-text
+			name="ecrf-user.list.review">
+			<aui:button type="button" value="Review" onClick="<%=approveURL.toString() %>" />
+		</liferay-ui:search-container-column-text>
+		
 	</liferay-ui:search-container-row>
 
 <liferay-ui:search-iterator	/>
@@ -153,3 +167,12 @@ if(membershipRequestCount <= 0) {
 
 </c:when>
 </c:choose>
+
+<aui:script use="aui-base node">
+	var A = AUI();
+	A.one('#<portlet:namespace/>call').on('click', function(event) {
+		console.log(window.navigator.userAgent);
+		
+		//window.location.replace("https://apps.apple.com/us/app/instagram/id389801252");
+	});
+</aui:script>
