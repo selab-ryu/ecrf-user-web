@@ -94,14 +94,14 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 	<aui:row>
 		<aui:col md="6">
 			<aui:input 
-				name="startDate" 
+				name="<%=ECRFUserProjectAttributes.START_DATE %>" 
 				label="ecrf.user.project.start-date"
 				cssClass="search-input" 
 				required="true" />
 		</aui:col>
 		<aui:col md="6">
 			<aui:input 
-				name="endDate" 
+				name="<%=ECRFUserProjectAttributes.END_DATE %>" 
 				label="ecrf.user.project.end-date"
 				cssClass="search-input" 
 				required="true" />
