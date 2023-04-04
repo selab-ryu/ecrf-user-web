@@ -26,6 +26,10 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_MEMBERSHIP %>" />
 </portlet:renderURL>
 
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_REVIEW_MEMBERSHIP_REQUEST %>" var="reviewMembershipRequestURL">
+	<portlet:param name="<%=ECRFUserApproveAttibutes.MEMBERSHIP_REQUEST_ID %>" value="<%=String.valueOf(membershipRequestId) %>" />
+</portlet:actionURL>
+
 <liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.approve.title.membership-request-review" />
 
 <aui:container cssClass="radius-shadow-container">
@@ -63,12 +67,17 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	</aui:row>
 </aui:container>
 
-<aui:form name="fm" action="" method="POST">
+<aui:form name="fm" action="<%=reviewMembershipRequestURL %>" method="POST">
 <aui:input type="hidden" name="<%=Constants.CMD %>" />
 <aui:container cssClass="radius-shadow-container marTr">
 	<aui:row>
 		<aui:col md="12">
-			<aui:input type="textarea" cssClass="search-input" name="replyComment" label="ecrf-user.membership-request.reply-comment"/>
+			<aui:input 
+				type="textarea" 
+				cssClass="search-input" 
+				name="replyComment"
+				required="true" 
+				label="ecrf-user.membership-request.reply-comment"/>
 		</aui:col>
 	</aui:row>
 </aui:container>

@@ -24,4 +24,5 @@ dependencies {
 	compileOnly group: 'com.liferay', name: 'com.liferay.trash.api'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.string'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.function'
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "4.12.10"
 }
