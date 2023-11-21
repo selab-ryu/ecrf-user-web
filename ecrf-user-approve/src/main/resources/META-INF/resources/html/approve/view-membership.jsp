@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.service.RoleLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.ECRFUserApproveAttibutes"%>
 <%@ include file="../init.jsp" %>
 
@@ -5,6 +6,20 @@
 
 <%
 List<User> siteUsers = UserLocalServiceUtil.getGroupUsers(scopeGroupId);
+Role adminRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Administrator");
+int removeIndex = -1;
+
+// admin dosent have researcher entity
+// fine admin user from site users
+for(int i=0; i<siteUsers.size(); i++) {
+	User tempSiteUser = siteUsers.get(i);
+	if(tempSiteUser.getRoles().contains(adminRole)) removeIndex = i;
+}
+
+// remove admin user from site user
+if(removeIndex >= 0) {
+	siteUsers.remove(removeIndex);
+}
 
 int siteUserCount = siteUsers.size();
 
@@ -58,42 +73,48 @@ if(membershipRequestCount <= 0) {
 		modelVar="siteUser" >
 		
 		<liferay-ui:search-container-column-text
-			name="ecrf-user.list.no"
 			value="<%=String.valueOf(++membershipUserCount) %>"
+			cssClass="descriptive-index-col decriptive-col-center"
 		/>
 		
 		<liferay-ui:search-container-column-text
-			name="ecrf-user.list.name"
-			value="<%=siteUser.getFullName() %>"
-		/>
+			cssClass="decriptive-col-center"
+		>
+			<liferay-ui:user-portrait
+				userId="<%=siteUser.getUserId() %>"
+			/>
+		</liferay-ui:search-container-column-text>
 		
-		<liferay-ui:search-container-column-text
-			name="ecrf-user.list.email"
-			value="<%=siteUser.getEmailAddress() %>"
-		/>
-		
+		<liferay-ui:search-container-column-text>
+			<h5>
+				<%=HtmlUtil.escape(siteUser.getFullName()) %>
+			</h5>
+			
+			<h6>
+				<span><%=siteUser.getEmailAddress() %></span>
+			</h6>
+		</liferay-ui:search-container-column-text>
+				
 		<%
-		List<Researcher> researcherList = ResearcherLocalServiceUtil.getResearcherByG_RU(scopeGroupId, siteUser.getUserId());
-		int researcherCount = ResearcherLocalServiceUtil.getResearcherCountByG_RU(scopeGroupId, siteUser.getUserId());
-		Researcher researcher = null;
-		if(researcherCount > 0) {
-			researcher = researcherList.get(0);
-		}
+		Researcher researcher = ResearcherLocalServiceUtil.getResearcherByUserId(siteUser.getUserId());
 		%>
 		
-		<liferay-ui:search-container-column-text
-			name="ecrf-user.list.position"
-			value="<%=Validator.isNull(researcher) ? StringPool.DASH : researcher.getPosition() %>"
-		/>
+		<liferay-ui:search-container-column-text>
+			<h6>
+				<span><%=Validator.isNull(researcher) ? StringPool.DASH : researcher.getPosition() %></span>
+			</h6>
+			
+			<h6>
+				<span><%=Validator.isNull(researcher) ? StringPool.DASH : researcher.getInstitution() %></span>
+			</h6>
 		
-		<liferay-ui:search-container-column-text
-			name="ecrf-user.list.institution"
-			value="<%=Validator.isNull(researcher) ? StringPool.DASH : researcher.getInstitution() %>"
-		/>
-		
+		</liferay-ui:search-container-column-text>
 	</liferay-ui:search-container-row>
 
-<liferay-ui:search-iterator	/>
+	<liferay-ui:search-iterator
+		displayStyle="descriptive"
+		markupView="lexicon"
+	/>
 </liferay-ui:search-container>
 
 <c:choose>

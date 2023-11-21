@@ -1,4 +1,7 @@
 Bundle-Name: ecrf-user-crf
 Bundle-SymbolicName: ecrf.user.crf
 Bundle-Version: 1.0.0
-Export-Package: ecrf.user.crf.constants
+
+-privatepackage: \
+	ecrf.user.constants,\
+	com.sx.icecap.constant

@@ -1,3 +1,6 @@
+<%@page import="com.liferay.portal.kernel.service.RoleLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.util.Tuple"%>
+<%@page import="com.liferay.portal.kernel.service.UserGroupLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.CalendarFactoryUtil"%>
 <%@ include file="../init.jsp" %>
 
@@ -6,6 +9,8 @@
 %>
 
 <%
+_log.info("group id : " + scopeGroupId);
+
 long projectId = ParamUtil.getLong(renderRequest, ECRFUserProjectAttributes.PROJECT_ID, 0);
 Project project = null;
 
@@ -18,14 +23,30 @@ if(projectId > 0) {
 	manageResearcherId = project.getManageResearcherId();
 }
 
+List<User> siteUserList = UserLocalServiceUtil.getGroupUsers(scopeGroupId);
+Role adminRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Administrator");
+_log.info("site user list size : " + siteUserList.size());
+
 List<Researcher> leadResearcherList = new ArrayList<Researcher>();
 List<Researcher> manageResearcherList = new ArrayList<Researcher>();
+List<Researcher> wholeResearcherList = new ArrayList<Researcher>();
 
-leadResearcherList = ResearcherLocalServiceUtil.getResearcherByG_P(scopeGroupId, "lead");
-manageResearcherList = ResearcherLocalServiceUtil.getResearcherByGroupId(scopeGroupId);
+for(int i=0; i<siteUserList.size(); i++) {
+	User siteUser = siteUserList.get(i);
+	
+	if(siteUser.getRoles().contains(adminRole)) continue;
+	
+	Researcher researcher = ResearcherLocalServiceUtil.getResearcherByUserId(siteUser.getUserId());
+	
+	if(researcher.getPosition() == "lead") {
+		leadResearcherList.add(researcher);
+	} else {
+		manageResearcherList.add(researcher);
+	}
+}
 
-int leadResearcherCount = ResearcherLocalServiceUtil.getResearcherCountByG_P(scopeGroupId, "lead");
-int manageResearcherCount = ResearcherLocalServiceUtil.getResearcherCount(scopeGroupId);
+int leadResearcherCount = leadResearcherList.size();
+int manageResearcherCount = manageResearcherList.size(); 
 
 _log.info("lead researcher count : " + leadResearcherCount);
 _log.info("manage researcher count : " + manageResearcherCount);

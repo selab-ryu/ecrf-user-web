@@ -71,9 +71,6 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
-<%@ page import="ecrf.user.researcher.internal.security.permission.resource.ResearcherModelPermission" %>
-<%@ page import="ecrf.user.researcher.internal.security.permission.resource.ResearcherPermission" %>
-
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
 

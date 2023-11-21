@@ -15,8 +15,8 @@
 <%
 SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
 
-List<Researcher> researcherList = ResearcherLocalServiceUtil.getResearcherByGroupId(scopeGroupId);
-int totalCount = ResearcherLocalServiceUtil.getResearcherCount(scopeGroupId);
+int totalCount = ResearcherLocalServiceUtil.getResearchersCount();
+List<Researcher> researcherList = ResearcherLocalServiceUtil.getResearchers(0, totalCount);
 
 _log.info("all researcher size : "+totalCount);
 

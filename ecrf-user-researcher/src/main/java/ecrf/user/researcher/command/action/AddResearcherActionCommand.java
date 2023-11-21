@@ -39,7 +39,6 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserResearcherAttributes;
 import ecrf.user.constants.ECRFUserWebKeys;
 import ecrf.user.model.Researcher;
-import ecrf.user.search.researcher.ResearcherModelDocumentContributor;
 import ecrf.user.service.ResearcherLocalService;
 
 @Component
@@ -54,7 +53,7 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		 _log = LogFactoryUtil.getLog(this.getClass().getName()); 
+		_log = LogFactoryUtil.getLog(this.getClass().getName()); 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 		
@@ -144,7 +143,6 @@ public class AddResearcherActionCommand extends BaseMVCActionCommand {
 		} else {
 			_log.info("user is null");
 		}
-		
 	}
 	
 	public void updateResearcherWithUser(ActionRequest actionRequest, ActionResponse actionResponse) {

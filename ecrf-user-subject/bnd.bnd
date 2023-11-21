@@ -1,0 +1,5 @@
+Bundle-Name: ecrf-user-subject
+Bundle-SymbolicName: ecrf.user.subject
+Bundle-Version: 1.0.0
+
+-privatepackage: ecrf.user.constants

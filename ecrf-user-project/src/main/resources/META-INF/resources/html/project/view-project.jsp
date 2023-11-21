@@ -32,6 +32,8 @@ if(projectCount > 0) {
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+boolean isPrivate = layout.isPrivateLayout();
+
 %>
 
 <portlet:renderURL var="addProjectURL">
@@ -126,6 +128,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 </c:choose>
 </aui:container>
 
+<c:if test="<%=isPrivate %>">
 <!-- buttons -->
 <aui:container>
 	<aui:row>
@@ -144,5 +147,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		</aui:col>
 	</aui:row>
 </aui:container>
+</c:if>
 
 </div>

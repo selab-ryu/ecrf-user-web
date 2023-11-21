@@ -20,7 +20,7 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Main",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/view.jsp",
+		"javax.portlet.init-param.view-template=/html/main/view-site.jsp",
 		"javax.portlet.name=" + ECRFUserPortletKeys.MAIN,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"

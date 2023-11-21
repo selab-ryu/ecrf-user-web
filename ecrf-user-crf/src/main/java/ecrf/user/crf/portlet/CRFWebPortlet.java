@@ -6,7 +6,7 @@ import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
 
-import ecrf.user.crf.constants.CRFWebPortletKeys;
+import ecrf.user.constants.ECRFUserPortletKeys;
 
 /**
  * @author Ryu
@@ -14,13 +14,14 @@ import ecrf.user.crf.constants.CRFWebPortletKeys;
 @Component(
 	immediate = true,
 	property = {
-		"com.liferay.portlet.display-category=category.sample",
+		"javax.portlet.version=3.0",	// for using MutableRenderParameters
+		"com.liferay.portlet.display-category=category.ecrf-user",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
-		"com.liferay.portlet.instanceable=true",
+		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=CRFWeb",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/view.jsp",
-		"javax.portlet.name=" + CRFWebPortletKeys.CRFWEB,
+		"javax.portlet.init-param.view-template=/html/crf/list-crf.jsp",
+		"javax.portlet.name=" + ECRFUserPortletKeys.CRF,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},

@@ -13,7 +13,7 @@ if(membershipRequestId > 0) {
 	_log.info("request id : " + membershipRequestId);
 	membershipRequest = MembershipRequestLocalServiceUtil.fetchMembershipRequest(membershipRequestId);
 	membershipUser = UserLocalServiceUtil.fetchUser(membershipRequest.getUserId());
-	researcher = ResearcherLocalServiceUtil.getResearcherByG_RU_First(scopeGroupId, membershipUser.getUserId());
+	researcher = ResearcherLocalServiceUtil.getResearcherByUserId(membershipUser.getUserId());
 } else {
 	_log.error("error : no membership request id");
 }

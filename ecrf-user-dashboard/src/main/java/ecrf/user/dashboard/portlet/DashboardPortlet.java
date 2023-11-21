@@ -15,7 +15,7 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 	immediate = true,
 	property = {
 			"javax.portlet.version=3.0",	// for using MutableRenderParameters
-		"com.liferay.portlet.display-category=category.sample",
+		"com.liferay.portlet.display-category=category.ecrf-user",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Dashboard",

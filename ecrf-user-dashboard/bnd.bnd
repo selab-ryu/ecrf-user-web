@@ -1,4 +1,5 @@
 Bundle-Name: ecrf-user-dashboard
 Bundle-SymbolicName: ecrf.user.dashboard
 Bundle-Version: 1.0.0
-Export-Package: ecrf.user.dashboard.constants
+
+-privatepackage: ecrf.user.constants
