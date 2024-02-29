@@ -19,7 +19,7 @@ import org.osgi.service.component.annotations.Reference;
 import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
-import ecrf.user.constants.ECRFUserSubjectAttributes;
+import ecrf.user.constants.attribute.ECRFUserSubjectAttributes;
 import ecrf.user.model.Subject;
 import ecrf.user.service.SubjectLocalService;
 
@@ -42,10 +42,13 @@ public class UpdateSubjectRenderCommand implements MVCRenderCommand {
 		
 		long subjectId = ParamUtil.getLong(renderRequest, ECRFUserSubjectAttributes.SUBJECT_ID, 0);
 		
+		_log.info("subject id : " + subjectId);
+		
 		Subject subject = null;
 		if(subjectId > 0) {
 			try {
 				subject = _subjectLocalService.getSubject(subjectId);
+				_log.info("birth : " + subject.getBirth());
 			} catch (Exception e) {
 				throw new PortletException("Cannot find subject : " + subjectId);
 			}

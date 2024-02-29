@@ -48,10 +48,18 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
+<%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
+<%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
+<%@ page import="ecrf.user.constants.ECRFUserConstants"%>
+<%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
+<%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
+
+
 <%@page import="ecrf.user.service.ProjectLocalServiceUtil"%>
-<%@page import="ecrf.user.constants.ECRFUserProjectAttributes"%>
-<%@page import="ecrf.user.constants.ECRFUserWebKeys"%>
-<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@page import="ecrf.user.constants.attribute.ECRFUserProjectAttributes"%>
+
 <%@page import="ecrf.user.model.Project"%>
 <%@page import="ecrf.user.project.internal.security.permission.resource.ProjectPermission"%>
 
@@ -66,4 +74,20 @@
 	String currentURL = themeDisplay.getURLCurrent();
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
 	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
+	
+	boolean updatePermission = true;
+	boolean isAdmin = false;
+	boolean isPI = false;
+	
+	if(ResearcherLocalServiceUtil.hasPIPermission(user.getUserId())) isPI = true;
+	
+	//check user roles
+	if(user != null) {
+		List<Role> roleList = user.getRoles();
+		for(int i=0; i<roleList.size(); i++) {
+			Role role = roleList.get(i);
+			if(role.getName().equals("Guest")) updatePermission = false;
+			if(role.getName().equals("Administrator")) isAdmin = true;
+		}
+	}
 %>

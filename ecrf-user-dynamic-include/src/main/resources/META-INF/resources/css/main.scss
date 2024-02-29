@@ -1,2 +1,113 @@
-.ecrf-user-dynamic-include {
+.ecrf-user {
+	
+	/* button style */
+	.add-btn { background-color:#5f73ff;  border-color: rgba(60, 64, 67, 0.3); box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; color:white; }
+	.add-btn:active { background-color:#5f73ff!important; border-color:#5f73ff!important; color:white!important; }
+	
+	.delete-btn { background-color:#3cbe5a; border-color: #3cbe5a; color:white; }
+	.delete-btn:active { background-color:#3cbe5a!important; border-color:#3cbe5a!important; color:white!important; }
+	
+	.sub-delete-btn { background-color:#3cbe5a; border-color: rgba(60, 64, 67, 0.3); box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; color:white; }
+	.sub-delete-btn:active { background-color:#3cbe5a!important; border-color:#3cbe5a!important; color:white!important; }
+	
+	.reset-btn { background-color:#3cbe5a; border-color: rgba(60, 64, 67, 0.3); box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; color:white; }
+	.reset-btn:active { background-color:#3cbe5a!important; border-color:#3cbe5a!important; color:white!important; }
+	
+	.history-btn{ background-color:#8c78ff; border-color:#8c78ff; color:white; }
+	.history-btn:active { background-color:#8c78ff!important; border-color:#29AAE1!important; color:white!important; }
+	
+	.cancel-btn { background-color:#FFFFFF; border-color: rgba(60, 64, 67, 0.3); box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; color:black; }
+	.cancel-btn:active { background-color:#FFFFFF!important; border-color:#D1D2D3!important; color:black!important; }
+	
+	.edit-btn { background-color:#5f73ff; border-color:#5f73ff; color:white; }
+	.edit-btn:active { background-color:#5f73ff!important; border-color:#5f73ff!important; color:white!important; }
+	
+	.ci-btn { background-color:#5f73ff; border-color:#5f73ff; color:white; }
+	.ci-btn:active { background-color:#5f73ff!important; border-color:#5f73ff!important; color:white!important; }
+	
+	.emr-btn { background-color:#58BD84; border-color:#58BD84; color:white; }
+	.emr-btn:active { background-color:#58BD84!important; border-color:#58BD84!important; color:white!important; }
+	
+	.vcf-btn { background-color:#2F5597; border-color:#2F5597; color:white; }
+	.vcf-btn:active { background-color:#2F5597!important; border-color:#2F5597!important; color:white!important; }
+	
+	.ai-btn { background-color:#F4A460; border-color:#F4A460; color:white; }
+	.ai-btn:active { background-color:#F4A460!important; border-color:#F4A460!important; color:white!important; }
+	
+	.none-btn { background-color:#929497; border-color:#929497; color:white; }
+	.none-btn:active { background-color:#929497!important; border-color:#929497!important; color:white!important; }
+		
+	.radius-btn { border-radius:20px; }
+	
+	.medium-btn { font-size:1rem; padding: 0.3rem 1.5rem; height:40px; }
+	.small-btn { font-size:0.8rem; border-radius: 0; padding: 0.2rem 0.8rem; height:30px; }
+	/* button style */
+	
+	.searchcontainer-content .table thead th,
+	.table thead th, .table-list thead td, .table-list thead th {
+		background-color: #424242;
+		color: #A0A0A0;
+	}
+	
+	.breadcrumb {
+	    padding: 0;
+	    margin-bottom: 0.5rem;
+	}
+	
+	.center {
+	    display:flex;
+	    justify-content: center;
+	}
+	.search-input {
+	    background-color:white;
+	    border-color:#72aee6;
+	}
+	.min-width{
+	    width: min-content;
+	}
+
+	.field-pad { padding: 10px; }
+    .left { float:left; }
+    .right { float:right; }
+
+    .center-table,
+    .center-table thead tr,
+    .center-table thead th,
+    .center-table tbody tr,
+    .center-table tbody td
+    { text-align: center !important; }
+
+    .thead-gray>tr>th 
+    {
+        background-color:#2271b1;
+        color:white;
+        font-size:0.9rem
+    }
+
+    .vertical-middle {
+        display:flex;
+        align-items:center;
+    }  
+
+    .input-top-margin-container {
+        input {
+            margin-top:1rem;
+            margin-bottom:1rem;
+        }
+
+        select {
+            margin-top:1rem;
+            margin-bottom:1rem;
+        }
+    }
+
+    .form-group { margin-bottom:1rem; }
+
+    .row-first {
+        border-top: solid 1.5px #aaaaaa;
+        border-bottom: solid 1px #cccccc;
+    }
+    .row-middle { border-bottom: solid 1px #cccccc; }
+    .row-other { border-bottom: solid 1px #cccccc; }
+    .row-last { border-top: solid 1.5px #aaaaaa; }
 }

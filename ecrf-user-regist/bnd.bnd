@@ -1,4 +1,0 @@
-Bundle-Name: ecrf-user-regist
-Bundle-SymbolicName: ecrf.user.regist
-Bundle-Version: 1.0.0
-Export-Package: ecrf.user.regist.constants

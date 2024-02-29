@@ -14,6 +14,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import ecrf.user.constants.ECRFUserConstants;
+import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.service.ResearcherLocalService;
 
@@ -29,7 +30,7 @@ import ecrf.user.service.ResearcherLocalService;
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Researcher",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/html/researcher/list-researcher.jsp",
+		"javax.portlet.init-param.view-template=" + ECRFUserJspPaths.JSP_LIST_RESEARCHER,
 		"javax.portlet.name=" + ECRFUserPortletKeys.RESEARCHER,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"

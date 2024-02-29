@@ -1,0 +1,9 @@
+Bundle-Name: ecrf-user-crf-data
+Bundle-SymbolicName: ecrf.user.crf.data
+Bundle-Version: 1.0.0
+
+Web-ContextPath: /ecrf.user.crf.data
+
+-privatepackage: \
+	ecrf.user.constants,\
+	com.sx.icecap.constant

@@ -22,7 +22,14 @@ public class ECRFUserTopHeadDynamicInclude extends BaseDynamicInclude {
 			throws IOException {
 		PrintWriter printWriter = response.getWriter();
 		
-		String content = "<link rel=\"stylesheet\" type = \"text/css\" href=\"/o/ecrf.user.dynamic.include/css/ecrf-user.css\" >";
+		String content = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/o/ecrf.user.dynamic.include/css/ecrf-user.css\" >";
+				
+		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/DataTables/datatables.min.js\"></script>";
+		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/ecrf-user.js\"></script>";
+		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/jquery.mask/jquery.mask.js\"></script>";
+		
+		content += "<link rel=\"stylesheet\" href=\"/o/ecrf.user.dynamic.include/css/main.css\" >";
+		content += "<link rel=\"stylesheet\" href=\"/o/ecrf.user.dynamic.include/js/DataTables/datatables.min.css\" >";
 		
 		printWriter.println(content);
 	}

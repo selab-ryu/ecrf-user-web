@@ -1,0 +1,7 @@
+Bundle-Name: ecrf-user-crf-query
+Bundle-SymbolicName: ecrf.user.crf.query
+Bundle-Version: 1.0.0
+
+-privatepackage: \
+	com.sx.icecap.constant,\
+	ecrf.user.constants

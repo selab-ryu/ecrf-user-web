@@ -36,8 +36,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import ecrf.user.constants.ECRFUserMVCCommand;
-import ecrf.user.constants.ECRFUserResearcherAttributes;
 import ecrf.user.constants.ECRFUserWebKeys;
+import ecrf.user.constants.attribute.ECRFUserResearcherAttributes;
 import ecrf.user.model.Researcher;
 import ecrf.user.service.ResearcherLocalService;
 
@@ -54,7 +54,7 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		 _log = LogFactoryUtil.getLog(this.getClass().getName()); 
+		_log.info("custom user add");
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 		
@@ -104,20 +104,24 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 		int birthYear = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.BIRTH_YEAR, 1970);
 		int birthMonth = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.BIRTH_MONTH, Calendar.JANUARY);
 		int birthDay = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.BIRTH_DAY, 1);
+		
+		int gender = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.GENDER, 0);
+		
 		String phone = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.PHONE);
 		String institution = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.INSTITUTION);
 		String officeContact = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.OFFICE_CONTACT);
 		String position = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.POSITION);
-		position = "researcher";
+		//position = "researcher";
 		
 		Researcher researcher = null;
 		try {
 		researcher = _researcherLocalService.addResarcherWithUser(
-				company.getCompanyId(), facebookId, openId, languageId,
+				company.getCompanyId(),
+				facebookId, openId, languageId,
 				male, jobTitle, prefixId, suffixId,
 				email, password1, password2, screenName, firstName, lastName,
-				birthYear, birthMonth, birthDay, phone, 
-				institution, officeContact, position, 0,
+				birthYear, birthMonth, birthDay, gender, 
+				phone, institution, officeContact, position, 0,
 				userServiceContext, researcherServiceContext);
 			SessionMessages.add(actionRequest, "researcherWithUserAdded");
 		} catch(PortalException e) {
@@ -155,6 +159,8 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 	public void sendRedirect() {
 		
 	}
+
+	private Log _log = LogFactoryUtil.getLog(CustomCreateAccountActionCommand.class);
 	
 	@Reference
 	private Portal _portal;
@@ -167,6 +173,4 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 	
 	@Reference
 	private MembershipRequestLocalService _membershipRequestLocalService;
-	
-	private Log _log;
 }

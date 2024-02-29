@@ -33,8 +33,8 @@ import org.osgi.service.component.annotations.Reference;
 
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
-import ecrf.user.constants.ECRFUserSubjectAttributes;
 import ecrf.user.constants.ECRFUserWebKeys;
+import ecrf.user.constants.attribute.ECRFUserSubjectAttributes;
 import ecrf.user.model.Subject;
 import ecrf.user.service.SubjectLocalService;
 
@@ -54,6 +54,8 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		_log = LogFactoryUtil.getLog(this.getClass().getName());		
 		
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+		
+		_log.info("cmd : " + cmd);
 		
 		if(cmd.equals(Constants.ADD)) {
 			addSubject(actionRequest, actionResponse);
@@ -76,18 +78,13 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		String serialId = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.SERIAL_ID);
 		
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-		Date birth = ParamUtil.getDate(actionRequest, ECRFUserSubjectAttributes.BIRTH, df);
-		
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(birth);
 		
+		Date birth = ParamUtil.getDate(actionRequest, ECRFUserSubjectAttributes.BIRTH, df);
+		cal.setTime(birth);
 		int birthYear = cal.get(Calendar.YEAR);
 		int birthMonth = cal.get(Calendar.MONTH);
 		int birthDay = cal.get(Calendar.DATE);
-		
-//		int birthYear = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.BIRTH_YEAR, 1970);
-//		int birthMonth = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.BIRTH_MONTH, Calendar.JANUARY);
-//		int birthDay = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.BIRTH_DAY, 1);
 		
 		int gender = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.GENDER);
 		String address = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.ADDRESS);
@@ -96,44 +93,19 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		
 		int hospitalCode = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.HOSPITAL_CODE);
 		
-		int visitDateYear = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.VISIT_DATE_YEAR);
-		int visitDateMonth = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.VISIT_DATE_MONTH);
-		int visitDateDay = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.VISIT_DATE_DAY);
-		
-		int consentYear = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.CONSENT_DATE_YEAR);
-		int consentMonth = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.CONSENT_DATE_MONTH);
-		int consentDay = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.CONSENT_DATE_DAY);
-		
-		int participationDateYear = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.PARTICIPATION_START_DATE_YEAR);		
-		int participationDateMonth = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.PARTICIPATION_START_DATE_MONTH);
-		int participationDateDay = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.PARTICIPATION_START_DATE_DAY);
-		
-		String experimentalGroup = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.EXPERIMENTAL_GROUP);
-		
-		int participationStatus = 1;
-		boolean hasCRF = false;
-		boolean hasCohortStudy = false;
-		boolean hasMRIStudy = false;
-		
 		Subject subject = null;
 		
 		try {
-			
 			subject = _subjectLocalService.addSubject(
 					name, 
 					birthYear, birthMonth, birthDay, 
 					gender, phone, phone2, 
 					address, serialId, hospitalCode, 
-					visitDateYear, visitDateMonth, visitDateDay, 
-					consentYear, consentMonth, consentDay, 
-					participationDateYear, participationDateMonth, participationDateDay, 
-					participationStatus, experimentalGroup, 
-					hasCRF, hasCohortStudy, hasMRIStudy, subjectServiceContext);
+					subjectServiceContext);
 			
 		} catch(PortalException e) {
 			_log.error("subject is null");	
 		}
-		
 	}
 	
 	public void updateSubject(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException {
@@ -149,9 +121,14 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		String name = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.NAME);
 		String serialId = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.SERIAL_ID);
 		
-		int birthYear = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.BIRTH_YEAR, 1970);
-		int birthMonth = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.BIRTH_MONTH, Calendar.JANUARY);
-		int birthDay = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.BIRTH_DAY, 1);
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Calendar cal = Calendar.getInstance();
+		
+		Date birth = ParamUtil.getDate(actionRequest, ECRFUserSubjectAttributes.BIRTH, df);
+		cal.setTime(birth);
+		int birthYear = cal.get(Calendar.YEAR);
+		int birthMonth = cal.get(Calendar.MONTH);
+		int birthDay = cal.get(Calendar.DATE);
 		
 		int gender = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.GENDER);
 		String address = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.ADDRESS);
@@ -159,26 +136,7 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		String phone2 = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.PHONE_2);
 		
 		int hospitalCode = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.HOSPITAL_CODE);
-		
-		int visitDateYear = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.VISIT_DATE_YEAR);
-		int visitDateMonth = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.VISIT_DATE_MONTH);
-		int visitDateDay = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.VISIT_DATE_DAY);
-		
-		int consentYear = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.CONSENT_DATE_YEAR);
-		int consentMonth = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.CONSENT_DATE_MONTH);
-		int consentDay = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.CONSENT_DATE_DAY);
-		
-		int participationDateYear = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.PARTICIPATION_START_DATE_YEAR);		
-		int participationDateMonth = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.PARTICIPATION_START_DATE_MONTH);
-		int participationDateDay = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.PARTICIPATION_START_DATE_DAY);
-		
-		String experimentalGroup = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.EXPERIMENTAL_GROUP);
-		
-		int participationStatus = 1;
-		boolean hasCRF = false;
-		boolean hasCohortStudy = false;
-		boolean hasMRIStudy = false;
-		
+				
 		Subject subject = null;
 		
 		try {
@@ -188,11 +146,7 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 					birthYear, birthMonth, birthDay, 
 					gender, phone, phone2, 
 					address, serialId, hospitalCode, 
-					visitDateYear, visitDateMonth, visitDateDay, 
-					consentYear, consentMonth, consentDay, 
-					participationDateYear, participationDateMonth, participationDateDay, 
-					participationStatus, experimentalGroup, 
-					hasCRF, hasCohortStudy, hasMRIStudy, subjectServiceContext);
+					subjectServiceContext);
 			
 		} catch(PortalException e) {
 			_log.error("subject is null");	

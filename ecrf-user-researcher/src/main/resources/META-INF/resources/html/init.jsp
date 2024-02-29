@@ -1,4 +1,3 @@
-<%@page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
@@ -57,6 +56,8 @@
 <%@ page import="com.liferay.portal.kernel.log.Log" %>
 <%@ page import="com.liferay.portal.kernel.log.LogFactoryUtil" %>
 
+<%@ page import="com.liferay.portal.kernel.service.UserLocalServiceUtil" %>
+
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
@@ -71,6 +72,22 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
+<%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
+<%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>
+<%@ page import="ecrf.user.constants.ECRFUserConstants"%>
+<%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
+<%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
+<%@ page import="ecrf.user.constants.ECRFUserUtil"%>
+
+<%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserResearcherAttributes"%>
+
+<%@ page import="ecrf.user.model.Researcher" %>
+<%@ page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
+
+<%@ page import="ecrf.user.constants.ResearcherPosition"%>
+ 
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
 
@@ -78,4 +95,20 @@
 	String currentURL = themeDisplay.getURLCurrent();
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
 	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
+	
+	boolean updatePermission = true;
+	boolean isAdmin = false;
+	boolean isPI = false;
+	
+	if(ResearcherLocalServiceUtil.hasPIPermission(user.getUserId())) isPI = true;
+	
+	//check user roles
+	if(user != null) {
+		List<Role> roleList = user.getRoles();
+		for(int i=0; i<roleList.size(); i++) {
+			Role role = roleList.get(i);
+			if(role.getName().equals("Guest")) updatePermission = false;
+			if(role.getName().equals("Administrator")) isAdmin = true;
+		}
+	}
 %>

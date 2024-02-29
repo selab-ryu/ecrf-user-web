@@ -14,6 +14,8 @@
 
 .marBr-date { margin-bottom:1.5rem; }
 
+.mar16px { margin:16px; }
+
 .marT10 { margin-top:10px; }
 .marT20 { margin-top:20px;}
 .marT25 { margin-top:25px;}
@@ -44,15 +46,21 @@
 
 .radius-shadow-container {
 	padding: 16px;
-	background-color:#BEBEBE!important;
-	border: 1px solid #BEBEBE;
+	background-color:#FFFFFF!important;
+	border: 1px solid #FFFFFF;
     border-radius: 4px;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 .radio-one-line .radio { 
 	display: inline-block;
 	margin : 0;
+}
+
+.radio-align {
+	height: 2.5rem;
+    margin-bottom: 1.5rem;
+    padding-top: 0.5rem;
 }
 
 .search-input {
@@ -67,6 +75,11 @@
 
 .hide {	display:none; }
 .show {	display:block; }
+
+.right { float:right }
+.left { float:left }
+
+.div-center { text-align:center; }
 
 .descriptive-index-col {
 	padding-right:10px!important;
@@ -84,3 +97,145 @@
     color:#272833;
     background-color:#f0f5ff;
 }
+
+/* The side navigation menu */
+/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+div.page-content {
+    padding:16px 16px 16px 170px; 
+    max-width:2000px;
+}
+
+div.page-content-sub {
+    padding:16px 16px 16px 162px; 
+    max-width:2000px;
+}
+        
+.side-menu {
+   	margin-top: 16px;
+    margin-left: 12px;
+    padding: 4px;
+    width: 145px;
+    position: absolute;
+    overflow: auto;
+	min-width: 145px;
+	line-height: 12px;
+		
+	background-color:white;
+}
+        
+.main-menu-bar {
+   	width:100%;
+   	border-radius:8px;
+   	margin-top:8px;
+   	margin-bottom:8px;
+   	font-size: 0.76rem;
+   	
+   	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.active-menu-bar {
+	background-color:#58BD84; 
+	border-color:#58BD84; 
+	color:white;
+}
+
+.active-menu-bar:active {
+	background-color:#58BD84!important; 
+	border-color:#58BD84!important; 
+	color:white!important;
+}
+
+.deactive-menu-bar {
+  	background-color:#A8AAAD;
+   	border-color:#A8AAAD;
+   	color:white;
+}
+
+.deactive-menu-bar:active {
+	background-color:#A8AAAD!important;
+ 	border-color:#A8AAAD!important;
+  	color:white!important;
+}
+    
+
+.sub-menu-bar {
+   	width:96%;
+   	border-radius:1px;
+   	margin-top:2px;
+   	margin-bottom:2px;
+  	font-size:0.7rem;
+   	
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.active-sub-menu-bar {
+	background-color:#5f73ff; 
+	border-color:#5f73ff; 
+	color:white;
+}
+
+.active-sub-menu-bar:active {
+	background-color:#5f73ff!important; 
+	border-color:#5f73ff!important; 
+	color:white!important;
+}
+
+.deactive-sub-menu-bar {
+  	background-color:#DCDDDE;
+  	border-color:#DCDDDE;
+   	color:black;
+}
+
+.deactive-sub-menu-bar:active {
+  	background-color:#DCDDDE!important;
+ 	border-color:#DCDDDE!important;
+	color:black!important;
+}
+
+
+.sub-main-menu-bar {
+   	width:90%;
+   	border-radius:4px;
+   	margin-top:4px;
+   	margin-bottom:4px;
+  	font-size:0.7rem;
+   	
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.sub-main-sub-menu-bar {
+	width:86%;
+   	border-radius:1px;
+   	margin-top:2px;
+   	margin-bottom:2px;
+  	font-size:0.66rem;
+   	
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.active-version-bar {
+   	background-color:#4c51b7; 
+   	border-color:#4c51b7; 
+   	color:white;
+}
+/* The side navigation menu */
+
+/* override attribute */
+
+.pagination {
+	font-size:0.8rem;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    font-size: 0.8rem;
+}
+
+.table th {
+    height: 24px;
+}
+
+.table-list tbody tr:nth-last-child(2) td {
+	border-bottom-width: 1px!important;
+}
+
+/* override attribute */

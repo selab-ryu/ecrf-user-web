@@ -30,6 +30,7 @@
 <%@ page import="com.liferay.portal.kernel.model.User" %>
 <%@ page import="com.liferay.portal.kernel.model.Role" %>
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
+<%@ page import="com.liferay.portal.kernel.portlet.PortletURLUtil"%>
 
 <%@ page import="com.liferay.portal.kernel.log.Log" %>
 <%@ page import="com.liferay.portal.kernel.log.LogFactoryUtil" %>
@@ -45,22 +46,41 @@
 <%@ page import="java.util.Comparator" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Iterator" %>
+<%@ page import="java.util.stream.Collectors"%>
+<%@ page import="java.util.stream.Stream"%>
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
-<%@ page import="ecrf.user.service.ProjectLocalServiceUtil"%>
-<%@ page import="ecrf.user.constants.ECRFUserProjectAttributes"%>
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>
+<%@ page import="ecrf.user.constants.ECRFUserConstants"%>
+<%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
+<%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
+<%@ page import="ecrf.user.constants.CRFStatus"%>
+
+<%@ page import="ecrf.user.constants.attribute.ECRFUserProjectAttributes"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserCRFAttributes"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
+
+<%@ page import="ecrf.user.model.custom.CRFSubjectInfo"%>
+<%@ page import="ecrf.user.constants.ExperimentalGroup"%>
+
+<%@ page import="ecrf.user.model.Researcher"%>
+<%@ page import="ecrf.user.model.CRF"%>
+<%@ page import="com.sx.icecap.model.DataType"%>
 
 <%@ page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
-<%@ page import="ecrf.user.model.Researcher"%>
-
 <%@ page import="ecrf.user.service.CRFLocalServiceUtil"%>
-<%@ page import="ecrf.user.model.CRF"%>
+<%@ page import="ecrf.user.service.ProjectLocalServiceUtil"%>
+<%@ page import="ecrf.user.service.CRFSubjectLocalServiceUtil"%>
+<%@ page import="ecrf.user.service.CRFResearcherLocalServiceUtil"%>
 
 <%@ page import="com.sx.icecap.service.DataTypeLocalServiceUtil"%>
-<%@ page import="com.sx.icecap.model.DataType"%>
+
+<%@ page import="com.sx.constant.StationXWebKeys"%>
+
+<%@ page import="ecrf.user.crf.util.SearchUtil"%>
 
 <liferay-theme:defineObjects />
 
@@ -70,4 +90,56 @@
 	String currentURL = themeDisplay.getURLCurrent();
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
 	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
+	
+	long crfId = 0L;
+	long dataTypeId = 0L;
+	
+	boolean updatePermission = true;
+	boolean isAdmin = false;
+	boolean isPI = false;
+	
+	if(ResearcherLocalServiceUtil.hasPIPermission(user.getUserId())) isPI = true;
+	
+	//check user roles
+	if(user != null) {
+		List<Role> roleList = user.getRoles();
+		for(int i=0; i<roleList.size(); i++) {
+			Role role = roleList.get(i);
+			if(role.getName().equals("Guest")) updatePermission = false;
+			if(role.getName().equals("Administrator")) isAdmin = true;
+		}
+	}
+	
+	crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFAttributes.CRF_ID, 0);
+	dataTypeId = CRFLocalServiceUtil.getDataTypeId(crfId);
 %>
+
+<script charset="utf-8" src="/o/ecrf.user.crf/js/ecrf-user-crf.js" ></script>
+
+<!-- 
+<ol class="breadcrumb">
+	<li class="breadcrumb-item">
+		<a class="breadcrumb-link" href="#1" title="Home">
+			<span class="breadcrumb-text-truncate">Home</span>
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+		<a class="breadcrumb-link" href="#1" title="Components">
+			<span class="breadcrumb-text-truncate">Components</span>
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+		<a class="breadcrumb-link" href="#1" title="Breadcrumbs and Paginations">
+			<span class="breadcrumb-text-truncate">Breadcrumbs and Paginations</span>
+		</a>
+	</li>
+	<li class="breadcrumb-item">
+		<a class="breadcrumb-link" href="#1" title="Page">
+			<span class="breadcrumb-text-truncate">Page</span>
+		</a>
+	</li>
+	<li class="active breadcrumb-item">
+		<span class="breadcrumb-text-truncate" title="Active">Active</span>
+	</li>
+</ol>
+	-->

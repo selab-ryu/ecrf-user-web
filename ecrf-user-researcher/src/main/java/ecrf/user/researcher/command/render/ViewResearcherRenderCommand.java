@@ -10,6 +10,7 @@ import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
 
+import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 
@@ -20,13 +21,11 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 	},
 	service = MVCRenderCommand.class
 )
-public class ViewResearcherRenderCommand implements MVCRenderCommand {
-	private Log _log;
-	
+public class ViewResearcherRenderCommand implements MVCRenderCommand {	
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
-		_log = LogFactoryUtil.getLog(this.getClass().getName());
-		return "/html/researcher/view-researcher.jsp";
+		return ECRFUserJspPaths.JSP_VIEW_RESEARCHER;
 	}
-
+	
+	private Log _log = LogFactoryUtil.getLog(ViewResearcherRenderCommand.class);
 }

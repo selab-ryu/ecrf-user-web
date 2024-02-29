@@ -1,0 +1,80 @@
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_OTHER_PAGE %>" var="moveDashboardURL">
+	<portlet:param name="<%=ECRFUserWebKeys.PAGE_FRIENDLY_URL %>" value="<%=ECRFUserPageFriendlyURL.DASHBOARD %>" />
+	<portlet:param name="<%=ECRFUserWebKeys.PORTLET_KEY %>" value="<%=ECRFUserPortletKeys.DASHBOARD %>" />
+</portlet:actionURL>
+
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_OTHER_PAGE %>" var="moveApproveURL">
+	<portlet:param name="<%=ECRFUserWebKeys.PAGE_FRIENDLY_URL %>" value="<%=ECRFUserPageFriendlyURL.APPROVE %>" />
+	<portlet:param name="<%=ECRFUserWebKeys.PORTLET_KEY %>" value="<%=ECRFUserPortletKeys.APPROVE %>" />
+</portlet:actionURL>
+
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_OTHER_PAGE %>" var="moveProjectURL">
+	<portlet:param name="<%=ECRFUserWebKeys.PAGE_FRIENDLY_URL %>" value="<%=ECRFUserPageFriendlyURL.PROJECT %>" />
+	<portlet:param name="<%=ECRFUserWebKeys.PORTLET_KEY %>" value="<%=ECRFUserPortletKeys.PROJECT %>" />
+</portlet:actionURL>
+
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_OTHER_PAGE %>" var="moveResearcherURL">
+	<portlet:param name="<%=ECRFUserWebKeys.PAGE_FRIENDLY_URL %>" value="<%=ECRFUserPageFriendlyURL.RESEARCHER %>" />
+	<portlet:param name="<%=ECRFUserWebKeys.PORTLET_KEY %>" value="<%=ECRFUserPortletKeys.RESEARCHER %>" />
+</portlet:actionURL>
+
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_OTHER_PAGE %>" var="moveSubjectURL">
+	<portlet:param name="<%=ECRFUserWebKeys.PAGE_FRIENDLY_URL %>" value="<%=ECRFUserPageFriendlyURL.SUBJECT %>" />
+	<portlet:param name="<%=ECRFUserWebKeys.PORTLET_KEY %>" value="<%=ECRFUserPortletKeys.SUBJECT %>" />
+</portlet:actionURL>
+
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_OTHER_PAGE %>" var="moveCRFURL">
+	<portlet:param name="<%=ECRFUserWebKeys.PAGE_FRIENDLY_URL %>" value="<%=ECRFUserPageFriendlyURL.CRF %>" />
+	<portlet:param name="<%=ECRFUserWebKeys.PORTLET_KEY %>" value="<%=ECRFUserPortletKeys.CRF %>" />
+</portlet:actionURL>
+
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_OTHER_PAGE %>" var="moveMyInfoURL">
+	<portlet:param name="<%=ECRFUserWebKeys.PAGE_FRIENDLY_URL %>" value="<%=ECRFUserPageFriendlyURL.MY_INFO %>" />
+	<portlet:param name="<%=ECRFUserWebKeys.PORTLET_KEY %>" value="<%=ECRFUserPortletKeys.ACCOUNT %>" />
+</portlet:actionURL>
+
+
+<div class="side-menu radius-shadow-container" style="text-align:center;">
+	<!-- Dashboard -->
+	<div>
+		<aui:button cssClass="main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.dashboard" onClick="<%=moveDashboardURL %>" />
+	</div>
+	<!-- Dashboard -->
+	
+	<!-- Mebership Request Approve Management -->
+	<div>
+		<aui:button cssClass="main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.approve" onClick="<%=moveApproveURL %>" />
+	</div>
+	<!-- Mebership Request Approve Management -->
+	
+	<!-- Project Management -->
+	<div>
+		<aui:button cssClass="main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.project" onClick="<%=moveProjectURL %>" />
+	</div>
+	<!-- Project Management -->
+	
+	<!-- Researcher Management -->
+	<div>
+		<aui:button cssClass="main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.researcher" onClick="<%=moveResearcherURL %>" />
+	</div>
+	<!-- Researcher Management -->
+	
+	<!-- Subject Management -->
+	<div>
+		<aui:button cssClass="main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.subject" onClick="<%=moveSubjectURL %>" />
+	</div>
+	<!-- Subject Management -->
+	
+	<!-- CRF Management -->
+	<div>
+		<aui:button cssClass="main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.crf" onClick="<%=moveCRFURL %>" />	
+	</div>
+	<!-- CRF Management -->
+	
+	<!-- My Info Management -->
+	<div>
+		<aui:button cssClass="main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.my-info" onClick="<%=moveMyInfoURL %>" />
+	</div>
+	<!-- My Info Management -->
+	
+</div>

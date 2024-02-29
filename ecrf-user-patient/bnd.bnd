@@ -1,4 +1,0 @@
-Bundle-Name: ecrf-user-patient
-Bundle-SymbolicName: ecrf.user.patient
-Bundle-Version: 1.0.0
-Export-Package: ecrf.user.patient.constants

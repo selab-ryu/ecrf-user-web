@@ -20,8 +20,8 @@ import org.osgi.service.component.annotations.Reference;
 
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
-import ecrf.user.constants.ECRFUserSubjectAttributes;
 import ecrf.user.constants.ECRFUserWebKeys;
+import ecrf.user.constants.attribute.ECRFUserSubjectAttributes;
 import ecrf.user.service.SubjectLocalService;
 
 @Component

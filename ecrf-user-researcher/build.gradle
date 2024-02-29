@@ -28,5 +28,6 @@ dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.petra.model.adapter"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.reflect"
 	
-		compileOnly group: "org.slf4j", name: "jcl-over-slf4j"
+	compileOnly group: "org.slf4j", name: "jcl-over-slf4j"
+	
 }

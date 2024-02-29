@@ -1,4 +1,4 @@
-<%@page import="ecrf.user.model.Researcher"%>
+
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html/main/request-membership_jsp"); %>
@@ -8,13 +8,16 @@ User curUser = themeDisplay.getUser();
 Researcher researcher = null;
 
 // get researcher
-
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+long siteGroupId = ParamUtil.getLong(renderRequest, ECRFUserMainAttributes.SITE_GROUP_ID, 0);
 
 %>
 
-<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_REQUEST_MEMBERSHIP %>" var="requestMembershipURL">
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_ADD_MEMBERSHIP_REQUEST %>" var="requestMembershipURL">
 	<portlet:param name="<%=WebKeys.USER_ID %>" value="<%=String.valueOf(curUser.getUserId()) %>" />
+	<portlet:param name="<%=ECRFUserMainAttributes.SITE_GROUP_ID %>" value="<%=String.valueOf(siteGroupId) %>" />
+	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=redirect %>" />
 </portlet:actionURL>
 
 <liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.main.title.request-membership" />
@@ -49,7 +52,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			<aui:input 
 				type="textarea" 
 				cssClass="search-input" 
-				name="requestComment"
+				name="<%=ECRFUserMainAttributes.REQUEST_COMMENT %>"
 				required="true" 
 				label="ecrf-user.main.request-comment"/>
 		</aui:col>

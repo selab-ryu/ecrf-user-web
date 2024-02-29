@@ -1,108 +1,197 @@
-<%@page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
-<%@page import="ecrf.user.constants.ECRFUserResearcherAttributes"%>
-<%@page import="ecrf.user.constants.ECRFUserAttributes"%>
-<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
-<%@page import="ecrf.user.model.Researcher" %>
-<%@page import="com.liferay.portal.kernel.service.UserLocalServiceUtil" %>
 <%@ include file="../init.jsp" %>
 
-<%!
-    private static Log _log = LogFactoryUtil.getLog("html.researcher.update_researcher_jsp");
-%>
+<%! private static Log _log = LogFactoryUtil.getLog("html.researcher.view_researcher_jsp"); %>
 
 <%
+String menu = ParamUtil.getString(renderRequest, "menu", "researcher-list");
+
 long researcherId = ParamUtil.getLong(renderRequest, ECRFUserResearcherAttributes.RESEARCHER_ID);
 long userId = 0;
+
 Researcher researcher = null;
+User researcherUser = null;
+
+String birthStr = null;
+boolean isMale = true;
+String genderStrKey = "";
+
 if(researcherId > 0) {
 	researcher = ResearcherLocalServiceUtil.getResearcher(researcherId);
 	userId = researcher.getResearcherUserId();
+	
+	birthStr = ECRFUserUtil.getDateStr(researcher.getBirth());
+	
+	// gender value / male : 0, female : 1
+	int genderValue = researcher.getGender();
+	isMale = (genderValue == 1) ? false : true;	// if null -> male is true (default value)
+	
+	if(Validator.isNull(genderValue)) {
+		genderStrKey = "-";
+	} else {
+		if(genderValue == 0) {
+			genderStrKey = "ecrf-user.general.male";
+		} else {
+			genderStrKey = "ecrf-user.general.female";
+		}
+	}
+	
+	if(userId > 0) researcherUser = UserLocalServiceUtil.getUser(userId);
 }
 
-User researcherUser = null;
-if(userId > 0) {
-	researcherUser = UserLocalServiceUtil.getUser(userId);
-}
+backURL = redirect;
 
 %>
 
-<liferay-ui:header backURL="<%=redirect %>" title="ecrf.user.researcher.title.view-resarcher" />
+<div class="ecrf-user ecrf-user-researcher">
 
-<div class="ecrf-user-researcher">
-	<aui:container cssClass="radius-shadow-container">
-		<aui:form name="viewResearhcerFm" action="" method="post" autocomplete="off">
-		<aui:row>
-		<aui:col md="12">
+	<%@ include file="sidebar.jspf" %>
+
+	<div class="page-content">
+		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.researcher.title.view-researcher" />
+		
+		<aui:container cssClass="radius-shadow-container">	
+				
 		<!-- user info -->
-		<aui:container>
-			<aui:row>
-				<aui:col md="12" cssClass="sub-title-bottom-border">
-					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf.user.researcher.title.user-info" />
-					</span>
-				</aui:col>
-			</aui:row>
-			<aui:row>
-				<aui:col md="6">
-					<aui:input 
-						autofocus="true"
-						name="<%=ECRFUserResearcherAttributes.EMAIL %>" 
-						value="<%=Validator.isNull(researcherUser) ? "" : researcherUser.getEmailAddress() %>"
-						readonly="true" />
-					<aui:input 
-						name="<%=ECRFUserResearcherAttributes.SCREEN_NAME %>" 
-						value="<%=Validator.isNull(researcherUser) ? "" : researcherUser.getScreenName() %>"
-						readonly="true" />
-				</aui:col>
-				<aui:col md="6">
-					<aui:input 
-						name="<%=ECRFUserResearcherAttributes.FIRST_NAME %>"
-						value="<%=Validator.isNull(researcherUser) ? "" : researcherUser.getFirstName() %>"
-						readonly="true" />
-					<aui:input 
-						name="<%=ECRFUserResearcherAttributes.LAST_NAME %>"
-						value="<%=Validator.isNull(researcherUser) ? "" : researcherUser.getLastName() %>"
-						readonly="true" />
-				</aui:col>
-			</aui:row>
-		</aui:container>
-		<!-- resarcher info -->
-		<aui:container>
-			<aui:row>
-				<aui:col md="12" cssClass="sub-title-bottom-border">
-					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf.user.researcher.title.researcher-info" />
-					</span>
-				</aui:col>
-			</aui:row>
-			<aui:row>
-				<aui:col md="6">
-					<aui:input 
-						name="<%=ECRFUserResearcherAttributes.INSTITUTION %>"
-						value="<%=Validator.isNull(researcher) ? "" : researcher.getInstitution() %>"
-						readonly="true" />
-					<aui:input 
-						name="<%=ECRFUserResearcherAttributes.PHONE %>"
-						value="<%=Validator.isNull(researcher) ? "" : researcher.getPhone() %>"
-						readonly="true" />
-				</aui:col>
-				<aui:col md="6">
-					<aui:input
-						name="<%=ECRFUserResearcherAttributes.POSITION %>"
-						value="<%=Validator.isNull(researcher) ? "" : researcher.getPosition() %>"
-						readonly="true" />
-					<aui:input 
-						name="<%=ECRFUserResearcherAttributes.OFFICE_CONTACT %>"
-						value="<%=Validator.isNull(researcher) ? "" : researcher.getOfficeContact() %>"
-						readonly="true" />
-				</aui:col>
-			</aui:row>
-		</aui:container>
-		<aui:button-row>
-			<aui:button name="back" type="button" value="Back" onClick="<%=redirect %>"/>
-		</aui:button-row>
-		</aui:col>
+		<aui:row>
+			<aui:col md="12" cssClass="sub-title-bottom-border">
+				<span class="sub-title-span">
+					<liferay-ui:message key="ecrf-user.researcher.title.user-info" />
+				</span>
+			</aui:col>
 		</aui:row>
-		</aui:form>
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.email"
+				>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(researcher) ? StringPool.DASH : researcher.getEmail() %> </p>
+			</aui:col>
+		</aui:row>
+		
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.screen-name"
+				>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(researcherUser) ? StringPool.DASH : researcherUser.getScreenName() %> </p>
+			</aui:col>
+		</aui:row>		
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.first-name"
+				>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(researcherUser) ? StringPool.DASH : researcherUser.getFirstName() %> </p>
+			</aui:col>
+		</aui:row>		
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.last-name"
+				>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(researcherUser) ? StringPool.DASH : researcherUser.getLastName() %> </p>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.birth"
+				>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(birthStr) ? StringPool.DASH : birthStr %> </p>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.general.gender"
+				>
+				</aui:field-wrapper>
+			</aui:col>
+			
+			<aui:col md="6">
+				<liferay-ui:message key="<%=genderStrKey %>"></liferay-ui:message>
+			</aui:col>
+		</aui:row>
+		
+		
+		<!-- resarcher info -->
+		<aui:row>
+			<aui:col md="12" cssClass="sub-title-bottom-border">
+				<span class="sub-title-span">
+					<liferay-ui:message key="ecrf-user.researcher.title.researcher-info" />
+				</span>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.institution"
+				>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(researcher) ? StringPool.BLANK : researcher.getInstitution() %> </p>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.phone"
+				>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(researcher) ? StringPool.DASH : researcher.getPhone() %> </p>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.office-contact"
+					>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(researcher) ? StringPool.DASH : researcher.getOfficeContact() %> </p>
+			</aui:col>
+		</aui:row>
+		
+		<aui:row>
+			<aui:col md="3">
+				<aui:field-wrapper
+					label="ecrf-user.researcher.position"
+					>
+				</aui:field-wrapper>
+			</aui:col>
+			<aui:col md="6">
+				<p> <%=Validator.isNull(researcher.getPosition()) ? StringPool.DASH : ResearcherPosition.findByLower(researcher.getPosition()).getFull() %> </p>
+			</aui:col>
+		</aui:row>
+		
+		<aui:row>
+			<aui:col md="12">
+				<aui:button-row>
+					<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=backURL %>"></aui:button>
+				</aui:button-row>
+			</aui:col>
+		</aui:row>
+
 	</aui:container>
+		
+	</div>
 </div>

@@ -34,6 +34,9 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 boolean isPrivate = layout.isPrivateLayout();
 
+String pageClass = "page-content";
+if(!isPrivate) pageClass = "mar16px";
+
 %>
 
 <portlet:renderURL var="addProjectURL">
@@ -53,100 +56,111 @@ boolean isPrivate = layout.isPrivateLayout();
 	<portlet:param name="<%=ECRFUserProjectAttributes.PROJECT_ID %>" value="<%=String.valueOf(projectId) %>" />
 </liferay-portlet:actionURL>
 
-<liferay-ui:header title="ecrf.user.project.title.view-project" />
 
-<div class="ecrf-user-project">
 
-<!-- Project info -->
-<aui:container cssClass="radius-shadow-container">
-	<aui:row>
-		<aui:col md="12">
-			<span class="title-span">
-				<liferay-ui:message key="ecrf.user.project.title.project-info" />
-			</span>
-			<hr align="center" class="marV5"></hr>
-		</aui:col>
-	</aui:row>
-<c:choose>
-<c:when test="<%=Validator.isNull(project) %>">
-	<aui:row>
-		<aui:col>
-			<span>
-				<liferay-ui:message key="ecrf.user.project.info.no-project" />
-			</span>
-		</aui:col>
-	</aui:row>
-</c:when>
-<c:otherwise>
-	<aui:row>
-		<aui:col md="12">
-			<strong><liferay-ui:message key="ecrf.user.project.title"/></strong>
-			<p><%=Validator.isNull(project.getTitle()) ? StringPool.DASH : project.getTitle() %></p>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col md="12">
-			<strong><liferay-ui:message key="ecrf.user.project.short-title"/></strong>
-			<p><%=Validator.isNull(project.getShortTitle()) ? StringPool.DASH : project.getShortTitle() %></p>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col md="12">
-			<strong><liferay-ui:message key="ecrf.user.project.purpose"/></strong>
-			<p><%=Validator.isNull(project.getPurpose()) ? StringPool.BLANK : project.getPurpose() %></p>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col md="6">
-			<strong><liferay-ui:message key="ecrf.user.project.start-date"/></strong>
-			<p><%=Validator.isNull(project.getStartDate()) ? StringPool.DASH : dateFormat.format(project.getStartDate()) %></p>
-		</aui:col>
-		<aui:col md="6">
-			<strong><liferay-ui:message key="ecrf.user.project.end-date"/></strong>
-			<p><%=Validator.isNull(project.getEndDate()) ? StringPool.DASH : dateFormat.format(project.getEndDate()) %></p>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col md="12">
-			<span class="title-span">
-				<liferay-ui:message key="ecrf.user.project.title.project-manager-info" />
-			</span>
-			<hr align="center" class="marV5"></hr>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col md="6">
-			<strong><liferay-ui:message key="ecrf.user.project.principal-researcher"/></strong>
-			<p><%=principalResearcherText %></p>
-		</aui:col>
-		<aui:col md="6">
-			<strong><liferay-ui:message key="ecrf.user.project.manage-researcher"/></strong>
-			<p><%=manageResearcherText %></p>
-		</aui:col>
-	</aui:row>
-</c:otherwise>
-</c:choose>
-</aui:container>
+<div class="ecrf-user-project ecrf-user">
+	
+	<c:if test="<%=isPrivate %>" >
+	<%@include file="sidebar.jspf" %>
+	
+	</c:if>
+	
+	<div class="<%=pageClass%>">
+	<liferay-ui:header title="ecrf.user.project.title.view-project" />
 
-<c:if test="<%=isPrivate %>">
-<!-- buttons -->
-<aui:container>
-	<aui:row>
-		<aui:col>
-			<aui:button-row>
-				<c:choose>
-				<c:when test="<%=Validator.isNull(project) %>">
-					<aui:button type="button" value="Add Project Info" onClick="<%=addProjectURL.toString() %>" />	
-				</c:when>
-				<c:when test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, "ADD_PROJECT") %>">
-					<aui:button type="button" value="Go to Update Project Info" onClick="<%=updateProjectURL.toString() %>" />
-					<aui:button type="button" value="Delete" onClick="<%=deleteProjectURL.toString() %>" />
-				</c:when>
-				</c:choose>
-			</aui:button-row>
-		</aui:col>
-	</aui:row>
-</aui:container>
-</c:if>
-
+	<!-- Project info -->
+	<aui:container cssClass="radius-shadow-container">
+		<aui:row>
+			<aui:col md="12">
+				<span class="title-span">
+					<liferay-ui:message key="ecrf.user.project.title.project-info" />
+				</span>
+				<hr align="center" class="marV5"></hr>
+			</aui:col>
+		</aui:row>
+	<c:choose>
+	<c:when test="<%=Validator.isNull(project) %>">
+		<aui:row>
+			<aui:col>
+				<span>
+					<liferay-ui:message key="ecrf.user.project.info.no-project" />
+				</span>
+			</aui:col>
+		</aui:row>
+	</c:when>
+	<c:otherwise>
+		<aui:row>
+			<aui:col md="12">
+				<strong><liferay-ui:message key="ecrf.user.project.title"/></strong>
+				<p><%=Validator.isNull(project.getTitle()) ? StringPool.DASH : project.getTitle() %></p>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="12">
+				<strong><liferay-ui:message key="ecrf.user.project.short-title"/></strong>
+				<p><%=Validator.isNull(project.getShortTitle()) ? StringPool.DASH : project.getShortTitle() %></p>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="12">
+				<strong><liferay-ui:message key="ecrf.user.project.purpose"/></strong>
+				<p><%=Validator.isNull(project.getPurpose()) ? StringPool.BLANK : project.getPurpose() %></p>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="6">
+				<strong><liferay-ui:message key="ecrf.user.project.start-date"/></strong>
+				<p><%=Validator.isNull(project.getStartDate()) ? StringPool.DASH : dateFormat.format(project.getStartDate()) %></p>
+			</aui:col>
+			<aui:col md="6">
+				<strong><liferay-ui:message key="ecrf.user.project.end-date"/></strong>
+				<p><%=Validator.isNull(project.getEndDate()) ? StringPool.DASH : dateFormat.format(project.getEndDate()) %></p>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="12">
+				<span class="title-span">
+					<liferay-ui:message key="ecrf.user.project.title.project-manager-info" />
+				</span>
+				<hr align="center" class="marV5"></hr>
+			</aui:col>
+		</aui:row>
+		<aui:row>
+			<aui:col md="6">
+				<strong><liferay-ui:message key="ecrf.user.project.principal-researcher"/></strong>
+				<p><%=principalResearcherText %></p>
+			</aui:col>
+			<aui:col md="6">
+				<strong><liferay-ui:message key="ecrf.user.project.manage-researcher"/></strong>
+				<p><%=manageResearcherText %></p>
+			</aui:col>
+		</aui:row>
+	</c:otherwise>
+	</c:choose>
+	</aui:container>
+	
+	<c:if test="<%=isPrivate %>">
+	<!-- buttons -->
+	<c:if test="<%=(isAdmin || isPI) %>">
+	<aui:container>
+		<aui:row>
+			<aui:col>
+				<aui:button-row>
+					<c:choose>
+					<c:when test="<%=Validator.isNull(project) %>">
+						<aui:button type="button" value="Add Project Info" onClick="<%=addProjectURL.toString() %>" />	
+					</c:when>
+					<c:otherwise>
+						<aui:button type="button" value="Go to Update Project Info" onClick="<%=updateProjectURL.toString() %>" />
+						<aui:button type="button" value="Delete" onClick="<%=deleteProjectURL.toString() %>" />
+					</c:otherwise>
+					</c:choose>
+				</aui:button-row>
+			</aui:col>
+		</aui:row>
+	</aui:container>
+	</c:if>
+	</c:if>
+	
+	</div>
 </div>

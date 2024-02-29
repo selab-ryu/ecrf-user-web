@@ -6,6 +6,7 @@ import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
 
+import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserPortletKeys;
 
 /**
@@ -20,7 +21,7 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Account",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/view.jsp",
+		"javax.portlet.init-param.view-template=" + ECRFUserJspPaths.JSP_UPDATE_INFO,
 		"javax.portlet.name=" + ECRFUserPortletKeys.ACCOUNT,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"

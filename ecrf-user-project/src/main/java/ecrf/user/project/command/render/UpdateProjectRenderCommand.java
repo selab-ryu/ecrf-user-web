@@ -16,7 +16,7 @@ import org.osgi.service.component.annotations.Reference;
 import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
-import ecrf.user.constants.ECRFUserProjectAttributes;
+import ecrf.user.constants.attribute.ECRFUserProjectAttributes;
 import ecrf.user.model.Project;
 import ecrf.user.service.ProjectLocalService;
 

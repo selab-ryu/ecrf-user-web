@@ -25,6 +25,7 @@
 <%@ page import="com.liferay.portal.kernel.util.ListUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.Constants" %>
 <%@ page import="com.liferay.portal.kernel.service.UserLocalServiceUtil" %>
+<%@ page import="com.liferay.portal.kernel.service.UserLocalService" %>
 <%@ page import="com.liferay.portal.kernel.model.User" %>
 <%@ page import="com.liferay.portal.kernel.model.Role" %>
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
@@ -32,6 +33,7 @@
 <%@ page import="com.liferay.portal.kernel.model.MembershipRequestConstants"%>
 <%@ page import="com.liferay.portal.kernel.service.MembershipRequestLocalServiceUtil"%>
 <%@ page import="com.liferay.portal.kernel.model.MembershipRequest"%>
+<%@ page import="com.liferay.portal.kernel.service.MembershipRequestLocalService"%>
 
 <%@ page import="com.liferay.portal.kernel.log.Log" %>
 <%@ page import="com.liferay.portal.kernel.log.LogFactoryUtil" %>
@@ -52,10 +54,20 @@
 
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
+<%@ page import="ecrf.user.constants.ECRFUserConstants"%>
+<%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
+<%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
+
+<%@ page import="ecrf.user.constants.attribute.ECRFUserApproveAttibutes"%>
+
 <%@ page import="ecrf.user.model.Researcher"%>
 <%@ page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
+<%@ page import="ecrf.user.service.ResearcherLocalService"%>
 
 <%@ page import="ecrf.user.approve.internal.security.permission.resource.ApprovePermission" %>
+
 
 <liferay-theme:defineObjects />
 
@@ -65,4 +77,20 @@
 	String currentURL = themeDisplay.getURLCurrent();
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
 	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
+	
+	boolean updatePermission = true;
+	boolean isAdmin = false;
+	boolean isPI = false;
+	
+	if(ResearcherLocalServiceUtil.hasPIPermission(user.getUserId())) isPI = true;
+	
+	//check user roles
+	if(user != null) {
+		List<Role> roleList = user.getRoles();
+		for(int i=0; i<roleList.size(); i++) {
+			Role role = roleList.get(i);
+			if(role.getName().equals("Guest")) updatePermission = false;
+			if(role.getName().equals("Administrator")) isAdmin = true;
+		}
+	}
 %>

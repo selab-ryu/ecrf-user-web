@@ -5,49 +5,162 @@
 %>
 
 <%
-SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
-
-SubjectLocalService subjectLocalService = (SubjectLocalService)renderRequest.getAttribute(ECRFUserConstants.SUBJECT_LOCAL_SERVICE);
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
 ArrayList<Subject> subjectList = new ArrayList<Subject>();
+subjectList.addAll(SubjectLocalServiceUtil.getSubjectByGroupId(scopeGroupId));
 
-subjectList.addAll(subjectLocalService.getAllSubject(scopeGroupId));
+String menu="subject-list";
 
-boolean updatePermission = true;
+boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false); 
 
-//check user roles
-if(user != null) {
-	List<Role> roleList = user.getRoles();
-	for(int i=0; i<roleList.size(); i++) {
-		Role role = roleList.get(i);
-		//_logger.info("user role : " + role.getName());
-		if(role.getName().equals("Guest")) updatePermission = false;
-	}
+PortletURL portletURL = null;
+
+// set search keyword
+if(isSearch) {
+	_log.info("search");
+		
+	portletURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+	_log.info("portlet url : " + portletURL.toString());
+	
+	String serialIdKeyword = ParamUtil.getString(renderRequest, ECRFUserSubjectAttributes.SERIAL_ID);
+	String nameKeyword = ParamUtil.getString(renderRequest, ECRFUserSubjectAttributes.NAME);
+	
+	int gender = ParamUtil.getInteger(renderRequest, ECRFUserSubjectAttributes.GENDER, -1); 
+	
+	Date birthStart = null;
+	Date birthEnd = null;
+	
+	String birthStartStr = ParamUtil.getString(renderRequest, ECRFUserSubjectAttributes.BIRTH_START);	
+	if(!birthStartStr.isEmpty()) { birthStart = sdf.parse(birthStartStr); }
+	
+	String birthEndStr = ParamUtil.getString(renderRequest, ECRFUserSubjectAttributes.BIRTH_END);
+	if(!birthEndStr.isEmpty()) { birthEnd = sdf.parse(birthEndStr); }
+		
+	subjectList = SubjectSearchUtil.search(
+			subjectList, serialIdKeyword, nameKeyword, gender, 
+			birthStart, birthEnd);
 }
-
 %>
 
-<portlet:renderURL var="addSubjectURL">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_ADD_SUBJECT %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+<portlet:renderURL var="searchURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SUBJECT %>" />
+	<portlet:param name="isSearch" value="true" />
 </portlet:renderURL>
 
-<div class="">
+<portlet:renderURL var="clearSearchURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SUBJECT %>" />	
+</portlet:renderURL>
 
-	<liferay-ui:header title="Subject List" />
+<div class="ecrf-user">
 
-	<div class="">
+	<%@ include file="sidebar.jspf" %>
+
+	<div class="page-content">
+		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.subject.title.subject-list" />
+		
 		<!-- search option section -->
-		<aui:form action="" name="searchOptionFm" autocomplete="off">
+		<aui:form action="${searchURL}" name="searchOptionFm" autocomplete="off" cssClass="marBr">
+			<aui:container cssClass="radius-shadow-container">
+				<aui:row>
+					<aui:col md="4">
+						<aui:field-wrapper
+							name="<%=ECRFUserSubjectAttributes.SERIAL_ID %>"
+							label="ecrf-user.subject.serial-id"
+							helpMessage=""
+							cssClass="marBrh"
+						>
+							<aui:input
+								type="text"
+								name="<%=ECRFUserSubjectAttributes.SERIAL_ID %>"  
+								cssClass="form-control"
+								label=" "
+								></aui:input>
+						</aui:field-wrapper>
+					</aui:col>
+					<aui:col md="4">
+						<aui:field-wrapper
+							name="<%=ECRFUserSubjectAttributes.NAME %>"
+							label="ecrf-user.subject.name"
+							helpMessage=""
+							cssClass="marBrh"
+						>
+							<aui:input
+								type="text"
+								name="<%=ECRFUserSubjectAttributes.NAME %>" 
+								cssClass="form-control" 
+								label=" "
+								></aui:input>
+						</aui:field-wrapper>
+					</aui:col>
+					<aui:col md="4">
+						<aui:field-wrapper
+							name="<%=ECRFUserSubjectAttributes.GENDER %>"
+							label="ecrf-user.subject.gender"
+							helpMessage=""
+							cssClass="marBrh"
+						>
+							<aui:fieldset cssClass="radio-one-line radio-align">
+								<aui:input 
+									type="radio" 
+									name="<%=ECRFUserSubjectAttributes.GENDER %>" 
+									cssClass="search-input"
+									label="ecrf-user.general.male"  
+									value="0" />
+								<aui:input 
+									type="radio" 
+									name="<%=ECRFUserSubjectAttributes.GENDER %>" 
+									cssClass="search-input"
+									label="ecrf-user.general.female" 
+									value="1" />
+							</aui:fieldset>
+						</aui:field-wrapper>
+					</aui:col>
+				</aui:row>
+				<aui:row>
+					<aui:col md="4">
+						<aui:field-wrapper
+							name="<%=ECRFUserSubjectAttributes.BIRTH_START %>"
+							label="ecrf-user.subject.birth.start"
+							helpMessage=""
+							cssClass="marBrh"
+						>
+							<aui:input 
+								name="<%=ECRFUserSubjectAttributes.BIRTH_START %>"
+								cssClass="date"
+								placeholder="yyyy/mm/dd"
+								label="" />
+						</aui:field-wrapper>
+					</aui:col>
+					<aui:col md="4">
+						<aui:field-wrapper
+							name="<%=ECRFUserSubjectAttributes.BIRTH_END %>"
+							label="ecrf-user.subject.birth.end"
+							helpMessage=""
+							cssClass="marBrh"
+						>
+							<aui:input 
+								name="<%=ECRFUserSubjectAttributes.BIRTH_END %>"
+								cssClass="date"
+								placeholder="yyyy/mm/dd"
+								label="" />
+						</aui:field-wrapper>
+					</aui:col>
+				</aui:row>								
+				<aui:row>
+					<aui:col md="12">
+						<aui:button-row cssClass="right marVr">
+							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
+							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+						</aui:button-row>
+					</aui:col>
+				</aui:row>
+			</aui:container>
 		</aui:form>
-		
-		<!-- button section -->
-		<aui:button-row>
-			<aui:button name="add-subject" value="ecrf-user.subject.button.add-subject" onClick="<%=addSubjectURL.toString() %>" />
-		</aui:button-row>
-		
+				
 		<!-- search result section -->
 		<liferay-ui:search-container
+			iteratorURL="<%=portletURL %>"
 			delta="10"
 			emptyResultsMessage="subject.no-subjects-were-found"
 			emptyResultsMessageCssClass="taglib-empty-result-message-header"
@@ -86,48 +199,53 @@ if(user != null) {
 					value="<%=String.valueOf(++count) %>"
 				/>
 			
-				<portlet:renderURL var="rowURL">
-					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_UPDATE_SUBJECT%>" />
+				<portlet:renderURL var="viewURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_SUBJECT%>" />
 					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subject.getSubjectId()) %>" />
+					<portlet:param name="menu" value="subject-list" />
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 			
 				<liferay-ui:search-container-column-text
-					href="<%=rowURL.toString() %>"
-					name="ecrf-user.list.name"
-					value="<%=subject.getName() %>"
-				/>
-				
-				<liferay-ui:search-container-column-text
+					href="<%=viewURL.toString() %>"
 					name="ecrf-user.list.serial-id"
 					value="<%=subject.getSerialId() %>"
+				/>
+			
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.name"
+					value="<%=subject.getName() %>"
 				/>
 				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.birth"
 					value="<%=Validator.isNull(subject.getBirth()) ? "-" : sdf.format(subject.getBirth()) %>"
 				/>
-												
-				<liferay-ui:search-container-column-text
-					name="ecrf-user.list.participation-date"
-					value="<%=Validator.isNull(subject.getParticipationStartDate()) ? "-" : sdf.format(subject.getParticipationStartDate()) %>"
-				/>
+				
+				<%
+					String genderStrKey = "";
+					if(Validator.isNull(subject.getGender())) {
+						genderStrKey = "-";
+					} else {
+						if(subject.getGender() == 0) {
+							genderStrKey = "ecrf-user.general.male";
+						} else {
+							genderStrKey = "ecrf-user.general.female";
+						}
+					}
+				%>
 				
 				<liferay-ui:search-container-column-text
-					name="ecrf-user.list.visit-date"
-					value="<%=Validator.isNull(subject.getVisitDate()) ? "-" : sdf.format(subject.getVisitDate()) %>"
-				/>
-				
-				<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_SUBJECT %>" var="deleteSubjectURL">
-					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subject.getSubjectId()) %>" />
-				</liferay-portlet:actionURL>
+					name="ecrf-user.list.gender"	
+				>
+					<liferay-ui:message key="<%=genderStrKey %>"></liferay-ui:message>
+				</liferay-ui:search-container-column-text>
 				
 				<liferay-ui:search-container-column-text
-					href="<%=deleteSubjectURL.toString() %>"
-					name="ecrf-user.list.delete"
-					value="Delete"
+					name="ecrf-user.list.create-date"
+					value="<%=Validator.isNull(subject.getCreateDate()) ? "-" : sdf.format(subject.getCreateDate()) %>"
 				/>
-			
+				
 			</liferay-ui:search-container-row>
 			
 			<liferay-ui:search-iterator
@@ -139,5 +257,33 @@ if(user != null) {
 		</liferay-ui:search-container>
 		
 	</div>
-
+	
 </div>
+
+<script>
+$(document).ready(function() {
+	$("#<portlet:namespace/>birthStart").datetimepicker({
+		lang: 'kr',
+		changeYear: true,
+		changeMonth : true,
+		validateOnBlur: false,
+		gotoCurrent: true,
+		timepicker: false,
+		format: 'Y/m/d',
+		scrollMonth: false
+	});
+	$("#<portlet:namespace/>birthStart").mask("0000/00/00");
+	
+	$("#<portlet:namespace/>birthEnd").datetimepicker({
+		lang: 'kr',
+		changeYear: true,
+		changeMonth : true,
+		validateOnBlur: false,
+		gotoCurrent: true,
+		timepicker: false,
+		format: 'Y/m/d',
+		scrollMonth: false
+	});
+	$("#<portlet:namespace/>birthEnd").mask("0000/00/00");
+});
+</script>

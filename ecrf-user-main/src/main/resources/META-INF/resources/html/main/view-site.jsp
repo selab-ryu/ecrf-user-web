@@ -1,4 +1,3 @@
-<%@ page import="ecrf.user.main.display.context.SiteDisplayContext"%>
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html/main/view-site_jsp"); %>
@@ -8,6 +7,7 @@
 	boolean signedIn = themeDisplay.isSignedIn();
 	if(!signedIn) _log.info("not logged in");
 %>
+
 
 <liferay-ui:error embed="<%= false %>" key="membershipAlreadyRequested" message="membership-was-already-requested" />
 
@@ -165,6 +165,7 @@
 		<liferay-ui:search-container-column-text>
 			<portlet:renderURL var="requestMembershipURL">
 				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_REQUEST_MEMBERSHIP %>" />
+				<portlet:param name="<%=ECRFUserMainAttributes.SITE_GROUP_ID %>" value="<%=String.valueOf(group.getGroupId()) %>" />
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
 			

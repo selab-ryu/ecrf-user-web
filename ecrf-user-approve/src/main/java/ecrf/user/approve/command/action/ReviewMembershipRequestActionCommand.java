@@ -31,10 +31,10 @@ import javax.portlet.PortletURL;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import ecrf.user.constants.ECRFUserApproveAttibutes;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserWebKeys;
+import ecrf.user.constants.attribute.ECRFUserApproveAttibutes;
 
 @Component
 (
@@ -48,7 +48,7 @@ public class ReviewMembershipRequestActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		_log = LogFactoryUtil.getLog(this.getClass().getName()); 
+	
 		
 		replyRequest(actionRequest, actionResponse);
 		
@@ -66,8 +66,10 @@ public class ReviewMembershipRequestActionCommand extends BaseMVCActionCommand {
 		
 		long membershipRequestId = ParamUtil.getLong(actionRequest, ECRFUserApproveAttibutes.MEMBERSHIP_REQUEST_ID);
 		String replyComment = ParamUtil.getString(actionRequest, ECRFUserApproveAttibutes.REPLY_COMMENT);
-			
+		_log.info("null check : " + cmd + " / " + statusId + " / " + String.valueOf(membershipRequestId) + " / " + replyComment);
+		
 		_membershipRequestService.updateStatus(membershipRequestId, replyComment, statusId, serviceContext);
+		_log.info("status updated");
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
@@ -78,6 +80,8 @@ public class ReviewMembershipRequestActionCommand extends BaseMVCActionCommand {
 			MembershipRequest membershipRequest = _membershipRequestService.getMembershipRequest(membershipRequestId);
 			
 			LiveUsers.joinGroup(group.getCompanyId(), groupId, new long[] {membershipRequest.getUserId()});
+			
+			_log.info("membership updated");
 		}
 	}
 	
@@ -99,7 +103,7 @@ public class ReviewMembershipRequestActionCommand extends BaseMVCActionCommand {
 	@Reference
 	private Portal _portal;
 	
-	private Log _log;
+	private Log _log = LogFactoryUtil.getLog(ReviewMembershipRequestActionCommand.class);
 	
 	@Reference
 	private MembershipRequestService _membershipRequestService;

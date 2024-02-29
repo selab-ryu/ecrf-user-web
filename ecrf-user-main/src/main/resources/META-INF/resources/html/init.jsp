@@ -52,6 +52,17 @@
 
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>
+<%@ page import="ecrf.user.constants.ECRFUserConstants"%>
+<%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
+<%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
+
+<%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserMainAttributes"%>
+
+<%@ page import="ecrf.user.model.Researcher"%>
+
+<%@ page import="ecrf.user.main.display.context.SiteDisplayContext"%>
 
 <liferay-theme:defineObjects />
 

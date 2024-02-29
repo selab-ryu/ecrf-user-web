@@ -2,6 +2,9 @@ Bundle-Name: ecrf-user-crf
 Bundle-SymbolicName: ecrf.user.crf
 Bundle-Version: 1.0.0
 
+Web-ContextPath: /ecrf.user.crf
+
 -privatepackage: \
 	ecrf.user.constants,\
-	com.sx.icecap.constant
+	com.sx.icecap.constant,\
+	ecrf.user.model.custom
