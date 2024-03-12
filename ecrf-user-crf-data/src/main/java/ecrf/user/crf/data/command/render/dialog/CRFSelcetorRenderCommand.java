@@ -46,7 +46,8 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 		long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0);
 		
 		List<LinkCRF> links = _linkLocalService.getLinkCRFByC_S(crfId, subjectId);
-		
+		_log.info("link size : " + links.size());
+
 		ArrayList<StructuredData> sdList = new ArrayList<>();
 		
 		for(int i = 0; i < links.size(); i++) {
@@ -82,7 +83,6 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 			hasForm = dataType.getHasDataStructure();
 			_log.info("has form : " + hasForm);
 		}
-		
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.HAS_FORM, hasForm);
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST, sdList);
 		

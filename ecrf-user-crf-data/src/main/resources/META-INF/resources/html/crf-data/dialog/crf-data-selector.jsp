@@ -137,7 +137,7 @@ boolean hasForm = (boolean)renderRequest.getAttribute(ECRFUserCRFDataAttributes.
 						</portlet:actionURL>
 						
 						<td>
-							<aui:button name="deleteCRF" type="button" value="Delete CRF Data" cssClass="delete-btn small-btn" onClick="<%=deleteCRFDataURL %>"></aui:button>
+							<aui:button name="deleteCRF" type="button" value="delete CRF" cssClass="delete-btn small-btn" onClick="<%="deleteEachCRF(" + link.getLinkId() +")"%>"></aui:button>							
 						</td>
 						</c:when>
 						<c:otherwise>
@@ -187,15 +187,17 @@ boolean hasForm = (boolean)renderRequest.getAttribute(ECRFUserCRFDataAttributes.
 			</aui:col>
 		</aui:row>
 		</c:if>
-		
 		<aui:button name="addCRF" type="button" value="Add New CRF Data" cssClass="<%=auditHidden %>"></aui:button>
-		<aui:button name="deleteAllCRF" type="button" value="Delete All CRF Data" cssClass="<%=deleteHidden %>"></aui:button>
 	</aui:container>
 </div>
 
 <script>
 function toEachCRF(sdId, isAudit){
 	Liferay.Util.getOpener().moveUpdateCRFData(<%=subjectId %>, <%=crfId%>, sdId, isAudit, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>);	
+}
+
+function deleteEachCRF(linkCrfId){
+	Liferay.Util.getOpener().moveDeleteCRFData(linkCrfId, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>);	
 }
 </script>
 

@@ -26,15 +26,9 @@
 	DataType dataType = null;
 	
 	if(isUpdate) {
-		long paramDataTypeId = ParamUtil.getLong(renderRequest, ECRFUserCRFAttributes.DATATYPE_ID, 0);
-		
-		if(paramDataTypeId != dataTypeId) {
-			_log.info("parameter datatype id is difference from crf datatype id");
-		} else {
-			_log.info("dataType id : " + dataTypeId);					
-			if(dataTypeId > 0) {
-				dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
-			}
+		_log.info("dataType id : " + dataTypeId);					
+		if(dataTypeId > 0) {
+			dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
 		}
 	}
 %>
@@ -157,10 +151,14 @@ function initTable(type) {
 				// remove item matched current crf subject info arr
 				
 				for(let i=0; i<initCurrentSubjectArr.length; i++) {
-					let item = initCurrentSubjectArr[i];
-					const itemToFind = obj.find(function(item) {return item.subjectId == item.subjectId});
+					let subject = initCurrentSubjectArr[i];
+					console.log(subject);
+					const itemToFind = obj.find(function(item) {return item.subjectId == subject.subjectId});
 					const idx = obj.indexOf(itemToFind);
-					if(idx>-1) obj.splice(idx, 1);
+					if(idx>-1) {
+						console.log("remove idx : " + idx);
+						obj.splice(idx, 1);
+					}
 				}				
 				
 				notIncludedSubjectArr = obj;

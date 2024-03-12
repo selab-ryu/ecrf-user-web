@@ -1,5 +1,7 @@
 package ecrf.user.crf.data.command.render.data;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -44,6 +46,8 @@ public class ViewCRFDataRenderCommand implements MVCRenderCommand {
 		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
 		long sdId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.STRUCTURED_DATA_ID, 0);
 		
+		String fromFlag = ParamUtil.getString(renderRequest, "fromFlag", "");
+
 		Subject subject = null;
 		LinkCRF linkCRF = null;
 		
@@ -55,6 +59,7 @@ public class ViewCRFDataRenderCommand implements MVCRenderCommand {
 				
 				if(crfDataCount > 0) {
 					try {
+						_log.info("group / subject / crf / sd : " + themeDisplay.getScopeGroupId() + " / " + subjectId + " / " + crfId + " / " + sdId);
 						linkCRF = _linkCRFLocalService.getLinkCRFByG_S_C_SD(themeDisplay.getScopeGroupId(), subjectId, crfId, sdId);
 					} catch (Exception e) {
 						throw new PortletException("Cannot find link");
@@ -66,17 +71,17 @@ public class ViewCRFDataRenderCommand implements MVCRenderCommand {
 			e.printStackTrace();
 		}
 		
-		long dataTypeId = 0;
-		if(crfId > 0) dataTypeId = _crfLocalService.getDataTypeId(crfId);
-		
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.SUBJECT, subject);
 		renderRequest.setAttribute("SubjectLocalService", _subjectLocalService);
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.LINK_CRF, linkCRF);
 		renderRequest.setAttribute("LinkCRFLocalService", _linkCRFLocalService);
-		renderRequest.setAttribute("dataTypeId", dataTypeId);
+		renderRequest.setAttribute(ECRFUserCRFDataAttributes.CRF_ID, crfId);
+		renderRequest.setAttribute("fromFlag", fromFlag);
 		return ECRFUserJspPaths.JSP_VIEW_CRF_DATA;
 	}
 
+	private Log _log = LogFactoryUtil.getLog(ViewCRFDataRenderCommand.class);
+	
 	@Reference
 	private SubjectLocalService _subjectLocalService;
 	

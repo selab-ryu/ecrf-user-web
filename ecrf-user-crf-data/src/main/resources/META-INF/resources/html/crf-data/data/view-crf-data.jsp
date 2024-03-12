@@ -9,35 +9,36 @@
 	long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0);
 	
 	System.out.println("view-crf / subject id: "+subjectId);
+	String fromFlag = ParamUtil.getString(renderRequest, "fromFlag", "");
 	
 	Subject subject = null;
 	LinkCRF linkCRF = null;
 	
 	if(subjectId > 0) {
-		dataTypeId = (long)renderRequest.getAttribute("dataTypeId");
-		subject = (Subject)renderRequest.getAttribute(SXCRFFormSubjectAttributes.SUBJECT);
-		linkCRF = (LinkCRF)renderRequest.getAttribute(SXCRFFormSubjectAttributes.LINK_CRF);
+		
+		subject = (Subject)renderRequest.getAttribute(ECRFUserCRFDataAttributes.SUBJECT);
+		linkCRF = (LinkCRF)renderRequest.getAttribute(ECRFUserCRFDataAttributes.LINK_CRF);
 	}
 	System.out.println("dataTypeId : " + dataTypeId);
 	System.out.println("linkCRF : " + linkCRF);
 	
-	long sdId = 0;
-	
+	String cmd = ParamUtil.getString(renderRequest, "command", "add");
+	System.out.println("cmd ? " + cmd);
+	long sdId = ParamUtil.getLong(renderRequest, "structuredDataId", 0);
+
 	if(linkCRF != null){
 		sdId = linkCRF.getStructuredDataId();
 	}
-	
-	String menu = "add-crf";
-	if(sdId > 0){
-		menu = "edit-crf";
+	if(fromFlag.equals("selector-add")){
+		sdId = 0;
 	}
-	System.out.println("sdId : " + sdId);
+	String menu = "add-crf";
 	
 	String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 %>
-<div class="SXCRFForm-web">
-	<%@ include file="sidebar.jspf" %>
-	<div class="page-content-sub">
+<div class="ecrf-user-crf-data ecrf-user">
+	<%@ include file="../other/sidebar.jspf" %>
+	<div class="page-content">
 			<aui:container>	
 				<aui:row cssClass="">
 					<aui:col>
@@ -56,21 +57,21 @@
 											<aui:field-wrapper
 												name="subjectId"
 												label="SXcrfForm.subject.id">
-												<p><%=Validator.isNull(subject) ? "-" : String.valueOf(subject.getSubjectIdStr()) %></p>
+												<p><%=Validator.isNull(subject) ? "-" : String.valueOf(subject.getSerialId()) %></p>
 											</aui:field-wrapper>
 										</aui:col>
 										<aui:col md="3" cssClass="marTr">
 											<aui:field-wrapper
 												name="subjectName"
 												label="SXcrfForm.subject.name">
-												<p><%=Validator.isNull(subject) ? "-" : subject.getSubjectName() %></p>
+												<p><%=Validator.isNull(subject) ? "-" : subject.getName() %></p>
 											</aui:field-wrapper>
 										</aui:col>
 										<aui:col md="3" cssClass="marTr">
 											<aui:field-wrapper
 												name="subjectSex"
 												label="SXcrfForm.subject.sex">
-												<p><%=Validator.isNull(subject) ? "-" : (subject.getSubjectSex() ? "male" : "female") %></p>
+												<p><%=Validator.isNull(subject) ? "-" : (subject.getGender() == 0 ? "male" : "female") %></p>
 											</aui:field-wrapper>
 										</aui:col>
 									</aui:row>
@@ -79,27 +80,8 @@
 											<aui:field-wrapper
 												name="subjectBirth"
 												label="SXcrfForm.subject.birthage">
-												<p><%=Validator.isNull(subject) ? "-" : sdf.format(subject.getSubjectBirth()) + " (" + Math.abs(123 - subject.getSubjectBirth().getYear()) + ")" %></p>
+												<p><%=Validator.isNull(subject) ? "-" : sdf.format(subject.getBirth()) + " (" + Math.abs(124 - subject.getBirth().getYear()) + ")" %></p>
 											</aui:field-wrapper>
-										</aui:col>
-										<aui:col md="3" cssClass="marTr">
-											<aui:field-wrapper
-												name="visitDate"
-												label="SXcrfForm.subject.visit">
-												<p><%=Validator.isNull(subject) ? "-" : sdf.format(subject.getVisitDate()) %></p>
-											</aui:field-wrapper>
-										</aui:col>
-										<aui:col md="3" cssClass="marTr">
-											<aui:field-wrapper
-												name="hasCohortStudy"
-												label="SXcrfForm.subject.cohort">
-												<p><%=Validator.isNull(subject) ? "-" : (subject.getHasCohortStudy() ? "yes" : "no") %></p>											</aui:field-wrapper>
-										</aui:col>
-										<aui:col md="3" cssClass="marTr">
-											<aui:field-wrapper
-												name="hasMRIStudy"
-												label="SXcrfForm.subject.mri">
-												<p><%=Validator.isNull(subject) ? "-" : (subject.getHasMRIStudy() ? "yes" : "no") %></p>											</aui:field-wrapper>
 										</aui:col>
 									</aui:row>
 								</aui:container>
@@ -109,7 +91,7 @@
 					<aui:col>
 						<aui:fieldset-group markupView="lexicon">
 							<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="<%= menu.equals("add-crf") ? "SxcrfForm.menu.crf.add" : "SxcrfForm.menu.crf.edit" %>">
-								<liferay-portlet:runtime portletName="<%=sdPortlet %>" queryString="<%="subjectId="+ subjectId + "&structuredDataId="+ sdId + "&dataTypeId="+ dataTypeId + "&mvcRenderCommandName=" + IcecapMVCCommands.RENDER_STRUCTURED_DATA_EDIT%>">
+								<liferay-portlet:runtime portletName="<%=sdPortlet %>" queryString="<%="subjectId="+ subjectId + "&structuredDataId="+ sdId + "&dataTypeId="+ dataTypeId + "&mvcRenderCommandName=/html/StructuredData/edit-structured-data"%>">
 								</liferay-portlet:runtime>
 							</aui:fieldset>
 						</aui:fieldset-group>

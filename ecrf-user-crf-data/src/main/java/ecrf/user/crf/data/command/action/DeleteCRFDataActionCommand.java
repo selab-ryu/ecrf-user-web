@@ -24,6 +24,8 @@ import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserWebKeys;
+import ecrf.user.constants.attribute.ECRFUserAttributes;
+import ecrf.user.constants.attribute.ECRFUserCRFAttributes;
 import ecrf.user.constants.attribute.ECRFUserCRFDataAttributes;
 import ecrf.user.model.LinkCRF;
 import ecrf.user.service.CRFLocalService;
@@ -79,7 +81,9 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
 				themeDisplay.getPlid(), 
 				PortletRequest.RENDER_PHASE);
 		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, renderCommand);
+		renderURL.setParameter(ECRFUserCRFAttributes.CRF_ID, String.valueOf(crfId));
 		renderURL.setParameter(ECRFUserWebKeys.LIST_PATH, listPath);
+
 		actionResponse.sendRedirect(renderURL.toString());
 	}
 	
