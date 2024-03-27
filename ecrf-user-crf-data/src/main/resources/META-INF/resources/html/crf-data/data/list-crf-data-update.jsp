@@ -7,6 +7,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
 ArrayList<CRFSubject> crfSubjectList = new ArrayList<>();
 crfSubjectList.addAll(CRFSubjectLocalServiceUtil.getCRFSubjectByCRFId(scopeGroupId, crfId));
+
 long[] subjectIds = ECRFUserUtil.getSubjectIdFromCRFSubject(crfSubjectList);
 ArrayList<Subject> subjectList = new ArrayList<Subject>();
 subjectList.addAll(SubjectLocalServiceUtil.getSubjectByIds(scopeGroupId, subjectIds));

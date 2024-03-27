@@ -173,6 +173,7 @@
 								<th>Birth</th>
 								<th>Gender</th>
 								<th>Exp. Group</th>
+								<th>Update Lock</th>
 							</tr>
 						</thead>
 					</table>
@@ -288,6 +289,54 @@ function manageSubjectPopup() {
 	});
 }
 
+function manageExpGroupPopup() {
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    renderURL.setParameter("<%=ECRFUserWebKeys.MVC_PATH%>", "<%=ECRFUserJspPaths.JSP_DIALOG_MANAGE_EXP_GROUP %>");
+    renderURL.setParameter("<%=ECRFUserCRFAttributes.CRF_ID%>", crfId);
+    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
+    
+	AUI().use("liferay-util-window", function(A) {
+		Liferay.Util.openWindow({
+			dialog: {
+				width:800,
+				height:800,
+				modal: true,
+				cenered: true
+			},
+			id: "manageExpGroupPopup",
+			title: "Manage Experimental Group",
+			uri: renderURL.toString() 
+		})
+	});
+}
+
+function manageUpdateLockPopup() {
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    renderURL.setParameter("<%=ECRFUserWebKeys.MVC_PATH%>", "<%=ECRFUserJspPaths.JSP_DIALOG_MANAGE_UPDATE_LOCK %>");
+    renderURL.setParameter("<%=ECRFUserCRFAttributes.CRF_ID%>", crfId);
+    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
+    
+	AUI().use("liferay-util-window", function(A) {
+		Liferay.Util.openWindow({
+			dialog: {
+				width:800,
+				height:800,
+				modal: true,
+				cenered: true
+			},
+			id: "manageUpdateLockPopup",
+			title: "Manage Update Lock",
+			uri: renderURL.toString()
+		})
+	});
+}
+
 function fetchResearcherArr() {
 	Liferay.Service(
 		{
@@ -355,9 +404,9 @@ Liferay.provide(window, "closePopup", function(dialogId, type, data) {
 	if(type == "save") {
 		console.log("is it called?");	// check equals
 		
-		if(dialogId == "manageSubjectPopup") {
+		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" || dialogId == "manageExpGroupPopup" ) {
 			crfSubjectInfoArr = data;
-			refreshSubjectTable();	
+			refreshSubjectTable();
 		} else if (dialogId == "manageResearcherPopup") {
 			crfResearcherInfoArr = data;
 			refreshResearcherTable();	
@@ -443,6 +492,20 @@ function tableLoading() {
             		manageSubjectPopup();            		
             	}
             },
+            {
+            	text : 'Manage Exp. Group',
+            	className : 'small-btn marRr marBrh',
+            	action : function( e, dt, node, config) {
+            		manageExpGroupPopup();            		
+            	}
+            },
+            {
+            	text : 'Manage Update Lock',
+            	className : 'small-btn marRr marBrh',
+            	action : function( e, dt, node, config) {
+            		manageUpdateLockPopup();            		
+            	}
+            },
 		],
 		data : crfSubjectInfoArr,
 		columns: [
@@ -467,6 +530,19 @@ function tableLoading() {
 				render: function(data, type, row) {
 					// check and return value
 					return "Not Assign";
+				}
+			},
+			{
+				data:"updateLock",
+				render: function(data, type, row) {
+					// check and return value
+					console.log("updatelock : " + data);
+					let lockStr = "N";
+					if(data == true) {
+						lockStr = "Y";
+					}
+					
+					return lockStr;
 				}
 			}
 		]
