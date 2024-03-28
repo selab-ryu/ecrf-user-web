@@ -75,16 +75,19 @@
 		<!-- Subject Management -->
 		<div>
 			<aui:button cssClass="<%="main-menu-bar active-menu-bar"%>" type="button" value="ecrf-user.menu.subject" onClick="<%=moveSubjectURL %>" />
-		</div>		
+		</div>
+				<div>
+			<aui:button cssClass="<%="sub-menu-bar " + ((menu.equals("subject-list-update") || menu.equals("subject-update")) ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.list" onClick="<%=updatePermission ? updateListURL : "-" %>" />
+		</div>
+		<!--
 		<div>
 			<aui:button cssClass="<%="sub-menu-bar " + (menu.equals("subject-list") || menu.equals("subject-view") ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.list" onClick="<%=moveSubjectURL %>" />
 		</div>
+		-->
 		<div>
 			<aui:button cssClass="<%="sub-menu-bar " + (menu.equals("subject-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.add" onClick="<%=updatePermission ? addSubjectRenderURL : "-" %>"/>
 		</div>
-		<div>
-			<aui:button cssClass="<%="sub-menu-bar " + ((menu.equals("subject-list-update") || menu.equals("subject-update")) ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.update" onClick="<%=updatePermission ? updateListURL : "-" %>" />
-		</div>
+
 		<div>
 			<aui:button cssClass="<%="normal-cursor sub-menu-bar " + (menu.equals("subject-list-delete") ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.delete" onClick="<%=updatePermission ? deleteListURL : "-" %>"/>
 		</div>

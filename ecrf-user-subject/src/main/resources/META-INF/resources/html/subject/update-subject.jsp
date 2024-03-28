@@ -50,6 +50,12 @@ if(isUpdate) {
 	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
+<portlet:renderURL var="updateListURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SUBJECT %>" />
+	<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.UPDATE%>" />
+	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+</portlet:renderURL>
+
 <div class="ecrf-user">
 
 	<%@include file="sidebar.jspf" %>
@@ -231,7 +237,7 @@ if(isUpdate) {
 					<aui:button-row cssClass="mar0 marL10">
 						<aui:button type="button" name="save" cssClass="" value="ecrf-user.button.save"></aui:button>
 						<aui:button type="button" name="delete" cssClass="<%=isUpdate ? StringPool.BLANK : "hide" %>" value="ecrf-user.button.delete" onClick="<%=deleteSubjectURL %>"></aui:button>
-						<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=listSubjectURL %>"></aui:button>
+						<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=updateListURL %>"></aui:button>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>

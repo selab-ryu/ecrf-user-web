@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -54,6 +55,7 @@ public class DeleteSubjectActionCommand extends BaseMVCActionCommand {
 				PortletRequest.RENDER_PHASE);
 		
 		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, renderCommand);
+		renderURL.setParameter(Constants.CMD, Constants.UPDATE);
 		
 		_log.info("Move");
 		actionResponse.sendRedirect(renderURL.toString());

@@ -53,6 +53,11 @@ if(isSearch) {
 	<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.UPDATE%>" />
 </portlet:renderURL>
 
+<portlet:renderURL var="addSubjectRenderURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_ADD_SUBJECT %>" />
+	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+</portlet:renderURL>
+
 
 <div class="">
 
@@ -268,9 +273,9 @@ if(isSearch) {
 				</liferay-ui:search-container-column-text>
 				
 				</c:if>
-			
 			</liferay-ui:search-container-row>
-			
+
+				
 			<liferay-ui:search-iterator
 				displayStyle="list"
 				markupView="lexicon"
@@ -278,9 +283,10 @@ if(isSearch) {
 				searchContainer="<%=searchContainer %>"
 			/>
 		</liferay-ui:search-container>
-		
+		<div class="ecrf-user">		
+			<aui:button type="button" name="add" value="Add Subject" cssClass="add-btn medium-btn radius-btn marTr" onClick="<%=addSubjectRenderURL %>"></aui:button>
+		</div>
 	</div>
-	
 </div>
 
 <script>
