@@ -29,8 +29,13 @@
 	
 	<div class="page-content">
 		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-form.title.manage-form" />
-		<aui:container>				
-			<aui:row cssClass="radius-shadow-container">
+		<aui:container cssClass="radius-shadow-container hide-embedded-portlet-header">
+			<!-- for check change of crf form -->
+			<aui:row>
+				<aui:col>
+				</aui:col>
+			</aui:row>
+			<aui:row>
 				<aui:col>
 					<liferay-portlet:runtime portletName="<%=IcecapWebPortletKeys.DATATYPE_MANAGEMENT %>" queryString="<%=queryString %>" >
 						</liferay-portlet:runtime>
@@ -39,3 +44,12 @@
 		</aui:container>
 	</div>
 </div>
+
+<script>
+$(document).ready(function() {
+	let dtPortletName = "<%=IcecapWebPortletKeys.DATATYPE_MANAGEMENT %>";
+	let dtPortletNamespace = "_" + dtPortletName + "_";
+	//console.log(dtPortletNamespace);
+	$('#' + dtPortletNamespace + 'naviCol').css('display', 'none');
+});
+</script>

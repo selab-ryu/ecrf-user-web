@@ -325,10 +325,25 @@ String progressPercentage = "0%";
 			>
 			
 			<%
-				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s')", rowSubjectId, crfId, 0, updatePermission, themeDisplay.getPortletDisplay().getId());				
+				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s')", rowSubjectId, crfId, 0, updatePermission, themeDisplay.getPortletDisplay().getId());
+				boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, rowSubjectId);
+				_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
 			%>
-			
+				
+				<c:choose>
+				<c:when test="<%=updateLock %>">
+				
+				<aui:button name="viewCRF" type="button" value="ecrf-user.button.view" cssClass="<%=CRFBtnClass %>" onClick="<%=updateFunctionCallStr%>"></aui:button>
+				
+				</c:when>
+				<c:otherwise>
+				
 				<aui:button name="updateCRF" type="button" value="<%=hasCRF ? "ecrf-user.button.update" : "ecrf-user.button.add" %>" cssClass="<%=CRFBtnClass %>" onClick="<%=updateFunctionCallStr%>"></aui:button>
+				
+				</c:otherwise>
+				</c:choose>
+				
+				
 			</liferay-ui:search-container-column-text>
 			
 			<%

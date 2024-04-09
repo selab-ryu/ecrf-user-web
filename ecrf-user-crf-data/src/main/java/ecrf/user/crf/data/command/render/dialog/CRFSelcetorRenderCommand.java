@@ -25,8 +25,11 @@ import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.attribute.ECRFUserCRFDataAttributes;
+import ecrf.user.constants.attribute.ECRFUserCRFSubjectInfoAttribute;
+import ecrf.user.model.CRFSubject;
 import ecrf.user.model.LinkCRF;
 import ecrf.user.service.CRFLocalService;
+import ecrf.user.service.CRFSubjectLocalService;
 import ecrf.user.service.LinkCRFLocalService;
 
 @Component(
@@ -64,6 +67,17 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 			}
 		}
 		
+		// check crf-subject update lock
+		boolean updateLock = false;
+		
+		CRFSubject crfSubject = null;
+		if(crfId > 0 && subjectId > 0) {
+			crfSubject = _crfSubjectLocalService.getCRFSubjectByC_S(crfId, subjectId);
+			if(Validator.isNotNull(crfSubject)) {
+				updateLock = crfSubject.getUpdateLock();
+			}
+		}
+		
 		// check crf has crf-form
 		boolean hasForm = false;
 		
@@ -83,8 +97,10 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 			hasForm = dataType.getHasDataStructure();
 			_log.info("has form : " + hasForm);
 		}
+		
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.HAS_FORM, hasForm);
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST, sdList);
+		renderRequest.setAttribute(ECRFUserCRFSubjectInfoAttribute.UPDATE_LOCK, updateLock);
 		
 		return ECRFUserJspPaths.JSP_DIALOG_CRF_DATA_VERSION;
 	}
@@ -99,4 +115,7 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 	
 	@Reference
 	private CRFLocalService _crfLocalService;
+	
+	@Reference
+	private CRFSubjectLocalService _crfSubjectLocalService;
 }

@@ -480,5 +480,4 @@ function setCheckboxEvent() {
 <aui:script>
 
 
-
 </aui:script>

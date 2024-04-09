@@ -238,4 +238,10 @@ div.dataTables_wrapper div.dataTables_info {
 	border-bottom-width: 1px!important;
 }
 
+.hide-embedded-portlet-header
+.portlet-header
+{
+	display:none;	
+}
+
 /* override attribute */

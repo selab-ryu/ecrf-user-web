@@ -1,3 +1,5 @@
+<%@page import="ecrf.user.service.CRFSubjectLocalServiceUtil"%>
+<%@page import="ecrf.user.service.SubjectLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.attribute.ECRFUserCRFDataAttributes"%>	
 <%@ include file="../init.jsp" %>
 <%
@@ -125,14 +127,21 @@
 				keyProperty="autoQueryId"
 				modelVar="crfAutoquery"
 			>
-	
+		
 				<liferay-ui:search-container-column-text
 					name="No"
 					value="<%=String.valueOf(++count) %>"
 				/>
+				
+				<%
+					Subject rowSubject = SubjectLocalServiceUtil.getSubject(crfAutoquery.getSubjectId());
+				
+					String idRowStr = rowSubject.getName() + "(" + crfAutoquery.getSubjectId() + ")";
+				%>
+				
 				<liferay-ui:search-container-column-text
 					name="SXcrfForm.subject.id"
-					property="subjectId"
+					value="<%=idRowStr %>"
 				/>
 				<liferay-ui:search-container-column-text
 					name="SXcrfForm.subject.crf.id"
@@ -228,11 +237,28 @@
 				</portlet:renderURL>
 				<!-- History button -->
 				
+				<%
+					boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, crfAutoquery.getSubjectId());
+				%>
+				
 				<liferay-ui:search-container-column-text
 					name="SXcrfAutoquery.query.edit-btn"
 					cssClass="min-width-80"
 				>
+					<c:choose>
+					<c:when test="<%=updateLock %>">
+					
+					<aui:button name="lockCRF" type="button" value="ecrf-user.button.lock" cssClass="none-btn small-btn" disabled="true"></aui:button>
+					
+					</c:when>
+					<c:otherwise>
+					
 					<aui:button name="updateQuery" type="button" value="SXcrfAutoquery.query.edit-btn" cssClass="edit-btn small-btn" onClick="<%=updateQueryURL%>"></aui:button>
+					
+					</c:otherwise>
+					</c:choose>
+				
+					
 				</liferay-ui:search-container-column-text>
 			
 			</liferay-ui:search-container-row>
