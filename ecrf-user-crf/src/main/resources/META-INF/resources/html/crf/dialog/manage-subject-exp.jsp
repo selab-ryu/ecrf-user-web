@@ -2,10 +2,6 @@
 
 <%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/dialog/manage-subject_jsp"); %>
 
-<!-- TODO: get subject list from dialog -->
-<!-- TODO: get researcher list from dialog -->
-<!-- TODO: add/update/delete subjects and researchers -->
-
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 	
@@ -36,7 +32,6 @@
 <div class="ecrf-user">
 	
 	<div class="">
-		<aui:form name="updateCRFFm" action="" method="POST" autocomplete="off">
 		<aui:container cssClass="radius-shadow-container">
 			
 			<c:if test="<%=isUpdate %>">
@@ -108,7 +103,6 @@
 			</aui:button-row>
 			
 		</aui:container>
-		</aui:form>		
 	</div>
 	
 </div>

@@ -492,13 +492,7 @@ function tableLoading() {
             		manageSubjectPopup();            		
             	}
             },
-            {
-            	text : 'Manage Exp. Group',
-            	className : 'small-btn marRr marBrh',
-            	action : function( e, dt, node, config) {
-            		manageExpGroupPopup();            		
-            	}
-            },
+
             {
             	text : 'Manage Update Lock',
             	className : 'small-btn marRr marBrh',
