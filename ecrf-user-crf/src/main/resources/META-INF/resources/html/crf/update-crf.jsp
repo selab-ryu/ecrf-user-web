@@ -289,30 +289,6 @@ function manageSubjectPopup() {
 	});
 }
 
-function manageExpGroupPopup() {
-	var renderURL = Liferay.PortletURL.createRenderURL();
-	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up");
-    renderURL.setParameter("<%=ECRFUserWebKeys.MVC_PATH%>", "<%=ECRFUserJspPaths.JSP_DIALOG_MANAGE_EXP_GROUP %>");
-    renderURL.setParameter("<%=ECRFUserCRFAttributes.CRF_ID%>", crfId);
-    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
-    
-	AUI().use("liferay-util-window", function(A) {
-		Liferay.Util.openWindow({
-			dialog: {
-				width:800,
-				height:800,
-				modal: true,
-				cenered: true
-			},
-			id: "manageExpGroupPopup",
-			title: "Manage Experimental Group",
-			uri: renderURL.toString() 
-		})
-	});
-}
-
 function manageUpdateLockPopup() {
 	var renderURL = Liferay.PortletURL.createRenderURL();
 	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
@@ -404,7 +380,7 @@ Liferay.provide(window, "closePopup", function(dialogId, type, data) {
 	if(type == "save") {
 		console.log("is it called?");	// check equals
 		
-		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" || dialogId == "manageExpGroupPopup" ) {
+		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" ) {
 			crfSubjectInfoArr = data;
 			refreshSubjectTable();
 		} else if (dialogId == "manageResearcherPopup") {
@@ -492,7 +468,6 @@ function tableLoading() {
             		manageSubjectPopup();            		
             	}
             },
-
             {
             	text : 'Manage Update Lock',
             	className : 'small-btn marRr marBrh',
