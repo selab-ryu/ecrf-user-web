@@ -1,4 +1,4 @@
-<%@ include file="../../init.jsp" %>
+ <%@ include file="../../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html.crf-data.data.list_crf_data_update_jsp"); %>
 
@@ -316,6 +316,37 @@ String progressPercentage = "0%";
 				}
 			%>
 			
+			<%
+				boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, rowSubjectId);
+				_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
+				String lockBtnKey = "";
+				String lockCss = "";
+				if(updateLock) {
+					lockBtnKey = "ecrf-user.button.db-unlock";
+					lockCss = "small-btn none-btn";
+				} else {
+					lockBtnKey = "ecrf-user.button.db-lock";
+					lockCss = "small-btn emr-btn";
+				}
+			%>
+			
+			<!-- DB Lock -->
+			<liferay-ui:search-container-column-text
+				name="ecrf-user.list.db-lock"
+				cssClass="min-width-80"
+			>
+			
+			<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_CHANGE_UPDATE_LOCK %>" var="changeUpdateLock">
+				<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA_UPDATE %>" />
+				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+			</portlet:actionURL>
+			
+			<aui:button name="dbLock" type="button" value="<%=lockBtnKey%>" cssClass="<%=lockCss %>" onClick="<%=changeUpdateLock %>" ></aui:button>
+			</liferay-ui:search-container-column-text>
+			
+			<!-- DB Lock -->
+			
 			<c:if test="<%=updatePermission %>">
 			
 			<!-- Data Update -->
@@ -326,8 +357,6 @@ String progressPercentage = "0%";
 			
 			<%
 				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s')", rowSubjectId, crfId, 0, updatePermission, themeDisplay.getPortletDisplay().getId());
-				boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, rowSubjectId);
-				_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
 			%>
 				
 				<c:choose>
