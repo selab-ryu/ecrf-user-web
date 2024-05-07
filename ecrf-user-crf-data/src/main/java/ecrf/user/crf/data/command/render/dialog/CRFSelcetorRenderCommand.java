@@ -10,6 +10,7 @@ import com.sx.icecap.exception.NoSuchDataTypeException;
 import com.sx.icecap.model.DataType;
 import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
+import com.sx.icecap.service.StructuredDataLocalService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,19 +52,19 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 		List<LinkCRF> links = _linkLocalService.getLinkCRFByC_S(crfId, subjectId);
 		_log.info("link size : " + links.size());
 
-		ArrayList<StructuredData> sdList = new ArrayList<>();
+		ArrayList<Long> sdList = new ArrayList<>();
 		
 		for(int i = 0; i < links.size(); i++) {
 			StructuredData sd = null;
 			
 			try {
-				sd = _dataTypeLocalService.getStructuredData(links.get(i).getStructuredDataId());
+				sd = _structuredDataLocalService.getStructuredData(links.get(i).getStructuredDataId());
 			}catch (Exception e) {
 				throw new PortletException("Cannot find StructuredData : " + links.get(i).getStructuredDataId());
 			}
 			
 			if(Validator.isNotNull(sd)) {
-				sdList.add(sd);
+				sdList.add(sd.getStructuredDataId());
 			}
 		}
 		
@@ -112,6 +113,9 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 	
 	@Reference
 	private DataTypeLocalService _dataTypeLocalService;
+	
+	@Reference
+	private StructuredDataLocalService	_structuredDataLocalService;
 	
 	@Reference
 	private CRFLocalService _crfLocalService;

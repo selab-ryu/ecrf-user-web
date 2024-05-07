@@ -102,9 +102,8 @@ public class ViewCRFDataRenderCommand implements MVCRenderCommand {
 		}
 		
 		// get crf data (structured data)
-		if(sdId > 0) {
-			StructuredData sd = _dataTypeLocalService.getStructuredData(sdId);
-			String answerFormStr = sd.getStructuredData();
+		if(sdId > 0) { 
+			String answerFormStr = _dataTypeLocalService.getStructuredData(sdId);
 			
 			try {
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(crfFormStr);

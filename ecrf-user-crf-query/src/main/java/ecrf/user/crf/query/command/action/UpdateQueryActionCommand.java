@@ -15,7 +15,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.sx.icecap.model.DataType;
-import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
 
 import java.util.List;
@@ -37,6 +36,7 @@ import ecrf.user.model.CRFHistory;
 import ecrf.user.model.Subject;
 import ecrf.user.service.CRFAutoqueryLocalService;
 import ecrf.user.service.CRFHistoryLocalService;
+import ecrf.user.service.CRFLocalService;
 import ecrf.user.service.SubjectLocalService;
 
 @Component
@@ -68,10 +68,11 @@ public class UpdateQueryActionCommand extends BaseMVCActionCommand{
 		String queryComment = ParamUtil.getString(actionRequest, "queryComment");
 		_log.info("edit action : " + sId + " / " + sdId + " / " + queryId + " / " + queryComfirm + " / " + queryComment);
 		
-		StructuredData sd = _dataTypeLocalService.getStructuredData(sdId);
-		String crfFormStr = _dataTypeLocalService.getDataTypeStructure(sd.getDataTypeId());
+		long dataTypeId = _crfLocalService.getDataTypeId(crfId);
+		 
+		String crfFormStr = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
 		JSONArray crfForm = JSONFactoryUtil.createJSONObject(crfFormStr).getJSONArray("terms");
-		String answerFormStr = sd.getStructuredData();
+		String answerFormStr = _dataTypeLocalService.getStructuredData(sdId);
 		CRFAutoquery query = _queryLocalService.getCRFAutoquery(queryId);
 		JSONObject answerForm = JSONFactoryUtil.createJSONObject(answerFormStr);
 		for(int i = 0; i < crfForm.length(); i++) {
@@ -87,7 +88,7 @@ public class UpdateQueryActionCommand extends BaseMVCActionCommand{
 		case 1:
 			if(answerForm.has(query.getQueryTermName())) {
 				answerForm.put(query.getQueryTermName(), queryChangeValue);
-				_dataTypeLocalService.updateStructuredData(sdId, 0, sd.getDataTypeId(), answerForm.toString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
+				_dataTypeLocalService.updateStructuredData(sdId, 0, dataTypeId, answerForm.toString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
 				Subject subject = _subjectLocalService.getSubject(sId);
 				List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryBySubjectId(sId);
 				CRFHistory prevHistory = prevHistoryList.get(prevHistoryList.size() - 1);
@@ -95,14 +96,14 @@ public class UpdateQueryActionCommand extends BaseMVCActionCommand{
 					prevHistory = prevHistoryList.get(i);
 					if(prevHistory.getStructuredDataId() == sdId) break;
 				}
-				_historyLocalService.addCRFHistory(subject.getName(), sId, subject.getSerialId(), sdId, sd.getDataTypeId(), prevHistory.getCurrentJSON(), answerForm.toString(), 0, "1.0.0", historyServiceContext);
+				_historyLocalService.addCRFHistory(subject.getName(), sId, subject.getSerialId(), sdId, dataTypeId, prevHistory.getCurrentJSON(), answerForm.toString(), 0, "1.0.0", historyServiceContext);
 			}
 			_queryLocalService.comfirmAutoquery(queryId, queryComfirm, queryValue, queryChangeValue, queryComment, queryServiceContext);
 			break;
 		case 2:
 			if(answerForm.has(query.getQueryTermName())) {
 				answerForm.put(query.getQueryTermName(), queryChangeValue);
-				_dataTypeLocalService.updateStructuredData(sdId, 0, sd.getDataTypeId(), answerForm.toString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
+				_dataTypeLocalService.updateStructuredData(sdId, 0, dataTypeId, answerForm.toString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
 				Subject subject = _subjectLocalService.getSubject(sId);
 				List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryBySubjectId(sId);
 				CRFHistory prevHistory = prevHistoryList.get(prevHistoryList.size() - 1);
@@ -110,7 +111,7 @@ public class UpdateQueryActionCommand extends BaseMVCActionCommand{
 					prevHistory = prevHistoryList.get(i);
 					if(prevHistory.getStructuredDataId() == sdId) break;
 				}
-				_historyLocalService.addCRFHistory(subject.getName(), sId, subject.getSerialId(), sdId, sd.getDataTypeId(), prevHistory.getCurrentJSON(), answerForm.toString(), 0, "1.0.0", historyServiceContext);
+				_historyLocalService.addCRFHistory(subject.getName(), sId, subject.getSerialId(), sdId, dataTypeId, prevHistory.getCurrentJSON(), answerForm.toString(), 0, "1.0.0", historyServiceContext);
 			}
 			_queryLocalService.comfirmAutoquery(queryId, queryComfirm, queryValue, queryChangeValue, queryComment, queryServiceContext);
 			break;
@@ -142,4 +143,7 @@ public class UpdateQueryActionCommand extends BaseMVCActionCommand{
 	
 	@Reference
 	private CRFAutoqueryLocalService _queryLocalService;
+	
+	@Reference
+	private CRFLocalService _crfLocalService;
 }

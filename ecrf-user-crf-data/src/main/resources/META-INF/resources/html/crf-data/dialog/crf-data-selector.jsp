@@ -1,3 +1,4 @@
+<%@page import="com.sx.icecap.service.StructuredDataLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.attribute.ECRFUserCRFSubjectInfoAttribute"%>
 <%@page import="ecrf.user.model.CRFAutoquery"%>
 <%@page import="com.sx.icecap.service.DataTypeStructureLocalServiceUtil"%>
@@ -48,7 +49,8 @@ _log.info("update lock : " + updateLock);
 				<%
 				if(Validator.isNotNull(sdList)){
 					for(int i = sdList.size() - 1; i >= 0; i--){
-						StructuredData sd = sdList.get(i);						
+						long rowSdId = sdList.get(i);
+						StructuredData sd = StructuredDataLocalServiceUtil.getStructuredData(rowSdId);	
 						JSONObject answerForm = JSONFactoryUtil.createJSONObject(sd.getStructuredData());
 						String dateStr = "";
 				        Date visitDate = null;
