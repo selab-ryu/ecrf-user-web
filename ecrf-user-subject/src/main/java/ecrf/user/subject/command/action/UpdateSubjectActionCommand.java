@@ -31,9 +31,11 @@ import javax.servlet.http.HttpSession;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserWebKeys;
+import ecrf.user.constants.attribute.ECRFUserExpGroupAttributes;
 import ecrf.user.constants.attribute.ECRFUserSubjectAttributes;
 import ecrf.user.model.Subject;
 import ecrf.user.service.SubjectLocalService;
@@ -93,6 +95,8 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		
 		int hospitalCode = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.HOSPITAL_CODE);
 		
+		long expGroupId = ParamUtil.getLong(actionRequest, ECRFUserSubjectAttributes.EXPERIMENTAL_GROUP_ID);
+		
 		Subject subject = null;
 		
 		try {
@@ -100,7 +104,8 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 					name, 
 					birthYear, birthMonth, birthDay, 
 					gender, phone, phone2, 
-					address, serialId, hospitalCode, 
+					address, serialId, hospitalCode,
+					expGroupId,
 					subjectServiceContext);
 			
 		} catch(PortalException e) {
@@ -136,7 +141,9 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		String phone2 = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.PHONE_2);
 		
 		int hospitalCode = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.HOSPITAL_CODE);
-				
+		
+		long expGroupId = ParamUtil.getLong(actionRequest, ECRFUserSubjectAttributes.EXPERIMENTAL_GROUP_ID);
+		
 		Subject subject = null;
 		
 		try {
@@ -145,7 +152,8 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 					subjectId, name, 
 					birthYear, birthMonth, birthDay, 
 					gender, phone, phone2, 
-					address, serialId, hospitalCode, 
+					address, serialId, hospitalCode,
+					expGroupId,
 					subjectServiceContext);
 			
 		} catch(PortalException e) {
@@ -165,6 +173,7 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 				PortletRequest.RENDER_PHASE);
 		
 		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, renderCommand);
+		renderURL.setParameter(Constants.CMD, Constants.UPDATE);
 		actionResponse.sendRedirect(renderURL.toString());
 	}
 	

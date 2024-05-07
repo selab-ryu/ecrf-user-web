@@ -18,16 +18,13 @@
 		
 		menu = "update-query";
 	}
-	StructuredData sd = null;
-	if(sdId != null) {
-		sd = (StructuredData)renderRequest.getAttribute("sd");
-	}
+
 	CRFAutoquery query = null;
 	if(value != null){
 		query = (CRFAutoquery)renderRequest.getAttribute("query");
 	}
 	
-	System.out.println("jsp : " + sd + " / " + subject + " / " + query);
+	//System.out.println("jsp : " + sd + " / " + subject + " / " + query);
 
 %>
 <liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_COMFIRM_CRF_QUERY%>" var="updateQueryURL">
@@ -36,7 +33,13 @@
 	<portlet:param name="queryId" value="<%=String.valueOf(query.getAutoQueryId())%>" />
 </liferay-portlet:actionURL>
 
-<div class="ecrf-user ecrf-user-query SXCRFAutoquery">
+<portlet:renderURL var="listCRFQueryURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_QUERY%>"/>
+	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+</portlet:renderURL>
+
+<div class="ecrf-user">
 
 	<%@ include file="sidebar.jspf" %>
 	
@@ -48,16 +51,16 @@
 			<aui:row>
 				<aui:col md="12">
 					<aui:form name="updateQueryFm" action="<%=updateQueryURL%>" autocomplete="off">
-						<aui:container cssClass="">	
+						<aui:container>	
 							<aui:row cssClass="marBrh">
-								<aui:col md="12">
+								<aui:col md="12" cssClass="sub-title-bottom-border">
 									<span class="sub-title-span">
 										<liferay-ui:message key="SXcrfAutoquery.query.context" />
 									</span>
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="top-border">
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryType"
 										label="SXcrfAutoquery.query.querytype"
@@ -84,7 +87,7 @@
 										}
 									}
 								%>
-								<aui:col md="9" cssClass="marTr">
+								<aui:col md="9">
 									<aui:input
 										cssClass="search-input h35"
 										name="queryType"
@@ -96,7 +99,7 @@
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="top-border">
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryTermName"
 										label="SXcrfAutoquery.query.termname"
@@ -118,7 +121,7 @@
 										}
 									}
 								%>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:input
 										cssClass="search-input h35"
 										name="queryTermName"
@@ -128,7 +131,7 @@
 									>
 									</aui:input>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryValue"
 										label="SXcrfAutoquery.query.value"
@@ -137,7 +140,7 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:input
 										cssClass="search-input h35"
 										name="queryValue"
@@ -149,7 +152,7 @@
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="top-border">
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="subjectIdStr"
 										label="SXcrfForm.subject.id"
@@ -158,17 +161,17 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:input
 										cssClass="search-input h35"
 										name="subjectIdStr"
 										label=" "
 										placeholder=""
-										value="<%= Validator.isNull(subject) ? StringPool.BLANK : subject.getSubjectIdStr()%>"
+										value="<%= Validator.isNull(subject) ? StringPool.BLANK : subject.getSerialId()%>"
 									>
 									</aui:input>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="structuredDataId"
 										label="SXcrfForm.subject.crf.id"
@@ -177,19 +180,19 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:input
 										cssClass="search-input h35"
 										name="structuredDataId"
 										label=" "
 										placeholder=""
-										value="<%= Validator.isNull(sd) ? StringPool.BLANK : sd.getStructuredDataId()%>"
+										value="<%= Validator.isNull(sdId) ? StringPool.BLANK : sdId%>"
 									>
 									</aui:input>
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="top-border">
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="userName"
 										label="SXcrfAutoquery.user.name"
@@ -198,7 +201,7 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:input
 										cssClass="search-input h35"
 										name="userName"
@@ -208,7 +211,7 @@
 									>
 									</aui:input>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="createDate"
 										label="SXcrfAutoquery.query.comfirm.date"
@@ -232,7 +235,7 @@
 										}
 									}
 								%>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<liferay-ui:input-date
 										cssClass="search-input h35"
 										name="createDate"
@@ -248,14 +251,14 @@
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="marBrh">
-								<aui:col md="12">
+								<aui:col md="12" cssClass="sub-title-bottom-border">
 									<span class="sub-title-span">
 										<liferay-ui:message key="SXcrfAutoquery.query.comfirm.context" />
 									</span>
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="top-border">
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryChangeValue"
 										label="SXcrfAutoquery.query.changevalue"
@@ -264,7 +267,7 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:input
 										cssClass="search-input h35"
 										name="queryChangeValue"
@@ -276,7 +279,7 @@
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="top-border">
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryComment"
 										label="SXcrfAutoquery.query.comment"
@@ -285,7 +288,7 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
-								<aui:col md="9" cssClass="marTr">
+								<aui:col md="9">
 									<aui:input
 										cssClass="search-input h35"
 										name="queryComment"
@@ -296,15 +299,16 @@
 									</aui:input>
 								</aui:col>
 							</aui:row>
+							
 							<aui:row cssClass="marBrh">
-								<aui:col md="12">
+								<aui:col md="12" cssClass="sub-title-bottom-border">
 									<span class="sub-title-span">
 										<liferay-ui:message key="SXcrfAutoquery.query.comfirm" />
 									</span>
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="top-border">
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryComfirm"
 										label="SXcrfAutoquery.query.comfirm"
@@ -326,8 +330,8 @@
 										accept = true;
 									}
 								%>
-								<aui:col md="9" cssClass="marTrh">
-									<aui:fieldset cssClass="">
+								<aui:col md="9" >
+									<aui:fieldset>
 										<aui:input type="radio" name="queryComfirm" value="0" cssClass="search-input" label="SXcrfAutoquery.query.comfirm.processing" checked="<%=processing %>"></aui:input>
 										<aui:input type="radio" name="queryComfirm" value="1" cssClass="search-input" label="SXcrfAutoquery.query.comfirm.refuse" checked="<%=refuse %>"></aui:input>
 										<aui:input type="radio" name="queryComfirm" value="2" cssClass="search-input" label="SXcrfAutoquery.query.comfirm.accept" checked="<%=accept %>"></aui:input>
@@ -335,7 +339,7 @@
 								</aui:col>
 							</aui:row>
 							<aui:row cssClass="top-border">
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryComfirmUserName"
 										label="SXcrfAutoquery.query.comfirm.user"
@@ -344,7 +348,7 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:input
 										cssClass="search-input h35"
 										name="queryComfirmUserName"
@@ -354,7 +358,7 @@
 									>
 									</aui:input>
 								</aui:col>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<aui:field-wrapper
 										name="modifiedDate"
 										label="SXcrfAutoquery.query.comfirm.date"
@@ -378,7 +382,7 @@
 										}
 									}
 								%>
-								<aui:col md="3" cssClass="marTr">
+								<aui:col md="3">
 									<liferay-ui:input-date
 										cssClass="search-input h35"
 										name="modifiedDate"
@@ -397,7 +401,7 @@
 								<aui:col md="12">
 									<aui:button-row cssClass="marL10">
 										<aui:button type="button" name="save" value="<%=isUpdate ? "SxcrfForm.update.save-btn" : "SxcrfForm.update.add-btn" %>" cssClass="add-btn medium-btn radius-btn"></aui:button>
-										<aui:button type="button" name="cancel" value="<%=isUpdate ? "SxcrfForm.update.list-btn" : "SxcrfForm.update.cancel-btn" %>" cssClass="cancel-btn medium-btn radius-btn" onClick="location.href = 'query'"></aui:button>
+										<aui:button type="button" name="cancel" value="<%=isUpdate ? "SxcrfForm.update.list-btn" : "SxcrfForm.update.cancel-btn" %>" cssClass="cancel-btn medium-btn radius-btn" onClick=""></aui:button>
 									</aui:button-row>
 								</aui:col>
 							</aui:row>	

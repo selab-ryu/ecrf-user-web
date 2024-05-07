@@ -64,7 +64,7 @@
 <%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
 
 <%@ page import="ecrf.user.model.custom.CRFSubjectInfo"%>
-<%@ page import="ecrf.user.constants.ExperimentalGroup"%>
+<%@ page import="ecrf.user.constants.ExperimentalGroupType"%>
 
 <%@ page import="ecrf.user.model.Researcher"%>
 <%@ page import="ecrf.user.model.CRF"%>

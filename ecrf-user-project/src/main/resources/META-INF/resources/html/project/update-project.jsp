@@ -15,6 +15,8 @@ Project project = null;
 long principalResearchId = 0;
 long manageResearcherId = 0;
 
+String menu = "project-info";
+
 if(projectId > 0) {
 	project = (Project)renderRequest.getAttribute(ECRFUserProjectAttributes.PROJECT);
 	principalResearchId = project.getPrincipalResearcherId();

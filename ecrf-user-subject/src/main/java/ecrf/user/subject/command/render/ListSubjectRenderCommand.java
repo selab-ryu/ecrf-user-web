@@ -35,15 +35,16 @@ import ecrf.user.service.SubjectLocalService;
 	service=MVCRenderCommand.class
 )
 public class ListSubjectRenderCommand implements MVCRenderCommand {
-	private Log _log;
+	private Log _log = LogFactoryUtil.getLog(ListSubjectRenderCommand.class);
 	
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
-		_log = LogFactoryUtil.getLog(this.getClass().getName());
 		
 		String cmd = ParamUtil.getString(renderRequest, Constants.CMD, StringPool.BLANK);
 		
 		String listPath = StringPool.BLANK;
+		
+		_log.info(listPath);
 		
 		if(cmd.equals(Constants.UPDATE)) {
 			listPath = ECRFUserJspPaths.JSP_LIST_SUBJECT_UPDATE;
@@ -57,7 +58,7 @@ public class ListSubjectRenderCommand implements MVCRenderCommand {
 		
 		return listPath;
 	}
-
+	
 	@Reference
 	private SubjectLocalService _subjectLocalService;
 }

@@ -1,3 +1,5 @@
+<%@page import="ecrf.user.service.ExperimentalGroupLocalServiceUtil"%>
+<%@page import="ecrf.user.model.ExperimentalGroup"%>
 <%@ include file="../init.jsp" %>
 
 <%!
@@ -47,7 +49,7 @@ if(isUpdate) {
 
 <portlet:renderURL var="listSubjectURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SUBJECT %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+	<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.UPDATE %>"/>
 </portlet:renderURL>
 
 <div class="ecrf-user">
@@ -225,6 +227,45 @@ if(isUpdate) {
 						value="<%=Validator.isNull(subject) ? StringPool.BLANK : subject.getHospitalCode() %>" />
 				</aui:col>
 			</aui:row>
+			
+			<aui:row>
+				<aui:col md="3">
+					<aui:field-wrapper
+						name="<%=ECRFUserSubjectAttributes.EXPERIMENTAL_GROUP_ID %>"
+						label="ecrf-user.subject.experimental-group"
+						required="true"
+					>
+					</aui:field-wrapper>
+				</aui:col>
+				<aui:col md="6">
+				
+					<aui:select
+						name="<%=ECRFUserSubjectAttributes.EXPERIMENTAL_GROUP_ID %>" 
+						label=""
+					>
+						<aui:option selected="true" value="0"></aui:option>
+					
+					<%
+						ArrayList<ExperimentalGroup> expGroupList = new ArrayList<>();
+						expGroupList.addAll(ExperimentalGroupLocalServiceUtil.getExpGroupByGroupId(scopeGroupId));
+						
+						for(int i=0; i<expGroupList.size(); i++) {
+							ExperimentalGroup expGroup = expGroupList.get(i);
+							boolean isSelect = false;
+							if(Validator.isNotNull(subject)) {
+								if(subject.getExpGroupId() == expGroup.getExperimentalGroupId()) isSelect = true;
+							}
+					%>
+					
+						<aui:option selected="<%=isSelect %>" value="<%=expGroup.getExperimentalGroupId() %>"><%=expGroup.getName() %></aui:option>
+					<%
+						}
+					%>
+					</aui:select>
+				</aui:col>
+			</aui:row>
+				
+			
 			
 			<aui:row>
 				<aui:col md="12">

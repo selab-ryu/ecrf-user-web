@@ -1,6 +1,6 @@
 <%@ include file="../init.jsp" %>
 
-<%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/update-crf_jsp"); %>
+<%!private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/update-crf_jsp");%>
 
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
@@ -16,12 +16,12 @@
 	if(crfId > 0) {
 		crf = (CRF)renderRequest.getAttribute(ECRFUserCRFAttributes.CRF);
 		if(Validator.isNotNull(crf)) {
-			isUpdate = true;
-			menu = "crf-update";	
+	isUpdate = true;
+	menu = "crf-update";	
 		}
 	}
 	
-	List<String> expGroupList = Stream.of(ExperimentalGroup.values()).map(m -> m.getFullString()).collect(Collectors.toList());
+	List<String> expGroupList = Stream.of(ExperimentalGroupType.values()).map(m -> m.getFullString()).collect(Collectors.toList());
 	_log.info(expGroupList);
 	
 	DataType dataType = null;
@@ -30,8 +30,8 @@
 		dataTypeId = crf.getDatatypeId();
 		
 		if(dataTypeId > 0) {
-			_log.info("dataType id : " + dataTypeId);
-			dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+	_log.info("dataType id : " + dataTypeId);
+	dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
 		}
 	}
 %>

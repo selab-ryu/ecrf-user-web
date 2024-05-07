@@ -27,7 +27,7 @@ import ecrf.user.service.SubjectLocalService;
 	    immediate = true,
 	    property = {
 	        "javax.portlet.name=" + ECRFUserPortletKeys.CRF_QUERY,
-	        "mvc.command.name="+ ECRFUserMVCCommand.RENDER_UPDATE_CRF
+	        "mvc.command.name="+ ECRFUserMVCCommand.RENDER_UPDATE_CRF_QUERY
 	    },
 	    service = MVCRenderCommand.class
 	)

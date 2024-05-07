@@ -1,4 +1,4 @@
- <%@ include file="../../init.jsp" %>
+<%@ include file="../../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html.crf-data.data.list_crf_data_update_jsp"); %>
 
