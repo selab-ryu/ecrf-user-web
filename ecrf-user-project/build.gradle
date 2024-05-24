@@ -20,12 +20,13 @@ dependencies {
 
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.1.0"
 	
-	compileOnly group: "org.slf4j", name: "jcl-over-slf4j"
-	
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
 	compileOnly group: 'com.liferay', name: 'com.liferay.trash.api'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.string'
-	compileOnly group: 'com.liferay', name: 'com.liferay.petra.function'
+	
+	compileOnly group: "com.liferay", name: "com.liferay.petra.function"
+	compileOnly group: "com.liferay", name: "com.liferay.petra.model.adapter"
+	compileOnly group: "com.liferay", name: "com.liferay.petra.reflect"
 	
 	compileOnly group: "com.liferay", name: "com.liferay.application.list.api", version: "4.2.5"
 }

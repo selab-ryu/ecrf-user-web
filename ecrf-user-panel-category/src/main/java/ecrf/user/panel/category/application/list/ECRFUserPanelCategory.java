@@ -41,11 +41,5 @@ public class ECRFUserPanelCategory extends BasePanelCategory {
 
 		return LanguageUtil.get(resourceBundle, "site-panel.ecrf-user");
 	}
-
-//	@Override
-//	public boolean isShow(PermissionChecker permissionChecker, Group group) throws PortalException {
-//		//return super.isShow(permissionChecker, group);
-//		return true;
-//	}
 	
 }

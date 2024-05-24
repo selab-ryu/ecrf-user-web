@@ -1,8 +1,10 @@
 .padTr { padding-top: 1rem; }
 .padBr { padding-bottom: 1rem; }
-   
+
 .padV5 { padding-top:5px; padding-bottom:5px; }
 .padVr { padding-top:1rem; padding-bottom:1rem; }
+
+.pad16 { padding:16px; }
 
 .mar1r {margin: 1rem; }   
 .marLr { margin-left: 1rem; }
@@ -219,6 +221,8 @@ div.page-content-sub {
    	color:white;
 }
 /* The side navigation menu */
+
+
 
 /* override attribute */
 

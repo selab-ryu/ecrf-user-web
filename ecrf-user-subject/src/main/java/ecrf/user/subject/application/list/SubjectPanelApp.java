@@ -1,4 +1,7 @@
-package ecrf.user.approve.application.list;
+/**
+ * 
+ */
+package ecrf.user.subject.application.list;
 
 import com.liferay.application.list.BasePanelApp;
 import com.liferay.application.list.PanelApp;
@@ -12,25 +15,27 @@ import ecrf.user.panel.category.constants.ECRFUserPanelCategoryKeys;
 
 /**
  * @author SELab-Ryu
+ *
  */
+
 @Component(
 	immediate = true,
 	property = {
-		"panel.app.order:Integer=370",
+		"panel.app.order:Integer=390",
 		"panel.category.key=" + ECRFUserPanelCategoryKeys.SITE_ECRF_PANEL
 	},
 	service = PanelApp.class
 )
-public class ApprovePanelApp extends BasePanelApp {
+public class SubjectPanelApp extends BasePanelApp {
 
 	@Override
 	public String getPortletId() {
-		return ECRFUserPortletKeys.APPROVE_ADMIN;
+		return ECRFUserPortletKeys.SUBJECT;
 	}
-
+	
 	@Override
 	@Reference(
-		target = "(javax.portlet.name=" + ECRFUserPortletKeys.APPROVE_ADMIN + ")",
+		target = "(javax.portlet.name=" + ECRFUserPortletKeys.SUBJECT + ")",
 		unbind = "-"
 	)
 	public void setPortlet(Portlet portlet) {

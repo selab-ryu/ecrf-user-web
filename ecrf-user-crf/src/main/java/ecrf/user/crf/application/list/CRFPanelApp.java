@@ -20,7 +20,7 @@ import ecrf.user.panel.category.constants.ECRFUserPanelCategoryKeys;
 @Component(
 		immediate = true,
 		property = {
-			"panel.app.order:Integer=300",
+			"panel.app.order:Integer=400",
 			"panel.category.key=" + ECRFUserPanelCategoryKeys.SITE_ECRF_PANEL
 		},
 		service = PanelApp.class
