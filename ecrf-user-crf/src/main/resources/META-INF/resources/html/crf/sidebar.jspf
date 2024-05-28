@@ -8,15 +8,6 @@
 	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
-<portlet:renderURL var="moveCRFUpdateListURL">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF %>" />
-	<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_UPDATE%>" />
-</portlet:renderURL>
-
-<portlet:renderURL var="moveCRFDeleteListURL">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF %>" />
-	<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DELETE%>" />
-</portlet:renderURL>
 
 <portlet:renderURL var="moveManageFormURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_MANAGE_FORM %>" />
@@ -38,20 +29,13 @@
 </portlet:renderURL>
 
 
-
 <div class="side-menu radius-shadow-container" style="text-align:center;">	
 	<!-- CRF Management -->
 	<div>
 		<aui:button cssClass="<%="main-menu-bar active-menu-bar" %>" type="button" value="ecrf-user.menu.crf" onClick="<%=moveCRFListURL %>" />	
 	</div>
 	<div>
-		<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("crf-list") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.list" onClick="<%=moveCRFListURL %>" />
-	</div>
-	<div>
-		<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("crf-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.add" onClick="<%=(isAdmin || isPI) ? moveAddCRFURL : "-" %>" />
-	</div>
-	<div>
-		<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("crf-list-update") || menu.equals("crf-update") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.update" onClick="<%=updatePermission ? moveCRFUpdateListURL : "-" %>" />
+		<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("crf-list") || menu.equals("crf-update") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.list" onClick="<%=moveCRFListURL %>" />
 	</div>
 	
 	<c:if test="<%=menu.equals("crf-update") %>">
@@ -67,8 +51,7 @@
 	</c:if>
 	
 	<div>
-		<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("crf-list-delete" ) ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.delete" onClick="<%=updatePermission ? moveCRFDeleteListURL : "-" %>" />
+		<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("crf-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.add" onClick="<%=(isAdmin || isPI) ? moveAddCRFURL : "-" %>" />
 	</div>
-	<!-- CRF Management -->
-	
+		
 </div>

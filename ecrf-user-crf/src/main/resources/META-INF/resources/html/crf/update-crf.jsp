@@ -16,8 +16,8 @@
 	if(crfId > 0) {
 		crf = (CRF)renderRequest.getAttribute(ECRFUserCRFAttributes.CRF);
 		if(Validator.isNotNull(crf)) {
-	isUpdate = true;
-	menu = "crf-update";	
+			isUpdate = true;
+			menu = "crf-update";	
 		}
 	}
 	
@@ -30,8 +30,8 @@
 		dataTypeId = crf.getDatatypeId();
 		
 		if(dataTypeId > 0) {
-	_log.info("dataType id : " + dataTypeId);
-	dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+			_log.info("dataType id : " + dataTypeId);
+			dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
 		}
 	}
 %>
@@ -187,30 +187,33 @@
 			
 			<c:if test="<%=isUpdate %>">
 			<aui:button-row>
-				<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_CRF_FORM %>" var="manageFormURL">
-					<portlet:param name="crfId" value="<%=String.valueOf(crfId) %>" />
-					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
-				</portlet:actionURL>
-				
-				<aui:button type="button" value="ecrf-user.button.manage-crf-form" onClick="<%=manageFormURL %>" />
-				
-				<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_CRF_DATA %>" var="crfDataURL">
+				<portlet:renderURL var="moveCRFFormURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_MANAGE_FORM %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
-				</portlet:actionURL>
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+				</portlet:renderURL>
+												
+				<aui:button type="button" value="ecrf-user.button.manage-crf-form" onClick="<%=moveCRFFormURL %>" />
 				
-				<aui:button type="button" value="ecrf-user.button.crf-data" onClick="<%=crfDataURL %>" />
-				
-				<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_CRF_QUERY %>" var="crfQueryURL">
+				<portlet:renderURL var="moveCRFDataURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
+					<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA%>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
-				</portlet:actionURL>
+				</portlet:renderURL>
 				
-				<aui:button type="button" value="ecrf-user.button.crf-query" onClick="<%=crfQueryURL %>" />
+				<aui:button type="button" value="ecrf-user.button.crf-data" onClick="<%=moveCRFDataURL %>" />
 				
+				<portlet:renderURL var="moveCRFQueryURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_QUERY %>" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+				</portlet:renderURL>
 				
-				<aui:button type="button" value="ecrf-user.button.crf-meta"/>
-				
+				<aui:button type="button" value="ecrf-user.button.crf-query" onClick="<%=moveCRFQueryURL %>" />
+								
 			</aui:button-row>
 			</c:if>
 			
