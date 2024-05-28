@@ -25,12 +25,12 @@ public class ApprovePanelApp extends BasePanelApp {
 
 	@Override
 	public String getPortletId() {
-		return ECRFUserPortletKeys.APPROVE_ADMIN;
+		return ECRFUserPortletKeys.APPROVE;
 	}
 
 	@Override
 	@Reference(
-		target = "(javax.portlet.name=" + ECRFUserPortletKeys.APPROVE_ADMIN + ")",
+		target = "(javax.portlet.name=" + ECRFUserPortletKeys.APPROVE + ")",
 		unbind = "-"
 	)
 	public void setPortlet(Portlet portlet) {
