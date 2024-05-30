@@ -1,9 +1,9 @@
-function openMultiCRFDialog(sId, crfId, type, hasPermission, portletId){
+Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, hasPermission, portletId, baseURL) {
 	console.log("function activate");
 	
 	if(hasPermission){
 		var renderURL = Liferay.PortletURL.createRenderURL();
-		
+
 		// set default value
 		renderURL.setPortletId(portletId);
 		renderURL.setPortletMode("edit");
@@ -12,6 +12,7 @@ function openMultiCRFDialog(sId, crfId, type, hasPermission, portletId){
 	    // set url param
 		renderURL.setParameter("subjectId", sId);
 		renderURL.setParameter("crfId", crfId);
+		renderURL.setParameter("baseURL", baseURL);
 		
 		// set dialog type value by type param 
 		if(type === 0) {
@@ -27,7 +28,7 @@ function openMultiCRFDialog(sId, crfId, type, hasPermission, portletId){
 		
 		// set render command
 		renderURL.setParameter("mvcRenderCommandName", "/render/crf-data/crf-data-selector");
-		
+				
 		Liferay.Util.openWindow({
 			dialog: {
 				cache: false,
@@ -44,15 +45,18 @@ function openMultiCRFDialog(sId, crfId, type, hasPermission, portletId){
 			uri: renderURL.toString()
 		});
 	}
-}
+	
+}, ['liferay-portlet-url']); 
 
-Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, dialogId, portletId, plId) {
+
+Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
 	console.log("subject Id / crf Id : " + sId + " / " + crfId);
 		
-	var renderURL = Liferay.PortletURL.createRenderURL();
+	var renderURL = Liferay.PortletURL.createURL(baseURL);
+	
 	renderURL.setPortletId(portletId);
 	renderURL.setPlid(plId);
 	
@@ -64,13 +68,14 @@ Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, dialogId, portlet
 	window.location.href = renderURL;
 },['liferay-util-window']);
 
-Liferay.provide(window, 'moveViewCRFData', function(sId, crfId, sdId, dialogId, portletId, plId) {
+Liferay.provide(window, 'moveViewCRFData', function(sId, crfId, sdId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
 	console.log("subject Id / crf Id : " + sId + " / " + crfId);
+		
+	var renderURL = Liferay.PortletURL.createURL(baseURL);
 	
-	var renderURL = Liferay.PortletURL.createRenderURL();
 	renderURL.setPortletId(portletId);
 	renderURL.setPlid(plId);
 	
@@ -83,16 +88,17 @@ Liferay.provide(window, 'moveViewCRFData', function(sId, crfId, sdId, dialogId, 
 	window.location.href = renderURL;	
 },['liferay-util-window']);
 
-Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit, dialogId, portletId, plId) {
+Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
 	console.log("subject Id / crf Id : " + sId + " / " + crfId);
+		
+	var renderURL = Liferay.PortletURL.createURL(baseURL);
 	
-	var renderURL = Liferay.PortletURL.createRenderURL();
 	renderURL.setPortletId(portletId);
 	renderURL.setPlid(plId);
-	
+		
 	renderURL.setParameter("subjectId", sId);
 	renderURL.setParameter("crfId", crfId);
 	renderURL.setParameter("structuredDataId", sdId);
@@ -102,22 +108,23 @@ Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit,
 	}else{
 		renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/update-crf-data");
 	}
-	
+		
 	window.location.href = renderURL;	
 },['liferay-util-window']);
 
-Liferay.provide(window, 'moveDeleteCRFData', function(linkCrfId, dialogId, portletId, plId) {
+Liferay.provide(window, 'moveDeleteCRFData', function(linkCrfId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
-
-	var actionURL = Liferay.PortletURL.createActionURL();
+	var actionURL = Liferay.PortletURL.createURL(baseURL);
+	
 	actionURL.setPortletId(portletId);
 	actionURL.setPlid(plId);
 	
 	actionURL.setParameter("linkCrfId", linkCrfId);
-	
 	actionURL.setName("/action/crf-data/delete-crf-data");
 	
-	window.location.href = actionURL.toString();	
+	console.log(actionURL);
+	
+	//window.location.href = actionURL.toString();	
 },['liferay-util-window']);

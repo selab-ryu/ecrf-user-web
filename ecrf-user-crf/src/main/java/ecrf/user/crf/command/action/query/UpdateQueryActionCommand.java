@@ -42,7 +42,7 @@ import ecrf.user.service.SubjectLocalService;
 @Component
 (
 	property = {
-		"javax.portlet.name=" + ECRFUserPortletKeys.CRF_QUERY,
+		"javax.portlet.name=" + ECRFUserPortletKeys.CRF,
 		"mvc.command.name=" + ECRFUserMVCCommand.ACTION_COMFIRM_CRF_QUERY
 	},
 	service = MVCActionCommand.class

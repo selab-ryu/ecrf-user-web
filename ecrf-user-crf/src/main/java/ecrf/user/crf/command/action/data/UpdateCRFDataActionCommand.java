@@ -55,7 +55,7 @@ import ecrf.user.service.SubjectLocalService;
 @Component
 (
 	property = {
-		"javax.portlet.name=" + ECRFUserPortletKeys.CRF_DATA,
+		"javax.portlet.name=" + ECRFUserPortletKeys.CRF,
 		"mvc.command.name=" + ECRFUserMVCCommand.ACTION_ADD_CRF_DATA,
 		"mvc.command.name=" + ECRFUserMVCCommand.ACTION_UPDATE_CRF_DATA,
 	},

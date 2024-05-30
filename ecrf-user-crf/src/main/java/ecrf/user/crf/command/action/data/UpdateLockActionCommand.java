@@ -37,7 +37,7 @@ import ecrf.user.service.SubjectLocalService;
 @Component
 (
 	property = {
-		"javax.portlet.name=" + ECRFUserPortletKeys.CRF_DATA,
+		"javax.portlet.name=" + ECRFUserPortletKeys.CRF,
 		"mvc.command.name=" + ECRFUserMVCCommand.ACTION_CHANGE_UPDATE_LOCK,
 	},
 	service = MVCActionCommand.class

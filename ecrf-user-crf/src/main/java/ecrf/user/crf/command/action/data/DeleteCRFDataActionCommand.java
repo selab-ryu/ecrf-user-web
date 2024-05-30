@@ -34,7 +34,7 @@ import ecrf.user.service.LinkCRFLocalService;
 @Component
 (
 	property = {
-		"javax.portlet.name=" + ECRFUserPortletKeys.CRF_DATA,
+		"javax.portlet.name=" + ECRFUserPortletKeys.CRF,
 		"mvc.command.name=" + ECRFUserMVCCommand.ACTION_DELETE_CRF_DATA,
 	},
 	service = MVCActionCommand.class

@@ -29,7 +29,7 @@ import ecrf.user.service.CRFAutoqueryLocalService;
 @Component
 (
 	property = {
-		"javax.portlet.name=" + ECRFUserPortletKeys.CRF_QUERY,
+		"javax.portlet.name=" + ECRFUserPortletKeys.CRF,
 		"mvc.command.name=" + ECRFUserMVCCommand.ACTION_DELETE_ALL_CRF_QUERY
 	},
 	service = MVCActionCommand.class

@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletURL"%>
 <%@ include file="../../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html.crf-data.data.list_crf_data_update_jsp"); %>
@@ -40,6 +41,9 @@ if(isSearch) {
 }
 
 String progressPercentage = "0%";
+
+LiferayPortletURL baseURL = PortletURLFactoryUtil.create(request, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+_log.info("url : " + baseURL.toString());
 %>
 
 <portlet:renderURL var="searchURL">
@@ -356,9 +360,9 @@ String progressPercentage = "0%";
 			>
 			
 			<%
-				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s')", rowSubjectId, crfId, 0, updatePermission, themeDisplay.getPortletDisplay().getId());
+				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s', '%s')", rowSubjectId, crfId, 0, updatePermission, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 			%>
-				
+			
 				<c:choose>
 				<c:when test="<%=updateLock %>">
 				
@@ -371,7 +375,6 @@ String progressPercentage = "0%";
 				
 				</c:otherwise>
 				</c:choose>
-				
 				
 			</liferay-ui:search-container-column-text>
 			
@@ -391,7 +394,7 @@ String progressPercentage = "0%";
 			>
 			
 			<%
-				String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s')", rowSubjectId, crfId, 1, updatePermission, themeDisplay.getPortletDisplay().getId());								
+				String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s', '%s')", rowSubjectId, crfId, 1, updatePermission, themeDisplay.getPortletDisplay().getId(), baseURL.toString());								
 			%>
 			
 				<aui:button name="auditCRF" type="button" value="<%=updatePermission ? "ecrf-user.list.audit-trail" : ""  %>" cssClass="<%=HistoryBtnClass %>" onClick="<%=auditFunctionCallStr%>"></aui:button>

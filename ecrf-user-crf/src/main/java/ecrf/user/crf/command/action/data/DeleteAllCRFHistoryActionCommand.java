@@ -28,7 +28,7 @@ import ecrf.user.service.CRFHistoryLocalService;
 @Component
 (
 	property = {
-		"javax.portlet.name=" + ECRFUserPortletKeys.CRF_DATA,
+		"javax.portlet.name=" + ECRFUserPortletKeys.CRF,
 		"mvc.command.name=" + ECRFUserMVCCommand.ACTION_DELETE_ALL_CRF_HISTORY
 	},
 	service = MVCActionCommand.class

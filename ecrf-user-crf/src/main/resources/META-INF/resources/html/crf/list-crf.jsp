@@ -8,6 +8,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
 String menu="crf-list";
 
+_log.info("groupd id : " + scopeGroupId);
+
 ArrayList<CRF> crfList = new ArrayList<CRF>();
 crfList.addAll(CRFLocalServiceUtil.getCRFByGroupId(scopeGroupId));
 
