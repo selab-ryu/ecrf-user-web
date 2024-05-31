@@ -7,6 +7,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
+import com.sx.icecap.service.StructuredDataLocalServiceUtil;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -59,7 +60,12 @@ public class UpdateQueryRenderCommand  implements MVCRenderCommand{
 		if(Validator.isNotNull(sdId)) {
 			structuredDataId = Long.valueOf(sdId);
 			if(structuredDataId > 0) {
-				sd = _dataTypeLocalService.getStructuredData(structuredDataId);
+				try {
+					sd = StructuredDataLocalServiceUtil.getStructuredData(structuredDataId);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		

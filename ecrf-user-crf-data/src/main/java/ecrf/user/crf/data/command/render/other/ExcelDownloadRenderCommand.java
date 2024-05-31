@@ -78,8 +78,7 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				StructuredData sd = _dataTypeLocalService.getStructuredData(link.getStructuredDataId());
-				String ansTemp = sd.getStructuredData();
+				String ansTemp = _dataTypeLocalService.getStructuredData(link.getStructuredDataId());
 				JSONObject ansObj =  null;
 				try {
 					 ansObj = JSONFactoryUtil.createJSONObject(ansTemp);

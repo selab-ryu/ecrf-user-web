@@ -12,7 +12,7 @@ SimpleDateFormat dateFormatWithTime = new SimpleDateFormat("yyyy/M/d HH:mm");
 
 long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID);
 
-ArrayList<StructuredData> sdList = (ArrayList<StructuredData>)renderRequest.getAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST);
+ArrayList<LinkCRF> linkList = (ArrayList<LinkCRF>)renderRequest.getAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST);
 
 boolean isAudit = ParamUtil.getBoolean(renderRequest, ECRFUserCRFDataAttributes.IS_AUDIT, false);
 boolean isDelete = ParamUtil.getBoolean(renderRequest, ECRFUserCRFDataAttributes.IS_DELETE, false);
@@ -41,18 +41,17 @@ boolean hasForm = (boolean)renderRequest.getAttribute(ECRFUserCRFDataAttributes.
 				</thead>
 				<tbody style="text-align: center;">
 				<%
-				if(Validator.isNotNull(sdList)){
-					for(int i = sdList.size() - 1; i >= 0; i--){
-						StructuredData sd = sdList.get(i);						
-						JSONObject answerForm = JSONFactoryUtil.createJSONObject(sd.getStructuredData());
+				if(Validator.isNotNull(linkList)){
+					for(int i = linkList.size() - 1; i >= 0; i--){					
+						JSONObject answerForm = JSONFactoryUtil.createJSONObject(DataTypeLocalServiceUtil.getStructuredData(linkList.get(i).getStructuredDataId()));
 						String dateStr = "";
 				        Date visitDate = null;
 						if(Validator.isNotNull(answerForm) && answerForm.has("visit_date")){
 							visitDate = new Date(Long.valueOf(answerForm.getString("visit_date")));
 						}
-						Date modifiedDate = sd.getModifiedDate();
+						Date modifiedDate = linkList.get(i).getModifiedDate();
 						
-						LinkCRF link = LinkCRFLocalServiceUtil.getLinkCRFByC_S_SD(crfId, subjectId, sd.getStructuredDataId());
+						LinkCRF link = LinkCRFLocalServiceUtil.getLinkCRFByC_S_SD(crfId, subjectId, linkList.get(i).getStructuredDataId());
 				%>
 					<tr>
 						<td><%=i+1%></td>
@@ -91,10 +90,10 @@ boolean hasForm = (boolean)renderRequest.getAttribute(ECRFUserCRFDataAttributes.
 										progressSrc = renderRequest.getContextPath() + "/img/empty_progress.png";
 										if(percent >= 100){
 											progressSrc = renderRequest.getContextPath()+"/img/complete_progress.png";
-											if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(sd.getStructuredDataId()) > 0){
+											if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(linkList.get(i).getStructuredDataId()) > 0){
 												List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(subjectId);
 												for(int k = 0; k < queryList.size(); k++){
-													if(queryList.get(k).getQueryTermId() == sd.getStructuredDataId() && queryList.get(k).getQueryComfirm() < 2){
+													if(queryList.get(k).getQueryTermId() == linkList.get(i).getStructuredDataId() && queryList.get(k).getQueryComfirm() < 2){
 														progressSrc = renderRequest.getContextPath()+"/img/incomplete_autoqueryerror.png";
 													}
 												}
@@ -102,10 +101,10 @@ boolean hasForm = (boolean)renderRequest.getAttribute(ECRFUserCRFDataAttributes.
 										}
 										else {
 											progressSrc = renderRequest.getContextPath()+"/img/incomplete_progress.png";
-											if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(sd.getStructuredDataId()) > 0){
+											if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(linkList.get(i).getStructuredDataId()) > 0){
 												List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(subjectId);
 												for(int k = 0; k < queryList.size(); k++){
-													if(queryList.get(k).getQueryTermId() == sd.getStructuredDataId() && queryList.get(k).getQueryComfirm() < 2){
+													if(queryList.get(k).getQueryTermId() == linkList.get(i).getStructuredDataId() && queryList.get(k).getQueryComfirm() < 2){
 														progressSrc = renderRequest.getContextPath()+"/img/incomplete_autoqueryerror.png";
 													}
 												}
@@ -142,7 +141,7 @@ boolean hasForm = (boolean)renderRequest.getAttribute(ECRFUserCRFDataAttributes.
 						</c:when>
 						<c:otherwise>
 						
-						<% String updateFunctionCall = String.format("toEachCRF(%d, %d)", sd.getStructuredDataId(), (isAudit ? 1 : 0)); %>
+						<% String updateFunctionCall = String.format("toEachCRF(%d, %d)", linkList.get(i).getStructuredDataId(), (isAudit ? 1 : 0)); %>
 						
 						<td>
 							<aui:button name="updateCRF" type="button" value="<%=isAudit ? "view Audit Trail" : "Edit CRF" %>" cssClass="ci-btn small-btn" onClick="<%=updateFunctionCall%>"></aui:button>
@@ -197,8 +196,15 @@ function toEachCRF(sdId, isAudit){
 }
 
 function deleteEachCRF(linkCrfId){
-	Liferay.Util.getOpener().moveDeleteCRFData(linkCrfId, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>);	
+	msg = "Are you sure to delete CRF?";
+	if(confirm(msg)){
+		console.log("pass");
+		Liferay.Util.getOpener().moveDeleteCRFData(linkCrfId, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>);	
+	}else{
+		return false;
+	}
 }
+	
 </script>
 
 <aui:script use="aui-base">

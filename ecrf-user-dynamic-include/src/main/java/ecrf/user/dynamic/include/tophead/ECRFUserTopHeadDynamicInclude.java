@@ -26,6 +26,7 @@ public class ECRFUserTopHeadDynamicInclude extends BaseDynamicInclude {
 				
 		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/DataTables/datatables.min.js\"></script>";
 		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/ecrf-user.js\"></script>";
+		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/ecrf-viewer.js\"></script>";
 		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/jquery.mask/jquery.mask.js\"></script>";
 		
 		content += "<link rel=\"stylesheet\" href=\"/o/ecrf.user.dynamic.include/css/main.css\" >";
