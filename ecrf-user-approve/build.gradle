@@ -1,5 +1,10 @@
 dependencies {
+	compileOnly project(":modules:StationX:StationX-api")
+	compileOnly project(":modules:SXIcecap:SXIcecap-api")
+	
 	compileOnly project(":modules:ecrf-user:ecrf-user-api")
+	compileOnly project(":modules:ecrf-user-web:ecrf-user-panel-category")
+	
 	compileOnly group: "com.liferay", name: "com.liferay.asset.taglib"
 	compileOnly group: "com.liferay", name: "com.liferay.comment.taglib"
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib"
@@ -21,8 +26,14 @@ dependencies {
 	compileOnly group: "org.slf4j", name: "jcl-over-slf4j"
 	
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
+	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.soy"
+	
 	compileOnly group: 'com.liferay', name: 'com.liferay.trash.api'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.string'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.function'
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl"
+	
+	compileOnly group: "com.liferay", name: "com.liferay.application.list.api", version: "4.2.5"
+	compileOnly group: "com.liferay", name: "com.liferay.application.list.taglib"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl"
 }

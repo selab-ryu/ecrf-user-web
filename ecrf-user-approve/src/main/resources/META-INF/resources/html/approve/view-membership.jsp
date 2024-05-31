@@ -49,10 +49,8 @@ if(membershipRequestCount <= 0) {
 %>
 
 <div class="ecrf-user-approve ecrf-user">
-
-	<%@ include file="sidebar.jspf" %>
 	
-	<div class="page-content">
+	<div class="pad16">
 	
 		<liferay-ui:header title="ecrf-user.approve.title.view-membership" />
 		

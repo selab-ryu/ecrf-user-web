@@ -1,6 +1,6 @@
 <%@ include file="../init.jsp" %>
 
-<%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/update-crf_jsp"); %>
+<%!private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/update-crf_jsp");%>
 
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
@@ -21,7 +21,7 @@
 		}
 	}
 	
-	List<String> expGroupList = Stream.of(ExperimentalGroup.values()).map(m -> m.getFullString()).collect(Collectors.toList());
+	List<String> expGroupList = Stream.of(ExperimentalGroupType.values()).map(m -> m.getFullString()).collect(Collectors.toList());
 	_log.info(expGroupList);
 	
 	DataType dataType = null;
@@ -187,30 +187,33 @@
 			
 			<c:if test="<%=isUpdate %>">
 			<aui:button-row>
-				<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_CRF_FORM %>" var="manageFormURL">
-					<portlet:param name="crfId" value="<%=String.valueOf(crfId) %>" />
-					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
-				</portlet:actionURL>
-				
-				<aui:button type="button" value="ecrf-user.button.manage-crf-form" onClick="<%=manageFormURL %>" />
-				
-				<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_CRF_DATA %>" var="crfDataURL">
+				<portlet:renderURL var="moveCRFFormURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_MANAGE_FORM %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
-				</portlet:actionURL>
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+				</portlet:renderURL>
+												
+				<aui:button type="button" value="ecrf-user.button.manage-crf-form" onClick="<%=moveCRFFormURL %>" />
 				
-				<aui:button type="button" value="ecrf-user.button.crf-data" onClick="<%=crfDataURL %>" />
-				
-				<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_MOVE_CRF_QUERY %>" var="crfQueryURL">
+				<portlet:renderURL var="moveCRFDataURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
+					<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA%>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
-				</portlet:actionURL>
+				</portlet:renderURL>
 				
-				<aui:button type="button" value="ecrf-user.button.crf-query" onClick="<%=crfQueryURL %>" />
+				<aui:button type="button" value="ecrf-user.button.crf-data" onClick="<%=moveCRFDataURL %>" />
 				
+				<portlet:renderURL var="moveCRFQueryURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_QUERY %>" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+				</portlet:renderURL>
 				
-				<aui:button type="button" value="ecrf-user.button.crf-meta"/>
-				
+				<aui:button type="button" value="ecrf-user.button.crf-query" onClick="<%=moveCRFQueryURL %>" />
+								
 			</aui:button-row>
 			</c:if>
 			
@@ -285,30 +288,6 @@ function manageSubjectPopup() {
 			id: "manageSubjectPopup",
 			title: "Manage CRF Subject",
 			uri: renderURL.toString()
-		})
-	});
-}
-
-function manageExpGroupPopup() {
-	var renderURL = Liferay.PortletURL.createRenderURL();
-	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up");
-    renderURL.setParameter("<%=ECRFUserWebKeys.MVC_PATH%>", "<%=ECRFUserJspPaths.JSP_DIALOG_MANAGE_EXP_GROUP %>");
-    renderURL.setParameter("<%=ECRFUserCRFAttributes.CRF_ID%>", crfId);
-    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
-    
-	AUI().use("liferay-util-window", function(A) {
-		Liferay.Util.openWindow({
-			dialog: {
-				width:800,
-				height:800,
-				modal: true,
-				cenered: true
-			},
-			id: "manageExpGroupPopup",
-			title: "Manage Experimental Group",
-			uri: renderURL.toString() 
 		})
 	});
 }
@@ -404,7 +383,7 @@ Liferay.provide(window, "closePopup", function(dialogId, type, data) {
 	if(type == "save") {
 		console.log("is it called?");	// check equals
 		
-		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" || dialogId == "manageExpGroupPopup" ) {
+		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" ) {
 			crfSubjectInfoArr = data;
 			refreshSubjectTable();
 		} else if (dialogId == "manageResearcherPopup") {
@@ -490,13 +469,6 @@ function tableLoading() {
             	className : 'small-btn marRr marBrh',
             	action : function( e, dt, node, config) {
             		manageSubjectPopup();            		
-            	}
-            },
-            {
-            	text : 'Manage Exp. Group',
-            	className : 'small-btn marRr marBrh',
-            	action : function( e, dt, node, config) {
-            		manageExpGroupPopup();            		
             	}
             },
             {

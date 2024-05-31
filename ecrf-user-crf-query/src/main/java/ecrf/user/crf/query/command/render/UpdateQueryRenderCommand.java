@@ -28,7 +28,7 @@ import ecrf.user.service.SubjectLocalService;
 	    immediate = true,
 	    property = {
 	        "javax.portlet.name=" + ECRFUserPortletKeys.CRF_QUERY,
-	        "mvc.command.name="+ ECRFUserMVCCommand.RENDER_UPDATE_CRF
+	        "mvc.command.name="+ ECRFUserMVCCommand.RENDER_UPDATE_CRF_QUERY
 	    },
 	    service = MVCRenderCommand.class
 	)
@@ -70,7 +70,7 @@ public class UpdateQueryRenderCommand  implements MVCRenderCommand{
 		}
 		
 		CRFAutoquery query = null;
-		if(Validator.isNotNull(subject) && Validator.isNotNull(sd) && Validator.isNotNull(value)) {
+		if(Validator.isNotNull(subject) && Validator.isNotNull(structuredDataId) && Validator.isNotNull(value)) {
 			try {
 				query = _queryLocalService.getQueryBySdIdSIdValue(structuredDataId, subjectId, termName, value);
 			} catch (Exception e) {
@@ -80,7 +80,6 @@ public class UpdateQueryRenderCommand  implements MVCRenderCommand{
 		renderRequest.setAttribute("sdId", sdId);
 		renderRequest.setAttribute("sId", sId);
 		renderRequest.setAttribute("value", value);
-		renderRequest.setAttribute("sd", sd);
 		renderRequest.setAttribute("subject", subject);
 		renderRequest.setAttribute("query", query);
 		renderRequest.setAttribute("dataTypeLocalServie", _dataTypeLocalService);

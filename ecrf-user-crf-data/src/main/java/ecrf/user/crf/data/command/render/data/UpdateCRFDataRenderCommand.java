@@ -85,8 +85,9 @@ public class UpdateCRFDataRenderCommand implements MVCRenderCommand {
 		}
 		
 		// get crf data (structured data)
-		if(sdId > 0) {
-			String answerFormStr = _dataTypeLocalService.getStructuredData(sdId);						
+    if(sdId > 0) { 
+			String answerFormStr = _dataTypeLocalService.getStructuredData(sdId);
+  
 			try {
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(crfFormStr);
 				crfForm = jsonObject.getJSONArray("terms");
@@ -94,7 +95,7 @@ public class UpdateCRFDataRenderCommand implements MVCRenderCommand {
 				
 				renderRequest.setAttribute(ECRFUserCRFDataAttributes.CRF_FORM, crfForm);
 				renderRequest.setAttribute(ECRFUserCRFDataAttributes.ANSWER_FORM, answerForm);
-				renderRequest.setAttribute("none", "¹Ì½ÃÇà");
+				renderRequest.setAttribute("none", "Â¹ÃŒÂ½ÃƒÃ‡Ã ");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -104,7 +105,7 @@ public class UpdateCRFDataRenderCommand implements MVCRenderCommand {
 				crfForm = jsonObject.getJSONArray("terms");
 				
 				renderRequest.setAttribute(ECRFUserCRFDataAttributes.CRF_FORM, crfForm);
-				renderRequest.setAttribute("none", "¹Ì½ÃÇà");
+				renderRequest.setAttribute("none", "Â¹ÃŒÂ½ÃƒÃ‡Ã ");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			

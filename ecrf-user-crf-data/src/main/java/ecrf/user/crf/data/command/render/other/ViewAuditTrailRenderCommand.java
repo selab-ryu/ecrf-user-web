@@ -48,20 +48,20 @@ public class ViewAuditTrailRenderCommand implements MVCRenderCommand {
 		Subject subject = null;
 		String crfForm = "";
 		String answerForm = "";
-		CRF thisCRF = null;
-		try {
-			thisCRF = _crfLocalService.getCRF(crfId);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		if(subjectId > 0 && sdId > 0 && thisCRF != null) {
+    
+    long dataTypeId = 0;
+				
+		if(subjectId > 0 && sdId > 0 && crfId > 0) {
+  
 			try {
+				dataTypeId = _crfLocalService.getDataTypeId(crfId);
 				subject = _subjectLocalService.getSubject(subjectId);
-				String crfFormStr = _dataTypeLocalService.getDataTypeStructure(thisCRF.getDatatypeId());
+        
+        String crfFormStr = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(crfFormStr);
 				crfForm = jsonObject.getString("terms");
-				answerForm =_dataTypeLocalService.getStructuredData(sdId);
+				answerForm = _dataTypeLocalService.getStructuredData(sdId);
+  
 			} catch (Exception e) {
 				throw new PortletException("Cannot find subject : " + subjectId);
 			}

@@ -8,6 +8,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
 String menu="crf-list";
 
+_log.info("groupd id : " + scopeGroupId);
+
 ArrayList<CRF> crfList = new ArrayList<CRF>();
 crfList.addAll(CRFLocalServiceUtil.getCRFByGroupId(scopeGroupId));
 
@@ -184,7 +186,7 @@ if(isSearch) {
 				</portlet:renderURL>
 				
 				<liferay-ui:search-container-column-text
-					href="<%=viewURL.toString() %>"
+					
 					name="ecrf-user.list.crf-title"
 					value="<%=Validator.isNull(datatype.getDisplayName(locale)) ? "-" : datatype.getDisplayName(locale) %>"
 				/>
@@ -223,6 +225,36 @@ if(isSearch) {
 					name="ecrf-user.list.crf-apply-date"
 					value="<%=sdf.format(crf.getApplyDate()) %>"
 				/>
+				
+				<%
+					
+					boolean hasCRFPermission = CRFResearcherLocalServiceUtil.isResearcherInCRF(crf.getCrfId(), user.getUserId());
+					if(isAdmin || isPI) hasCRFPermission = true;
+				%>
+				
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.update"
+				>
+					<portlet:renderURL var="updateCRFURL">
+						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_UPDATE_CRF %>" />
+						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crf.getCrfId()) %>" />
+						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+					</portlet:renderURL>
+					
+					<aui:button disabled="<%=hasCRFPermission ? false : true %>" name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateCRFURL %>"></aui:button>
+ 				</liferay-ui:search-container-column-text>
+				
+				
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.delete"
+				>
+					<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_CRF %>" var="deleteCRFURL">
+						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crf.getCrfId()) %>" />
+					</portlet:actionURL>
+													
+					<aui:button disabled="<%=hasCRFPermission ? false : true %>" name="delete" type="button" value="ecrf-user.button.delete" cssClass="small-btn delete-btn" onClick="<%=deleteCRFURL %>"></aui:button>
+					
+ 				</liferay-ui:search-container-column-text>
 								
 			</liferay-ui:search-container-row>
 			
