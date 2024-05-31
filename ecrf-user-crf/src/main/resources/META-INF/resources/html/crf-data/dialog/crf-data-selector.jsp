@@ -54,8 +54,8 @@ _log.info("url : " + url.toString());
 				</thead>
 				<tbody style="text-align: center;">
 				<%
-				if(Validator.isNotNull(sdList)){
-					for(int i = sdList.size() - 1; i >= 0; i--){
+				if(Validator.isNotNull(linkList)){
+					for(int i = linkList.size() - 1; i >= 0; i--){
 						LinkCRF link = linkList.get(i);
 						JSONObject answerForm = JSONFactoryUtil.createJSONObject(DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId()));
 

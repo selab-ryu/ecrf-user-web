@@ -54,7 +54,7 @@ let ECRFViewer = function(){
 
         buildGroupTerm : function(terms, term){
         	let displayName = term.displayName.localizedMap.en_US;
-        	let $accordionTab = $('<div class="card-horizontal main-content-card">');
+        	let $accordionTab = $('<div class="card-horizontal main-content-card" style="min-height:0px;">');
 			let $groupBody = $('<div id="'+ term.termName +'">');
 			let $groupName = $('<h3>').text(displayName);
 			$accordionTab.append($groupName);
