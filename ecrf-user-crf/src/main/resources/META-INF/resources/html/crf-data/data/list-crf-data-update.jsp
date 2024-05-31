@@ -209,8 +209,7 @@ _log.info("url : " + baseURL.toString());
 					List<LinkCRF> linkList = LinkCRFLocalServiceUtil.getLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
 					if(linkList.size() > 0){
 						LinkCRF link = linkList.get(linkList.size() - 1);
-						StructuredData sd = StructuredDataLocalServiceUtil.getStructuredData(link.getStructuredDataId());
-						String answer = sd.getStructuredData();
+						String answer = DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId());
 						JSONObject answerObj = JSONFactoryUtil.createJSONObject(answer);
 						
 						if(Validator.isNotNull(answerObj)){
