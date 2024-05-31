@@ -77,7 +77,8 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 					link = _linkCRFLocalService.getLinkCRFBySId(subTemp.getSubjectId());
 				} catch (Exception e) {
 					e.printStackTrace();
-				} 
+				}
+        
 				String ansTemp = _dataTypeLocalService.getStructuredData(link.getStructuredDataId());
 				JSONObject ansObj =  null;
 				try {

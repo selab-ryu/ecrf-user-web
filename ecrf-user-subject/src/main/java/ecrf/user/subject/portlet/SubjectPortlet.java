@@ -29,7 +29,7 @@ import ecrf.user.service.SubjectLocalService;
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Subject",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=" + ECRFUserJspPaths.JSP_LIST_SUBJECT,
+		"javax.portlet.init-param.view-template=" + ECRFUserJspPaths.JSP_LIST_SUBJECT_UPDATE,
 		"javax.portlet.name=" + ECRFUserPortletKeys.SUBJECT,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"

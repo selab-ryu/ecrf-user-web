@@ -204,8 +204,7 @@ String progressPercentage = "0%";
 					List<LinkCRF> linkList = LinkCRFLocalServiceUtil.getLinkCRFByG_S_C(scopeGroupId, subject.getSubjectId(), crfId);
 					if(linkList.size() > 0){
 						LinkCRF link = linkList.get(linkList.size() - 1);
-						StructuredData sd = StructuredDataLocalServiceUtil.getStructuredData(link.getStructuredDataId());
-						String answer = sd.getStructuredData();
+            String answer = DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId());
 						JSONObject answerObj = JSONFactoryUtil.createJSONObject(answer);
 						
 						if(Validator.isNotNull(answerObj)){

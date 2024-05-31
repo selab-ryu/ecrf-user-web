@@ -52,30 +52,20 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 		List<LinkCRF> links = _linkLocalService.getLinkCRFByC_S(crfId, subjectId);
 		_log.info("link size : " + links.size());
 
-		ArrayList<Long> sdList = new ArrayList<>();
-		
+		ArrayList<LinkCRF> linkList = new ArrayList<>();
 		for(int i = 0; i < links.size(); i++) {
-			StructuredData sd = null;
-			
-			try {
-				sd = _structuredDataLocalService.getStructuredData(links.get(i).getStructuredDataId());
-			}catch (Exception e) {
-				throw new PortletException("Cannot find StructuredData : " + links.get(i).getStructuredDataId());
-			}
-			
-			if(Validator.isNotNull(sd)) {
-				sdList.add(sd.getStructuredDataId());
-			}
-		}
-		
-		// check crf-subject update lock
-		boolean updateLock = false;
-		
-		CRFSubject crfSubject = null;
-		if(crfId > 0 && subjectId > 0) {
-			crfSubject = _crfSubjectLocalService.getCRFSubjectByC_S(crfId, subjectId);
-			if(Validator.isNotNull(crfSubject)) {
-				updateLock = crfSubject.getUpdateLock();
+			if(Validator.isNotNull(links.get(i).getStructuredDataId())) {
+				linkList.add(links.get(i));
+  
+    // check crf-subject update lock
+    boolean updateLock = false;
+
+    CRFSubject crfSubject = null;
+    if(crfId > 0 && subjectId > 0) {
+      crfSubject = _crfSubjectLocalService.getCRFSubjectByC_S(crfId, subjectId);
+      if(Validator.isNotNull(crfSubject)) {
+        updateLock = crfSubject.getUpdateLock();
+  
 			}
 		}
 		
@@ -100,8 +90,8 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 		}
 		
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.HAS_FORM, hasForm);
-		renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST, sdList);
-		renderRequest.setAttribute(ECRFUserCRFSubjectInfoAttribute.UPDATE_LOCK, updateLock);
+    renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST, linkList);
+    renderRequest.setAttribute(ECRFUserCRFSubjectInfoAttribute.UPDATE_LOCK, updateLock);
 		
 		return ECRFUserJspPaths.JSP_DIALOG_CRF_DATA_VERSION;
 	}

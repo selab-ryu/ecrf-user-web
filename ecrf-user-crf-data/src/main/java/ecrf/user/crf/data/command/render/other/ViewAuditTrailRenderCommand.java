@@ -21,6 +21,7 @@ import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.attribute.ECRFUserCRFDataAttributes;
 import ecrf.user.constants.attribute.ECRFUserSubjectAttributes;
+import ecrf.user.model.CRF;
 import ecrf.user.model.Subject;
 import ecrf.user.service.CRFLocalService;
 import ecrf.user.service.LinkCRFLocalService;
@@ -47,18 +48,20 @@ public class ViewAuditTrailRenderCommand implements MVCRenderCommand {
 		Subject subject = null;
 		String crfForm = "";
 		String answerForm = "";
-		
-		long dataTypeId = 0;
+    
+    long dataTypeId = 0;
 				
 		if(subjectId > 0 && sdId > 0 && crfId > 0) {
+  
 			try {
 				dataTypeId = _crfLocalService.getDataTypeId(crfId);
-				
 				subject = _subjectLocalService.getSubject(subjectId);
-				String crfFormStr = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
+        
+        String crfFormStr = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(crfFormStr);
 				crfForm = jsonObject.getString("terms");
 				answerForm = _dataTypeLocalService.getStructuredData(sdId);
+  
 			} catch (Exception e) {
 				throw new PortletException("Cannot find subject : " + subjectId);
 			}

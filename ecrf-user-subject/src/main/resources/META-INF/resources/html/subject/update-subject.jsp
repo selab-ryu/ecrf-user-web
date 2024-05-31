@@ -27,9 +27,13 @@ if(subjectId > 0) {
 	}
 }
 
+int birthAge = 0;
+
 if(isUpdate) {
 	subjectBirthStr = ECRFUserUtil.getDateStr(subject.getBirth());
-	
+	Date now = new Date();
+	birthAge = now.getYear() - subject.getBirth().getYear();
+	System.out.println(birthAge);
 	// gender value / male : 0, female : 1
 	int genderValue = subject.getGender();
 	isMale = (genderValue == 1) ? false : true;	// if null -> male is true (default value)
@@ -50,6 +54,12 @@ if(isUpdate) {
 <portlet:renderURL var="listSubjectURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SUBJECT %>" />
 	<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.UPDATE %>"/>
+</portlet:renderURL>
+
+<portlet:renderURL var="updateListURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SUBJECT %>" />
+	<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.UPDATE%>" />
+	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
 <div class="ecrf-user">
@@ -118,7 +128,7 @@ if(isUpdate) {
 					>
 					</aui:field-wrapper>
 				</aui:col>
-				<aui:col md="6">
+				<aui:col md="3">
 					<aui:input 
 						name="<%=ECRFUserSubjectAttributes.BIRTH %>"
 						cssClass="date"
@@ -127,6 +137,16 @@ if(isUpdate) {
 						value="<%=Validator.isNull(subjectBirthStr) ? "" : subjectBirthStr %>" 
 						>
 					</aui:input>
+				</aui:col>
+				<aui:col md="1">
+					<aui:field-wrapper
+						name="<%=ECRFUserSubjectAttributes.BIRTH_YEAR %>"
+						label="ecrf-user.subject.birth-age"
+					>
+					</aui:field-wrapper>
+				</aui:col>
+				<aui:col md="1">
+					<p><%=birthAge %></p>
 				</aui:col>
 			</aui:row>
 			<aui:row>
@@ -272,7 +292,7 @@ if(isUpdate) {
 					<aui:button-row cssClass="mar0 marL10">
 						<aui:button type="button" name="save" cssClass="" value="ecrf-user.button.save"></aui:button>
 						<aui:button type="button" name="delete" cssClass="<%=isUpdate ? StringPool.BLANK : "hide" %>" value="ecrf-user.button.delete" onClick="<%=deleteSubjectURL %>"></aui:button>
-						<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=listSubjectURL %>"></aui:button>
+						<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=updateListURL %>"></aui:button>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>

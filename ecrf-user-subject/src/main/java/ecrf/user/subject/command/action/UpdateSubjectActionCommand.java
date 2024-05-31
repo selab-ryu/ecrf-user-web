@@ -174,9 +174,10 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		
 		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, renderCommand);
 		renderURL.setParameter(Constants.CMD, Constants.UPDATE);
+
 		actionResponse.sendRedirect(renderURL.toString());
 	}
-	
+
 	@Reference
 	private SubjectLocalService _subjectLocalService;
 	

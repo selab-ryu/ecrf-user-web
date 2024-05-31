@@ -1,3 +1,4 @@
+.pad1R{ padding:1rem; }
 .padTr { padding-top: 1rem; }
 .padBr { padding-bottom: 1rem; }
 
@@ -33,6 +34,12 @@
 .mar0 {margin:0px;}
 
 .h35 {height:35px;}
+.align-control{width:250px; display:inline-block; margin-left:1rem;}
+
+.crf-align-table{width:15%; height: auto; display:inline-block; margin-left:1rem;}
+.crf-align-vertical{width:80%; display:block;}
+
+.label-controller{height:60px;}
 
 .round-container { border: 1px solid #aaaaaa; border-radius:3px; }
 .title-span { font-size:20px; font-weight:bold; }
