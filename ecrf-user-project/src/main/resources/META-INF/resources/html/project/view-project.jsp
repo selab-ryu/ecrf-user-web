@@ -1,7 +1,7 @@
 <%@ include file="../init.jsp" %>
 
 <%!
-    private static Log _log = LogFactoryUtil.getLog("html.researcher.update_researcher_jsp");
+    private static Log _log = LogFactoryUtil.getLog("html.project.view_project_jsp");
 %>
 
 <%
@@ -13,6 +13,8 @@ long principalResearcherId = 0;
 String principalResearcherText = StringPool.DASH;
 long manageResearcherId = 0;
 String manageResearcherText = StringPool.DASH;
+
+String menu = "project-info";
 
 if(projectCount > 0) {
 	List<Project> projectList = ProjectLocalServiceUtil.getProjectByGroupId(scopeGroupId);
@@ -55,8 +57,6 @@ if(!isPrivate) pageClass = "mar16px";
 <liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_PROJECT %>" var="deleteProjectURL" >
 	<portlet:param name="<%=ECRFUserProjectAttributes.PROJECT_ID %>" value="<%=String.valueOf(projectId) %>" />
 </liferay-portlet:actionURL>
-
-
 
 <div class="ecrf-user-project ecrf-user">
 	

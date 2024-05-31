@@ -66,6 +66,9 @@
 <%@page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
 <%@page import="ecrf.user.model.Researcher"%>
 
+<%@ page import="ecrf.user.model.ExperimentalGroup"%>
+<%@ page import="ecrf.user.service.ExperimentalGroupLocalServiceUtil"%>
+
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />

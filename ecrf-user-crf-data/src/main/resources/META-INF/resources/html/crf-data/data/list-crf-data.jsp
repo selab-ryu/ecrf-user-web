@@ -1,4 +1,4 @@
-
+<%@page import="com.sx.icecap.service.StructuredDataLocalServiceUtil"%>
 <%@ include file="../../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html.crf-data.list_crf_data_jsp"); %>
@@ -204,7 +204,7 @@ String progressPercentage = "0%";
 					List<LinkCRF> linkList = LinkCRFLocalServiceUtil.getLinkCRFByG_S_C(scopeGroupId, subject.getSubjectId(), crfId);
 					if(linkList.size() > 0){
 						LinkCRF link = linkList.get(linkList.size() - 1);
-						StructuredData sd = DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId());
+						StructuredData sd = StructuredDataLocalServiceUtil.getStructuredData(link.getStructuredDataId());
 						String answer = sd.getStructuredData();
 						JSONObject answerObj = JSONFactoryUtil.createJSONObject(answer);
 						

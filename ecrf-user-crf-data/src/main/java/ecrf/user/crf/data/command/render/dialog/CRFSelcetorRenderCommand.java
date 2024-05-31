@@ -10,6 +10,7 @@ import com.sx.icecap.exception.NoSuchDataTypeException;
 import com.sx.icecap.model.DataType;
 import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
+import com.sx.icecap.service.StructuredDataLocalService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,11 @@ import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.attribute.ECRFUserCRFDataAttributes;
+import ecrf.user.constants.attribute.ECRFUserCRFSubjectInfoAttribute;
+import ecrf.user.model.CRFSubject;
 import ecrf.user.model.LinkCRF;
 import ecrf.user.service.CRFLocalService;
+import ecrf.user.service.CRFSubjectLocalService;
 import ecrf.user.service.LinkCRFLocalService;
 
 @Component(
@@ -48,19 +52,30 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 		List<LinkCRF> links = _linkLocalService.getLinkCRFByC_S(crfId, subjectId);
 		_log.info("link size : " + links.size());
 
-		ArrayList<StructuredData> sdList = new ArrayList<>();
+		ArrayList<Long> sdList = new ArrayList<>();
 		
 		for(int i = 0; i < links.size(); i++) {
 			StructuredData sd = null;
 			
 			try {
-				sd = _dataTypeLocalService.getStructuredData(links.get(i).getStructuredDataId());
+				sd = _structuredDataLocalService.getStructuredData(links.get(i).getStructuredDataId());
 			}catch (Exception e) {
 				throw new PortletException("Cannot find StructuredData : " + links.get(i).getStructuredDataId());
 			}
 			
 			if(Validator.isNotNull(sd)) {
-				sdList.add(sd);
+				sdList.add(sd.getStructuredDataId());
+			}
+		}
+		
+		// check crf-subject update lock
+		boolean updateLock = false;
+		
+		CRFSubject crfSubject = null;
+		if(crfId > 0 && subjectId > 0) {
+			crfSubject = _crfSubjectLocalService.getCRFSubjectByC_S(crfId, subjectId);
+			if(Validator.isNotNull(crfSubject)) {
+				updateLock = crfSubject.getUpdateLock();
 			}
 		}
 		
@@ -83,8 +98,10 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 			hasForm = dataType.getHasDataStructure();
 			_log.info("has form : " + hasForm);
 		}
+		
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.HAS_FORM, hasForm);
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST, sdList);
+		renderRequest.setAttribute(ECRFUserCRFSubjectInfoAttribute.UPDATE_LOCK, updateLock);
 		
 		return ECRFUserJspPaths.JSP_DIALOG_CRF_DATA_VERSION;
 	}
@@ -98,5 +115,11 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 	private DataTypeLocalService _dataTypeLocalService;
 	
 	@Reference
+	private StructuredDataLocalService	_structuredDataLocalService;
+	
+	@Reference
 	private CRFLocalService _crfLocalService;
+	
+	@Reference
+	private CRFSubjectLocalService _crfSubjectLocalService;
 }

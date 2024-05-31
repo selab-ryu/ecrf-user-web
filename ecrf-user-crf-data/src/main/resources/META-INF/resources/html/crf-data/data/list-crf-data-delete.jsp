@@ -304,10 +304,16 @@ String progressPercentage = "0%";
 				<img src="<%= progressSrc%>" width="50%" height="auto"/>			
 			</liferay-ui:search-container-column-text>
 			<%
+				boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, subject.getSubjectId());
+			
 				String CRFBtnClass = "";
 				if(hasCRF){
 					CRFBtnClass = "ci-btn small-btn";
 				}else{
+					CRFBtnClass = "none-btn small-btn";
+				}
+				
+				if(updateLock) {
 					CRFBtnClass = "none-btn small-btn";
 				}
 			%>
@@ -321,19 +327,33 @@ String progressPercentage = "0%";
 			
 			<%
 				String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s')", subject.getSubjectId(), crfId, 2, updatePermission, themeDisplay.getPortletDisplay().getId());
+			
+				
 			%>
 			
 			<liferay-ui:search-container-column-text 
 				name="ecrf-user.list.delete"
 				cssClass="min-width-80"
 			>
+				<c:choose>
+				<c:when test="<%=updateLock %>">
+				
+				<aui:button name="lockCRF" type="button" value="ecrf-user.button.lock" cssClass="<%=CRFBtnClass %>" disabled="true"></aui:button>
+				
+				</c:when>
+				<c:otherwise>
+				
 				<aui:button name="delete" type="button" value="ecrf-user.list.delete" cssClass="delete-btn small-btn" onClick="<%=deleteFunctionCallStr%>"></aui:button>
+				
+				</c:otherwise>
+				</c:choose>
+
 			</liferay-ui:search-container-column-text>
 			
 			<% } %>
 			
 			</liferay-ui:search-container-row>
-	
+			
 			<liferay-ui:search-iterator
 				displayStyle="list"
 				markupView="lexicon"

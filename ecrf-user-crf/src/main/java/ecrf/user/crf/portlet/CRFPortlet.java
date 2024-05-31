@@ -42,7 +42,7 @@ import ecrf.user.service.CRFLocalService;
 	},
 	service = Portlet.class
 )
-public class CRFWebPortlet extends MVCPortlet {
+public class CRFPortlet extends MVCPortlet {
 	
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
@@ -64,7 +64,7 @@ public class CRFWebPortlet extends MVCPortlet {
 		super.render(renderRequest, renderResponse);
 	}
 	
-	private Log _log = LogFactoryUtil.getLog(CRFWebPortlet.class);
+	private Log _log = LogFactoryUtil.getLog(CRFPortlet.class);
 	
 	@Reference
 	private CRFLocalService _crfLocalService;
