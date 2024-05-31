@@ -140,6 +140,13 @@
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
 	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
 	
+	Locale defaultLocale = PortalUtil.getSiteDefaultLocale(themeDisplay.getScopeGroupId());
+	
+	Set<Locale> availableLocales = LanguageUtil.getAvailableLocales();
+	
+	JSONArray jsonLocales = JSONFactoryUtil.createJSONArray();
+	availableLocales.forEach( jsonLocales::put );
+	
 	long crfId = 0L;
 	long dataTypeId = 0L;
 	

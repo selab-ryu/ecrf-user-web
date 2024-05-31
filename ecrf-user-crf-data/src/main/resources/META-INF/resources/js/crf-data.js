@@ -102,7 +102,7 @@ Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit,
 	if(isAudit){
 		renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-audit");
 	}else{
-    //renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-crf-data");
+		//renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-crf-data");
 		renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/crf-viewer");
 	}
 	

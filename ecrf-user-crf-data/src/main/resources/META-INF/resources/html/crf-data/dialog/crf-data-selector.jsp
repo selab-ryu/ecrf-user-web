@@ -50,11 +50,11 @@ _log.info("update lock : " + updateLock);
 
 				if(Validator.isNotNull(linkList)){
 					for(int i = linkList.size() - 1; i >= 0; i--){
-            LinkCRF link = linkList.get(i);
+           				LinkCRF link = linkList.get(i);
 						JSONObject answerForm = JSONFactoryUtil.createJSONObject(DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId()));
 
 						String dateStr = "";
-            Date visitDate = null;
+           				Date visitDate = null;
 						if(Validator.isNotNull(answerForm) && answerForm.has("visit_date")){
 							visitDate = new Date(Long.valueOf(answerForm.getString("visit_date")));
 						}
@@ -161,8 +161,7 @@ _log.info("update lock : " + updateLock);
 							</c:otherwise>
 							</c:choose>
 						</c:when>
-
-            <c:choose>
+						
 						<c:when test="<%=isAudit %>">
 						
 						<% String auditFunctionCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 1); %>
@@ -171,6 +170,7 @@ _log.info("update lock : " + updateLock);
 						</td>
 						
 						</c:when>
+						
 						<c:otherwise>
 							
 							<c:choose>

@@ -56,16 +56,17 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 		for(int i = 0; i < links.size(); i++) {
 			if(Validator.isNotNull(links.get(i).getStructuredDataId())) {
 				linkList.add(links.get(i));
+			}
+		}
   
-    // check crf-subject update lock
-    boolean updateLock = false;
-
-    CRFSubject crfSubject = null;
-    if(crfId > 0 && subjectId > 0) {
-      crfSubject = _crfSubjectLocalService.getCRFSubjectByC_S(crfId, subjectId);
-      if(Validator.isNotNull(crfSubject)) {
-        updateLock = crfSubject.getUpdateLock();
-  
+	    // check crf-subject update lock
+	    boolean updateLock = false;
+	
+	    CRFSubject crfSubject = null;
+	    if(crfId > 0 && subjectId > 0) {
+	    	crfSubject = _crfSubjectLocalService.getCRFSubjectByC_S(crfId, subjectId);
+			if(Validator.isNotNull(crfSubject)) {
+				updateLock = crfSubject.getUpdateLock();
 			}
 		}
 		
@@ -90,9 +91,9 @@ public class CRFSelcetorRenderCommand implements MVCRenderCommand {
 		}
 		
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.HAS_FORM, hasForm);
-    renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST, linkList);
-    renderRequest.setAttribute(ECRFUserCRFSubjectInfoAttribute.UPDATE_LOCK, updateLock);
-		
+	    renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST, linkList);
+	    renderRequest.setAttribute(ECRFUserCRFSubjectInfoAttribute.UPDATE_LOCK, updateLock);
+			
 		return ECRFUserJspPaths.JSP_DIALOG_CRF_DATA_VERSION;
 	}
 	

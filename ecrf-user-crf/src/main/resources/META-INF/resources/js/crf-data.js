@@ -63,7 +63,9 @@ Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, dialogId, portlet
 	renderURL.setParameter("subjectId", sId);
 	renderURL.setParameter("crfId", crfId);
 	
-	renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/update-crf-data");
+	renderURL.setParameter("fromFlag", "selector-add");
+	//renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-crf-data");
+	renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/crf-viewer");
 	
 	window.location.href = renderURL;
 },['liferay-util-window']);
@@ -106,7 +108,8 @@ Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit,
 	if(isAudit){
 		renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-audit");
 	}else{
-		renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/update-crf-data");
+		//renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-crf-data");
+		renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/crf-viewer");
 	}
 		
 	window.location.href = renderURL;	
@@ -126,5 +129,5 @@ Liferay.provide(window, 'moveDeleteCRFData', function(linkCrfId, dialogId, portl
 	
 	console.log(actionURL);
 	
-	//window.location.href = actionURL.toString();	
+	window.location.href = actionURL.toString();	
 },['liferay-util-window']);

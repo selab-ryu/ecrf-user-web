@@ -57,7 +57,7 @@ public class ViewAuditTrailRenderCommand implements MVCRenderCommand {
 				dataTypeId = _crfLocalService.getDataTypeId(crfId);
 				subject = _subjectLocalService.getSubject(subjectId);
         
-        String crfFormStr = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
+				String crfFormStr = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(crfFormStr);
 				crfForm = jsonObject.getString("terms");
 				answerForm = _dataTypeLocalService.getStructuredData(sdId);
