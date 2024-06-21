@@ -236,7 +236,7 @@
 
     <script>
         // Emergency Inspection Term Lsit Json to Object array
-        let inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
+        var inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
 		//console.log("inspectionData: " + inspectionData);
         // Text in Html
         let ContentText = "";
