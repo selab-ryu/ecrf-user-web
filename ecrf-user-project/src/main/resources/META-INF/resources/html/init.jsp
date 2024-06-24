@@ -57,14 +57,16 @@
 <%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
 
 
-<%@page import="ecrf.user.service.ProjectLocalServiceUtil"%>
-<%@page import="ecrf.user.constants.attribute.ECRFUserProjectAttributes"%>
+<%@ page import="ecrf.user.service.ProjectLocalServiceUtil"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserProjectAttributes"%>
 
-<%@page import="ecrf.user.model.Project"%>
-<%@page import="ecrf.user.project.internal.security.permission.resource.ProjectPermission"%>
+<%@ page import="ecrf.user.model.Project"%>
+<%@ page import="ecrf.user.project.security.permission.resource.ProjectPermission"%>
+<%@ page import="ecrf.user.project.security.permission.resource.ProjectModelPermission"%>
+<%@ page import="ecrf.user.project.security.permission.resource.ExpGroupModelPermission"%>
 
-<%@page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
-<%@page import="ecrf.user.model.Researcher"%>
+<%@ page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
+<%@ page import="ecrf.user.model.Researcher"%>
 
 <%@ page import="ecrf.user.model.ExperimentalGroup"%>
 <%@ page import="ecrf.user.service.ExperimentalGroupLocalServiceUtil"%>

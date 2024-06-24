@@ -119,6 +119,14 @@
 <%@ page import="ecrf.user.service.CRFSubjectLocalServiceUtil"%>
 <%@ page import="ecrf.user.service.CRFResearcherLocalServiceUtil"%>
 
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFResearcherModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFSubjectModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.LinkCRFModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFAutoqueryModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFHistoryModelPermission" %>
+
 <%@ page import="com.sx.icecap.service.DataTypeLocalServiceUtil"%>
 <%@page import="com.sx.icecap.service.StructuredDataLocalServiceUtil"%>
 

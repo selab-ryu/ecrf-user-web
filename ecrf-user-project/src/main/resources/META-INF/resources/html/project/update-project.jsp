@@ -19,10 +19,11 @@ String menu = "project-info";
 
 if(projectId > 0) {
 	project = (Project)renderRequest.getAttribute(ECRFUserProjectAttributes.PROJECT);
-	principalResearchId = project.getPrincipalResearcherId();
-	manageResearcherId = project.getManageResearcherId();
+// 	principalResearchId = project.getPrincipalResearcherId();
+// 	manageResearcherId = project.getManageResearcherId();
 }
 
+/*
 List<User> siteUserList = UserLocalServiceUtil.getGroupUsers(scopeGroupId);
 Role adminRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Administrator");
 _log.info("site user list size : " + siteUserList.size());
@@ -50,6 +51,7 @@ int manageResearcherCount = manageResearcherList.size();
 
 _log.info("lead researcher count : " + leadResearcherCount);
 _log.info("manage researcher count : " + manageResearcherCount);
+*/
 
 Date date = new Date();
 Calendar startDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
@@ -181,6 +183,18 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 		</c:otherwise>
 		</c:choose>
 		
+		<c:if test="<%=(projectId > 0) %>">
+		<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.PERMISSIONS) %>">
+			<liferay-security:permissionsURL
+		        modelResource="<%= Project.class.getName() %>"
+		        modelResourceDescription="project"
+		        resourcePrimKey="<%= String.valueOf(projectId) %>"
+		        var="permissionsURL" />
+		
+			<aui:button type="button" value="Permissions" onClick="<%=permissionsURL %>" />
+		</c:if>
+		</c:if>
+	
 	</div>
 </div>
 

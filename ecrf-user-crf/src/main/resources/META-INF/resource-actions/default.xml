@@ -3,15 +3,16 @@
 
 <resource-action-mapping>
 	<portlet-resource>
-		<portlet-name>ecrf_user_approve_ApprovePortlet</portlet-name>
+		<portlet-name>ecrf_user_crf_CRFPortlet</portlet-name>
 		<permissions>
 			<supports>
 				<action-key>ACCESS_IN_CONTROL_PANEL</action-key>
 				<action-key>ADD_TO_PAGE</action-key>
 				<action-key>CONFIGURATION</action-key>
-				<action-key>ADD_REQUEST</action-key>
-				<action-key>ADD_LIST</action-key>
 				<action-key>VIEW</action-key>
+				<action-key>ADD_CRF</action-key>
+				<action-key>ADD_CRF_DATA</action-key>
+				<action-key>ADD_CRF_QUERY</action-key>
 			</supports>
 			<site-member-defaults>
 				<action-key>VIEW</action-key>
@@ -20,7 +21,6 @@
 				<action-key>VIEW</action-key>
 			</guest-defaults>
 			<guest-unsupported>
-				<action-key>ACCESS_IN_CONTROL_PANEL</action-key>
 				<action-key>ADD_TO_PAGE</action-key>
 				<action-key>CONFIGURATION</action-key>
 			</guest-unsupported>
