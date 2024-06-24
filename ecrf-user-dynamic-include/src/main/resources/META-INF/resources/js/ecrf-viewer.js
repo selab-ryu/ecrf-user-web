@@ -1,11 +1,14 @@
 let ECRFViewer = function(){
 	class Viewer{
+
 		constructor(DataStructure, align, structuredData){
 			var result = new Object();
 			renderUtil.align = align;
 			console.log("sd data", structuredData);
-			renderUtil.structuredData = structuredData;
-			result = structuredData;
+			if(structuredData){
+				renderUtil.structuredData = structuredData;
+				result = structuredData;
+			}
 			$(document).ready(function(){
 				let dataPacket = new EventDataPacket();
 				dataPacket.result = result;
@@ -22,11 +25,20 @@ let ECRFViewer = function(){
                 }
                 this.$canvas.empty();
                 this.$canvas.html(renderUtil.renderCanvas(this.terms));
+                
+                this.terms.forEach(term=>{
+					if( term.termType === 'List' || term.termType === 'boolean' ){
+						if( term.hasSlaves() ){
+							//renderUtil.activateSlaveTerms( term );
+						}
+					}
+				});
             };
             
             Liferay.on('value_changed', function(event){
             	if(event.dataPacket.term){
             		let eventTerm = event.dataPacket.term;
+            		console.log(eventTerm.value);
             		result[eventTerm.termName.toString()] = eventTerm.value;
             		event.dataPacket.result = result;
             	}
@@ -42,7 +54,8 @@ let ECRFViewer = function(){
                 	if(term.groupTermId.name === ""){
                 		$loader.append(this.buildGroupTerm(terms, term));
                 	}
-                }else{
+                }
+                else{
                 	if(term.groupTermId.name === ""){
                 		$loader.append(this.buildGeneralTerm(term, this.align));
                 	}
@@ -114,6 +127,9 @@ let ECRFViewer = function(){
 					term.value = this.structuredData[term.termName];
 				}
 			}
+			if(term.termType === "Grid"){
+				align_control = "crf-align-vertical";
+			}
             let label = term.displayName.localizedMap.en_US;
         	let $container = $('<div class = "radius-shadow-container marBr ' + align_control + '">');
 			if(term.disabled){
@@ -124,7 +140,103 @@ let ECRFViewer = function(){
 			$label.append($('<p>' + label + '</p>'));
 			$section.append($label);
 			$container.append($section);
-			let $inputLabel = this.buildTermInput(term);
+			let $inputLabel = $('<div>');
+			if(term.termType === "Grid"){
+				console.log("is Grid", term);
+				
+				let $gridTable = $('<table class="crf-grid-table">');
+				$gridTable.prop({
+					id: term.termName
+				});
+				$gridTable.data('rowIndex', 1);
+
+				let $gridHead = $('<thead></thead>');
+				let $headRow = $('<tr></tr>');
+				let $gridBody = $('<tbody>');
+				
+				term.rowIndex = 1;
+				if(term.value){
+					let totalIndex = Object.keys(term.value).length;
+					term.rowIndex = totalIndex;
+				}
+				let keys = Object.keys(term.columnDefs);
+				keys.forEach((key) =>{
+					let includeTerm = term.columnDefs[key];
+					$headRow.append($('<th>' + includeTerm.displayName.localizedMap.en_US +'</th>'));
+					$gridHead.append($headRow);
+
+				});
+				for(var i = 1; i < term.rowIndex + 1; i++){
+					let $bodyRow = $('<tr></tr>');
+					keys.forEach((key) =>{
+						let $dataColumn = $('<td>'); 
+						$dataColumn.append(this.buildGridIncludeTerm(term.columnDefs[key], term, i));
+						$bodyRow.append($dataColumn);
+						$gridBody.append($bodyRow);
+					});
+				}
+				$gridTable.append($gridHead);
+				$gridTable.append($gridBody);
+				$inputLabel.append($gridTable);
+				
+				let $btnArea = $('<div>');
+				let $addBtn = $('<button>');
+				let $deleteBtn = $('<button>');
+				$addBtn.prop({
+					class: "btn btn-default marTr",
+					id: term.termName +"_addBtn",
+					name: term.termName +"_addBtn",
+				});
+				$addBtn.append("add");
+				
+				$addBtn.on("click", function(event){
+					console.log("add btn clicked");
+					console.log(term.termName);
+					let gridTable = document.getElementById(term.termName);
+					term.rowIndex = gridTable.childNodes[1].childNodes.length + 1;
+					console.log(term.rowIndex);
+					var newRow = gridTable.insertRow();
+					let keys = Object.keys(term.columnDefs);
+					keys.forEach((key) =>{
+						var newCell = newRow.insertCell(); 
+						$(newCell).append(renderUtil.buildGridIncludeTerm(term.columnDefs[key], term, term.rowIndex));
+					});
+
+				});
+				
+				
+				$deleteBtn.prop({
+					class: "btn btn-default marTr marLr",
+					id: term.termName +"_deleteBtn",
+					name: term.termName +"_deleteBtn",
+				});
+				$deleteBtn.append("delete");
+				
+				$deleteBtn.on("click", function(event){
+					let gridTable = document.getElementById(term.termName);
+					gridTable.deleteRow(term.rowIndex);
+
+					if(term.value){
+						let tempIndex = term.rowIndex.toString();
+						delete term.value[tempIndex];
+						let dataPacket = new EventDataPacket();
+						dataPacket.term = term;
+						console.log(dataPacket);
+						const eventData = {
+							dataPacket: dataPacket
+						};
+						
+						Liferay.fire( 'value_changed', eventData );		
+					}
+					term.rowIndex = term.rowIndex - 1;
+				});
+				
+				$btnArea.append($addBtn);
+				$btnArea.append($deleteBtn);
+				$inputLabel.append($btnArea);
+			}else{
+				$inputLabel.append(this.buildTermInput(term));
+			}
 			$section.append($inputLabel);
 			
 			return $container;
@@ -180,7 +292,7 @@ let ECRFViewer = function(){
 							const eventData = {
 								dataPacket: dataPacket
 							};
-							Liferay.fire( 'value_changed', eventData );					
+							//Liferay.fire( 'value_changed', eventData );					
 						}
 					}
 				};
@@ -286,11 +398,223 @@ let ECRFViewer = function(){
 						for: term.termName
 					});
 				}
+				break;
+			case "File":
+				$inputTag = $('<input type="file" class="lfr-input-text form-control" size="80" multiple>');
+				$inputTag.prop({
+					id: term.termName,
+					name: term.termName,
+					disabled: !!this.disabled ? true : false
+				});
+
 			}
 			if(term.disabled){
 				$inputTag.attr("style", "color: black");
 			}	
         	return $inputTag;
+        },
+        buildGridIncludeTerm : function(term, gridTerm, rowIndex){
+        	let cellValue = undefined;
+        	if(gridTerm.value){
+        		if(gridTerm.value.hasOwnProperty(rowIndex.toString())){
+        			cellValue = gridTerm.value[rowIndex.toString()][term.termName];
+        		}
+        	}
+        	
+        	let $gridInputTag = $('<input class="field form-control" type="text">');
+			switch(term.termType){
+			case "String":
+			case "Numeric":
+				$gridInputTag.prop({
+					id: term.termName + "_" + rowIndex,
+					name: term.termName,
+					disabled: term.disabled,
+					value: cellValue
+				});
+				
+				let eventFuncs = {
+						change: function( event ){
+							event.stopPropagation();
+
+							let termValue = $('#' + term.termName + "_" + rowIndex).val();
+							console.log( 'get value: ', termValue);
+							let gridTermFormat = new Object();
+							let rowDataFormat = new Object();
+							if(gridTerm.value){
+								gridTermFormat = gridTerm.value;
+								if(!gridTermFormat[rowIndex.toString()]){
+									gridTermFormat[rowIndex.toString()] = new Object();
+								}
+								rowDataFormat = gridTermFormat[rowIndex.toString()];
+							}
+							
+							rowDataFormat[term.termName] = termValue;
+							gridTermFormat[rowIndex.toString()] = rowDataFormat;
+							gridTerm.value = JSON.stringify(gridTermFormat);
+							console.log(gridTermFormat);
+							let dataPacket = new EventDataPacket();
+							dataPacket.term = gridTerm;
+							console.log(dataPacket);
+							const eventData = {
+								dataPacket: dataPacket
+							};
+							
+							Liferay.fire( 'value_changed', eventData );					
+						}
+					};
+				Object.keys( eventFuncs ).forEach( event => {
+					$gridInputTag.on( event, eventFuncs[event] );
+				});
+				break;
+			case "Date":
+				$gridInputTag = $('<input class="form-control date" type="text" placeholder="yyyy/MM/dd HH:mm">');
+				$gridInputTag.prop({
+					id: term.termName,
+					name: term.termName,
+					disabled: term.mandatory
+				});
+				let dateEventFuncs = {
+					change: function(event){
+						if((typeof $gridInputTag.val() === 'string') && $gridInputTag.val() === ''){
+							term.value = undefined;				
+						}
+					}
+				};
+				Object.keys( dateEventFuncs ).forEach( event => {
+					$gridInputTag.on( event, dateEventFuncs[event] );
+				});
+
+				let options = {
+					lang: 'kr',
+					changeYear: true,
+					changeMonth : true,
+					yearStart: term.startYear ? term.startYear : new Date().getFullYear(),
+					yearEnd: term.endYear ? term.endYear : new Date().getFullYear(),
+					scrollInput:false,
+					value: term.enableTime ? renderUtil.toDateTimeString(cellValue) : renderUtil.toDateString(cellValue),
+					validateOnBlur: false,
+					id:term.termName,
+					onChangeDateTime: function(dateText, inst){
+						let termValue = $gridInputTag.datetimepicker("getValue").getTime();
+	
+						if( term.enableTime ){
+							$gridInputTag.val(renderUtil.toDateTimeString(termValue));
+						}
+						else{
+							$gridInputTag.val(renderUtil.toDateString(termValue));
+						}
+	
+						$gridInputTag.datetimepicker('setDate', $gridInputTag.datetimepicker("getValue"));
+						
+						let gridTermFormat = new Object();
+						let rowDataFormat = new Object();
+						if(gridTerm.value){
+							gridTermFormat = gridTerm.value;
+							if(!gridTermFormat[rowIndex.toString()]){
+								gridTermFormat[rowIndex.toString()] = new Object();
+							}
+							rowDataFormat = gridTermFormat[rowIndex.toString()];
+						}
+						
+						rowDataFormat[term.termName] = termValue;
+						gridTermFormat[rowIndex.toString()] = rowDataFormat;
+						gridTerm.value = JSON.stringify(gridTermFormat);
+						console.log(gridTermFormat);
+						
+						let dataPacket = new EventDataPacket();
+						dataPacket.term = gridTerm;
+						const eventData = {
+							dataPacket: dataPacket
+						};
+						Liferay.fire( 'value_changed', eventData );		
+					}
+				};
+
+				if( term.enableTime ){
+					options.timepicker = true;
+					options.format = 'Y. m. d. H:i';
+					options.value = this.toDateTimeString(),
+					$gridInputTag.datetimepicker(options);
+					$gridInputTag.val(this.toDateTimeString(cellValue));
+				}
+				else{
+					options.timepicker = false;
+					options.format = 'Y. m. d.';
+					options.value = this.toDateString(),
+					$gridInputTag.datetimepicker(options);
+					$gridInputTag.val(this.toDateString(cellValue));
+				}
+				break;
+			case "List":
+				if(term.displayStyle === "select"){
+					$gridInputTag = $( '<select class="form-control">' );
+					term.options.forEach((option)=>{
+						let $optionTag = $('<option>').text(option.label.localizedMap.en_US);
+						$optionTag.val(option.value);
+						$gridInputTag.append($optionTag);
+					});
+					$gridInputTag.prop({
+						id: term.termName + "_" + rowIndex,
+						name: term.termName,
+						disabled: term.disabled,
+						value: cellValue
+					});
+					
+					let listEventFuncs = {
+						change: function( event ){
+							event.stopPropagation();
+	
+							let termValue = $('#'+term.termName + "_" + rowIndex).val();
+							console.log( 'get value: ', termValue);
+							let gridTermFormat = new Object();
+							let rowDataFormat = new Object();
+							var listArr = new Array();
+							if(gridTerm.value){
+								gridTermFormat = gridTerm.value;
+								if(!gridTermFormat[rowIndex.toString()]){
+									gridTermFormat[rowIndex.toString()] = new Object();
+								}
+								rowDataFormat = gridTermFormat[rowIndex.toString()];
+							}
+							listArr.push(termValue.toString());
+							rowDataFormat[term.termName] = listArr;
+							gridTermFormat[rowIndex.toString()] = rowDataFormat;
+							gridTerm.value = JSON.stringify(gridTermFormat);
+							console.log(gridTermFormat);
+							let dataPacket = new EventDataPacket();
+							dataPacket.term = gridTerm;
+							const eventData = {
+								dataPacket: dataPacket
+							};
+							
+							Liferay.fire( 'value_changed', eventData );					
+						}
+					};
+				Object.keys( listEventFuncs ).forEach( event => {
+					$gridInputTag.on( event, listEventFuncs[event] );
+				});
+				}else if(term.displayStyle === "radio"){
+					$gridInputTag = $('<label>');
+					term.options.forEach((option)=>{
+						let $radioTag = $( '<input type="radio">' );
+						$radioTag.prop({
+							class :"field",
+							id: term.termName + "_" + rowIndex,
+							name: term.termName,
+							disabled: term.disabled,
+							value: option.value
+						});
+						let $nameTag = $('<span>').text(option.label.localizedMap.en_US); 
+						$gridInputTag.append($radioTag);
+						$gridInputTag.append($nameTag);
+					});
+					$gridInputTag.prop({
+						for: term.termName
+					});
+				}
+				break;
+			}
+        	return $gridInputTag;
         },
 		toDateTimeString : function(value){
 			if(Number(value) !== value){

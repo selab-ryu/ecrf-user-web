@@ -49,6 +49,12 @@ _log.info("is update : " + isUpdate);
 	<%@ include file="../other/sidebar.jspf" %>	
 	<div class="page-content">
 		<liferay-ui:header backURL="<%=redirect %>" title='<%=isUpdate ? "Update CRF" : "ADD CRF" %>' />
+		<div class="marBr">
+			<aui:button-row>
+				<aui:button type="button" id="btnTable" value="Table"></aui:button>
+				<aui:button type="button" id="btnVert" value="Vertical"></aui:button>
+			</aui:button-row>
+		</div>
 		<div class="col-md-12"  id="<portlet:namespace/>canvasPanel"></div>
 		<form action="<%=saveActionURL.toString() %>" name="<portlet:namespace/>fm" id="<portlet:namespace/>fm" method="post">
 			<input type="hidden" id="<portlet:namespace/>crfId" name="<portlet:namespace/>crfId" value="<%=crfId %>" >
@@ -82,6 +88,7 @@ console.log(profile);
 let ev = ECRFViewer();
 let dataStructure = SX.newDataStructure(<%=crfForm%>, profile, SX.Constants.FOR_EDITOR, $('#<portlet:namespace/>canvasPanel'));
 let align = "crf-align-table";
+$('#<portlet:namespace/>btnTable').css("background-color","#5f73ff");
 let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>);
 console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
@@ -103,6 +110,23 @@ $('#<portlet:namespace/>btnSave').on( 'click', function(event){
 		$('#<portlet:namespace/>fm').submit();
 	}
 	
+});
+
+$('#<portlet:namespace/>btnTable').on( 'click', function(event){
+	$('#<portlet:namespace/>btnTable').css("background-color","#5f73ff");
+	$('#<portlet:namespace/>btnVert').css("background-color","white");
+	align = "crf-align-table";
+	viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>);
+	dataStructure.renderSmartCRF();
+});
+
+$('#<portlet:namespace/>btnVert').on( 'click', function(event){
+	$('#<portlet:namespace/>btnTable').css("background-color","white");
+	$('#<portlet:namespace/>btnVert').css("background-color","#5f73ff");
+	
+	align = "crf-align-vertical";
+	viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>);
+	dataStructure.renderSmartCRF();
 });
 
 });

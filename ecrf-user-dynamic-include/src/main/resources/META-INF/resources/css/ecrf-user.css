@@ -39,7 +39,25 @@
 .crf-align-table{width:15%; height: auto; display:inline-block; margin-left:1rem;}
 .crf-align-vertical{width:80%; display:block;}
 
-.label-controller{height:60px;}
+table.crf-grid-table{
+	table-layout: fixed;
+	width: auto;
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.crf-grid-table thead th {
+	background-color: #eee;
+	border: 1px solid #aaa;
+	padding: 1rem!important;
+}
+
+.crf-grid-table tbody td {
+	border: 1px solid #aaa;
+	padding: 1rem!important;
+}
+.label-controller{margin-bottom:1rem; height:30px;}
 
 .round-container { border: 1px solid #aaaaaa; border-radius:3px; }
 .title-span { font-size:20px; font-weight:bold; }

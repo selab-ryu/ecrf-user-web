@@ -236,16 +236,16 @@
 
     <script>
         // Emergency Inspection Term Lsit Json to Object array
-        let inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
+        var inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
 		//console.log("inspectionData: " + inspectionData);
         // Text in Html
-        let ContentText = "";
+        var ContentText = "";
         
         // Survey object data to Each List
-        let Big_Category = [];
-        let Main_Category = [];
-        let Sub_Category = [];
-        let Sub_Category_only = [];
+        var Big_Category = [];
+        var Main_Category = [];
+        var Sub_Category = [];
+        var Sub_Category_only = [];
 
         // Move each List
         for(var i = 0; i < inspectionData.length; i++){
@@ -269,12 +269,12 @@
         }
 
         // Index to attach Each Category element id
-        let indexA = 0;
-        let indexB = 0;
-        let indexC = 0;
+        var indexA = 0;
+        var indexB = 0;
+        var indexC = 0;
 
         // Index to new Line Sub Category
-        let Index_Sub_category = 0;
+        var Index_Sub_category = 0;
 
         // Print Each Category
         for(var i = 0; i < Big_Category.length; i++){
@@ -439,8 +439,8 @@
 				buttons:dlgButtons
 		};*/
         // Get answer data and patient information data.
-        let answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
-        let patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));         
+        var answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
+        var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));         
         
         // This function finds the range of cells to merge in Excel.
         function search_range(arr){
