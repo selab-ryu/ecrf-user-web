@@ -55,8 +55,10 @@ _log.info("is update : " + isUpdate);
 				<aui:button type="button" id="btnVert" value="Vertical"></aui:button>
 			</aui:button-row>
 		</div>
-		<div class="col-md-12"  id="<portlet:namespace/>canvasPanel"></div>
-		<form action="<%=saveActionURL.toString() %>" name="<portlet:namespace/>fm" id="<portlet:namespace/>fm" method="post">
+		
+		<div class="col-md-12"  id="<portlet:namespace/>canvasPanel"></div>		
+		
+		<form action="<%=saveActionURL.toString() %>" name="crfViewerForm" id="crfViewerForm" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="<portlet:namespace/>crfId" name="<portlet:namespace/>crfId" value="<%=crfId %>" >
 			<input type="hidden" id="<portlet:namespace/>dataTypeId" name="<portlet:namespace/>dataTypeId" value="<%=dataTypeId %>" >			
 			<input type="hidden" id="<portlet:namespace/>structuredDataId" name="<portlet:namespace/>structuredDataId" value="<%=sdId%>" >
@@ -107,7 +109,7 @@ $('#<portlet:namespace/>btnSave').on( 'click', function(event){
 		alert("visit date required");
 		document.getElementById('visit_date').focus();
 	}else{
-		$('#<portlet:namespace/>fm').submit();
+		$('#crfViewerForm').submit();
 	}
 	
 });

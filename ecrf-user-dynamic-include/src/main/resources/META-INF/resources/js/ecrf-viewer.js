@@ -29,7 +29,7 @@ let ECRFViewer = function(){
                 this.terms.forEach(term=>{
 					if( term.termType === 'List' || term.termType === 'boolean' ){
 						if( term.hasSlaves() ){
-							//renderUtil.activateSlaveTerms( term );
+							renderUtil.activateTerms(term);
 						}
 					}
 				});
@@ -39,6 +39,9 @@ let ECRFViewer = function(){
             	if(event.dataPacket.term){
             		let eventTerm = event.dataPacket.term;
             		console.log(eventTerm.value);
+            		if(eventTerm.termType === "List"){
+            			renderUtil.activateTerms(eventTerm);
+            		}
             		result[eventTerm.termName.toString()] = eventTerm.value;
             		event.dataPacket.result = result;
             	}
@@ -132,6 +135,9 @@ let ECRFViewer = function(){
 			}
             let label = term.displayName.localizedMap.en_US;
         	let $container = $('<div class = "radius-shadow-container marBr ' + align_control + '">');
+        	$container.prop({
+        		id:term.termName + "_outerDiv"
+        	});
 			if(term.disabled){
 				$container.attr("style", "background-color: #dcdcdc!important");
 			}	
@@ -381,11 +387,12 @@ let ECRFViewer = function(){
 				});
 				}else if(term.displayStyle === "radio"){
 					$inputTag = $('<label>');
+					let index = 1;
 					term.options.forEach((option)=>{
 						let $radioTag = $( '<input type="radio">' );
 						$radioTag.prop({
 							class :"field",
-							id: term.termName,
+							id: term.termName + "_" + index,
 							name: term.termName,
 							disabled: term.disabled,
 							value: option.value
@@ -393,18 +400,115 @@ let ECRFViewer = function(){
 						let $nameTag = $('<span>').text(option.label.localizedMap.en_US); 
 						$inputTag.append($radioTag);
 						$inputTag.append($nameTag);
+						index++;
 					});
 					$inputTag.prop({
 						for: term.termName
 					});
+					$inputTag.change(function(event){
+						event.stopPropagation();
+
+						let $checkedRadio = $(this).find('input[type="radio"]:checked').first();
+						let changedVal = $checkedRadio.val();
+
+						term.value = changedVal;
+
+						console.log( 'get value: ', term.value);
+						let dataPacket = new EventDataPacket();
+						dataPacket.term = term;
+						const eventData = {
+							dataPacket: dataPacket
+						};
+						
+						Liferay.fire( 'value_changed', eventData );		
+					});
 				}
 				break;
 			case "File":
-				$inputTag = $('<input type="file" class="lfr-input-text form-control" size="80" multiple>');
-				$inputTag.prop({
+				$inputTag = $('<div>');
+				
+				let $fileTag = $('<input type="file" class="lfr-input-text form-control" size="80" multiple>');
+				$fileTag.prop({
 					id: term.termName,
 					name: term.termName,
 					disabled: !!this.disabled ? true : false
+				});
+				
+				const dataTransfer = new DataTransfer();
+				//TODO: make table to config file items below
+				
+				let $fileProfileTag = $('<tr>');
+				console.log("has termvalue?", term.value);
+				
+				if(term.value){
+					for(const key in term.value){
+						$fileProfile = $('<td>');
+						console.log("has termvalue 1?", key);
+						$fileProfile.append(key);
+						$fileProfileTag.append($fileProfile);
+					}
+				}
+				$inputTag.append($fileTag);
+				$inputTag.append($fileProfileTag);
+				$fileTag.change(function(event){
+					event.stopPropagation();
+					let files = $(this)[0].files;
+				 	if(files != null && files.length>0){
+			            for(var i=0; i<files.length; i++){
+			                dataTransfer.items.add(files[i])
+			            }
+			            $(this)[0].files = dataTransfer.files;
+			            console.log("dataTransfer =>", dataTransfer.files);
+			            console.log("input FIles =>", $(this)[0].files);
+				 	}
+					
+					console.log( 'get value: ', $(this)[0].files);
+					
+					let $form = $('#crfViewerForm');
+
+					if($('#' + term.termName + "_fileCarrior").length > 0){
+						let $fileCarriorInput = $('#' + term.termName + "_fileCarrior");
+						$fileCarriorInput[0].files = $(this)[0].files;
+					}else{
+						let $fileCarriorInput = $('<input type="file" style="display: none;" multiple/>');
+						$fileCarriorInput.prop({
+							id: term.termName +"_fileCarrior",
+							name: term.termName +"_fileCarrior"
+						});
+						$fileCarriorInput[0].files = $(this)[0].files;
+						$form.append($fileCarriorInput);
+					}
+					
+					let fileTermValue = new Object();
+					
+					console.log(term.value);
+					if(term.value.constructor.length > 0){
+						fileTermValue = term.value;
+					}
+					let toObj = new Object();
+				
+					for(var i = 0; i < dataTransfer.files.length; i++){
+						let data = dataTransfer.files[i];
+						console.log(data);
+						toObj["size"] = data.size;
+						toObj["parentFolderId"] = 0;
+						toObj["name"] = data.name;
+						toObj["type"] = data.type;
+						toObj["fileId"] = 0;
+					}
+					
+					fileTermValue[toObj["name"]] = toObj;
+					console.log(fileTermValue);
+					
+					term.value = fileTermValue;
+					
+					let dataPacket = new EventDataPacket();
+					dataPacket.term = term;
+					const eventData = {
+						dataPacket: dataPacket
+					};
+					
+					Liferay.fire( 'value_changed', eventData );		
 				});
 
 			}
@@ -615,6 +719,43 @@ let ECRFViewer = function(){
 				break;
 			}
         	return $gridInputTag;
+        },
+        activateTerms : function(term){
+        	let options = term.options;
+
+			let values;
+			if( Array.isArray(term.value) ){
+				values = term.value;
+			}
+			else{
+				values = [term.value];
+			}
+			
+			options.forEach( option => {
+				if( values.includes( option.value ) ){
+					if( option.slaveTerms ){
+						let slaveTermNames = option.slaveTerms;
+						slaveTermNames.forEach( termName => this.showAndHide( termName, true ) );
+					}
+				}
+				else{ // all slave term are deactivated.
+					if( option.slaveTerms ){
+						let slaveTermNames = option.slaveTerms;
+						slaveTermNames.forEach( termName => this.showAndHide( termName, false ) );
+					}
+				}
+			});
+        },
+        showAndHide: function(termName, activeFlag){
+        	console.log("isSlaveTerm query", $("#"+termName+"_outerDiv"));
+        	if( activeFlag ){
+        		$("#"+termName+"_outerDiv").show();
+			}
+			else{
+				$("#"+termName+"_outerDiv").hide();
+	        	console.log("hided", $("#"+termName));
+				//term.value = undefined;
+			}
         },
 		toDateTimeString : function(value){
 			if(Number(value) !== value){
