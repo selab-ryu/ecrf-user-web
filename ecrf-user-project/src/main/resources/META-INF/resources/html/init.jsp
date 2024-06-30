@@ -48,6 +48,7 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
+<%@ page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 <%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>
@@ -55,7 +56,6 @@
 <%@ page import="ecrf.user.constants.ECRFUserConstants"%>
 <%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
-
 
 <%@ page import="ecrf.user.service.ProjectLocalServiceUtil"%>
 <%@ page import="ecrf.user.constants.attribute.ECRFUserProjectAttributes"%>

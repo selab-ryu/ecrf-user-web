@@ -1,3 +1,4 @@
+<%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ include file="../init.jsp" %>
 
 <%!
@@ -9,28 +10,12 @@ Project project = null;
 long projectId = 0;
 int projectCount = ProjectLocalServiceUtil.getProjectCount(scopeGroupId);
 
-long principalResearcherId = 0;
-String principalResearcherText = StringPool.DASH;
-long manageResearcherId = 0;
-String manageResearcherText = StringPool.DASH;
-
 String menu = "project-info";
 
 if(projectCount > 0) {
 	List<Project> projectList = ProjectLocalServiceUtil.getProjectByGroupId(scopeGroupId);
 	project = projectList.get(0);
 	projectId = project.getProjectId();
-	
-// 	principalResearcherId = project.getPrincipalResearcherId();
-// 	if(principalResearcherId > 0) {
-// 		Researcher researcher = ResearcherLocalServiceUtil.getResearcher(principalResearcherId);
-// 		principalResearcherText = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
-// 	}
-// 	manageResearcherId = project.getManageResearcherId();
-// 	if(manageResearcherId > 0) {
-// 		Researcher researcher = ResearcherLocalServiceUtil.getResearcher(manageResearcherId);
-// 		manageResearcherText = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
-// 	}
 }
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -66,7 +51,6 @@ if(!isPrivate) pageClass = "mar16px";
 	
 	<c:if test="<%=isPrivate %>" >
 	<%@include file="sidebar.jspf" %>
-	
 	</c:if>
 	
 	<div class="<%=pageClass%>">
@@ -124,11 +108,7 @@ if(!isPrivate) pageClass = "mar16px";
 	</c:otherwise>
 	</c:choose>
 	</aui:container>
-	
-	<c:if test="<%=!isPublic %>">
 		
-	</c:if>
-	
 	<!-- buttons -->
 	<aui:row>
 		<aui:col>
@@ -136,13 +116,15 @@ if(!isPrivate) pageClass = "mar16px";
 				<c:choose>
 				<c:when test="<%=(projectId > 0) %>">
 					<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE) %>">			
-						<aui:button type="button" value="Go to Update Project Info" onClick="<%=updateProjectURL.toString() %>" />
-						<aui:button type="button" value="Delete" onClick="<%=deleteProjectURL.toString() %>" />
+						<aui:button type="button" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn" onClick="<%=updateProjectURL.toString() %>" />			
+					</c:if>
+					<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.DELETE) %>">
+						<aui:button type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteProjectURL.toString() %>" />
 					</c:if>
 			 	</c:when>
 			 	<c:otherwise>
-			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, "ADD_PROJECT") %>">
-			 			<aui:button type="button" value="Add Project Info" onClick="<%=addProjectURL.toString() %>" />	
+			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
+			 			<aui:button type="button" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" onClick="<%=addProjectURL.toString() %>" />
 			 		</c:if>
 			 	</c:otherwise>
 			 	</c:choose>		

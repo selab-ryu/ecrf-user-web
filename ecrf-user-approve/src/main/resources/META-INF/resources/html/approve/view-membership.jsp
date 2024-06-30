@@ -103,6 +103,10 @@ if(membershipRequestCount <= 0) {
 					</h6>
 				</liferay-ui:search-container-column-text>
 				
+				<%
+					// get researhcer role	
+				%>
+				
 				<liferay-ui:search-container-column-text>
 					<h6>
 						<span><%=Validator.isNull(researcher) ? StringPool.DASH : ResearcherPosition.findByLower(researcher.getPosition()).getFull() %></span>

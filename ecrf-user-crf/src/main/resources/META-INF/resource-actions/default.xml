@@ -10,9 +10,6 @@
 				<action-key>ADD_TO_PAGE</action-key>
 				<action-key>CONFIGURATION</action-key>
 				<action-key>VIEW</action-key>
-				<action-key>ADD_CRF</action-key>
-				<action-key>ADD_CRF_DATA</action-key>
-				<action-key>ADD_CRF_QUERY</action-key>
 			</supports>
 			<site-member-defaults>
 				<action-key>VIEW</action-key>
