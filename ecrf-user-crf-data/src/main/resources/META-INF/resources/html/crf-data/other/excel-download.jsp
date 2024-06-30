@@ -236,11 +236,10 @@
 
     <script>
         // Emergency Inspection Term Lsit Json to Object array
-        let ContentText = "";
-
-        let inspectionData = "";
-        inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
-		//console.log("inspectionData: " + inspectionData);
+        var ContentText = "";
+        var inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
+      
+		    //console.log("inspectionData: " + inspectionData);
         // Text in Html
         
         // Survey object data to Each List

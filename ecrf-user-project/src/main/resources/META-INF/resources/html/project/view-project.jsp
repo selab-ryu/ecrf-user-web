@@ -1,3 +1,4 @@
+<%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ include file="../init.jsp" %>
 
 <%!
@@ -9,32 +10,20 @@ Project project = null;
 long projectId = 0;
 int projectCount = ProjectLocalServiceUtil.getProjectCount(scopeGroupId);
 
-long principalResearcherId = 0;
-String principalResearcherText = StringPool.DASH;
-long manageResearcherId = 0;
-String manageResearcherText = StringPool.DASH;
-
 String menu = "project-info";
 
 if(projectCount > 0) {
 	List<Project> projectList = ProjectLocalServiceUtil.getProjectByGroupId(scopeGroupId);
 	project = projectList.get(0);
 	projectId = project.getProjectId();
-	principalResearcherId = project.getPrincipalResearcherId();
-	if(principalResearcherId > 0) {
-		Researcher researcher = ResearcherLocalServiceUtil.getResearcher(principalResearcherId);
-		principalResearcherText = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
-	}
-	manageResearcherId = project.getManageResearcherId();
-	if(manageResearcherId > 0) {
-		Researcher researcher = ResearcherLocalServiceUtil.getResearcher(manageResearcherId);
-		manageResearcherText = researcher.getName() + StringPool.SLASH + researcher.getInstitution();
-	}
 }
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 boolean isPrivate = layout.isPrivateLayout();
+boolean isPublic = layout.isPublicLayout();
+
+_log.info("public / private : " + isPublic + " / " + isPrivate);
 
 String pageClass = "page-content";
 if(!isPrivate) pageClass = "mar16px";
@@ -62,7 +51,6 @@ if(!isPrivate) pageClass = "mar16px";
 	
 	<c:if test="<%=isPrivate %>" >
 	<%@include file="sidebar.jspf" %>
-	
 	</c:if>
 	
 	<div class="<%=pageClass%>">
@@ -117,50 +105,32 @@ if(!isPrivate) pageClass = "mar16px";
 				<p><%=Validator.isNull(project.getEndDate()) ? StringPool.DASH : dateFormat.format(project.getEndDate()) %></p>
 			</aui:col>
 		</aui:row>
-		<aui:row>
-			<aui:col md="12">
-				<span class="title-span">
-					<liferay-ui:message key="ecrf.user.project.title.project-manager-info" />
-				</span>
-				<hr align="center" class="marV5"></hr>
-			</aui:col>
-		</aui:row>
-		<aui:row>
-			<aui:col md="6">
-				<strong><liferay-ui:message key="ecrf.user.project.principal-researcher"/></strong>
-				<p><%=principalResearcherText %></p>
-			</aui:col>
-			<aui:col md="6">
-				<strong><liferay-ui:message key="ecrf.user.project.manage-researcher"/></strong>
-				<p><%=manageResearcherText %></p>
-			</aui:col>
-		</aui:row>
 	</c:otherwise>
 	</c:choose>
 	</aui:container>
-	
-	<c:if test="<%=isPrivate %>">
+		
 	<!-- buttons -->
-	<c:if test="<%=(isAdmin || isPI) %>">
-	<aui:container>
-		<aui:row>
-			<aui:col>
-				<aui:button-row>
-					<c:choose>
-					<c:when test="<%=Validator.isNull(project) %>">
-						<aui:button type="button" value="Add Project Info" onClick="<%=addProjectURL.toString() %>" />	
-					</c:when>
-					<c:otherwise>
-						<aui:button type="button" value="Go to Update Project Info" onClick="<%=updateProjectURL.toString() %>" />
-						<aui:button type="button" value="Delete" onClick="<%=deleteProjectURL.toString() %>" />
-					</c:otherwise>
-					</c:choose>
-				</aui:button-row>
-			</aui:col>
-		</aui:row>
-	</aui:container>
-	</c:if>
-	</c:if>
-	
+	<aui:row>
+		<aui:col>
+			<aui:button-row>
+				<c:choose>
+				<c:when test="<%=(projectId > 0) %>">
+					<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE) %>">			
+						<aui:button type="button" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn" onClick="<%=updateProjectURL.toString() %>" />			
+					</c:if>
+					<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.DELETE) %>">
+						<aui:button type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteProjectURL.toString() %>" />
+					</c:if>
+			 	</c:when>
+			 	<c:otherwise>
+			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
+			 			<aui:button type="button" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" onClick="<%=addProjectURL.toString() %>" />
+			 		</c:if>
+			 	</c:otherwise>
+			 	</c:choose>		
+			</aui:button-row>
+		</aui:col>
+	</aui:row>
+
 	</div>
 </div>

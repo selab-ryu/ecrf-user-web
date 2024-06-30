@@ -1,10 +1,11 @@
+
 <%@page import="com.liferay.portal.kernel.service.RoleLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Tuple"%>
 <%@page import="com.liferay.portal.kernel.service.UserGroupLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.CalendarFactoryUtil"%>
 <%@ include file="../init.jsp" %>
 
-<%! private static Log _log = LogFactoryUtil.getLog("html.researcher.update_researcher_jsp"); %>
+<%! private static Log _log = LogFactoryUtil.getLog("html.project.update_project_jsp"); %>
 
 <%
 _log.info("group id : " + scopeGroupId);
@@ -17,39 +18,13 @@ long manageResearcherId = 0;
 
 String menu = "project-info";
 
+
+boolean isUpdate = false;
+
 if(projectId > 0) {
 	project = (Project)renderRequest.getAttribute(ECRFUserProjectAttributes.PROJECT);
-	principalResearchId = project.getPrincipalResearcherId();
-	manageResearcherId = project.getManageResearcherId();
+	isUpdate = true;
 }
-
-List<User> siteUserList = UserLocalServiceUtil.getGroupUsers(scopeGroupId);
-Role adminRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), "Administrator");
-_log.info("site user list size : " + siteUserList.size());
-
-List<Researcher> leadResearcherList = new ArrayList<Researcher>();
-List<Researcher> manageResearcherList = new ArrayList<Researcher>();
-List<Researcher> wholeResearcherList = new ArrayList<Researcher>();
-
-for(int i=0; i<siteUserList.size(); i++) {
-	User siteUser = siteUserList.get(i);
-	
-	if(siteUser.getRoles().contains(adminRole)) continue;
-	
-	Researcher researcher = ResearcherLocalServiceUtil.getResearcherByUserId(siteUser.getUserId());
-	
-	if(researcher.getPosition() == "pi") {
-		leadResearcherList.add(researcher);
-	} else {
-		manageResearcherList.add(researcher);
-	}
-}
-
-int leadResearcherCount = leadResearcherList.size();
-int manageResearcherCount = manageResearcherList.size(); 
-
-_log.info("lead researcher count : " + leadResearcherCount);
-_log.info("manage researcher count : " + manageResearcherCount);
 
 Date date = new Date();
 Calendar startDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
@@ -60,6 +35,10 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_PROJECT%>" />
 </portlet:renderURL>
 
+<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_PROJECT %>" var="deleteProjectURL" >
+	<portlet:param name="<%=ECRFUserProjectAttributes.PROJECT_ID %>" value="<%=String.valueOf(projectId) %>" />
+</liferay-portlet:actionURL>
+
 <portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_UPDATE_PROJECT %>" var="updateProjectURL" />
 
 <div class="ecrf-user-project ecrf-user">
@@ -69,10 +48,6 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 	<div class="page-content">
 	
 		<liferay-ui:header backURL="<%=redirect %>" title="<%=Validator.isNull(project) ? "ecrf.user.project.title.add-project" : "ecrf.user.project.title.update-project" %>" />
-
-		<!-- check user permission -->
-		<c:choose>
-		<c:when test="<%=(isAdmin || isPI) %>">
 		
 		<aui:form name="fm" action="<%=updateProjectURL %>" autocomplete="off" method="POST">
 		
@@ -140,8 +115,23 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 			<aui:row>
 				<aui:col>
 					<aui:button-row>
-						<aui:button type="submit" value="Save" />	
-						<aui:button type="button" value="Back" onClick="<%=redirect.toString() %>" />
+						<c:choose>
+							<c:when test="<%=(projectId > 0) %>">
+								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE) %>">			
+									<aui:button type="submit" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn"/>			
+								</c:if>
+								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.DELETE) %>">
+									<aui:button type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteProjectURL.toString() %>" />
+								</c:if>
+						 	</c:when>
+						 	<c:otherwise>
+						 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
+						 			<aui:button type="submit" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" />
+						 		</c:if>
+						 	</c:otherwise>
+					 	</c:choose>		
+					 	
+						<aui:button type="button" value="ecrf-user.button.cancel" cssClass="cancel-btn medium-btn radius-btn" onClick="<%=viewProjectURL.toString() %>" />
 					</aui:button-row>
 				</aui:col>
 			</aui:row>
@@ -149,37 +139,6 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 		<!-- buttons -->
 		
 		</aui:form>
-		
-		</c:when>
-		<c:otherwise>
-		
-		<aui:container cssClass="radius-shadow-container">
-			<aui:row>
-				<aui:col md="12">
-					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf.user.project.title.project-info" />
-					</span>
-					<hr align="center" class="marV5"></hr>
-				</aui:col>
-			</aui:row>
-			<aui:row>
-				<aui:col>
-					<span>
-						<liferay-ui:message key="ecrf.user.project.info.no-permission" />
-					</span>
-				</aui:col>
-			</aui:row>
-			<aui:row>
-				<aui:col>
-					<aui:button-row>
-						<aui:button type="button" value="Back" onClick="<%=viewProjectURL.toString() %>" />
-					</aui:button-row>
-				</aui:col>
-			</aui:row>
-		</aui:container>
-		
-		</c:otherwise>
-		</c:choose>
 		
 	</div>
 </div>

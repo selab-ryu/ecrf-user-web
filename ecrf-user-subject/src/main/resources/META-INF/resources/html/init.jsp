@@ -63,6 +63,9 @@
 <%@ page import="ecrf.user.model.Subject"%>
 <%@ page import="ecrf.user.subject.util.SubjectSearchUtil"%>
 
+<%@ page import="ecrf.user.subject.security.permission.resource.SubjectPermission" %>
+<%@ page import="ecrf.user.subject.security.permission.resource.SubjectModelPermission" %>
+
 <%@ page import="ecrf.user.service.SubjectLocalService"%>
 <%@ page import="ecrf.user.service.SubjectLocalServiceUtil"%>
 

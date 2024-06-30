@@ -1,4 +1,4 @@
-package ecrf.user.project.internal.security.permission.resource;
+package ecrf.user.project.security.permission.resource;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -27,5 +27,5 @@ public class ProjectModelPermission {
 		_projectModelResourcePermission = modelResourcePermission;
 	}
 	
-	private static ModelResourcePermission<Project> _projectModelResourcePermission; 
+	private static ModelResourcePermission<Project> _projectModelResourcePermission;
 }

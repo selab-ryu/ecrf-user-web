@@ -119,6 +119,14 @@
 <%@ page import="ecrf.user.service.CRFSubjectLocalServiceUtil"%>
 <%@ page import="ecrf.user.service.CRFResearcherLocalServiceUtil"%>
 
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFResearcherModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFSubjectModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.LinkCRFModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFAutoqueryModelPermission" %>
+<%@ page import="ecrf.user.crf.security.permission.resource.CRFHistoryModelPermission" %>
+
 <%@ page import="com.sx.icecap.service.DataTypeLocalServiceUtil"%>
 <%@page import="com.sx.icecap.service.StructuredDataLocalServiceUtil"%>
 
@@ -172,31 +180,3 @@
 
 <script charset="utf-8" src="/o/ecrf.user.crf/js/crf-data.js" ></script>
 <script charset="utf-8" src="/o/ecrf.user.crf/js/ecrf-user-crf.js" ></script>
-
-<!-- 
-<ol class="breadcrumb">
-	<li class="breadcrumb-item">
-		<a class="breadcrumb-link" href="#1" title="Home">
-			<span class="breadcrumb-text-truncate">Home</span>
-		</a>
-	</li>
-	<li class="breadcrumb-item">
-		<a class="breadcrumb-link" href="#1" title="Components">
-			<span class="breadcrumb-text-truncate">Components</span>
-		</a>
-	</li>
-	<li class="breadcrumb-item">
-		<a class="breadcrumb-link" href="#1" title="Breadcrumbs and Paginations">
-			<span class="breadcrumb-text-truncate">Breadcrumbs and Paginations</span>
-		</a>
-	</li>
-	<li class="breadcrumb-item">
-		<a class="breadcrumb-link" href="#1" title="Page">
-			<span class="breadcrumb-text-truncate">Page</span>
-		</a>
-	</li>
-	<li class="active breadcrumb-item">
-		<span class="breadcrumb-text-truncate" title="Active">Active</span>
-	</li>
-</ol>
-	-->

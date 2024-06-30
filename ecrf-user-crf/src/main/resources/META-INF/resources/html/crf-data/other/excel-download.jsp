@@ -291,7 +291,7 @@
             Index_Sub_category = 0;
 
             // Variables for Design
-            let Flag_Sub_category = true;
+            var Flag_Sub_category = true;
 
             // Print Sub Category but It hasn't Main Category
             for(var j = 0; j < List_Depth2_Sub_category.length; j++){
@@ -319,7 +319,7 @@
             }
             
             // Variables for Design
-            let Flag_Main_category = true;
+            var Flag_Main_category = true;
 
             //After return Object, present Big Category Name is Key!
             var List_Main_category = Upfnc(Big_Category, Main_Category)[Big_Category[i].termName];
@@ -444,10 +444,10 @@
         
         // This function finds the range of cells to merge in Excel.
         function search_range(arr){
-        	let range = {};
-            let duplicateRange = [];
+        	var range = {};
+            var duplicateRange = [];
             
-            for(let i = 0; i < arr.length; i++) {
+            for(var i = 0; i < arr.length; i++) {
                 if(!range[arr[i]]) {
                     range[arr[i]] = [i, i];
                 } else {
@@ -455,7 +455,7 @@
                 }
             }
 
-            for(let key in range) {
+            for(var key in range) {
                 if(range[key][0] !== range[key][1]) {
                     duplicateRange.push(range[key]);
                 }
@@ -476,7 +476,7 @@
         }
      	
         function getProperty(object, property) {
-			  let result = object[property]
+			  var result = object[property]
 			  return result
 		}
         
@@ -811,11 +811,11 @@
             var newWorksheet = excelHandler.getWorksheet();
             
          	// It puts coordinates for merging the cell of the initial patient information data.
-            let merge = [];
+            var merge = [];
          	
             if(<%=isSearch%>){
             	for(var i = 0; i < 11; i++){
-                    let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
+                    var test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
                     merge.push(test);
                 }
             	
@@ -839,7 +839,7 @@
             }
             else{
             	for(var i = 0; i < 11; i++){
-                    let test = { s: {c: i, r: 0}, e: {c: i, r: 2}};
+                    var test = { s: {c: i, r: 0}, e: {c: i, r: 2}};
                     merge.push(test);
                 }
 

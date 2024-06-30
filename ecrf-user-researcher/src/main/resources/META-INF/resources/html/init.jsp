@@ -86,6 +86,9 @@
 <%@ page import="ecrf.user.model.Researcher" %>
 <%@ page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
 
+<%@ page import="ecrf.user.researcher.security.permission.resource.ResearcherPermission" %>
+<%@ page import="ecrf.user.researcher.security.permission.resource.ResearcherModelPermission" %>
+
 <%@ page import="ecrf.user.constants.ResearcherPosition"%>
  
 <liferay-theme:defineObjects />
