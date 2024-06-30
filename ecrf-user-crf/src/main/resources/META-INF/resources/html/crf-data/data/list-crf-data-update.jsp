@@ -365,8 +365,8 @@ _log.info("url : " + baseURL.toString());
 				<c:choose>
 				<c:when test="<%=updateLock %>">
 				
-				<aui:button name="updateCRF" type="button" value="<%=hasCRF ? "ecrf-user.button.update" : "ecrf-user.button.add" %>" cssClass="<%=lockCss %>" disabled="true"></aui:button>
-				
+        <aui:button name="updateCRF" type="button" value="<%=hasCRF ? "ecrf-user.button.update" : "ecrf-user.button.add" %>" cssClass="<%=lockCss %>" disabled="true"></aui:button>			
+          
 				</c:when>
 				<c:otherwise>
 				
