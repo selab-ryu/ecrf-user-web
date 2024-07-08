@@ -16,6 +16,10 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -31,6 +35,7 @@ import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserWebKeys;
 import ecrf.user.constants.attribute.ECRFUserProjectAttributes;
+import ecrf.user.constants.attribute.ECRFUserSubjectAttributes;
 import ecrf.user.model.Project;
 import ecrf.user.service.ProjectLocalService;
 
@@ -67,14 +72,21 @@ public class UpdateProjectActionCommand extends BaseMVCActionCommand {
 		String shortTitle = ParamUtil.getString(actionRequest, ECRFUserProjectAttributes.SHORT_TITLE);
 		String purpose = ParamUtil.getString(actionRequest, ECRFUserProjectAttributes.PURPOSE);
 		
-		int startDateYear = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.START_DATE_YEAR);
-		int startDateMonth = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.START_DATE_MONTH);
-		int startDateDay = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.START_DATE_DAY);
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Calendar cal = Calendar.getInstance();
 		
-		int endDateYear = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.END_DATE_YEAR);
-		int endDateMonth = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.END_DATE_MONTH);
-		int endDateDay = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.END_DATE_DAY);
-		
+		Date startDate = ParamUtil.getDate(actionRequest, ECRFUserProjectAttributes.START_DATE, df);
+		cal.setTime(startDate);
+		int startDateYear = cal.get(Calendar.YEAR);
+		int startDateMonth = cal.get(Calendar.MONTH);
+		int startDateDay = cal.get(Calendar.DATE);
+				
+		Date endDate = ParamUtil.getDate(actionRequest, ECRFUserProjectAttributes.END_DATE, df);
+		cal.setTime(endDate);
+		int endDateYear = cal.get(Calendar.YEAR);
+		int endDateMonth = cal.get(Calendar.MONTH);
+		int endDateDay = cal.get(Calendar.DATE);
+				
 		long principleResearcherId = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.PRINCIPAL_RESEARCHER_ID, 0);
 		long manageResearcherId = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.MANAGE_RESEARCHER_ID, 0);
 		
@@ -97,13 +109,20 @@ public class UpdateProjectActionCommand extends BaseMVCActionCommand {
 		String shortTitle = ParamUtil.getString(actionRequest, ECRFUserProjectAttributes.SHORT_TITLE);
 		String purpose = ParamUtil.getString(actionRequest, ECRFUserProjectAttributes.PURPOSE);
 		
-		int startDateYear = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.START_DATE_YEAR);
-		int startDateMonth = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.START_DATE_MONTH);
-		int startDateDay = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.START_DATE_DAY);
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Calendar cal = Calendar.getInstance();
 		
-		int endDateYear = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.END_DATE_YEAR);
-		int endDateMonth = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.END_DATE_MONTH);
-		int endDateDay = ParamUtil.getInteger(actionRequest, ECRFUserProjectAttributes.END_DATE_DAY);
+		Date startDate = ParamUtil.getDate(actionRequest, ECRFUserProjectAttributes.START_DATE, df);
+		cal.setTime(startDate);
+		int startDateYear = cal.get(Calendar.YEAR);
+		int startDateMonth = cal.get(Calendar.MONTH);
+		int startDateDay = cal.get(Calendar.DATE);
+				
+		Date endDate = ParamUtil.getDate(actionRequest, ECRFUserProjectAttributes.END_DATE, df);
+		cal.setTime(endDate);
+		int endDateYear = cal.get(Calendar.YEAR);
+		int endDateMonth = cal.get(Calendar.MONTH);
+		int endDateDay = cal.get(Calendar.DATE);
 		
 		long principleResearcherId = ParamUtil.getLong(actionRequest, ECRFUserProjectAttributes.PRINCIPAL_RESEARCHER_ID, 0);
 		long manageResearcherId = ParamUtil.getLong(actionRequest, ECRFUserProjectAttributes.MANAGE_RESEARCHER_ID, 0);

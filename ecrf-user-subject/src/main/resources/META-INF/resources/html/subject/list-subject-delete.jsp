@@ -190,6 +190,11 @@ if(isSearch) {
 
 			<% int count = searchContainer.getStart(); %>
 			
+			<%
+				boolean hasViewPermission = false;	
+				boolean hasDeletePermission = false;
+			%>
+			
 			<liferay-ui:search-container-row
 				className="ecrf.user.model.Subject"
 				escapedModel="<%=true %>"
@@ -202,15 +207,19 @@ if(isSearch) {
 					value="<%=String.valueOf(++count) %>"
 				/>
 			
+				<%
+				hasViewPermission = SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_SUBJECT);
+				%>
+			
 				<portlet:renderURL var="viewURL">
 					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_SUBJECT%>" />
 					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subject.getSubjectId()) %>" />
 					<portlet:param name="menu" value="subject-list-delete" />
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
-			
+				
 				<liferay-ui:search-container-column-text
-					href="<%=viewURL.toString() %>"
+					href="<%=hasViewPermission ? viewURL.toString() : ""%>"
 					name="ecrf-user.list.serial-id"
 					value="<%=subject.getSerialId() %>"
 				/>
@@ -253,17 +262,15 @@ if(isSearch) {
 					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subject.getSubjectId()) %>" />
 				</liferay-portlet:actionURL>
 				
-				<c:if test="<%=updatePermission %>">
-				
+				<% hasDeletePermission = SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_SUBJECT); %>
+								
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.delete"
 				>
 					<div class="ecrf-user">
-					<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="small-btn delete-btn" onClick="<%=deleteSubjectURL %>"></aui:button>
+					<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="small-btn delete-btn" onClick="<%=deleteSubjectURL %>" disabled="<%=hasDeletePermission ? false : true %>"></aui:button>
 					</div>
 				</liferay-ui:search-container-column-text>
-				
-				</c:if>
 			
 			</liferay-ui:search-container-row>
 			
@@ -274,6 +281,12 @@ if(isSearch) {
 				searchContainer="<%=searchContainer %>"
 			/>
 		</liferay-ui:search-container>
+		
+		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
+		<div class="ecrf-user">		
+			<aui:button type="button" name="add" value="Add Subject" cssClass="add-btn medium-btn radius-btn marTr" onClick="<%=addSubjectRenderURL %>"></aui:button>
+		</div>
+		</c:if>
 		
 	</div>
 	

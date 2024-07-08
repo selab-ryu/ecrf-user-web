@@ -16,6 +16,10 @@ if(projectCount > 0) {
 	List<Project> projectList = ProjectLocalServiceUtil.getProjectByGroupId(scopeGroupId);
 	project = projectList.get(0);
 	projectId = project.getProjectId();
+	
+	_log.info("project id : " + projectId);
+	
+	_log.info("project update : " + ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE));
 }
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -115,10 +119,10 @@ if(!isPrivate) pageClass = "mar16px";
 			<aui:button-row>
 				<c:choose>
 				<c:when test="<%=(projectId > 0) %>">
-					<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE) %>">			
+					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">			
 						<aui:button type="button" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn" onClick="<%=updateProjectURL.toString() %>" />			
 					</c:if>
-					<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.DELETE) %>">
+					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_PROJECT) %>">
 						<aui:button type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteProjectURL.toString() %>" />
 					</c:if>
 			 	</c:when>

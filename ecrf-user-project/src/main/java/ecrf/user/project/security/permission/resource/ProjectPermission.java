@@ -19,8 +19,7 @@ import ecrf.user.constants.ECRFUserConstants;
 @Component( immediate = true )
 public class ProjectPermission {
 	public static boolean contains(PermissionChecker permissionChecker, long groupId, String actionId) {
-		
-		_log.info("user id / group id / action id : " + permissionChecker.getUserId() + " / " + groupId + " / " + actionId);
+		//_log.info("user id / group id / action id : " + permissionChecker.getUserId() + " / " + groupId + " / " + actionId);
 		return _portletResourcePermission.contains(permissionChecker, groupId, actionId);
 	}
 	
@@ -29,7 +28,7 @@ public class ProjectPermission {
 		unbind="-"
 	)
 	protected void setPortletResourcePermission(PortletResourcePermission portlerResourcePermission) {
-		_log.info("resource name : " + portlerResourcePermission.getResourceName());
+		//_log.info("resource name : " + portlerResourcePermission.getResourceName());
 		_portletResourcePermission = portlerResourcePermission;
 	}
 	

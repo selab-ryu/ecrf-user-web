@@ -30,13 +30,13 @@ import javax.portlet.PortletURL;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import ecrf.user.constants.CRFStatus;
 import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserUtil;
 import ecrf.user.constants.ECRFUserWebKeys;
 import ecrf.user.constants.attribute.ECRFUserCRFAttributes;
+import ecrf.user.constants.type.CRFStatus;
 import ecrf.user.model.CRF;
 import ecrf.user.model.CRFResearcher;
 import ecrf.user.model.CRFSubject;
@@ -63,7 +63,8 @@ public class UpdateCRFActionCommand extends BaseMVCActionCommand {
 		Map<Locale, String> descriptionMap = LocalizationUtil.getLocalizationMap(actionRequest, ECRFUserCRFAttributes.DESCRIPTION);
 		String crfName = ParamUtil.getString(actionRequest, ECRFUserCRFAttributes.CRF_NAME);
 		String crfVersion = ParamUtil.getString(actionRequest, ECRFUserCRFAttributes.CRF_VERSION);
-				
+		int defaultUILayout = ParamUtil.getInteger(actionRequest, ECRFUserCRFAttributes.DEFAULT_UI_LAYOUT);
+		
 		ServiceContext dtsc = ServiceContextFactory.getInstance(DataType.class.getName(), actionRequest);
 		ServiceContext crfsc = ServiceContextFactory.getInstance(CRF.class.getName(), actionRequest);
 		ServiceContext crfSubjectSC = ServiceContextFactory.getInstance(CRFSubject.class.getName(), actionRequest);
@@ -90,7 +91,7 @@ public class UpdateCRFActionCommand extends BaseMVCActionCommand {
 		for(CRFResearcher crfResearcher : crfResearcherList) {
 			_log.info(crfResearcher.toString());
 		}
-				
+		
 		int crfStatus = CRFStatus.IN_PROGRESS.getNum();
 		
 		Calendar applyDateCal = Calendar.getInstance();
@@ -102,6 +103,7 @@ public class UpdateCRFActionCommand extends BaseMVCActionCommand {
 			crf = _crfLocalService.addCRF(
 					crfName, crfVersion,
 					crfTitleMap, descriptionMap,
+					defaultUILayout,
 					applyDateCal.get(Calendar.YEAR), applyDateCal.get(Calendar.MONTH), applyDateCal.get(Calendar.DAY_OF_MONTH),
 					crfStatus, crfsc, dtsc);									
 		} else {
@@ -109,6 +111,7 @@ public class UpdateCRFActionCommand extends BaseMVCActionCommand {
 					crfId,
 					crfName, crfVersion,
 					crfTitleMap, descriptionMap,
+					defaultUILayout,
 					applyDateCal.get(Calendar.YEAR), applyDateCal.get(Calendar.MONTH), applyDateCal.get(Calendar.DAY_OF_MONTH),
 					crfStatus, crfsc, dtsc);
 		}

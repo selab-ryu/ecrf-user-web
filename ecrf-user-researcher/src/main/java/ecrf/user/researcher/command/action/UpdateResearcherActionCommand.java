@@ -51,8 +51,8 @@ import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserWebKeys;
-import ecrf.user.constants.ResearcherPosition;
 import ecrf.user.constants.attribute.ECRFUserResearcherAttributes;
+import ecrf.user.constants.type.ResearcherPosition;
 import ecrf.user.exception.NoSuchResearcherException;
 import ecrf.user.model.Researcher;
 import ecrf.user.service.ResearcherLocalService;
@@ -195,28 +195,28 @@ public class UpdateResearcherActionCommand extends BaseMVCActionCommand {
 			
 			_membershipRequestLocalService.addMembershipRequest(researcherUser.getUserId(), themeDisplay.getScopeGroupId(), "Add Researcher to Site Membership", membershipServiceContext);
 			
-			if(researcher.getPosition().equals(ResearcherPosition.PI.getLower())) {
-				Role role = null;
-				
-				try {
-					role = _roleLocalService.getRole(company.getCompanyId(), "Site PI");
-					_log.info(role.toXmlString());
-					
-					UserGroupRole userGroupRole = UserGroupRoleLocalServiceUtil.createUserGroupRole(new UserGroupRolePK());
-					userGroupRole.setUserId(researcherUser.getUserId());
-					userGroupRole.setGroupId(themeDisplay.getScopeGroupId());
-					userGroupRole.setRoleId(role.getRoleId());
-					
-					if(!_userGroupRoleLocalService.hasUserGroupRole(userGroupRole.getUserId(), userGroupRole.getGroupId(), userGroupRole.getRoleId())) {
-						_userGroupRoleLocalService.addUserGroupRole(userGroupRole);
-					}
-				} catch (Exception e) {
-					if(e instanceof NoSuchRoleException) {
-						 // create new role and add UserGroupRole
-					}
-					_log.error(e.getMessage());
-				}
-			}
+//			if(researcher.getPosition().equals(ResearcherPosition.PI.getLower())) {
+//				Role role = null;
+//				
+//				try {
+//					role = _roleLocalService.getRole(company.getCompanyId(), "Site PI");
+//					_log.info(role.toXmlString());
+//					
+//					UserGroupRole userGroupRole = UserGroupRoleLocalServiceUtil.createUserGroupRole(new UserGroupRolePK());
+//					userGroupRole.setUserId(researcherUser.getUserId());
+//					userGroupRole.setGroupId(themeDisplay.getScopeGroupId());
+//					userGroupRole.setRoleId(role.getRoleId());
+//					
+//					if(!_userGroupRoleLocalService.hasUserGroupRole(userGroupRole.getUserId(), userGroupRole.getGroupId(), userGroupRole.getRoleId())) {
+//						_userGroupRoleLocalService.addUserGroupRole(userGroupRole);
+//					}
+//				} catch (Exception e) {
+//					if(e instanceof NoSuchRoleException) {
+//						 // create new role and add UserGroupRole
+//					}
+//					_log.error(e.getMessage());
+//				}
+//			}
 		} else {
 			_log.error("user is null");
 		}

@@ -227,9 +227,12 @@ if(isSearch) {
 				/>
 				
 				<%
-					
 					boolean hasCRFPermission = CRFResearcherLocalServiceUtil.isResearcherInCRF(crf.getCrfId(), user.getUserId());
-					if(isAdmin || isPI) hasCRFPermission = true;
+					if(isAdmin) hasCRFPermission = true;
+					if(CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ALL_UPDATE_CRF)) hasCRFPermission = true;
+					
+					boolean hasUpdatePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF);
+					boolean hasDeletePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_CRF);
 				%>
 				
 				<liferay-ui:search-container-column-text
@@ -241,7 +244,7 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<aui:button disabled="<%=hasCRFPermission ? false : true %>" name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateCRFURL %>"></aui:button>
+					<aui:button disabled="<%=(hasCRFPermission || hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateCRFURL %>"></aui:button>
  				</liferay-ui:search-container-column-text>
 				
 				
@@ -252,7 +255,7 @@ if(isSearch) {
 						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crf.getCrfId()) %>" />
 					</portlet:actionURL>
 													
-					<aui:button disabled="<%=hasCRFPermission ? false : true %>" name="delete" type="button" value="ecrf-user.button.delete" cssClass="small-btn delete-btn" onClick="<%=deleteCRFURL %>"></aui:button>
+					<aui:button disabled="<%=(hasCRFPermission || hasDeletePermission) ? false : true %>" name="delete" type="button" value="ecrf-user.button.delete" cssClass="small-btn delete-btn" onClick="<%=deleteCRFURL %>"></aui:button>
 					
  				</liferay-ui:search-container-column-text>
 								

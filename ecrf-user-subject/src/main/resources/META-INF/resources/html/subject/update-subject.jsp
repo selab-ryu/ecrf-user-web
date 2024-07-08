@@ -290,9 +290,28 @@ if(isUpdate) {
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="mar0 marL10">
-						<aui:button type="button" name="save" cssClass="" value="ecrf-user.button.save"></aui:button>
-						<aui:button type="button" name="delete" cssClass="<%=isUpdate ? StringPool.BLANK : "hide" %>" value="ecrf-user.button.delete" onClick="<%=deleteSubjectURL %>"></aui:button>
-						<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=updateListURL %>"></aui:button>
+						<c:choose>
+						<c:when test="<%=isUpdate %>">
+						
+						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_SUBJECT) %>">
+							<aui:button type="button" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.update"></aui:button>
+						</c:if>
+						
+						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_SUBJECT) %>">
+							<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete" onClick="<%=deleteSubjectURL %>"></aui:button>
+						</c:if>
+						
+						</c:when>
+						<c:otherwise>
+						
+						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
+							<aui:button type="button" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.add"></aui:button>
+						</c:if>
+						
+						</c:otherwise>
+						</c:choose>
+								
+						<aui:button type="button" name="cancel" cssClass="cancel-btn medium-btn radius-btn" value="ecrf-user.button.cancel" onClick="<%=updateListURL %>"></aui:button>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>

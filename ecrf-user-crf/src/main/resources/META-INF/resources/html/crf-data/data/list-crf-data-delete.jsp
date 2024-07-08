@@ -326,8 +326,6 @@ String progressPercentage = "0%";
 			
 			<%
 				String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s')", subject.getSubjectId(), crfId, 2, updatePermission, themeDisplay.getPortletDisplay().getId());
-			
-				
 			%>
 			
 			<liferay-ui:search-container-column-text 

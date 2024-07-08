@@ -73,7 +73,7 @@ if(isSearch) {
 	<%@ include file="../other/sidebar.jspf" %>
 	
 	<div class="page-content">
-		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-data.title.crf-data-history-list" />
+		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-data.title.data-history-list" />
 	
 		<aui:form action="${searchURL}" name="searchOptionFm" autocomplete="off" cssClass="marBr">
 			<aui:container cssClass="radius-shadow-container">
@@ -272,6 +272,7 @@ if(isSearch) {
 				/>				
 				
 				<%
+				/// TODO: change to use language key
 				String actionTypeStr = "";
 				switch(history.getActionType()){
 					case 0:
@@ -303,23 +304,25 @@ if(isSearch) {
 					value="<%=Validator.isNull(history.getModifiedDate()) ? "-" : sdf.format(history.getModifiedDate()) %>"
 				/>
 				
-				<c:if test="<%=updatePermission %>">
-				
 				<portlet:renderURL var="viewHistoryURL">
 					<portlet:param name="<%=ECRFUserCRFDataAttributes.HISTORY_ID %>" value="<%=String.valueOf(history.getHistoryId()) %>" />
 					<portlet:param name="<%=ECRFUserCRFDataAttributes.SUBJECT_ID %>" value="<%=String.valueOf(history.getSubjectId()) %>" />
 					<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(history.getCrfId()) %>" />			
-					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=updatePermission ? ECRFUserMVCCommand.RENDER_VIEW_CRF_DATA_HISTORY : "" %>" />
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_CRF_DATA_HISTORY%>" />
 					<portlet:param name="<%=WebKeys.REDIRECT%>" value="<%=Validator.isNull(portletURL) ? currentURL : portletURL.toString() %>" />
 				</portlet:renderURL>
 				
+				<%
+					boolean hasViewHistoryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY);
+				%>
+				
 				<liferay-ui:search-container-column-text 
-					name="sx.crf.history.view"
+					name="ecrf-user.list.view"
 					cssClass="min-width-80"
 				>
-					<aui:button name="view" type="button" value="sx.crf.history.view" cssClass="edit-btn small-btn" onClick="<%=viewHistoryURL %>"></aui:button>
+					<aui:button name="view" type="button" value="ecrf-user.button.view" cssClass="edit-btn small-btn" onClick="<%=viewHistoryURL %>" disabled="<%=hasViewHistoryPermission ? false : true %>"></aui:button>
 				</liferay-ui:search-container-column-text>
-				</c:if>
+				
 			</liferay-ui:search-container-row>
 	
 			<liferay-ui:search-iterator

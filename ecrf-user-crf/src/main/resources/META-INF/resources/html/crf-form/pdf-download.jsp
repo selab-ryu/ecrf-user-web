@@ -6,6 +6,8 @@
     String json = DataTypeLocalServiceUtil.getDataTypeStructure(dataTypeId);
     
     _log.info(json);
+    
+    boolean hasDownloadPermisson = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_PDF);
 %>
 
 <div class="ecrf-user-crf-data ecrf-user">
@@ -18,7 +20,8 @@
 		<aui:container cssClass="radius-shadow-container">
 			<div id ="pdfCanvas">
 			</div>
-			<button type="button" class="add-btn medium-btn radius-btn" id= "savePdfBtn">PDF download</button>
+					
+			<aui:button type="button" class="add-btn medium-btn radius-btn" id="savePdfBtn" value="ecrf-user.button.download" disabled="<%=hasDownloadPermisson ? false : true %>"></aui:button>
         </aui:container>
 	</div>
 </div>

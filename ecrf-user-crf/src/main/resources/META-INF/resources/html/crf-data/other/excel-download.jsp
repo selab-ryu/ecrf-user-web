@@ -60,6 +60,8 @@
 			searchTermName.add(str_ep_final);
 		}
 	}
+	
+	boolean hasDownloadExcelPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL);
 %>
 
 <style>
@@ -405,15 +407,16 @@
         }
         ContentText += '<br>';
 
+        // move to html tag
         // xlsx Name Input Window
-        ContentText += '<input id = "xlsx_name" placeholder = "FileName">.xlsx &nbsp</input>';
-
+        ContentText += '<input id="xlsx_name" placeholder="FileName">.xlsx &nbsp</input>';
         // xlsx Output Button
-        ContentText += '<button id = "btn_1">Export xlsx</button>';
+        ContentText += '<button id="btn_1" <%=hasDownloadExcelPermission ? "" : "disabled"%> >Export xlsx</button>';
 		
         // Insert the UI to be printed so far into the text.
        	$(document).ready(function(){
         	document.getElementById("searchText").innerHTML = ContentText;
+        	
         	for(var i = 0; i < inspectionData.length; i++){
         		if(inspectionData[i].termType === "List"){
         			var temp = document.getElementsByName(inspectionData[i].termName);

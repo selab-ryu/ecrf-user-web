@@ -242,7 +242,9 @@ _log.info("url : " + url.toString());
 		<c:when test="<%=updateLock %>">
 		<aui:row>
 			<aui:col cssClass="center">
+				<span>
 				<liferay-ui:message key="ecrf-user.crf-data.db-lock" />
+				</span>
 			</aui:col>
 		</aui:row>
 		</c:when>

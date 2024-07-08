@@ -15,7 +15,7 @@ import java.util.Locale;
 
 import javax.portlet.RenderRequest;
 
-import ecrf.user.constants.Gender;
+import ecrf.user.constants.type.Gender;
 import ecrf.user.model.Researcher;
 
 public class SearchUtil {

@@ -1,4 +1,4 @@
-<%@ page import="ecrf.user.constants.ExperimentalGroupType"%>
+<%@ page import="ecrf.user.constants.type.ExperimentalGroupType"%>
 <%@ page import="ecrf.user.constants.attribute.ECRFUserExpGroupAttributes"%>
 <%@ include file="../../init.jsp" %>
 
@@ -17,9 +17,13 @@ long expGroupId = ParamUtil.getLong(renderRequest, ECRFUserExpGroupAttributes.EX
 
 if(expGroupId > 0) {
 	isUpdate = true;
-	
 	expGroup = ExperimentalGroupLocalServiceUtil.getExperimentalGroup(expGroupId);
 }
+
+boolean hasAddPermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_EXP_GROUP);
+boolean hasUpdatePermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_EXP_GROUP);
+boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_EXP_GROUP);
+
 %>
 
 <portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_ADD_EXP_GROUP%>" var="addExpGroupURL" >
@@ -37,7 +41,6 @@ if(expGroupId > 0) {
 
 <portlet:renderURL var="listExpGroupURL" >
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_LIST_EXP_GROUP%>" />
-	<portlet:param name="<%=WebKeys.REDIRECT%>" value="<%=currentURL%>" />
 </portlet:renderURL>
 
 <div class="ecrf-user">
@@ -133,16 +136,24 @@ if(expGroupId > 0) {
 				</aui:row>
 			
 				<aui:button-row>
+				
 					<c:if test="<%=!isUpdate %>">
-					<aui:button type="submit" name="add" value="ecrf-user.button.add" />
+					<c:if test="<%=hasAddPermission %>">
+					<aui:button type="submit" name="add" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn"/>
+					</c:if>
 					</c:if>
 					
 					<c:if test="<%=isUpdate %>">
-					<aui:button type="submit" name="update" value="ecrf-user.button.update" />
-					<aui:button name="delete" value="ecrf-user.button.delete" onClick="<%=deleteExpGroupURL %>" />
+					<c:if test="<%=hasUpdatePermission %>">
+					<aui:button type="submit" name="update" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn"/>
 					</c:if>
 					
-					<aui:button name="cancel" value="ecrf-user.button.cancel" onClick="<%=listExpGroupURL %>" />
+					<c:if test="<%=hasDeletePermission %>">
+					<aui:button name="delete" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteExpGroupURL %>" />
+					</c:if>
+					</c:if>
+					
+					<aui:button name="cancel" value="ecrf-user.button.cancel" cssClass="cancel-btn medium-btn radius-btn" onClick="<%=listExpGroupURL %>" />
 				</aui:button-row>
 			
 			</aui:container>
