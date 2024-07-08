@@ -87,7 +87,7 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		int birthYear = cal.get(Calendar.YEAR);
 		int birthMonth = cal.get(Calendar.MONTH);
 		int birthDay = cal.get(Calendar.DATE);
-		
+		String lunarBirth = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.LUNARBIRTH);
 		int gender = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.GENDER);
 		String address = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.ADDRESS);
 		String phone = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.PHONE);
@@ -102,7 +102,7 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		try {
 			subject = _subjectLocalService.addSubject(
 					name, 
-					birthYear, birthMonth, birthDay, 
+					birthYear, birthMonth, birthDay, lunarBirth,
 					gender, phone, phone2, 
 					address, serialId, hospitalCode,
 					expGroupId,
@@ -134,7 +134,8 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 		int birthYear = cal.get(Calendar.YEAR);
 		int birthMonth = cal.get(Calendar.MONTH);
 		int birthDay = cal.get(Calendar.DATE);
-		
+		String lunarBirth = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.LUNARBIRTH);
+
 		int gender = ParamUtil.getInteger(actionRequest, ECRFUserSubjectAttributes.GENDER);
 		String address = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.ADDRESS);
 		String phone = ParamUtil.getString(actionRequest, ECRFUserSubjectAttributes.PHONE);
@@ -150,7 +151,7 @@ public class UpdateSubjectActionCommand extends BaseMVCActionCommand {
 			
 			subject = _subjectLocalService.updateSubject(
 					subjectId, name, 
-					birthYear, birthMonth, birthDay, 
+					birthYear, birthMonth, birthDay, lunarBirth,
 					gender, phone, phone2, 
 					address, serialId, hospitalCode,
 					expGroupId,

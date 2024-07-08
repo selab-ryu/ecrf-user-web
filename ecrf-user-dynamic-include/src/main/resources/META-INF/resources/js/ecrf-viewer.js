@@ -4,6 +4,7 @@ let ECRFViewer = function(){
 		constructor(DataStructure, align, structuredData){
 			var result = new Object();
 			renderUtil.align = align;
+			autoCalUtil.crf = DataStructure;
 			console.log("sd data", structuredData);
 			if(structuredData){
 				renderUtil.structuredData = structuredData;
@@ -43,11 +44,28 @@ let ECRFViewer = function(){
             			renderUtil.activateTerms(eventTerm);
             		}
             		result[eventTerm.termName.toString()] = eventTerm.value;
+            		let autoTerm = autoCalUtil.checkAutoCal(eventTerm);
             		event.dataPacket.result = result;
             	}
             });
         }
 	};
+	
+	let autoCalUtil = {
+		checkAutoCal : function(term){
+			if(this.crf){				
+				switch(this.crf.dataTypeName){
+					case "er_crf":
+						console.log("ER CRF Auto Calculation Running");
+						break; 
+					case "excercise_crf":
+						console.log("Exercise CRF Auto Calculation Running");
+						break;
+				}
+				 
+			}
+		}
+	}
 	
     let renderUtil = {
         renderCanvas : function(terms){
@@ -70,6 +88,10 @@ let ECRFViewer = function(){
 
         buildGroupTerm : function(terms, term){
         	let displayName = term.displayName.localizedMap.en_US;
+        	let $GroupOuterDiv = $('<div>');
+        	$GroupOuterDiv.prop({
+        		id:term.termName + "_outerDiv"
+        	});
         	let $accordionTab = $('<div class="card-horizontal main-content-card" style="min-height:0px;">');
 			let $groupBody = $('<div id="'+ term.termName +'">');
 			let $groupName = $('<h3>').text(displayName);
@@ -101,7 +123,8 @@ let ECRFViewer = function(){
 					ui.newPanel.css('height', 'auto');
 				}
             });
-			return $accordionTab;
+			$GroupOuterDiv.append($accordionTab);
+			return $GroupOuterDiv;
         },
         
         buildSubGroupTerm : function(terms, term){
@@ -803,6 +826,7 @@ let ECRFViewer = function(){
 
     return {
         Viewer : Viewer,
-        renderUtil : renderUtil
+        renderUtil : renderUtil,
+        autoCalUtil : autoCalUtil
     }
 };
