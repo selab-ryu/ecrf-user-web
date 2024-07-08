@@ -89,7 +89,7 @@
 <%@ page import="ecrf.user.researcher.security.permission.resource.ResearcherPermission" %>
 <%@ page import="ecrf.user.researcher.security.permission.resource.ResearcherModelPermission" %>
 
-<%@ page import="ecrf.user.constants.ResearcherPosition"%>
+<%@ page import="ecrf.user.constants.type.ResearcherPosition"%>
  
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
@@ -98,20 +98,4 @@
 	String currentURL = themeDisplay.getURLCurrent();
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
 	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
-	
-	boolean updatePermission = true;
-	boolean isAdmin = false;
-	boolean isPI = false;
-	
-	if(ResearcherLocalServiceUtil.hasPIPermission(user.getUserId())) isPI = true;
-	
-	//check user roles
-	if(user != null) {
-		List<Role> roleList = user.getRoles();
-		for(int i=0; i<roleList.size(); i++) {
-			Role role = roleList.get(i);
-			if(role.getName().equals("Guest")) updatePermission = false;
-			if(role.getName().equals("Administrator")) isAdmin = true;
-		}
-	}
 %>

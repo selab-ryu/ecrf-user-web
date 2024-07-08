@@ -30,7 +30,6 @@ import javax.portlet.PortletURL;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import ecrf.user.constants.CRFStatus;
 import ecrf.user.constants.ECRFUserConstants;
 import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
@@ -38,6 +37,7 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserUtil;
 import ecrf.user.constants.ECRFUserWebKeys;
 import ecrf.user.constants.attribute.ECRFUserCRFAttributes;
+import ecrf.user.constants.type.CRFStatus;
 import ecrf.user.model.CRF;
 import ecrf.user.model.CRFSubject;
 import ecrf.user.model.custom.CRFSubjectInfo;

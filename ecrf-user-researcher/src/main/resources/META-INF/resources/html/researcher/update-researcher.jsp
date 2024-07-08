@@ -1,4 +1,5 @@
-<%@page import="ecrf.user.constants.ResearcherPosition"%>
+<%@ page import="ecrf.user.constants.ECRFUserActionKeys" %>
+<%@ page import="ecrf.user.constants.type.ResearcherPosition" %>
 <%@ page import="com.liferay.portal.kernel.exception.UserEmailAddressException" %>
 <%@ page import="com.liferay.portal.kernel.exception.UserScreenNameException"%>
 <%@ page import="com.liferay.portal.kernel.exception.GroupFriendlyURLException"%>
@@ -85,6 +86,10 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 	<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcherId) %>" />
 </portlet:actionURL>
 
+<portlet:renderURL var="listResearcherURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_RESEARCHER %>" />	
+</portlet:renderURL>
+
 <liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeDuplicate.class %>" focusField="emailAddress" message="the-email-address-you-requested-is-already-taken" />
 <liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeNull.class %>" focusField="emailAddress" message="please-enter-an-email-address" />
 <liferay-ui:error exception="<%= UserEmailAddressException.MustNotBePOP3User.class %>" focusField="emailAddress" message="the-email-address-you-requested-is-reserved" />
@@ -119,7 +124,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 	<div class="page-content">
 	</c:if>
 
-	<liferay-ui:header backURL="<%=backURL %>" title="<%=headerTitle %>" />
+	<liferay-ui:header backURL="<%=listResearcherURL %>" title="<%=headerTitle %>" />
 	
 	<aui:form name="updateResearhcerFm" action="<%=isUpdate ? updateResearcherURL : addResearcherURL %>" method="post" autocomplete="off">
 	<aui:container cssClass="radius-shadow-container">	
@@ -405,9 +410,29 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 		<aui:row>
 			<aui:col md="12">
 				<aui:button-row>
-					<aui:button type="submit" name="save" cssClass="" value="ecrf-user.button.save"></aui:button>
-					<aui:button type="button" name="delete" cssClass="<%=isUpdate ? StringPool.BLANK : "hide" %>" value="ecrf-user.button.delete" onClick="<%=deleteResearcherURL %>"></aui:button>
-					<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=backURL %>"></aui:button>
+				
+					<c:choose>
+					<c:when test="<%=isUpdate %>">
+					
+					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) %>">
+					<aui:button type="submit" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.update" ></aui:button>
+					</c:if>
+					
+					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_RESEARCHER) %>">
+					<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete"  onClick="<%=deleteResearcherURL %>"></aui:button>
+					</c:if>
+					
+					</c:when>
+					<c:otherwise>
+					
+					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
+					<aui:button type="submit" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.add" ></aui:button>
+					</c:if>
+					
+					</c:otherwise>
+					</c:choose>			
+							
+					<aui:button type="button" name="cancel" cssClass="cancel-btn medium-btn radius-btn" value="ecrf-user.button.cancel" onClick="<%=listResearcherURL %>"></aui:button>
 				</aui:button-row>
 			</aui:col>
 		</aui:row>

@@ -1,7 +1,8 @@
-<%@page import="ecrf.user.constants.ResearcherPosition"%>
+<%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
+<%@page import="ecrf.user.constants.type.ResearcherPosition"%>
 <%@ page import="com.liferay.portal.kernel.portlet.PortletURLUtil"%>
 <%@ page import="ecrf.user.researcher.util.SearchUtil"%>
-<%@ page import="ecrf.user.constants.Gender"%>
+<%@ page import="ecrf.user.constants.type.Gender"%>
 <%@ page import="ecrf.user.constants.attribute.ECRFUserSubjectAttributes"%>
 <%@ page import="ecrf.user.constants.attribute.ECRFUserResearcherAttributes"%>
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
@@ -67,7 +68,7 @@ if(isSearch) {
 </portlet:renderURL>
 
 <portlet:renderURL var="clearSearchURL">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SUBJECT %>" />	
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_RESEARCHER %>" />	
 </portlet:renderURL>
 
 <portlet:renderURL var="addResearcherURL">
@@ -240,6 +241,10 @@ if(isSearch) {
 					value="<%=Validator.isNull(researcherUser.getScreenName()) ? "-" : researcherUser.getScreenName() %>"
 				/>
 				
+				<%
+				boolean hasViewPermission = ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_RESEARCHER);
+				%>
+				
 				<liferay-ui:search-container-column-text
 					href="<%=rowURL.toString() %>"
 					name="ecrf-user.list.name"
@@ -262,9 +267,11 @@ if(isSearch) {
 				/>
 				
 				<%
-				boolean hasUpdatePermission = (isAdmin || isPI);
+				// it make error ?
+				boolean hasUpdatePermission = ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER);
 				if(user.getUserId() == researcher.getResearcherUserId()) hasUpdatePermission = true;
 				%>
+				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.update"
 				>

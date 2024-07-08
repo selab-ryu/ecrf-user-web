@@ -309,27 +309,19 @@ _log.info("url : " + baseURL.toString());
 				name="ecrf-user.list.progress"
 			>
 				<img src="<%= progressSrc%>" width="50%" height="auto"/>			
-			</liferay-ui:search-container-column-text>
-			<%
-				String CRFBtnClass = "";
-				if(hasCRF){
-					CRFBtnClass = "ci-btn small-btn";
-				}else{
-					CRFBtnClass = "none-btn small-btn";
-				}
-			%>
-			
+			</liferay-ui:search-container-column-text>			
 			<%
 				boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, rowSubjectId);
 				_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
 				String lockBtnKey = "";
-				String lockCss = "";
+				String lockClass = "";
+				
 				if(updateLock) {
 					lockBtnKey = "ecrf-user.button.db-unlock";
-					lockCss = "small-btn none-btn";
+					lockClass = "small-btn none-btn";
 				} else {
 					lockBtnKey = "ecrf-user.button.db-lock";
-					lockCss = "small-btn emr-btn";
+					lockClass = "small-btn emr-btn";
 				}
 			%>
 			
@@ -345,35 +337,35 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
 			</portlet:actionURL>
 			
-			<aui:button name="dbLock" type="button" value="<%=lockBtnKey%>" cssClass="<%=lockCss %>" onClick="<%=changeUpdateLock %>" ></aui:button>
+			<aui:button name="dbLock" type="button" value="<%=lockBtnKey%>" cssClass="<%=lockClass %>" onClick="<%=changeUpdateLock %>" ></aui:button>
 			</liferay-ui:search-container-column-text>
 			
 			<!-- DB Lock -->
-			
-			<c:if test="<%=updatePermission %>">
-			
+						
 			<!-- Data Update -->
+			<%
+				String CRFUpdateBtnClass = "";
+				if(hasCRF){
+					CRFUpdateBtnClass = "ci-btn small-btn";
+				}else{
+					CRFUpdateBtnClass = "none-btn small-btn";
+				}
+				
+				if(updateLock) {
+					CRFUpdateBtnClass = "none-btn small-btn";
+				}
+			%>
+			
 			<liferay-ui:search-container-column-text 
 				name="ecrf-user.list.crf-data"
 				cssClass="min-width-80"
 			>
 			
 			<%
-				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s', '%s')", rowSubjectId, crfId, 0, updatePermission, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 0, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 			%>
 			
-				<c:choose>
-				<c:when test="<%=updateLock %>">
-				
-        <aui:button name="updateCRF" type="button" value="<%=hasCRF ? "ecrf-user.button.update" : "ecrf-user.button.add" %>" cssClass="<%=lockCss %>" disabled="true"></aui:button>			
-          
-				</c:when>
-				<c:otherwise>
-				
-				<aui:button name="updateCRF" type="button" value="<%=hasCRF ? "ecrf-user.button.update" : "ecrf-user.button.add" %>" cssClass="<%=CRFBtnClass %>" onClick="<%=updateFunctionCallStr%>"></aui:button>
-				
-				</c:otherwise>
-				</c:choose>
+				<aui:button name="updateCRF" type="button" value="<%=hasCRF ? "ecrf-user.button.update" : "ecrf-user.button.add" %>" cssClass="<%=CRFUpdateBtnClass %>" onClick="<%=updateFunctionCallStr%>" disabled="<%=updateLock ? true : false %>"></aui:button>
 				
 			</liferay-ui:search-container-column-text>
 			
@@ -384,6 +376,10 @@ _log.info("url : " + baseURL.toString());
 				}else{
 					HistoryBtnClass = "none-btn small-btn";
 				}
+			
+				String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 1, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+				
+				boolean hasViewAuditPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_AUDIT);
 			%>
 			
 			<!-- Audit trail button -->
@@ -392,14 +388,35 @@ _log.info("url : " + baseURL.toString());
 				cssClass="min-width-80"
 			>
 			
-			<%
-				String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, %b, '%s', '%s')", rowSubjectId, crfId, 1, updatePermission, themeDisplay.getPortletDisplay().getId(), baseURL.toString());								
-			%>
-			
-				<aui:button name="auditCRF" type="button" value="<%=updatePermission ? "ecrf-user.list.audit-trail" : ""  %>" cssClass="<%=HistoryBtnClass %>" onClick="<%=auditFunctionCallStr%>"></aui:button>
+				<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view" : "ecrf-user.button.audit-trail" %>" cssClass="<%=HistoryBtnClass %>" onClick="<%=auditFunctionCallStr%>" disabled="<%=hasViewAuditPermission ? false : true %>"></aui:button>
 			</liferay-ui:search-container-column-text>
 			
-			</c:if>
+			
+			
+			
+			<%
+				String CRFDeleteBtnClass = "";
+			
+				if(hasCRF){
+					CRFDeleteBtnClass = "delete-btn small-btn";
+				}else{
+					CRFDeleteBtnClass = "none-btn small-btn";
+				}
+				
+				if(updateLock) {
+					CRFDeleteBtnClass = "none-btn small-btn";
+				}
+				
+				String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 2, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+			%>
+			
+			<liferay-ui:search-container-column-text 
+				name="ecrf-user.list.delete"
+				cssClass="min-width-80"
+			>
+				<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="<%=CRFDeleteBtnClass %>" onClick="<%=deleteFunctionCallStr%>" disabled="<%=updateLock ? true : false %>"></aui:button>
+
+			</liferay-ui:search-container-column-text>
 			
 			</liferay-ui:search-container-row>
 			

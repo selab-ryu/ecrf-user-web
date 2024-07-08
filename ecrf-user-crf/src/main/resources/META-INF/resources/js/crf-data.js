@@ -1,50 +1,48 @@
-Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, hasPermission, portletId, baseURL) {
+Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portletId, baseURL) {
 	console.log("function activate");
 	
-	if(hasPermission){
-		var renderURL = Liferay.PortletURL.createRenderURL();
+	var renderURL = Liferay.PortletURL.createRenderURL();
 
-		// set default value
-		renderURL.setPortletId(portletId);
-		renderURL.setPortletMode("edit");
-	    renderURL.setWindowState("pop_up");
-	    
-	    // set url param
-		renderURL.setParameter("subjectId", sId);
-		renderURL.setParameter("crfId", crfId);
-		renderURL.setParameter("baseURL", baseURL);
-		
-		// set dialog type value by type param 
-		if(type === 0) {
-			renderURL.setParameter("isAudit", false);
-			renderURL.setParameter("isDelete", false);
-		} else if (type === 1) {
-			renderURL.setParameter("isAudit", true);
-			renderURL.setParameter("isDelete", false);
-		} else if (type === 2) {
-			renderURL.setParameter("isAudit", false);
-			renderURL.setParameter("isDelete", true);
-		}
-		
-		// set render command
-		renderURL.setParameter("mvcRenderCommandName", "/render/crf-data/crf-data-selector");
-				
-		Liferay.Util.openWindow({
-			dialog: {
-				cache: false,
-				destroyOnClose: true,
-				centered: true,
-				constrain2view: true,
-				modal: true,
-				resizable: false,
-				height: 700,
-				width: 1000
-			},
-			id: '_' + portletId + '_multiCRFDialog',	// add _ as prefix/suffix to make portlet namespace
-			title: 'CRF Selector',
-			uri: renderURL.toString()
-		});
+	// set default value
+	renderURL.setPortletId(portletId);
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    
+    // set url param
+	renderURL.setParameter("subjectId", sId);
+	renderURL.setParameter("crfId", crfId);
+	renderURL.setParameter("baseURL", baseURL);
+	
+	// set dialog type value by type param 
+	if(type === 0) {
+		renderURL.setParameter("isAudit", false);
+		renderURL.setParameter("isDelete", false);
+	} else if (type === 1) {
+		renderURL.setParameter("isAudit", true);
+		renderURL.setParameter("isDelete", false);
+	} else if (type === 2) {
+		renderURL.setParameter("isAudit", false);
+		renderURL.setParameter("isDelete", true);
 	}
+	
+	// set render command
+	renderURL.setParameter("mvcRenderCommandName", "/render/crf-data/crf-data-selector");
+			
+	Liferay.Util.openWindow({
+		dialog: {
+			cache: false,
+			destroyOnClose: true,
+			centered: true,
+			constrain2view: true,
+			modal: true,
+			resizable: false,
+			height: 700,
+			width: 1000
+		},
+		id: '_' + portletId + '_multiCRFDialog',	// add _ as prefix/suffix to make portlet namespace
+		title: 'CRF Selector',
+		uri: renderURL.toString()
+	});
 	
 }, ['liferay-portlet-url']); 
 

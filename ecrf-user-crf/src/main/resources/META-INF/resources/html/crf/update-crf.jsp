@@ -1,3 +1,5 @@
+<%@page import="ecrf.user.constants.type.UILayout"%>
+<%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ include file="../init.jsp" %>
 
 <%!private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/update-crf_jsp");%>
@@ -129,6 +131,47 @@
 				</aui:col>
 			</aui:row>		
 			
+			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_DATA_UI) %>">
+			<aui:row>
+				<aui:col md="12">
+					<aui:field-wrapper
+						name="<%=ECRFUserCRFAttributes.DEFAULT_UI_LAYOUT%>"
+						label="ecrf-user.crf.default-ui-layout"
+						helpMessage="ecrf-user.crf.default-ui-layout.help"
+						cssClass="marBrh"
+					>
+						<aui:fieldset cssClass="radio-one-line radio-align">
+							<aui:input 
+								type="radio" 
+								name="<%=ECRFUserCRFAttributes.DEFAULT_UI_LAYOUT%>" 
+								cssClass="search-input"
+								label="ecrf-user.crf.default-ui-layout.table" 
+								value="0"
+								checked="<%=Validator.isNull(crf) ? false : ((UILayout.TABLE.getNum() == crf.getDefaultUILayout()) ? true : false) %>"
+								/>
+							<aui:input 
+								type="radio" 
+								name="<%=ECRFUserCRFAttributes.DEFAULT_UI_LAYOUT%>" 
+								cssClass="search-input"
+								label="ecrf-user.crf.default-ui-layout.vertical" 
+								value="1"
+								checked="<%=Validator.isNull(crf) ? false : ((UILayout.VERTICAL.getNum() == crf.getDefaultUILayout()) ? true : false) %>"
+								/> 
+							<aui:input 
+								type="radio" 
+								name="<%=ECRFUserCRFAttributes.DEFAULT_UI_LAYOUT%>" 
+								cssClass="search-input"
+								label="ecrf-user.crf.default-ui-layout.station-x" 
+								value="2"
+								checked="<%=Validator.isNull(crf) ? false : ((UILayout.STATIONX.getNum() == crf.getDefaultUILayout()) ? true : false) %>"
+								/>
+						</aui:fieldset>
+					</aui:field-wrapper>
+				</aui:col>
+			</aui:row>
+			</c:if>
+			
+			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_RESEARCHER) %>">
 			<aui:row>
 				<aui:col md="12" cssClass="sub-title-bottom-border marBr">
 					<span class="sub-title-span">
@@ -136,7 +179,7 @@
 					</span>
 				</aui:col>
 			</aui:row>
-						
+			
 			<aui:row>
 				<aui:col>
 					<table id="researcherList" style="width:100%" class="table table-striped table-bordered">
@@ -152,9 +195,10 @@
 					</table>
 				</aui:col>
 			</aui:row>
+			</c:if>
 			
+			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_SUBJECT) %>">
 			<!-- subject list -->
-			
 			<aui:row>
 				<aui:col md="12" cssClass="sub-title-bottom-border marBr">
 					<span class="sub-title-span">
@@ -179,6 +223,7 @@
 					</table>
 				</aui:col>
 			</aui:row>
+			</c:if>
 			
 			<aui:row>
 				<aui:col md="12" cssClass="sub-title-bottom-border marBr">
@@ -187,24 +232,30 @@
 			
 			<c:if test="<%=isUpdate %>">
 			<aui:button-row>
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_FORM) %>">
 				<portlet:renderURL var="moveCRFFormURL">
 					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_MANAGE_FORM %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
-												
+									
 				<aui:button type="button" value="ecrf-user.button.manage-crf-form" onClick="<%=moveCRFFormURL %>" />
+				</c:if>
 				
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA_LIST) %>">
 				<portlet:renderURL var="moveCRFDataURL">
 					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
-					<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA%>" />
+					<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA_UPDATE%>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 				
 				<aui:button type="button" value="ecrf-user.button.crf-data" onClick="<%=moveCRFDataURL %>" />
+				</c:if>
 				
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY_LIST) %>">
 				<portlet:renderURL var="moveCRFQueryURL">
 					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_QUERY %>" />
 					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
@@ -213,19 +264,32 @@
 				</portlet:renderURL>
 				
 				<aui:button type="button" value="ecrf-user.button.crf-query" onClick="<%=moveCRFQueryURL %>" />
-								
+				</c:if>
 			</aui:button-row>
 			</c:if>
 			
-			
 			<aui:button-row>
-				<aui:button type="button" name="saveBtn" value="Save" />
+				<c:choose>
+				<c:when test="<%=isUpdate %>">
 				
-				<c:if test="<%=isUpdate %>">
-				<aui:button value="Delete" onClick="<%=deleteCRFURL %>" />		
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF) %>">
+					<aui:button type="button" name="saveBtn" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.update"></aui:button>
 				</c:if>
+		
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_CRF) %>">
+					<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete" onClick="<%=deleteCRFURL %>"></aui:button>
+				</c:if>
+								
+				</c:when>
+				<c:otherwise>
+								
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
+					<aui:button type="button" name="saveBtn" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.add"></aui:button>
+				</c:if>	
 				
-				<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=listCRFURL %>"></aui:button>
+				</c:otherwise>
+				</c:choose>
+				<aui:button type="button" name="cancel" cssClass="cancel-btn medium-btn radius-btn"  value="ecrf-user.button.cancel" onClick="<%=listCRFURL %>"></aui:button>
 			</aui:button-row>
 			
 		</aui:container>
@@ -244,6 +308,7 @@ var crfSubjectInfoArr = [];
 var crfId = "<%=String.valueOf(crfId) %>";
 var dataTypeId = "<%=String.valueOf(dataTypeId) %>";
 
+// is need to move to crf-data.js?
 function manageResearcherPopup() {
 	var renderURL = Liferay.PortletURL.createRenderURL();
 	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
@@ -420,11 +485,16 @@ function(portletId, node) {
 
 function tableLoading() {
 	console.group("table load start");
-			
+	
+	var hasUpdateCRFResearcherPermission = <%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_RESEARCHER) %>;
+	var resarcherDomFirstLine = "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>";
+	if(hasUpdateCRFResearcherPermission) resarcherDomFirstLine = "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>";
+	
+	
 	researcherTable = new DataTable('#researcherList',{
 		lengthChange: false,
 		searching: false,
-		dom: "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+		dom: resarcherDomFirstLine +
 		"<'row'<'col-sm-12'tr>>" +
 		"<'row marBr'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 		buttons: [
@@ -459,8 +529,12 @@ function tableLoading() {
 	    columnDefs: [ { "defaultContent": "-", "targets": "_all" } ]
 	});
 	
+	var hasUpdateCRFSubjectPermission = <%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_SUBJECT) %>;
+	var subjectDomFirstLine = "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>";
+	if(hasUpdateCRFSubjectPermission) subjectDomFirstLine = "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>";
+	
 	subjectTable = $('#subjectList').DataTable({
-		dom: "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+		dom: subjectDomFirstLine +
 		"<'row'<'col-sm-12'tr>>" +
 		"<'row marBr'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
         buttons: [

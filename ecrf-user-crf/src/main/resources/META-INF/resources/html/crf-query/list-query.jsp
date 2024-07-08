@@ -1,7 +1,7 @@
-<%@page import="ecrf.user.service.CRFSubjectLocalServiceUtil"%>
-<%@page import="ecrf.user.service.SubjectLocalServiceUtil"%>
-<%@page import="ecrf.user.constants.attribute.ECRFUserCRFDataAttributes"%>	
 <%@ include file="../init.jsp" %>
+
+<%! private Log _log = LogFactoryUtil.getLog("html/crf-query/list-query.jsp"); %>
+
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 		
@@ -32,7 +32,7 @@
 	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </liferay-portlet:actionURL>
 
-<div class="ecrf-user ecrf-user-query SXCRFAutoquery">
+<div class="ecrf-user ecrf-user-query">
 
 	<%@ include file="sidebar.jspf" %>
 	
@@ -76,7 +76,7 @@
 					<aui:col md="4">
 						<aui:field-wrapper
 							name="queryComfirm"
-							label="SXcrfAutoquery.query.comfirm"
+							label="ecrf-user.crf-query.confirm"
 							helpMessage="SXcrfAutoquery.query.comfirm"
 							cssClass="marBrh"
 						>
@@ -239,6 +239,7 @@
 				
 				<%
 					boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, crfAutoquery.getSubjectId());
+					boolean hasUpdateQueryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_QUERY);
 				%>
 				
 				<liferay-ui:search-container-column-text
@@ -253,12 +254,11 @@
 					</c:when>
 					<c:otherwise>
 					
-					<aui:button name="updateQuery" type="button" value="SXcrfAutoquery.query.edit-btn" cssClass="edit-btn small-btn" onClick="<%=updateQueryURL%>"></aui:button>
+					<aui:button name="updateQuery" type="button" value="SXcrfAutoquery.query.edit-btn" cssClass="edit-btn small-btn" onClick="<%=updateQueryURL%>" disabled="<%=hasUpdateQueryPermission ? false : true %>"></aui:button>
 					
 					</c:otherwise>
 					</c:choose>
 				
-					
 				</liferay-ui:search-container-column-text>
 			
 			</liferay-ui:search-container-row>

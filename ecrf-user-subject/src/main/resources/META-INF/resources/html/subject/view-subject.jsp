@@ -241,7 +241,7 @@ _log.info("jsp variable loading end");
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="mar0 marL10">
-						<aui:button type="button" name="list" cssClass="" value="ecrf-user.button.list" onClick="<%=listSubjectURL %>"></aui:button>
+						<aui:button type="button" name="cancel" cssClass="cancel-btn medium-btn radius-btn" value="ecrf-user.button.list" onClick="<%=listSubjectURL %>"></aui:button>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>

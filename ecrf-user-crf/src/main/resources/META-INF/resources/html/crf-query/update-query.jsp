@@ -1,5 +1,7 @@
 <%@ include file="../init.jsp" %>
 
+<%! private Log _log = LogFactoryUtil.getLog("html/crf-query/update-query.jsp"); %>
+
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
@@ -9,14 +11,14 @@
 	String sId = (String)renderRequest.getAttribute("sId");
 	String value = (String)renderRequest.getAttribute("value");
 	
-	String menu = "query-add";
+	String menu = "add-crf-query";
 
 	Subject subject = null;
 	if(sId != null) {
 		isUpdate = true;
 		subject = (Subject)renderRequest.getAttribute("subject");
 		
-		menu = "update-query";
+		menu = "update-crf-query";
 	}
 
 	CRFAutoquery query = null;
@@ -24,8 +26,10 @@
 		query = (CRFAutoquery)renderRequest.getAttribute("query");
 	}
 	
-	//System.out.println("jsp : " + sd + " / " + subject + " / " + query);
-
+	
+	//_log.info("jsp : " + sd + " / " + subject + " / " + query);
+	
+	boolean hasValidateQueryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VALIDATE_CRF_QUERY));
 %>
 <liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_COMFIRM_CRF_QUERY%>" var="updateQueryURL">
 	<portlet:param name="sId" value="<%=String.valueOf(sId) %>" />
@@ -400,6 +404,8 @@
 							<aui:row>
 								<aui:col md="12">
 									<aui:button-row cssClass="marL10">
+										
+									
 										<aui:button type="button" name="save" value="<%=isUpdate ? "SxcrfForm.update.save-btn" : "SxcrfForm.update.add-btn" %>" cssClass="add-btn medium-btn radius-btn"></aui:button>
 										<aui:button type="button" name="cancel" value="<%=isUpdate ? "SxcrfForm.update.list-btn" : "SxcrfForm.update.cancel-btn" %>" cssClass="cancel-btn medium-btn radius-btn" onClick=""></aui:button>
 									</aui:button-row>

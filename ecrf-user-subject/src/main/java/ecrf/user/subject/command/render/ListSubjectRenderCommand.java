@@ -51,7 +51,7 @@ public class ListSubjectRenderCommand implements MVCRenderCommand {
 		} else if(cmd.equals(Constants.DELETE)) {
 			listPath = ECRFUserJspPaths.JSP_LIST_SUBJECT_DELETE;
 		} else {
-			listPath = ECRFUserJspPaths.JSP_LIST_SUBJECT;
+			listPath = ECRFUserJspPaths.JSP_LIST_SUBJECT_UPDATE;
 		}
 		
 		renderRequest.setAttribute(ECRFUserConstants.SUBJECT_LOCAL_SERVICE, _subjectLocalService);

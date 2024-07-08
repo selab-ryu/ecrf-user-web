@@ -5,103 +5,100 @@
 
 <portlet:renderURL var="moveAddCRFURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_ADD_CRF %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+</portlet:renderURL>
+
+<portlet:renderURL var="moveUpdateCRFURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_UPDATE_CRF %>" />
+	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
 
 
 <portlet:renderURL var="moveManageFormURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_MANAGE_FORM %>" />
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
 <portlet:renderURL var="moveCRFQueryListURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_QUERY %>" />
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 	<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
 <portlet:renderURL var="moveCRFDataListURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
-	<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA%>" />
-	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-</portlet:renderURL>
-
-<portlet:renderURL var="moveCRFDataUpdateListURL">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
 	<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA_UPDATE%>" />
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
-</portlet:renderURL>
-
-<portlet:renderURL var="moveCRFDataDeleteListURL">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
-	<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA_DELETE%>" />
-	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
 <portlet:renderURL var="moveCRFDataHistoryListURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA_HISTORY %>" />
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
 <portlet:renderURL var="moveExcelDownloadURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_CRF_DATA_EXCEL_DOWNLOAD %>" />
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
 <portlet:renderURL var="moveSearchCRFDataURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_SEARCH_CRF_DATA %>" />
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
 <div class="side-menu radius-shadow-container" style="text-align:center;">	
 	<!-- CRF Management -->
 	<div>
-		<aui:button cssClass="main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.crf" onClick="<%=updatePermission ? moveCRFListURL : "-" %>" />	
+		<aui:button cssClass="main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.crf" onClick="<%=moveCRFListURL %>" />	
 	</div>
-	<div>
-		<aui:button cssClass="sub-menu-bar active-sub-menu-bar" type="button" value="ecrf-user.menu.crf.list" onClick="<%=updatePermission ? moveCRFListURL : "-" %>" />
-	</div>
-	
-	<div>
-		<aui:button cssClass="sub-main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.crf-form" onClick="<%=updatePermission ? moveManageFormURL : "-" %>" />	
-	</div>
-	
-	<div>
-		<aui:button cssClass="sub-main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.crf-data" onClick="<%=updatePermission ? moveCRFDataListURL : "-" %>" />	
-	</div>
-	<div>
-		<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-list") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.list" onClick="<%=updatePermission ? moveCRFDataListURL : "-" %>"/>
-	</div>
-	<div>
-		<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-list-update") || menu.equals("update-crf-data") || menu.equals("add-crf-data") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.update" onClick="<%=updatePermission ? moveCRFDataUpdateListURL : "-" %>"/>
-	</div>
-	<div>
-		<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-list-delete") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.delete" onClick="<%=updatePermission ? moveCRFDataDeleteListURL : "-" %>"/>
-	</div>
-	<div>
-		<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-history") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.history" onClick="<%=updatePermission ? moveCRFDataHistoryListURL : "-" %>" />
-	</div>
-	<div>
-		<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-excel") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.excel" onClick="<%=updatePermission ? moveExcelDownloadURL : "-" %>" />
-	</div>
-	<div>
-		<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("search-crf-data") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.search-crf-data" onClick="<%=updatePermission ? moveSearchCRFDataURL : "-" %>" />
-	</div>
-	
-	<div>
-		<aui:button cssClass="sub-main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.crf-query" onClick="<%=updatePermission ? moveCRFQueryListURL : "-" %>" />	
-	</div>
-	
-	<div>
-		<aui:button cssClass="sub-menu-bar deactive-sub-menu-bar" type="button" value="ecrf-user.menu.crf.add" onClick="<%=updatePermission ? moveAddCRFURL : "-" %>" />
-	</div>
+		<div>
+			<aui:button cssClass="sub-menu-bar deactive-sub-menu-bar" type="button" value="ecrf-user.menu.crf.list" onClick="<%=moveCRFListURL %>" />
+		</div>
+		
+		<div>
+			<aui:button cssClass="sub-menu-bar active-sub-menu-bar" type="button" value="ecrf-user.menu.crf.update" onClick="<%=moveUpdateCRFURL %>" />
+		</div>
+		
+			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_FORM) %>">
+			<div>
+				<aui:button cssClass="sub-main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.crf-form" onClick="<%=moveManageFormURL %>" />	
+			</div>
+			</c:if>
+			
+			<div>
+				<aui:button cssClass="sub-main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.crf-data" onClick="<%=moveCRFDataListURL %>" />	
+			</div>
+				<div>
+					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-list") || menu.equals("add-crf-data") || menu.equals("update-crf-data") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.list" onClick="<%=moveCRFDataListURL %>"/>
+				</div>
+				
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY_LIST) %>">
+				<div>
+					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-history") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.history" onClick="<%=moveCRFDataHistoryListURL %>" />
+				</div>
+				</c:if>
+				
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_EXCEL_DOWNLOAD) %>">
+				<div>
+					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-excel") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.excel" onClick="<%=moveExcelDownloadURL %>" />
+				</div>
+				</c:if>
+				
+				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ADVANCED_SEARCH) %>">
+				<div>
+					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("search-crf-data") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.search-crf-data" onClick="<%=moveSearchCRFDataURL %>" />
+				</div>
+				</c:if>
+			
+			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY) %>">
+			<div>
+				<aui:button cssClass="sub-main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.crf-query" onClick="<%=moveCRFQueryListURL %>" />	
+			</div>
+			</c:if>
+		
+		<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
+		<div>
+			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("crf-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.add" onClick="<%=moveAddCRFURL %>" />
+		</div>
+		</c:if>
 	<!-- CRF Management -->
-	
 </div>

@@ -25,27 +25,14 @@ if(updatePermission && Validator.isNotNull(user)) {
 
 <div class="ecrf-user ecrf-user-dashboard">
 	
-<c:choose>
-<c:when test="<%=isPublic %>">
-	<div class="mar16px">
+<div class="mar16px">
 		<liferay-ui:header title="ecrf-user.dashboard.title.view-dashboard" />
 		
+		<!-- 
 		<c:if test="<%=isSiteMember %>">
 		<aui:button value="Move to Private Page" href="<%=curGroup.getDisplayURL(themeDisplay, true) %>" />
 		</c:if>
+		 -->
 	</div>
-</c:when>
-<c:otherwise>
-			
-	<%@ include file="sidebar.jspf" %>
-	
-	<div class="page-content">
-		<liferay-ui:header title="ecrf-user.dashboard.title.view-dashboard" />
-		<aui:button value="Move to Public Page" href="<%=curGroup.getDisplayURL(themeDisplay, false) %>" />
-	</div>
-	
-</c:otherwise>
-</c:choose>		
-	
 </div>		
 	

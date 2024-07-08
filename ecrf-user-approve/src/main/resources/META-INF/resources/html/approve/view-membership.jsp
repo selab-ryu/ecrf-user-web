@@ -1,4 +1,5 @@
-<%@page import="ecrf.user.constants.ResearcherPosition"%>
+<%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
+<%@page import="ecrf.user.constants.type.ResearcherPosition"%>
 <%@page import="com.liferay.portal.kernel.service.RoleLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.attribute.ECRFUserApproveAttibutes"%>
 <%@ include file="../init.jsp" %>
@@ -29,7 +30,17 @@ if(siteUsers.size() <= 0) {
 } else {
 	for(int i=0; i<siteUserCount; i++) {
 		User siteUser = siteUsers.get(i); 
-		_log.info("Site Member / " + "name : " + siteUser.getFullName() + " / " + "email : " + siteUser.getEmailAddress());
+		
+		String roleStr = "";
+		ArrayList<Role> roleList = new ArrayList<>();
+		roleList.addAll(siteUser.getRoles());
+		for(int j=0; j<roleList.size(); j++) {
+			Role role = roleList.get(j);
+			roleStr += role.getName();
+			if(j != roleList.size()) roleStr += " | ";
+		}
+		
+		_log.info("Site Member / " + "name : " + siteUser.getFullName() + " / " + "email : " + siteUser.getEmailAddress() + " / " + roleStr);
 	}	
 }
 
@@ -78,11 +89,11 @@ if(membershipRequestCount <= 0) {
 				
 				<liferay-ui:search-container-column-text
 					value="<%=String.valueOf(++membershipUserCount) %>"
-					cssClass="descriptive-index-col decriptive-col-center"
+					cssClass="descriptive-index-col descriptive-col-center"
 				/>
 				
 				<liferay-ui:search-container-column-text
-					cssClass="decriptive-col-center"
+					cssClass="descriptive-col-center"
 				>
 					<liferay-ui:user-portrait
 						userId="<%=siteUser.getUserId() %>"
@@ -104,7 +115,8 @@ if(membershipRequestCount <= 0) {
 				</liferay-ui:search-container-column-text>
 				
 				<%
-					// get researhcer role	
+					// get researhcer role
+					
 				%>
 				
 				<liferay-ui:search-container-column-text>
@@ -126,7 +138,7 @@ if(membershipRequestCount <= 0) {
 		</liferay-ui:search-container>
 		
 		<c:choose>
-		<c:when test="<%=(isAdmin || isPI) %>">	
+		<c:when test="<%=ApprovePermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ASSIGN_MEMBERS) %>">	
 		
 		<liferay-ui:header cssClass="marTr" title="ecrf-user.approve.title.view-membership-request" />
 		

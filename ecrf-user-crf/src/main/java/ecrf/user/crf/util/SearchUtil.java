@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import ecrf.user.constants.CRFStatus;
+import ecrf.user.constants.type.CRFStatus;
 import ecrf.user.model.CRF;
 import ecrf.user.model.Subject;
 import ecrf.user.service.CRFLocalServiceUtil;
