@@ -19,7 +19,7 @@ if(projectCount > 0) {
 	
 	_log.info("project id : " + projectId);
 	
-	//_log.info("project update : " + ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE));
+	_log.info("project update : " + ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE));
 }
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
