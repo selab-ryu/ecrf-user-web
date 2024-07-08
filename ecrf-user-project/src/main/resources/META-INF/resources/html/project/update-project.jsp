@@ -1,4 +1,4 @@
-
+<%@page import="ecrf.user.constants.ECRFUserUtil"%>
 <%@page import="com.liferay.portal.kernel.service.RoleLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Tuple"%>
 <%@page import="com.liferay.portal.kernel.service.UserGroupLocalServiceUtil"%>
@@ -18,12 +18,17 @@ long manageResearcherId = 0;
 
 String menu = "project-info";
 
-
 boolean isUpdate = false;
+
+String startDateStr = null;
+String endDateStr = null;
 
 if(projectId > 0) {
 	project = (Project)renderRequest.getAttribute(ECRFUserProjectAttributes.PROJECT);
 	isUpdate = true;
+	
+	startDateStr = ECRFUserUtil.getDateStr(project.getStartDate());
+	endDateStr = ECRFUserUtil.getDateStr(project.getEndDate());		
 }
 
 Date date = new Date();
@@ -71,7 +76,9 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 						name="<%=ECRFUserProjectAttributes.TITLE %>" 
 						label="ecrf.user.project.title"
 						cssClass="search-input" 
-						required="true" />
+						required="true" 
+						value="<%=Validator.isNull(project) ? StringPool.BLANK : project.getTitle() %>"
+						/>
 				</aui:col>
 			</aui:row>
 			<aui:row>
@@ -80,7 +87,9 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 						name="<%=ECRFUserProjectAttributes.SHORT_TITLE %>" 
 						label="ecrf.user.project.short-title"
 						cssClass="search-input" 
-						required="true" />
+						required="true"
+						value="<%=Validator.isNull(project) ? StringPool.BLANK : project.getShortTitle() %>" 
+						/>
 				</aui:col>
 			</aui:row>
 			<aui:row>
@@ -88,7 +97,9 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 					<aui:input 
 						name="<%=ECRFUserProjectAttributes.PURPOSE %>"
 						cssClass="search-input" 
-						label="ecrf.user.project.purpose" />
+						label="ecrf.user.project.purpose"
+						value="<%=Validator.isNull(project) ? StringPool.BLANK : project.getPurpose() %>"
+						 />
 				</aui:col>
 			</aui:row>
 			<aui:row>
@@ -97,14 +108,18 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 						name="<%=ECRFUserProjectAttributes.START_DATE %>" 
 						label="ecrf.user.project.start-date"
 						cssClass="search-input" 
-						required="true" />
+						required="true"
+						value="<%=Validator.isNull(startDateStr) ? "" : startDateStr %>"
+						 />
 				</aui:col>
 				<aui:col md="6">
 					<aui:input 
 						name="<%=ECRFUserProjectAttributes.END_DATE %>" 
 						label="ecrf.user.project.end-date"
 						cssClass="search-input" 
-						required="true" />
+						required="true"
+						value="<%=Validator.isNull(endDateStr) ? "" : endDateStr %>" 
+						/>
 				</aui:col>
 			</aui:row>
 	 	</aui:container>
