@@ -28,11 +28,21 @@ if(subjectId > 0) {
 }
 
 int birthAge = 0;
-
+int lunarBirthAge = 0;
 if(isUpdate) {
 	subjectBirthStr = ECRFUserUtil.getDateStr(subject.getBirth());
 	Date now = new Date();
 	birthAge = now.getYear() - subject.getBirth().getYear();
+	if(Validator.isNotNull(subject.getLunarBirth())){
+		lunarBirthAge = now.getYear() - Integer.getInteger(subject.getLunarBirth().split("/")[0]);
+	}
+	if(now.getMonth() - subject.getBirth().getMonth() < 0){
+		birthAge =  birthAge + 1;
+	}else if(now.getMonth() - subject.getBirth().getMonth() == 0){
+		if(now.getDate() - subject.getBirth().getDate() < 0){
+			birthAge =  birthAge + 1;
+		}		
+	}
 	System.out.println(birthAge);
 	// gender value / male : 0, female : 1
 	int genderValue = subject.getGender();
@@ -146,7 +156,36 @@ if(isUpdate) {
 					</aui:field-wrapper>
 				</aui:col>
 				<aui:col md="1">
-					<p><%=birthAge %></p>
+					<p id="birthAge"><%=birthAge%></p>
+				</aui:col>
+			</aui:row>
+			
+			<aui:row>
+				<aui:col md="3">
+					<aui:field-wrapper
+						name="<%=ECRFUserSubjectAttributes.LUNARBIRTH %>"
+						label="ecrf-user.subject.lunarbirth"
+					>
+					</aui:field-wrapper>
+				</aui:col>
+				<aui:col md="3">
+					<aui:input 
+						name="<%=ECRFUserSubjectAttributes.LUNARBIRTH %>" 
+						label="" 
+						placeholder="yyyy/mm/dd"						
+						value="<%=Validator.isNull(subject) ? StringPool.BLANK : "" %>" 
+						>
+						</aui:input>
+				</aui:col>
+				<aui:col md="1">
+					<aui:field-wrapper
+						name="<%=ECRFUserSubjectAttributes.LUNARBIRTH_YEAR %>"
+						label="ecrf-user.subject.lunarbirth-age"
+					>
+					</aui:field-wrapper>
+				</aui:col>
+				<aui:col md="1">
+					<p id="lunarBirthAge"><%=Validator.isNotNull(subject) ? lunarBirthAge : "" %></p>
 				</aui:col>
 			</aui:row>
 			<aui:row>
@@ -412,17 +451,64 @@ function validFocus(elem) {
 $(document).ready(function() {
 	$("#<portlet:namespace/>phone").mask("000-0000-0000", {placeholder: "000-0000-0000"});
 	$("#<portlet:namespace/>phone2").mask("000-0000-0000", {placeholder: "000-0000-0000"});
+	let now = new Date();
+	let options = {
+			lang: 'kr',
+			changeYear: true,
+			changeMonth : true,
+			scrollInput:false,
+			validateOnBlur: false,
+			format: 'Y/m/d',
+			timepicker: false,
+			onChangeDateTime: function(dateText, inst){
+				let dateValue = $("#<portlet:namespace/>birth").datetimepicker("getValue");
+				console.log();
+				let age = now.getFullYear() - dateValue.getFullYear()
+				if(now.getTime() - dateValue.getTime() < 0){
+					alert("Birth must be in the past than present");
+				}else{
+					if(now.getMonth() - dateValue.getMonth() < 0){
+						age =  age + 1;
+						$("#birthAge")[0].innerText = age;
+					}else if(now.getMonth() - dateValue.getMonth() == 0){
+						if(now.getDate() - dateValue.getDate() < 0){
+							age =  age + 1;
+							$("#birthAge")[0].innerText = age;
+						}
+						else{
+							$("#birthAge")[0].innerText = age;
+						}
+					}else {
+						$("#birthAge")[0].innerText = age;
+					}
+				}
+			}
+	}
+	$("#<portlet:namespace/>birth").datetimepicker(options);
 	
-	$("#<portlet:namespace/>birth").datetimepicker({
-		lang: 'kr',
-		changeYear: true,
-		changeMonth : true,
-		validateOnBlur: false,
-		gotoCurrent: true,
-		timepicker: false,
-		format: 'Y/m/d',
-		scrollMonth: false
-	});
 	$("#<portlet:namespace/>birth").mask("0000/00/00");
+	$("#<portlet:namespace/>lunarBirth").mask("0000/00/00");
+	$("#<portlet:namespace/>lunarBirth").on("change", function(event){
+		let value = $("#<portlet:namespace/>lunarBirth").val();
+		let lunarYear = value.split("/")[0];
+		let lunarMonth = value.split("/")[1];
+		let lunarDate = value.split("/")[2];
+		let age = now.getFullYear() - lunarYear;
+		if(lunarMonth < 0 || lunarMonth > 12 || lunarDate < 0 || lunarDate > 30){
+			alert("invalid date");
+			$("#<portlet:namespace/>lunarBirth").val("");	
+			$("#lunarBirthAge")[0].innerText = "";	
+		}else{
+			if(age < 0){
+				alert("Birth must be in the past than present");
+			}else{
+				$("#lunarBirthAge")[0].innerText = age;	
+			}		
+		}
+	});
 });
+
+function getLunarDate(date){
+	console.log("getLunarDate", date);
+}
 </script>
