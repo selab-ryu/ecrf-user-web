@@ -294,7 +294,8 @@
 			
 		</aui:container>
 		</aui:form>		
-	</div>	
+	</div>
+	
 </div>
 
 <script>
@@ -306,6 +307,79 @@ var crfSubjectInfoArr = [];
 
 var crfId = "<%=String.valueOf(crfId) %>";
 var dataTypeId = "<%=String.valueOf(dataTypeId) %>";
+
+// is need to move to crf-data.js?
+function manageResearcherPopup() {
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    renderURL.setParameter("<%=ECRFUserWebKeys.MVC_PATH%>", "<%=ECRFUserJspPaths.JSP_DIALOG_MANAGE_CRF_RESEARCHER %>");
+    renderURL.setParameter("<%=ECRFUserCRFAttributes.CRF_ID%>", crfId);
+    renderURL.setParameter("crfResearcherInfoJsonStr", JSON.stringify(crfResearcherInfoArr));
+    
+	AUI().use("liferay-util-window", function(A) {
+		Liferay.Util.openWindow({
+			dialog: {
+				width:800,
+				height:800,
+				modal: true,
+				cenered: true
+			},
+			id: "manageResearcherPopup",
+			title: "Manage CRF Researcher",
+			uri: renderURL.toString()
+		})
+	});
+}
+
+function manageSubjectPopup() {
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    renderURL.setParameter("<%=ECRFUserWebKeys.MVC_PATH%>", "<%=ECRFUserJspPaths.JSP_DIALOG_MANAGE_CRF_SUBJECT %>");
+    renderURL.setParameter("<%=ECRFUserCRFAttributes.CRF_ID%>", crfId);
+    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
+    
+	AUI().use("liferay-util-window", function(A) {
+		Liferay.Util.openWindow({
+			dialog: {
+				width:800,
+				height:800,
+				modal: true,
+				cenered: true
+			},
+			id: "manageSubjectPopup",
+			title: "Manage CRF Subject",
+			uri: renderURL.toString()
+		})
+	});
+}
+
+function manageUpdateLockPopup() {
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    renderURL.setParameter("<%=ECRFUserWebKeys.MVC_PATH%>", "<%=ECRFUserJspPaths.JSP_DIALOG_MANAGE_UPDATE_LOCK %>");
+    renderURL.setParameter("<%=ECRFUserCRFAttributes.CRF_ID%>", crfId);
+    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
+    
+	AUI().use("liferay-util-window", function(A) {
+		Liferay.Util.openWindow({
+			dialog: {
+				width:800,
+				height:800,
+				modal: true,
+				cenered: true
+			},
+			id: "manageUpdateLockPopup",
+			title: "Manage Update Lock",
+			uri: renderURL.toString()
+		})
+	});
+}
 
 function fetchResearcherArr() {
 	Liferay.Service(
@@ -416,6 +490,7 @@ function tableLoading() {
 	var resarcherDomFirstLine = "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>";
 	if(hasUpdateCRFResearcherPermission) resarcherDomFirstLine = "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>";
 	
+	
 	researcherTable = new DataTable('#researcherList',{
 		lengthChange: false,
 		searching: false,
@@ -427,7 +502,7 @@ function tableLoading() {
             	text : 'Manage Researhcer',
             	className : 'small-btn marBrh',
             	action : function( e, dt, node, config) {
-            		openManageResearcherDialog("<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfResearcherInfoArr);     
+            		manageResearcherPopup();     
             	}
             }
 		],
@@ -467,14 +542,14 @@ function tableLoading() {
             	text : 'Manage Subject',
             	className : 'small-btn marRr marBrh',
             	action : function( e, dt, node, config) {
-            		openManageSubjectDialog("<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr);            		
+            		manageSubjectPopup();            		
             	}
             },
             {
             	text : 'Manage Update Lock',
             	className : 'small-btn marRr marBrh',
             	action : function( e, dt, node, config) {
-            		openManageUpdateLockDialog("<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr);            		
+            		manageUpdateLockPopup();            		
             	}
             },
 		],
