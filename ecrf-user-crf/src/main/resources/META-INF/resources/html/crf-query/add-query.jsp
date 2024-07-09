@@ -152,7 +152,6 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
-								<!-- TODO: change to enum -->
 								<%
 									String queryTypeStr = "";
 									if(Validator.isNotNull(query)){
@@ -266,7 +265,15 @@
 							</aui:row>
 							
 							<aui:row cssClass="top-border">
-							<!-- TODO: change to enum -->
+								<aui:col md="3">
+									<aui:field-wrapper
+										name="queryComfirm"
+										label="ecrf-user.crf-query.confirm-status"
+										helpMessage="ecrf-user.crf-query.confirm-status.help"
+										cssClass=""
+									>
+									</aui:field-wrapper>
+								</aui:col>
 								<% 
 									boolean processing = false;
 									boolean refuse = false;
@@ -280,19 +287,12 @@
 										accept = true;
 									}
 								%>
-								<aui:col md="12" >
-									<aui:field-wrapper
-										name="queryComfirm"
-										label="ecrf-user.crf-query.confirm-status"
-										helpMessage="ecrf-user.crf-query.confirm-status.help"
-										cssClass="marBrh"
-									>
-										<aui:fieldset>
-											<aui:input type="radio" name="queryComfirm" value="0" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.processing" checked="<%=processing %>"></aui:input>
-											<aui:input type="radio" name="queryComfirm" value="1" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.refuse" checked="<%=refuse %>"></aui:input>
-											<aui:input type="radio" name="queryComfirm" value="2" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.accept" checked="<%=accept %>"></aui:input>
-										</aui:fieldset>
-									</aui:field-wrapper>
+								<aui:col md="9" >
+									<aui:fieldset>
+										<aui:input type="radio" name="queryComfirm" value="0" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.processing" checked="<%=processing %>"></aui:input>
+										<aui:input type="radio" name="queryComfirm" value="1" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.refuse" checked="<%=refuse %>"></aui:input>
+										<aui:input type="radio" name="queryComfirm" value="2" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.accept" checked="<%=accept %>"></aui:input>
+									</aui:fieldset>
 								</aui:col>
 							</aui:row>
 							
@@ -300,8 +300,8 @@
 								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryComfirmUserName"
-										label="ecrf-user.crf-query.confirm-user"
-										helpMessage="ecrf-user.crf-query.confirm-user.help"
+										label="ecrf-user.crf-query.confirm-user-name"
+										helpMessage="ecrf-user.crf-query.confirm-user-name.help"
 										cssClass=""
 									>
 									</aui:field-wrapper>

@@ -15,6 +15,8 @@
 	
 	_log.info("crf id : " + crfId);
 	
+	long groupId = ParamUtil.getLong(renderRequest, "groupId");
+	
 	String crfSubjectInfoJsonStr = ParamUtil.getString(renderRequest, "crfSubjectInfoJsonStr");
 	_log.info("json str : " + crfSubjectInfoJsonStr);
 	
@@ -139,10 +141,14 @@ function initTable(type) {
 			currentSubjectTable.rows.add(currentSubjectArr).draw();
 		}
 	} else if (type == 1) {
+		console.log("group id : " + Liferay.ThemeDisplay.getScopeGroupId())
+		
+		console.log("group id : " + <%=groupId%>)
+		
 		Liferay.Service(
 			{
 				"/ec.crf-subject/get-all-crf-subject-info-list" : {
-					"groupId" : Liferay.ThemeDisplay.getScopeGroupId(),
+					"groupId" : <%=groupId%>,
 					"crfId" : "<%=crfId%>" 
 				}
 			},

@@ -44,6 +44,10 @@ String progressPercentage = "0%";
 
 LiferayPortletURL baseURL = PortletURLFactoryUtil.create(request, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 _log.info("url : " + baseURL.toString());
+
+String url = themeDisplay.getURLCurrent();
+_log.info("current url : " + url);
+
 %>
 
 <portlet:renderURL var="searchURL">
@@ -96,7 +100,6 @@ _log.info("url : " + baseURL.toString());
 					</aui:col>
 					<aui:col md="4">
 						<aui:field-wrapper
-							name="<%=ECRFUserSubjectAttributes.GENDER %>"
 							label="ecrf-user.subject.gender"
 							helpMessage="ecrf-user.subject.gender.help"
 							cssClass="marBrh"
@@ -199,7 +202,9 @@ _log.info("url : " + baseURL.toString());
 				boolean hasCRF = false;
 				int crfDataCount = LinkCRFLocalServiceUtil.countLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
 				if(crfDataCount > 0) hasCRF = true;
-				
+			%>
+			
+			<%
 				String progressBarCss = "progressBar";
 				boolean isWord = false;
 				
@@ -308,11 +313,12 @@ _log.info("url : " + baseURL.toString());
 			<liferay-ui:search-container-column-text
 				name="ecrf-user.list.progress"
 			>
-				<img src="<%= progressSrc%>" width="50%" height="auto"/>			
-			</liferay-ui:search-container-column-text>			
+				<img src="<%= progressSrc%>" width="50%" height="auto" style="min-width:60px;"/>			
+			</liferay-ui:search-container-column-text>	
 			<%
 				boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, rowSubjectId);
 				_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
+				
 				String lockBtnKey = "";
 				String lockClass = "";
 				
@@ -370,16 +376,18 @@ _log.info("url : " + baseURL.toString());
 			</liferay-ui:search-container-column-text>
 			
 			<%
-				String HistoryBtnClass = "";
+				String auditBtnClass = "";
 				if(hasCRF){
-					HistoryBtnClass = "history-btn small-btn";
+					auditBtnClass = "history-btn small-btn";
 				}else{
-					HistoryBtnClass = "none-btn small-btn";
+					auditBtnClass = "none-btn small-btn";
 				}
 			
 				String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 1, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 				
 				boolean hasViewAuditPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_AUDIT);
+				boolean auditDisable = true;
+				if(hasViewAuditPermission && hasCRF) auditDisable = false;  
 			%>
 			
 			<!-- Audit trail button -->
@@ -387,13 +395,10 @@ _log.info("url : " + baseURL.toString());
 				name="ecrf-user.list.audit-trail"
 				cssClass="min-width-80"
 			>
-			
-				<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view" : "ecrf-user.button.audit-trail" %>" cssClass="<%=HistoryBtnClass %>" onClick="<%=auditFunctionCallStr%>" disabled="<%=hasViewAuditPermission ? false : true %>"></aui:button>
+				<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view" : "ecrf-user.button.audit-trail" %>" cssClass="<%=auditBtnClass %>" onClick="<%=auditFunctionCallStr%>" disabled="<%=auditDisable ? true : false %>"></aui:button>
 			</liferay-ui:search-container-column-text>
 			
-			
-			
-			
+						
 			<%
 				String CRFDeleteBtnClass = "";
 			
@@ -408,14 +413,16 @@ _log.info("url : " + baseURL.toString());
 				}
 				
 				String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 2, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+				
+				boolean deleteDisable = true;
+				if(!updateLock && hasCRF) deleteDisable = false;
 			%>
 			
 			<liferay-ui:search-container-column-text 
 				name="ecrf-user.list.delete"
 				cssClass="min-width-80"
 			>
-				<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="<%=CRFDeleteBtnClass %>" onClick="<%=deleteFunctionCallStr%>" disabled="<%=updateLock ? true : false %>"></aui:button>
-
+				<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="<%=CRFDeleteBtnClass %>" onClick="<%=deleteFunctionCallStr%>" disabled="<%=deleteDisable ? true : false %>"></aui:button>
 			</liferay-ui:search-container-column-text>
 			
 			</liferay-ui:search-container-row>

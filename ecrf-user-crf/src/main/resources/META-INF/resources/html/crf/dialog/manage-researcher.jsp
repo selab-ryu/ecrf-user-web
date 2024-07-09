@@ -14,13 +14,15 @@
 	
 	_log.info("crf id : " + crfId);
 	
+	long groupId = ParamUtil.getLong(renderRequest, "groupId");
+	
 	String crfResearcherInfoJsonStr = ParamUtil.getString(renderRequest, "crfResearcherInfoJsonStr");
 	_log.info("json str : " + crfResearcherInfoJsonStr);
 	
 	if(crfId > 0) {
 		isUpdate = true;
 		menu = "crf-update";
-	}
+	}	 
 	
 	DataType dataType = null;
 	
@@ -147,7 +149,7 @@ function initTable(type) {
 		Liferay.Service(
 			{
 				"/ec.crf-researcher/get-all-crf-researcher-info" : {
-					"groupId" : Liferay.ThemeDisplay.getScopeGroupId(),
+					"groupId" : <%=groupId%>,
 					"crfId" : "<%=crfId%>" 
 				}
 			},

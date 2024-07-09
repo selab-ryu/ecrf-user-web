@@ -32,7 +32,7 @@ public class ListCRFDataRenderCommand implements MVCRenderCommand {
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		_log.info("list crf data render command");
 		
-		String listPath = ParamUtil.getString(renderRequest, ECRFUserWebKeys.LIST_PATH, ECRFUserJspPaths.JSP_LIST_CRF_DATA);
+		String listPath = ParamUtil.getString(renderRequest, ECRFUserWebKeys.LIST_PATH, ECRFUserJspPaths.JSP_LIST_CRF_DATA_UPDATE);
 				
 		return listPath;
 	}
