@@ -1,11 +1,12 @@
 let ECRFViewer = function(){
 	class Viewer{
 
-		constructor(DataStructure, align, structuredData){
+		constructor(DataStructure, align, structuredData, subjectBirth){
 			var result = new Object();
 			renderUtil.align = align;
 			autoCalUtil.crf = DataStructure;
 			console.log("sd data", structuredData);
+			autoCalUtil.age = autoCalUtil.calculateAge(subjectBirth);
 			if(structuredData){
 				renderUtil.structuredData = structuredData;
 				result = structuredData;
@@ -33,6 +34,9 @@ let ECRFViewer = function(){
 							renderUtil.activateTerms(term);
 						}
 					}
+					if(autoCalUtil.checkExcerciseFlag(term.termName)){
+						$("#" + term.termName + "_outerDiv").hide();
+					}
 				});
             };
             
@@ -52,14 +56,119 @@ let ECRFViewer = function(){
 	};
 	
 	let autoCalUtil = {
+		calculateAge: function (birthDate) {
+			var birthYear = birthDate.getFullYear();
+			var birthMonth = birthDate.getMonth();
+			var birthDay = birthDate.getDate();
+			
+			var currentDate = new Date();
+			var currentYear = currentDate.getFullYear();
+			var currentMonth = currentDate.getMonth();
+			var currentDay = currentDate.getDate();
+			
+			var age = currentYear - birthYear;
+			
+			if (currentMonth < birthMonth) {
+			  age--;
+			}
+			
+			else if (currentMonth === birthMonth && currentDay < birthDay) {
+			  age--;
+			}
+			
+			return age;
+		},
+		
+		checkExcerciseFlag : function(termName){
+			switch(termName){
+			case "diabetes":
+			case "is_low_risk":
+			case "is_mid_risk":
+			case "is_high_risk":
+				return true;
+				break;
+			case "par_q_under65":
+				if(this.age < 65){
+					return false;
+				}else {
+					return true;
+				}
+				break;
+			case "par_q_over65":
+				if(this.age > 65){
+					return false;
+				}else {
+					return true;
+				}
+			default:
+				return false;
+				break;
+			}
+			
+		},
+		
 		checkAutoCal : function(term){
 			if(this.crf){				
 				switch(this.crf.dataTypeName){
 					case "er_crf":
 						console.log("ER CRF Auto Calculation Running");
+						console.log(term.termName);
+						console.log(term.value);
+						if(term.termName === "conciousness") {
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "gcs"){
+									console.log("find", compareTerm.value);
+									let selectedValue = term.value[0];
+									switch(selectedValue) {
+									case '0':
+										compareTerm.value = 15;
+										console.log(compareTerm.value);
+										break;
+									case '1':
+										compareTerm.value = 12;
+										break;
+									case '2':
+										compareTerm.value = 10;
+										break;
+									case '3':
+										compareTerm.value = 8;
+										break;
+									case '4':
+										compareTerm.value = 5;
+										break;
+									case '5':
+										compareTerm.value = 3;
+										break;
+									default:
+										break;
+									}
+									$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+								}
+							});
+						}
+
 						break; 
 					case "excercise_crf":
 						console.log("Exercise CRF Auto Calculation Running");
+						if(term.termName === "drug_diabetes") {
+							console.log(term.value[0]);
+							if(term.value[0] === '1'){
+								this.crf.terms.forEach(compareTerm=>{
+									if(compareTerm.termName === "diabetes"){
+										compareTerm.value = "1";
+										console.log($("#" + compareTerm.termName));
+										$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+									}
+								});
+							}else{
+								this.crf.terms.forEach(compareTerm=>{
+									if(compareTerm.termName === "diabetes"){
+										compareTerm.value = "0";
+										$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');							
+									}
+								});
+							}
+						}
 						break;
 				}
 				 
@@ -106,6 +215,13 @@ let ECRFViewer = function(){
                 			hasSubGroup = true;
                 		}
                 	}
+                }else{
+                	if(subTerm.groupTermId.name !== ""){
+                		if(subTerm.groupTermId.name === term.termName){
+                			$groupBody.append(this.buildGeneralTerm(subTerm, this.align));
+                			hasSubGroup = true;
+                		}
+                	}
                 }
             });
 			
@@ -129,6 +245,10 @@ let ECRFViewer = function(){
         
         buildSubGroupTerm : function(terms, term){
         	let displayName = term.displayName.localizedMap.en_US;
+        	let $GroupOuterDiv = $('<div>');
+        	$GroupOuterDiv.prop({
+        		id:term.termName + "_outerDiv"
+        	});
         	let $accordionTab = $('<div class="card-horizontal main-content-card pad1R">');
 			let $groupBody = $('<div id="'+ term.termName +'">');
 			let $groupName = $('<h3>').text(displayName);
@@ -143,8 +263,8 @@ let ECRFViewer = function(){
 			
 			$accordionTab.append($groupName);
 			$accordionTab.append($groupBody);
-			
-			return $accordionTab;
+			$GroupOuterDiv.append($accordionTab);
+			return $GroupOuterDiv;
         },
         
         buildGeneralTerm : function(term, align_control){

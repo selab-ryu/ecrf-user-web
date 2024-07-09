@@ -258,12 +258,12 @@ _log.info("url : " + url.toString());
 
 <script>
 function toViewCRF(sdId){
-	Liferay.Util.getOpener().moveViewCRFData(<%=subjectId %>, <%=crfId%>, sdId, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');
+	Liferay.Util.getOpener().moveViewCRFData(<%=subjectId %>, <%=crfId%>, sdId, <%=CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout()%>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');
 }
 
 function toEachCRF(sdId, isAudit){
 	console.log("<%=baseURL%>");
-	Liferay.Util.getOpener().moveUpdateCRFData(<%=subjectId %>, <%=crfId%>, sdId, isAudit, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
+	Liferay.Util.getOpener().moveUpdateCRFData(<%=subjectId %>, <%=crfId%>, sdId, isAudit, <%=CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout()%>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
 }
 
 function deleteEachCRF(linkCrfId){
@@ -273,6 +273,6 @@ function deleteEachCRF(linkCrfId){
 
 <aui:script use="aui-base">
 A.one("#<portlet:namespace/>addCRF").on("click", function(event) {
-	Liferay.Util.getOpener().moveAddCRFData(<%=subjectId %>, <%=crfId %>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
+	Liferay.Util.getOpener().moveAddCRFData(<%=subjectId %>, <%=crfId %>, <%=CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout()%>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
 });
 </aui:script>
