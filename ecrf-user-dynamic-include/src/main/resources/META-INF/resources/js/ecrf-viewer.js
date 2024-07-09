@@ -6,6 +6,7 @@ let ECRFViewer = function(){
 			renderUtil.align = align;
 			autoCalUtil.crf = DataStructure;
 			console.log("sd data", structuredData);
+			DataStructure.terms = renderUtil.flattenTerms(DataStructure.terms);
 			autoCalUtil.age = autoCalUtil.calculateAge(subjectBirth);
 			if(structuredData){
 				renderUtil.structuredData = structuredData;
@@ -195,7 +196,10 @@ let ECRFViewer = function(){
         	
         	return $loader;
         },
-
+        flattenTerms : function (terms) {
+            terms.sort((a, b) => a.order - b.order);
+            return terms;
+        },
         buildGroupTerm : function(terms, term){
         	let displayName = term.displayName.localizedMap.en_US;
         	let $GroupOuterDiv = $('<div>');
