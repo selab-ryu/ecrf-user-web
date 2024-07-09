@@ -268,6 +268,32 @@
 			</aui:button-row>
 			</c:if>
 			
+			<c:if test="<%=isUpdate %>">
+				<aui:button-row>
+					<c:if test="<%=isAdmin %>">
+					<portlet:renderURL var="moveImportSubjectsURL">
+						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_IMPORT_SUBJECTS %>" />
+						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+						<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
+						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+					</portlet:renderURL>
+					
+					<aui:button type="button" value="ecrf-user.button.crf-import-subject" onClick="<%=moveImportSubjectsURL %>" />
+					</c:if>
+					
+					<c:if test="<%=isAdmin %>">
+					<portlet:renderURL var="moveImportDatasURL">
+						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="" />
+						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+						<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
+						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+					</portlet:renderURL>
+					
+					<aui:button type="button" value="ecrf-user.button.crf-import-sddata" onClick="" />
+					</c:if>
+				</aui:button-row>
+			</c:if>
+			
 			<aui:button-row>
 				<c:choose>
 				<c:when test="<%=isUpdate %>">
