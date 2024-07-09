@@ -15,6 +15,8 @@
 	
 	_log.info("crf id : " + crfId);
 	
+	long groupId = ParamUtil.getLong(renderRequest, "groupId");
+	
 	String crfSubjectInfoJsonStr = ParamUtil.getString(renderRequest, "crfSubjectInfoJsonStr");
 	_log.info("json str : " + crfSubjectInfoJsonStr);
 	
@@ -142,7 +144,7 @@ function initTable(type) {
 		Liferay.Service(
 			{
 				"/ec.crf-subject/get-all-crf-subject-info-list" : {
-					"groupId" : Liferay.ThemeDisplay.getScopeGroupId(),
+					"groupId" : <%=groupId%>,
 					"crfId" : "<%=crfId%>" 
 				}
 			},

@@ -427,7 +427,7 @@ function tableLoading() {
             	text : 'Manage Researhcer',
             	className : 'small-btn marBrh',
             	action : function( e, dt, node, config) {
-            		openManageResearcherDialog("<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfResearcherInfoArr);     
+            		openManageResearcherDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfResearcherInfoArr);     
             	}
             }
 		],
@@ -467,7 +467,7 @@ function tableLoading() {
             	text : 'Manage Subject',
             	className : 'small-btn marRr marBrh',
             	action : function( e, dt, node, config) {
-            		openManageSubjectDialog("<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr);            		
+            		openManageSubjectDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr);            		
             	}
             },
             {

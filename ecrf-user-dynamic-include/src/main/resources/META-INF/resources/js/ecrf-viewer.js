@@ -140,6 +140,7 @@ let ECRFViewer = function(){
 										compareTerm.value = 3;
 										break;
 									default:
+										compareTerm.value = "";
 										break;
 									}
 									$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');

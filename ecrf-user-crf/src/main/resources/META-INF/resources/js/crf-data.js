@@ -1,75 +1,3 @@
-Liferay.provide(window, 'openManageResearcherDialog', function(portletId, crfId, crfResearcherInfoArr) {
-	var renderURL = Liferay.PortletURL.createRenderURL();
-	
-	renderURL.setPortletId(portletId);
-	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up");
-    
-    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-researcher.jsp");
-    renderURL.setParameter("crfId", crfId);
-    renderURL.setParameter("crfResearcherInfoJsonStr", JSON.stringify(crfResearcherInfoArr));
-    
-    Liferay.Util.openWindow({
-		dialog: {
-			width:800,
-			height:800,
-			modal: true,
-			cenered: true
-		},
-		id: "manageResearcherPopup",
-		title: "Manage CRF Researcher",
-		uri: renderURL.toString()
-	});
-}, ['liferay-util-window', 'liferay-portlet-url']);
-
-Liferay.provide(window, 'openManageSubjectDialog', function(portletId, crfId, crfSubjectInfoArr) {
-	var renderURL = Liferay.PortletURL.createRenderURL();
-	
-	renderURL.setPortletId(portletId);
-	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up");
-    
-    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-subject.jsp");
-    renderURL.setParameter("crfId", crfId);
-    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
-    
-    Liferay.Util.openWindow({
-		dialog: {
-			width:800,
-			height:800,
-			modal: true,
-			cenered: true
-		},
-		id: "manageSubjectPopup",
-		title: "Manage CRF Subject",
-		uri: renderURL.toString()
-	});
-}, ['liferay-util-window', 'liferay-portlet-url']);
-
-Liferay.provide(window, 'openManageUpdateLockDialog', function(portletId, crfId, crfSubjectInfoArr) {
-	var renderURL = Liferay.PortletURL.createRenderURL();
-	
-	renderURL.setPortletId(portletId);
-	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up");
-    
-    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-subject-update-lock.jsp");
-    renderURL.setParameter("crfId", crfId);
-    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
-    
-    Liferay.Util.openWindow({
-		dialog: {
-			width:800,
-			height:800,
-			modal: true,
-			cenered: true
-		},
-		id: "manageUpdateLockPopup",
-		title: "Manage Update Lock",
-		uri: renderURL.toString()
-	});
-}, ['liferay-util-window', 'liferay-portlet-url']);
-
 Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portletId, baseURL) {
 	console.log("function activate");
 	
@@ -118,6 +46,79 @@ Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portlet
 	
 }, ['liferay-portlet-url']); 
 
+Liferay.provide(window, 'openManageResearcherDialog', function(groupId, portletId, crfId, crfResearcherInfoArr) {
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	
+	renderURL.setPortletId(portletId);
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    
+    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-researcher.jsp");
+    renderURL.setParameter("groupId", groupId);
+    renderURL.setParameter("crfId", crfId);
+    renderURL.setParameter("crfResearcherInfoJsonStr", JSON.stringify(crfResearcherInfoArr));
+    
+    Liferay.Util.openWindow({
+		dialog: {
+			width:800,
+			height:800,
+			modal: true,
+			cenered: true
+		},
+		id: "manageResearcherPopup",
+		title: "Manage CRF Researcher",
+		uri: renderURL.toString()
+	});
+}, ['liferay-util-window', 'liferay-portlet-url']);
+
+Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, crfId, crfSubjectInfoArr) {
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	
+	renderURL.setPortletId(portletId);
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    
+    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-subject.jsp");
+    renderURL.setParameter("groupId", groupId);
+    renderURL.setParameter("crfId", crfId);
+    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
+    
+    Liferay.Util.openWindow({
+		dialog: {
+			width:800,
+			height:800,
+			modal: true,
+			cenered: true
+		},
+		id: "manageSubjectPopup",
+		title: "Manage CRF Subject",
+		uri: renderURL.toString()
+	});
+}, ['liferay-util-window', 'liferay-portlet-url']);
+
+Liferay.provide(window, 'openManageUpdateLockDialog', function(portletId, crfId, crfSubjectInfoArr) {
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	
+	renderURL.setPortletId(portletId);
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    
+    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-subject-update-lock.jsp");
+    renderURL.setParameter("crfId", crfId);
+    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
+    
+    Liferay.Util.openWindow({
+		dialog: {
+			width:800,
+			height:800,
+			modal: true,
+			cenered: true
+		},
+		id: "manageUpdateLockPopup",
+		title: "Manage Update Lock",
+		uri: renderURL.toString()
+	});
+}, ['liferay-util-window', 'liferay-portlet-url']);
 
 Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, displayViewerId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
