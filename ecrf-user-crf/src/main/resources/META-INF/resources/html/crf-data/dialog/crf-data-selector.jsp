@@ -33,9 +33,6 @@ _log.info("update lock : " + updateLock);
 
 String baseURL = ParamUtil.getString(renderRequest, "baseURL");
 _log.info("base url : " + baseURL);
-
-LiferayPortletURL url = PortletURLFactoryUtil.create(request, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
-_log.info("url : " + url.toString());
 %>
 <div class="ecrf-user-crf-data ecrf-user">
 	<aui:container cssClass="">
@@ -155,9 +152,6 @@ _log.info("url : " + url.toString());
 							
 							<c:otherwise>
 							
-							<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_CRF_DATA %>" var="deleteCRFDataURL">
-								<portlet:param name="<%=ECRFUserCRFDataAttributes.LINK_CRF_ID %>" value="<%=String.valueOf(link.getLinkId()) %>" />
-							</portlet:actionURL>						
 							<td>
 								<aui:button name="deleteCRF" type="button" value="ecrf-user.crf-data.delete-crf" cssClass="delete-btn small-btn" onClick="<%="deleteEachCRF(" + link.getLinkId() +")"%>"></aui:button>							
 							</td>
@@ -171,7 +165,7 @@ _log.info("url : " + url.toString());
 						
 						<% String auditFunctionCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 1); %>
 						<td>
-							<aui:button name="auditCRF" type="button" value="view Audit Trail" cssClass="ci-btn small-btn" onClick="<%=auditFunctionCall%>"></aui:button>
+							<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view" : "ecrf-user.button.view-audit" %>" cssClass="ci-btn small-btn" onClick="<%=auditFunctionCall%>"></aui:button>
 						</td>
 						
 						</c:when>
@@ -267,7 +261,7 @@ function toEachCRF(sdId, isAudit){
 }
 
 function deleteEachCRF(linkCrfId){
-	Liferay.Util.getOpener().moveDeleteCRFData(linkCrfId, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>,  '<%=baseURL%>');	
+	Liferay.Util.getOpener().deleteCRFData(linkCrfId, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
 }
 </script>
 

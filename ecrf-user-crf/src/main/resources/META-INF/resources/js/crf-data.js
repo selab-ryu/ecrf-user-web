@@ -45,7 +45,23 @@ Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portlet
 	});
 }, ['liferay-util-window', 'liferay-portlet-url']); 
 
-Liferay.provide(window, 'openManageResearcherDialog', function(portletId, crfId, crfResearcherInfoArr) {
+Liferay.provide(window, 'openManageResearcherDialog', function(groupId, portletId, baseURL, crfId, crfResearcherInfoArr) {
+//	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
+//			{
+//				'p_p_id' : portletId,
+//				'p_auth': Liferay.authToken,
+//				
+//				
+//				'mvcPath' : '/html/crf/dialog/manage-researcher.jsp',
+//				'groupId' : groupId,
+//				'crfId' : crfId,
+//				'crfResearcherInfoJsonStr' : JSON.stringify(crfResearcherInfoArr)
+//			}
+//		);
+//	
+//	console.log(url);
+//	console.log("render url : " + url.toString());
+	
 	var renderURL = Liferay.PortletURL.createRenderURL();
 	
 	renderURL.setPortletId(portletId);
@@ -53,8 +69,11 @@ Liferay.provide(window, 'openManageResearcherDialog', function(portletId, crfId,
     renderURL.setWindowState("pop_up");
     
     renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-researcher.jsp");
+    renderURL.setParameter("groupId", groupId);
     renderURL.setParameter("crfId", crfId);
     renderURL.setParameter("crfResearcherInfoJsonStr", JSON.stringify(crfResearcherInfoArr));
+    
+//    console.log(renderURL);
     
     Liferay.Util.openWindow({
 		dialog: {
@@ -69,7 +88,7 @@ Liferay.provide(window, 'openManageResearcherDialog', function(portletId, crfId,
 	});
 }, ['liferay-util-window', 'liferay-portlet-url']);
 
-Liferay.provide(window, 'openManageSubjectDialog', function(portletId, crfId, crfSubjectInfoArr) {
+Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, crfId, crfSubjectInfoArr) {
 	var renderURL = Liferay.PortletURL.createRenderURL();
 	
 	renderURL.setPortletId(portletId);
@@ -77,6 +96,7 @@ Liferay.provide(window, 'openManageSubjectDialog', function(portletId, crfId, cr
     renderURL.setWindowState("pop_up");
     
     renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-subject.jsp");
+    renderURL.setParameter("groupId", groupId);
     renderURL.setParameter("crfId", crfId);
     renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
     
@@ -123,19 +143,22 @@ Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, dialogId, portlet
 	
 	console.log("subject Id / crf Id : " + sId + " / " + crfId);
 		
-	var renderURL = Liferay.PortletURL.createURL(baseURL);
+	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'p_l_id' : plId,
+				'p_auth': Liferay.authToken,
+				'mvcRenderCommandName' : '/render/crf-data/crf-viewer',
+				'fromFlag' : 'selector-add',
+				'subjectId' : sId,
+				'crfId' : crfId				
+			}
+		);
 	
-	renderURL.setPortletId(portletId);
-	renderURL.setPlid(plId);
+//	console.log(url);
+//	console.log("add render url : " + url.toString());
 	
-	renderURL.setParameter("subjectId", sId);
-	renderURL.setParameter("crfId", crfId);
-	
-	renderURL.setParameter("fromFlag", "selector-add");
-	//renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-crf-data");
-	renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/crf-viewer");
-	
-	window.location.href = renderURL;
+	window.location.href = url.toString();
 },['liferay-util-window', 'liferay-portlet-url']);
 
 Liferay.provide(window, 'moveViewCRFData', function(sId, crfId, sdId, dialogId, portletId, plId, baseURL) {
@@ -143,19 +166,23 @@ Liferay.provide(window, 'moveViewCRFData', function(sId, crfId, sdId, dialogId, 
 	dialog.destroy();
 	
 	console.log("subject Id / crf Id : " + sId + " / " + crfId);
-		
-	var renderURL = Liferay.PortletURL.createURL(baseURL);
 	
-	renderURL.setPortletId(portletId);
-	renderURL.setPlid(plId);
+	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'p_l_id' : plId,
+				'p_auth': Liferay.authToken,
+				'mvcRenderCommandName' : '/render/crf-data/view-crf-data',
+				'subjectId' : sId,
+				'crfId' : crfId,
+				'structuredDataId' : sdId
+			}
+		);
 	
-	renderURL.setParameter("subjectId", sId);
-	renderURL.setParameter("crfId", crfId);
-	renderURL.setParameter("structuredDataId", sdId);
+//	console.log(url);
+//	console.log("add render url : " + url.toString());
 	
-	renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-crf-data");
-	
-	window.location.href = renderURL;	
+	window.location.href = url.toString();	
 },['liferay-util-window', 'liferay-portlet-url']);
 
 Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit, dialogId, portletId, plId, baseURL) {
@@ -163,39 +190,44 @@ Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit,
 	dialog.destroy();
 	
 	console.log("subject Id / crf Id : " + sId + " / " + crfId);
-		
-	var renderURL = Liferay.PortletURL.createURL(baseURL);
 	
-	renderURL.setPortletId(portletId);
-	renderURL.setPlid(plId);
-		
-	renderURL.setParameter("subjectId", sId);
-	renderURL.setParameter("crfId", crfId);
-	renderURL.setParameter("structuredDataId", sdId);
-	
+	var renderCommand = "/render/crf-data/crf-viewer";
 	if(isAudit){
-		renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-audit");
-	}else{
-		//renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/view-crf-data");
-		renderURL.setParameter("mvcRenderCommandName" , "/render/crf-data/crf-viewer");
+		renderCommand = "/render/crf-data/view-audit";
 	}
-		
-	window.location.href = renderURL;	
+	
+	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'p_l_id' : plId,
+				'p_auth': Liferay.authToken,
+				'mvcRenderCommandName' : renderCommand,
+				'subjectId' : sId,
+				'crfId' : crfId,
+				'structuredDataId' : sdId
+			}
+		);
+	
+//	console.log(url);
+//	console.log("add render url : " + url.toString());
+			
+	window.location.href = url.toString();	
 },['liferay-util-window', 'liferay-portlet-url']);
 
-Liferay.provide(window, 'moveDeleteCRFData', function(linkCrfId, dialogId, portletId, plId, baseURL) {
+Liferay.provide(window, 'deleteCRFData', function(linkCrfId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
-	var actionURL = Liferay.PortletURL.createURL(baseURL);
+	var actionURL = Liferay.Util.PortletURL.createActionURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'javax.portlet.action' : '/action/crf-data/delete-crf-data',
+				'linkCrfId' : linkCrfId,
+				'p_auth': Liferay.authToken
+			});
 	
-	actionURL.setPortletId(portletId);
-	actionURL.setPlid(plId);
+//	console.log(actionURL);
+//	console.log(actionURL.toString());
 	
-	actionURL.setParameter("linkCrfId", linkCrfId);
-	actionURL.setName("/action/crf-data/delete-crf-data");
-	
-	console.log(actionURL);
-	
-	window.location.href = actionURL.toString();	
+	window.location.href = actionURL.toString();
 },['liferay-util-window', 'liferay-portlet-url']);

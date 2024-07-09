@@ -190,12 +190,7 @@ if(isSearch) {
 					name="ecrf-user.list.crf-title"
 					value="<%=Validator.isNull(datatype.getDisplayName(locale)) ? "-" : datatype.getDisplayName(locale) %>"
 				/>
-				
-				<liferay-ui:search-container-column-text
-					name="ecrf-user.list.crf-description"
-					value="<%=Validator.isNull(datatype.getDescription(locale)) ? "-" : datatype.getDescription(locale) %>"
-				/>
-				
+								
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.crf-version"
 					value="<%=datatype.getDataTypeVersion() %>"
@@ -205,15 +200,9 @@ if(isSearch) {
 					int crfStatus = crf.getCrfStatus();
 					String statusStr = CRFStatus.valueOf(crfStatus).getFull();
 				%>
-				
-				<liferay-ui:search-container-column-text
-					name="ecrf-user.list.crf-status"
-				>
-					<liferay-ui:message key="<%=statusStr %>"></liferay-ui:message>
-				</liferay-ui:search-container-column-text>
-				
+							    
 				<%
-					int crfSubjectCount = CRFSubjectLocalServiceUtil.countCRFSubjectByCRFId(scopeGroupId, crfId);
+					int crfSubjectCount = CRFSubjectLocalServiceUtil.countCRFSubjectByCRFId(scopeGroupId, crf.getCrfId());
 				%>
 				
 				<liferay-ui:search-container-column-text

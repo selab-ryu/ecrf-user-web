@@ -64,7 +64,7 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
 //        	dataTypeId = _crfLocalSerivice.getDataTypeId(crfId);
         	
         	try {
-                
+
             	_dataTypeLocalService.removeStructuredData(sdId, 0);
             	_linkCRFLocalService.deleteLinkCRF(linkCRFId);
             	// need to delete related query ?
@@ -74,7 +74,7 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
         }
         
 		String renderCommand = ECRFUserMVCCommand.RENDER_LIST_CRF_DATA;
-		String listPath = ECRFUserJspPaths.JSP_LIST_CRF_DATA_UPDATE;
+
 		PortletURL renderURL = PortletURLFactoryUtil.create(
 				actionRequest, 
 				themeDisplay.getPortletDisplay().getId(), 
@@ -82,7 +82,6 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
 				PortletRequest.RENDER_PHASE);
 		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, renderCommand);
 		renderURL.setParameter(ECRFUserCRFAttributes.CRF_ID, String.valueOf(crfId));
-		renderURL.setParameter(ECRFUserWebKeys.LIST_PATH, listPath);
 
 		actionResponse.sendRedirect(renderURL.toString());
 	}

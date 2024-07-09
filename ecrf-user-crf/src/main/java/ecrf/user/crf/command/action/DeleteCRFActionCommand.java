@@ -74,7 +74,6 @@ public class DeleteCRFActionCommand extends BaseMVCActionCommand {
 				PortletRequest.RENDER_PHASE);
 		
 		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, ECRFUserMVCCommand.RENDER_LIST_CRF);
-		renderURL.setParameter(ECRFUserWebKeys.LIST_PATH, ECRFUserJspPaths.JSP_LIST_CRF_DELETE);
 		
 		actionResponse.sendRedirect(renderURL.toString());
 	}

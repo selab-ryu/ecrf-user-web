@@ -1,6 +1,6 @@
 <%@ include file="../../init.jsp" %>
 
-<%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf-form/crf-data-viewer_jsp"); %>
+<%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf-data/crf-data-viewer_jsp"); %>
 
 <%
 long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0); 

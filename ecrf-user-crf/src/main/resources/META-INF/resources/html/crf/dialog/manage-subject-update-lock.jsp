@@ -15,6 +15,8 @@
 	
 	_log.info("crf id : " + crfId);
 	
+	long groupId = ParamUtil.getLong(renderRequest, "groupId");
+	
 	String crfSubjectInfoJsonStr = ParamUtil.getString(renderRequest, "crfSubjectInfoJsonStr");
 	_log.info("json str : " + crfSubjectInfoJsonStr);
 	
@@ -301,8 +303,8 @@ function tableLoading() {
 	    }
 	});
 	
- 	initTable(0); // current subject
- 	initTable(1); // not included subject
+ 	initTable(0); // update lock => true
+ 	initTable(1); // update lock => false
  	
  	setCheckboxEvent();
 	setMiddleButtonEvent();
