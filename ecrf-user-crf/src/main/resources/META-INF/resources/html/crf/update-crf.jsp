@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletURL"%>
 <%@page import="ecrf.user.constants.type.UILayout"%>
 <%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ include file="../init.jsp" %>
@@ -14,6 +15,7 @@
 	CRF crf = null;
 	
 	_log.info("crf id : " + crfId);
+	_log.info("group Id : " + scopeGroupId);
 	
 	if(crfId > 0) {
 		crf = (CRF)renderRequest.getAttribute(ECRFUserCRFAttributes.CRF);
@@ -36,6 +38,9 @@
 			dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
 		}
 	}
+	
+	LiferayPortletURL baseURL = PortletURLFactoryUtil.create(request, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+	
 %>
 
 <portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_ADD_CRF %>" var="addCRFURL">
@@ -171,6 +176,8 @@
 			</aui:row>
 			</c:if>
 			
+			<c:if test="<%=isUpdate %>">
+			
 			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_RESEARCHER) %>">
 			<aui:row>
 				<aui:col md="12" cssClass="sub-title-bottom-border marBr">
@@ -223,6 +230,8 @@
 					</table>
 				</aui:col>
 			</aui:row>
+			</c:if>
+			
 			</c:if>
 			
 			<aui:row>
@@ -425,7 +434,9 @@ $('#<portlet:namespace/>saveBtn').on("click", function(e) {
 });
 
 AUI().ready(function() {
-	tableLoading();	
+	var isUpdate = <%=isUpdate%>;
+	if(isUpdate)
+		tableLoading();	
 });
 
 Liferay.Portlet.ready(

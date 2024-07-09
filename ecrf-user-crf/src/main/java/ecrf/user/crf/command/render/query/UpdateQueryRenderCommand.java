@@ -19,9 +19,12 @@ import org.osgi.service.component.annotations.Reference;
 import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
+import ecrf.user.constants.attribute.ECRFUserCRFAttributes;
+import ecrf.user.model.CRF;
 import ecrf.user.model.CRFAutoquery;
 import ecrf.user.model.Subject;
 import ecrf.user.service.CRFAutoqueryLocalService;
+import ecrf.user.service.CRFLocalService;
 import ecrf.user.service.SubjectLocalService;
 
 @Component(
@@ -36,6 +39,7 @@ public class UpdateQueryRenderCommand  implements MVCRenderCommand{
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException{
 		_log.info("Render Query Edit");
+		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFAttributes.CRF_ID);
 		String sdId = ParamUtil.getString(renderRequest, "sdId");
 		String sId = ParamUtil.getString(renderRequest, "sId");
 		String termName = ParamUtil.getString(renderRequest, "termName");
@@ -52,6 +56,15 @@ public class UpdateQueryRenderCommand  implements MVCRenderCommand{
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
+		}
+		
+		CRF crf = null;
+		if(crfId > 0) {
+			try {
+				crf = _crfLocalService.getCRF(crfId);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		
@@ -83,6 +96,7 @@ public class UpdateQueryRenderCommand  implements MVCRenderCommand{
 		renderRequest.setAttribute("subject", subject);
 		renderRequest.setAttribute("query", query);
 		renderRequest.setAttribute("dataTypeLocalServie", _dataTypeLocalService);
+		renderRequest.setAttribute(ECRFUserCRFAttributes.CRF, crf);
 		
 		return ECRFUserJspPaths.JSP_UPDATE_QUERY;
 	}
@@ -97,5 +111,8 @@ public class UpdateQueryRenderCommand  implements MVCRenderCommand{
 	
 	@Reference
 	private CRFAutoqueryLocalService _queryLocalService;
+	
+	@Reference
+	private CRFLocalService _crfLocalService;
 	
 }

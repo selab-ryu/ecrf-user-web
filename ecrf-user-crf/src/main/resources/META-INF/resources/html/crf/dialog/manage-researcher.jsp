@@ -22,7 +22,7 @@
 	if(crfId > 0) {
 		isUpdate = true;
 		menu = "crf-update";
-	}
+	}	 
 	
 	DataType dataType = null;
 	

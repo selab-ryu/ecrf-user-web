@@ -141,6 +141,10 @@ function initTable(type) {
 			currentSubjectTable.rows.add(currentSubjectArr).draw();
 		}
 	} else if (type == 1) {
+		console.log("group id : " + Liferay.ThemeDisplay.getScopeGroupId())
+		
+		console.log("group id : " + <%=groupId%>)
+		
 		Liferay.Service(
 			{
 				"/ec.crf-subject/get-all-crf-subject-info-list" : {

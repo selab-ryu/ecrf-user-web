@@ -39,15 +39,15 @@
 	<div class="page-content">
 		
 		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-query.title.query-list" />
-				
+		
 		<aui:form action="${searchURL}" name="searchOptionFm" autocomplete="off" cssClass="marBr">
 			<aui:container cssClass="radius-shadow-container">
 				<aui:row>
 					<aui:col md="4">
 						<aui:field-wrapper
 							name="userId"
-							label="SXcrfAutoquery.user.id"
-							helpMessage="SXcrfAutoquery.user.id.help"
+							label="ecrf-user.crf-query.user-id"
+							helpMessage="ecrf-user.crf-query.user-id.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -61,8 +61,8 @@
 					<aui:col md="4">
 						<aui:field-wrapper
 							name="userName"
-							label="SXcrfAutoquery.user.name"
-							helpMessage="SXcrfAutoquery.user.name.help"
+							label="ecrf-user.crf-query.user-name"
+							helpMessage="ecrf-user.crf-query.user-name.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -76,14 +76,14 @@
 					<aui:col md="4">
 						<aui:field-wrapper
 							name="queryComfirm"
-							label="ecrf-user.crf-query.confirm"
-							helpMessage="SXcrfAutoquery.query.comfirm"
+							label="ecrf-user.crf-query.confirm-status"
+							helpMessage="ecrf-user.crf-query.confirm-status.help"
 							cssClass="marBrh"
 						>
 							<aui:fieldset cssClass="">
-								<aui:input type="radio" name="queryComfirm" value="0" cssClass="search-input" label="SXcrfAutoquery.query.comfirm.processing" ></aui:input>
-								<aui:input type="radio" name="queryComfirm" value="1" cssClass="search-input" label="SXcrfAutoquery.query.comfirm.accept" ></aui:input>
-								<aui:input type="radio" name="queryComfirm" value="2" cssClass="search-input" label="SXcrfAutoquery.query.comfirm.refuse" ></aui:input>
+								<aui:input type="radio" name="queryComfirm" value="0" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.processing" ></aui:input>
+								<aui:input type="radio" name="queryComfirm" value="1" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.accept" ></aui:input>
+								<aui:input type="radio" name="queryComfirm" value="2" cssClass="search-input" label="ecrf-user.crf-query.confirm-status.refuse" ></aui:input>
 							</aui:fieldset>
 						</aui:field-wrapper>
 					</aui:col>
@@ -136,17 +136,14 @@
 				<%
 					Subject rowSubject = SubjectLocalServiceUtil.getSubject(crfAutoquery.getSubjectId());
 				
-					String idRowStr = rowSubject.getName() + "(" + crfAutoquery.getSubjectId() + ")";
+					String idRowStr = rowSubject.getName() + "(" + rowSubject.getSerialId() + ")";
 				%>
 				
 				<liferay-ui:search-container-column-text
-					name="SXcrfForm.subject.id"
+					name="ecrf-user.list.subject-name-id"
 					value="<%=idRowStr %>"
 				/>
-				<liferay-ui:search-container-column-text
-					name="SXcrfForm.subject.crf.id"
-					property="queryTermId"
-				/>
+								
 				<%
 					String displayName = "";
 					//long dataTypeId = DataTypeLocalServiceUtil.getAllDataTypes().get(0).getDataTypeId();
@@ -161,17 +158,20 @@
 					}
 				%>
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.termname"
+					name="ecrf-user.list.term-name"
 					value="<%=displayName %>"
 				/>
+				
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.value"
+					name="ecrf-user.list.term-value"
 					property="queryValue"
 				/>
+				
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.prevalue"
+					name="ecrf-user.list.query.pre-value"
 					property="queryPreviousValue"
 				/>
+				
 				<%
 					String queryTypeStr = "";
 					if(Validator.isNotNull(crfAutoquery)){
@@ -190,25 +190,32 @@
 						}
 					}
 				%>
+				
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.querytype"
+					name="ecrf-user.list.query.query-type"
 					value="<%=queryTypeStr %>"
 				/>
+				
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.comment"
+					name="ecrf-user.list.comment"
 					property="queryComment"
 				/>
+				
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.createdate"
-					value="<%=Validator.isNull(crfAutoquery.getCreateDate()) ? "-" : sdf.format(crfAutoquery.getCreateDate()) %>"				/>
+					name="ecrf-user.list.query.create-date"
+					value="<%=Validator.isNull(crfAutoquery.getCreateDate()) ? "-" : sdf.format(crfAutoquery.getCreateDate()) %>"
+				/>
+				
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.comfirm.date"
+					name="ecrf-user.list.query.validate-date"
 					value="<%=Validator.isNull(crfAutoquery.getQueryComfirmDate()) ? "-" : sdf.format(crfAutoquery.getQueryComfirmDate()) %>"
 				/>
+				
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.user.name"
+					name="ecrf-user.list.query.publisher"
 					property="userName"
 				/>
+				
 				<%
 					String queryComfirmStr = "";
 					if(Validator.isNotNull(crfAutoquery.getQueryComfirm())){
@@ -222,7 +229,7 @@
 					}
 				%>
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.comfirm"
+					name="ecrf-user.list.query.confirm-status"
 					value="<%=Validator.isNull(crfAutoquery.getQueryComfirm()) ? "-" : queryComfirmStr%>"
 				/>
 
@@ -235,7 +242,6 @@
 					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_UPDATE_CRF_QUERY %>"/>
 					<portlet:param name="<%=WebKeys.REDIRECT%>" value="<%=Validator.isNull(portletURL) ? currentURL : portletURL.toString() %>" />
 				</portlet:renderURL>
-				<!-- History button -->
 				
 				<%
 					boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, crfAutoquery.getSubjectId());
@@ -243,7 +249,7 @@
 				%>
 				
 				<liferay-ui:search-container-column-text
-					name="SXcrfAutoquery.query.edit-btn"
+					name="ecrf-user.list.update"
 					cssClass="min-width-80"
 				>
 					<c:choose>
@@ -272,8 +278,8 @@
 		<aui:row>
 			<aui:col>
 				<aui:button-row cssClass="marL10">
-					<aui:button type="button" name="delete" value="delete all query" style="" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteAllQueryURL%>"></aui:button>
-					<aui:button type="button" name="add" value="add all query" style="" cssClass="add-btn medium-btn radius-btn" onClick="<%=addAllQueryURL%>"></aui:button>
+					<aui:button type="button" name="delete" value="ecrf-user.button.delete-all-query" style="" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteAllQueryURL%>"></aui:button>
+					<aui:button type="button" name="add" value="ecrf-user.button.add-all-query" style="" cssClass="add-btn medium-btn radius-btn" onClick="<%=addAllQueryURL%>"></aui:button>
 				</aui:button-row>
 				
 			</aui:col>
