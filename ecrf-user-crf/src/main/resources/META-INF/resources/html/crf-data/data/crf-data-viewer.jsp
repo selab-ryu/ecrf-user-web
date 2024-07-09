@@ -49,7 +49,7 @@ _log.info("is update : " + isUpdate);
 	<%@ include file="../other/sidebar.jspf" %>	
 	<div class="page-content">
 		<liferay-ui:header backURL="<%=redirect %>" title='<%=isUpdate ? "Update CRF" : "ADD CRF" %>' />
-		<div class="marBr">
+		<div class="marBr" style="display: none;">
 			<aui:button-row>
 				<aui:button type="button" id="btnTable" value="Table"></aui:button>
 				<aui:button type="button" id="btnVert" value="Vertical"></aui:button>
@@ -90,8 +90,14 @@ console.log(profile);
 let ev = ECRFViewer();
 let dataStructure = SX.newDataStructure(<%=crfForm%>, profile, SX.Constants.FOR_EDITOR, $('#<portlet:namespace/>canvasPanel'));
 let align = "crf-align-table";
+if(<%=CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout()%> == 0){
+	align = "crf-align-table";
+}else if(<%=CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout()%> == 1){
+	align = "crf-align-vertical";
+}
 $('#<portlet:namespace/>btnTable').css("background-color","#5f73ff");
-let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>);
+let subjectBirth = new Date(<%=subject.getBirth().getTime()%>);
+let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectBirth);
 console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
 

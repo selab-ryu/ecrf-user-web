@@ -43,9 +43,12 @@ Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portlet
 		title: 'CRF Selector',
 		uri: renderURL.toString()
 	});
-}, ['liferay-util-window', 'liferay-portlet-url']); 
+	
+}, ['liferay-portlet-url']); 
 
-Liferay.provide(window, 'openManageResearcherDialog', function(groupId, portletId, baseURL, crfId, crfResearcherInfoArr) {
+
+Liferay.provide(window, 'openManageResearcherDialog', function(groupId, portletId, crfId, crfResearcherInfoArr) {
+// delete baseURL parameter from function definition
 //	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
 //			{
 //				'p_p_id' : portletId,
@@ -137,18 +140,21 @@ Liferay.provide(window, 'openManageUpdateLockDialog', function(portletId, crfId,
 	});
 }, ['liferay-util-window', 'liferay-portlet-url']);
 
-Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, dialogId, portletId, plId, baseURL) {
+Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, displayViewerId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
 	console.log("subject Id / crf Id : " + sId + " / " + crfId);
-		
+	
+  var renderCommand = "/render/crf-data/view-crf-data";
+  if(displayViewerId == 0 || displayViewerId == 1) renderCommand = "/render/crf-data/crf-viewer";
+  
 	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
 			{
 				'p_p_id' : portletId,
 				'p_l_id' : plId,
 				'p_auth': Liferay.authToken,
-				'mvcRenderCommandName' : '/render/crf-data/crf-viewer',
+				'mvcRenderCommandName' : renderCommand,
 				'fromFlag' : 'selector-add',
 				'subjectId' : sId,
 				'crfId' : crfId				
@@ -161,7 +167,7 @@ Liferay.provide(window, 'moveAddCRFData', function(sId, crfId, dialogId, portlet
 	window.location.href = url.toString();
 },['liferay-util-window', 'liferay-portlet-url']);
 
-Liferay.provide(window, 'moveViewCRFData', function(sId, crfId, sdId, dialogId, portletId, plId, baseURL) {
+Liferay.provide(window, 'moveViewCRFData', function(sId, crfId, sdId, displayViewerId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
@@ -185,7 +191,7 @@ Liferay.provide(window, 'moveViewCRFData', function(sId, crfId, sdId, dialogId, 
 	window.location.href = url.toString();	
 },['liferay-util-window', 'liferay-portlet-url']);
 
-Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit, dialogId, portletId, plId, baseURL) {
+Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit, displayViewerId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
@@ -193,10 +199,16 @@ Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit,
 	
 	var renderCommand = "/render/crf-data/crf-viewer";
 	if(isAudit){
-		renderCommand = "/render/crf-data/view-audit";
+    		renderCommand = "/render/crf-data/view-audit";
+	} else{
+		if(displayViewerId == 0 || displayViewerId == 1){
+        renderCommand = "/render/crf-data/crf-viewer";
+		} else{
+      renderCommand = "/render/crf-data/view-crf-data";
+		}
 	}
-	
-	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
+  
+  var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
 			{
 				'p_p_id' : portletId,
 				'p_l_id' : plId,
