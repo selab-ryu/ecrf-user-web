@@ -1,4 +1,9 @@
 dependencies {
+	compileOnly project(":modules:StationX:StationX-api")
+	compileOnly project(":modules:SXIcecap:SXIcecap-api")
+
+	compileOnly project(":modules:ecrf-user:ecrf-user-api")
+	
 	compileOnly group: "com.liferay", name: "com.liferay.asset.taglib"
 	compileOnly group: "com.liferay", name: "com.liferay.comment.taglib"
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib"
@@ -17,12 +22,10 @@ dependencies {
 
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.1.0"
 	
-	compile project(":modules:ecrf-user:ecrf-user-api")
-	
-	compileOnly group: "org.slf4j", name: "jcl-over-slf4j"
-	
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
 	compileOnly group: 'com.liferay', name: 'com.liferay.trash.api'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.string'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.function'
+	
+	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.chart"
 }
