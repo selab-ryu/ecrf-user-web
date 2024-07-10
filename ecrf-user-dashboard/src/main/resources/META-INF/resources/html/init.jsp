@@ -68,18 +68,38 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Iterator" %>
 
-<%@page import="com.liferay.portal.kernel.model.Group"%>
-<%@page import="com.liferay.portal.kernel.model.Layout"%>
+<%@ page import="com.liferay.portal.kernel.model.Group"%>
+<%@ page import="com.liferay.portal.kernel.model.Layout"%>
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 <%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>
-<%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
 <%@ page import="ecrf.user.constants.ECRFUserConstants"%>
 <%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
+
+<%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserCRFAttributes"%>
+
+<%@ page import="ecrf.user.model.CRF"%>
+<%@ page import="ecrf.user.service.CRFLocalServiceUtil"%>
+<%@ page import="ecrf.user.service.CRFSubjectLocalServiceUtil"%>
+<%@ page import="ecrf.user.service.LinkCRFLocalServiceUtil"%>
+
+<%@ page import="com.sx.icecap.model.DataType"%>
+<%@ page import="com.sx.icecap.service.DataTypeLocalServiceUtil"%>
+
+<%@ page import="com.liferay.frontend.taglib.chart.model.percentage.donut.DonutChartConfig" %>
+<%@ page import="com.liferay.frontend.taglib.chart.model.point.bar.BarChartConfig" %>
+<%@ page import="com.liferay.frontend.taglib.chart.model.point.line.LineChartConfig" %>
+<%@ page import="com.liferay.frontend.taglib.chart.model.SingleValueColumn" %>
+<%@ page import="com.liferay.frontend.taglib.chart.model.MultiValueColumn" %>
+<%@ page import="com.liferay.frontend.taglib.chart.model.AxisX" %>
+
+<%@ page import="com.liferay.portal.kernel.json.JSONArray"%>
+<%@ page import="com.liferay.portal.kernel.json.JSONObject"%>
 
 
 <liferay-theme:defineObjects />
@@ -90,15 +110,4 @@
 	String currentURL = themeDisplay.getURLCurrent();
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
 	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
-	
-	boolean updatePermission = true;
-
-	//check user roles
-	if(user != null) {
-		List<Role> roleList = user.getRoles();
-		for(int i=0; i<roleList.size(); i++) {
-			Role role = roleList.get(i);
-			if(role.getName().equals("Guest")) updatePermission = false;
-		}
-	}
 %>
