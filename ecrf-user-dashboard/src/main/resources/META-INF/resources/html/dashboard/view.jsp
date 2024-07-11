@@ -85,6 +85,7 @@ JSONArray chartDataArr = obj.getJSONArray("chart-data");
 				MultiValueColumn yearCol = new MultiValueColumn("Frequency", yearFreqList);
 				yearChartConfig.addColumn(yearCol);
 				
+				
 				// set month chart config
 				BarChartConfig monthChartConfig = monthChartConfigList.get(i);
 				monthChartConfig.getAxisX().setType(AxisX.Type.CATEGORY);
@@ -108,6 +109,8 @@ JSONArray chartDataArr = obj.getJSONArray("chart-data");
 				
 				MultiValueColumn monthCol = new MultiValueColumn("Frequency", monthFreqList);
 				monthChartConfig.addColumn(monthCol);
+				
+				
 		%>
 			<aui:fieldset-group markupView="lexicon">
 				<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="false" collapsible="true" label="<%=datatype.getDisplayName() %>">
@@ -166,7 +169,6 @@ JSONArray chartDataArr = obj.getJSONArray("chart-data");
 						</aui:col>
 					</aui:row>
 					
-					
 					<aui:row>
 						<!-- Year Chart -->
 						<aui:col md="12" lg="6">
@@ -193,10 +195,25 @@ JSONArray chartDataArr = obj.getJSONArray("chart-data");
 							/>
 						</aui:col>
 					</aui:row>
+					
+					<aui:row>
+						<aui:col md="12" lg="12">
+							<aui:button name="test" value="Test" />
+							<div id="monthChart<%=i%>"></div>
+						</aui:col>
+					</aui:row>
 				</aui:container>
 				
 				</aui:fieldset>
 			</aui:fieldset-group>
+			
+			<!--
+			<script>
+			$(document).ready(function() {
+				setMonthChart('monthChart<%=i%>', "<%=monthFreqList%>", "<%=monthCategories%>");
+			});
+			</script>
+			-->
 		
 		<%
 			}
@@ -205,5 +222,91 @@ JSONArray chartDataArr = obj.getJSONArray("chart-data");
 		%>
 		
 	</div>
-</div>		
+</div>
+
+<!-- get billboard js object from liferay Loaded JS -->
+<aui:script require="frontend-taglib-chart$billboard.js@1.5.1/dist/billboard as myChart">
+function setMonthChart(id, freqData, timeData) {
+	var monthChart = myChart.bb.generate({
+		bindto: "id",
+		data: {
+			x:"x",
+			json: {
+				"Frequency" : freqData,
+				"x" : timeData
+			},
+			xFormat: "%Y-%m",
+			type: "line"
+		},
+		axis: {
+			x: {
+				tick: {
+					format: "%Y-%m",
+					fit:true,
+					count: 10
+				},
+ 				type: "timeseries"
+			}
+		},
+		zoom: {
+			enabled: true,
+			type: "drag"
+		},
+		point: {
+			focus: {
+				only: true
+			}
+		}
+	});
+}
+
+$(document).ready(function() {
+	/*
+	var monthChart = myChart.bb.generate({
+		bindto: "#monthChart",
+		data: {
+			x:"x",
+			json: {
+				"Frequency" : [25, 23, 12, 45, 54, 34, 32, 12],
+				"x" : ["2022-12", "2023-4", "2023-5", "2023-6", "2023-8", "2023-10", "2024-1", "2024-3"]
+			},
+			xFormat: "%Y-%m",
+			type: "line"
+		},
+		axis: {
+			x: {
+				tick: {
+					format: "%Y-%m",
+					fit:true,
+					count: 10	// month count / 12? => how many label on x axis
+				},
+ 				type: "timeseries"
+			}
+		},
+		zoom: {
+			enabled: true,
+			type: "drag"
+		},
+		point: {
+			focus: {
+				only: true
+			}
+		}
+	});
+	*/
+});
+
+
+// using aui module
+AUI().use('liferay-aui-module',
+	function(A) {
+		A.one('#<portlet:namespace/>test').on('click', function() {
+			
+		
+		});
+	}
 	
+	
+);
+	
+</aui:script>

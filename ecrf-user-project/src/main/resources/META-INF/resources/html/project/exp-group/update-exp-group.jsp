@@ -7,7 +7,7 @@
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
-String menu="exp-group";
+String menu="add-exp-group";
 
 boolean isUpdate = false;
 
@@ -17,6 +17,8 @@ long expGroupId = ParamUtil.getLong(renderRequest, ECRFUserExpGroupAttributes.EX
 
 if(expGroupId > 0) {
 	isUpdate = true;
+	menu="update-exp-group";
+	
 	expGroup = ExperimentalGroupLocalServiceUtil.getExperimentalGroup(expGroupId);
 }
 
