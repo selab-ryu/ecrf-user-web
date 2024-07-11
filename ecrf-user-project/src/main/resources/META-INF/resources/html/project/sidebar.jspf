@@ -6,20 +6,29 @@
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_EXP_GROUP %>" />
 </portlet:renderURL>
 
+<portlet:renderURL var="moveAddExpGroupURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_ADD_EXP_GROUP%>"/>
+</portlet:renderURL>
+
 <div class="side-menu radius-shadow-container" style="text-align:center;">
 		
 	<!-- Project Management -->
 	<div>
 		<aui:button cssClass="main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.project" onClick="<%=moveViewProjectURL %>" />
 	</div>
-	<div>
-		<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("project-info") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.info" onClick="<%=moveViewProjectURL %>" />
-	</div>
-	
-	
-	
-	<div>
-		<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("exp-group") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group" onClick="<%=moveExpGroupURL %>" />
-	</div>
+		<div>
+			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("project-info") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.info" onClick="<%=moveViewProjectURL %>" />
+		</div>		
+		
+		<div>
+			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("exp-group") || menu.equals("add-exp-group") || menu.equals("update-exp-group") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group" onClick="<%=moveExpGroupURL %>" />
+		</div>
+			<div>
+				<aui:button cssClass="<%="sub-main-menu-bar " + ( menu.equals("exp-group") || menu.equals("update-exp-group") ? "active-menu-bar" : "deactive-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group.list" onClick="<%=moveExpGroupURL %>" />
+			</div>
+			
+			<div>
+				<aui:button cssClass="<%="sub-main-menu-bar " + ( menu.equals("add-exp-group") ? "active-menu-bar" : "deactive-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group.add" onClick="<%=moveAddExpGroupURL %>" />
+			</div>
 	<!-- Project Management -->		
 </div>

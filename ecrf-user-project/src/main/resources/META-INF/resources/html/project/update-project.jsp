@@ -16,7 +16,7 @@ Project project = null;
 long principalResearchId = 0;
 long manageResearcherId = 0;
 
-String menu = "project-info";
+String menu = "add-project";
 
 boolean isUpdate = false;
 
@@ -26,9 +26,10 @@ String endDateStr = null;
 if(projectId > 0) {
 	project = (Project)renderRequest.getAttribute(ECRFUserProjectAttributes.PROJECT);
 	isUpdate = true;
+	menu = "update-project";
 	
 	startDateStr = ECRFUserUtil.getDateStr(project.getStartDate());
-	endDateStr = ECRFUserUtil.getDateStr(project.getEndDate());		
+	endDateStr = ECRFUserUtil.getDateStr(project.getEndDate());
 }
 
 Date date = new Date();
