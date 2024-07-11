@@ -80,7 +80,7 @@
 		
 		<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 		<div>
-			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("crf-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.add" onClick="<%=moveAddCRFURL %>" />
+			<aui:button cssClass="<%="sub-menu-bar last-menu " + ( menu.equals("crf-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.add" onClick="<%=moveAddCRFURL %>" />
 		</div>
 		</c:if>
 		

@@ -13,16 +13,21 @@ long[] subjectIds = ECRFUserUtil.getSubjectIdFromCRFSubject(crfSubjectList);
 ArrayList<Subject> subjectList = new ArrayList<Subject>();
 subjectList.addAll(SubjectLocalServiceUtil.getSubjectByIds(scopeGroupId, subjectIds));
 
-String menu="crf-data-list-update";
+String menu="crf-data-list";
 
 boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false);
 
 PortletURL portletURL = null;
 
+portletURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+_log.info("portletURL : " + portletURL);
+
+PortletURL iteratorURL = renderResponse.createRenderURL();
+_log.info("iterator URL : " + portletURL);
+
 if(isSearch) {
 	CRFDataSearchUtil searchUtil = new CRFDataSearchUtil();
-	portletURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
-	
+		
 	String serialIdKeyword = ParamUtil.getString(renderRequest, ECRFUserSubjectAttributes.SERIAL_ID, StringPool.BLANK);  
 	String nameKeyword = ParamUtil.getString(renderRequest, ECRFUserSubjectAttributes.NAME, StringPool.BLANK);
 

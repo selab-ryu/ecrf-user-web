@@ -134,12 +134,6 @@ if(isSearch) {
 			</aui:container>
 		</aui:form>
 		
-		<c:if test="<%=hasAddPermission %>">
-		<aui:button-row>
-			<aui:button name="addExp" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" onClick="<%=addExpGroupURL%>" />
-		</aui:button-row>
-		</c:if>
-		
 		<liferay-ui:search-container
 			iteratorURL="<%=portletURL%>"
 			delta="10"
@@ -238,6 +232,12 @@ if(isSearch) {
 			/>
 			
 		</liferay-ui:search-container>
+		
+		<c:if test="<%=hasAddPermission %>">
+		<aui:button-row>
+			<aui:button name="addExp" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" onClick="<%=addExpGroupURL%>" />
+		</aui:button-row>
+		</c:if>
 		
 	</div>
 </div>

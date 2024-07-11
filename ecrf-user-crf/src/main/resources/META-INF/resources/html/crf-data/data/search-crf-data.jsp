@@ -60,9 +60,9 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 <aui:script use="liferay-portlet-url">
 A.one("#<portlet:namespace/>download").on("click", function(event) {
 		var form = $("#<portlet:namespace/>fm");
-		var excelPackage = $('#<portlet:namespace/>searchResults').val();
+		var excelPackage = $('#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_searchResults').val();
 		
-		console.log($('#<portlet:namespace/>searchResults'));
+		console.log($('#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_searchResults'));
 		console.log(excelPackage);
 		var hasContent = true;
 		if(excelPackage.length == 0){

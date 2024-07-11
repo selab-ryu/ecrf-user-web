@@ -292,13 +292,13 @@
 					
 					<c:if test="<%=isAdmin %>">
 					<portlet:renderURL var="moveImportDatasURL">
-						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="" />
+						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_IMPORT_DATAS %>" />
 						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 						<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<aui:button type="button" value="ecrf-user.button.crf-import-sddata" onClick="" />
+					<aui:button type="button" value="ecrf-user.button.crf-import-sddata" onClick="<%=moveImportDatasURL %>" />
 					</c:if>
 				</aui:button-row>
 			</c:if>
