@@ -337,7 +337,7 @@ let ECRFViewer = function(){
 												this.riskCount++;
 												this.beforeValue = term.value;
 											}
-										}else if(this.beforeValue > 90 && term.value < 90){
+										}else if(this.beforeValue >= 90 && term.value < 90){
 											if(this.riskCount > 0){
 												this.riskCount--;
 												this.beforeValue = term.value;
@@ -363,7 +363,7 @@ let ECRFViewer = function(){
 												this.riskCount++;
 												this.beforeValue = term.value;
 											}
-										}else if(this.beforeValue > 80 && term.value < 80){
+										}else if(this.beforeValue >= 80 && term.value < 80){
 											if(this.riskCount > 0){
 												this.riskCount--;
 												this.beforeValue = term.value;
@@ -432,7 +432,210 @@ let ECRFViewer = function(){
 									}										
 								}
 								break;
-
+							case "survey_dbp":
+								if(this.beforeValue){
+									if(this.beforeValue < 90 && term.value >= 90) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value;
+										}
+									}else if(this.beforeValue >= 90 && term.value < 90){
+										if(this.riskCount > 0){
+											this.riskCount--;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}
+								}else{
+									console.log("dont have beforeValue");
+									if(term.value >= 90) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}										
+								}
+								break;
+							case "tc":
+								if(this.beforeValue){
+									if(this.beforeValue < 200 && term.value >= 200) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value;
+										}
+									}else if(this.beforeValue >= 200 && term.value < 200){
+										if(this.riskCount > 0){
+											this.riskCount--;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}
+								}else{
+									console.log("dont have beforeValue");
+									if(term.value >= 200) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}										
+								}
+								break;
+							case "survey_glu_fasting":
+								if(this.beforeValue){
+									if(this.beforeValue < 100 && term.value >= 100) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.metabolicCount++;
+											this.beforeValue = term.value;
+										}
+									}else if(this.beforeValue >= 100 && term.value < 100){
+										if(this.riskCount > 0){
+											this.riskCount--;
+											this.metabolicCount--;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}
+								}else{
+									console.log("dont have beforeValue");
+									if(term.value >= 100) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.metabolicCount++;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}										
+								}
+								break;
+							case "survey_glu_postprandial":
+								if(this.beforeValue){
+									if(this.beforeValue < 140 && term.value >= 140) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.metabolicCount++;
+											this.beforeValue = term.value;
+										}
+									}else if(this.beforeValue >= 140 && term.value < 140){
+										if(this.riskCount > 0){
+											this.riskCount--;
+											this.metabolicCount--;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}
+								}else{
+									console.log("dont have beforeValue");
+									if(term.value >= 140) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.metabolicCount++;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}										
+								}
+								break;
+							case "hdl":
+								if(this.gender == 0) {
+									if(this.beforeValue){
+										if(this.beforeValue > 40 && term.value <= 40) {
+											if(this.metabolicCount < 5){
+												this.metabolicCount++;
+												this.beforeValue = term.value;
+											}
+										}else if(this.beforeValue < 40 && term.value > 40){
+											if(this.metabolicCount > 0){
+												this.metabolicCount--;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}
+									}else{
+										console.log("dont have beforeValue");
+										if(term.value < 40) {
+											if(this.metabolicCount < 5){
+												this.metabolicCount++;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}										
+									}
+								}else{
+									if(this.beforeValue){
+										if(this.beforeValue > 50 && term.value <= 50) {
+											if(this.metabolicCount < 5){
+												this.metabolicCount++;
+												this.beforeValue = term.value;
+											}
+										}else if(this.beforeValue <= 50 && term.value < 50){
+											if(this.metabolicCount > 0){
+												this.metabolicCount--;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}
+									}else{
+										console.log("dont have beforeValue");
+										if(term.value < 50) {
+											if(this.metabolicCount < 5){
+												this.metabolicCount++;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}										
+									}
+								}
+								break;
+							case "drug_thyroid":
+							case "drug_cv":
+							case "drug_a_c":
+							case "drug_lung":
+							case "drug_respiratory":
+							case "drug_liver":
+							case "drug_kidney_ureter":
+								if(term.value[0] === '1'){
+									this.crf.terms.forEach(compareTerm=>{
+										if(compareTerm.termName === "is_high_risk"){
+											compareTerm.value = "0";
+											$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+										}
+									});
+								}else{
+									let highriskContentArr = new Array();
+									this.crf.terms.forEach(compareTerm=>{
+										if(compareTerm.termName === "drug_thyroid" || compareTerm.termName === "drug_cv" || compareTerm.termName === "drug_a_c" || compareTerm.termName === "drug_lung" || compareTerm.termName === "drug_respiratory" || compareTerm.termName === "drug_liver" || compareTerm.termName === "diabetes"){
+											console.log("comparing term", compareTerm.value);
+											highriskContentArr.push(compareTerm.value);												
+										}
+										
+									});
+									for(const index in highriskContentArr){
+										console.log("highriskContentArr", highriskContentArr);
+										console.log("highriskContentArr", highriskContentArr[index][0]);
+										if(highriskContentArr[index][0] !== "0"){
+											$("#is_high_risk").val("0").trigger('change');
+											break;
+										}else{
+											$("#is_high_risk").val("1").trigger('change');
+										}
+									}
+								}
+								break;
 						}				 
 					break;						
 				}
