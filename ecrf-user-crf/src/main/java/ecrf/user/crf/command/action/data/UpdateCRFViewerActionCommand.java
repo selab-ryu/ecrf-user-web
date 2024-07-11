@@ -29,6 +29,7 @@ import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -100,7 +101,6 @@ public class UpdateCRFViewerActionCommand extends BaseMVCActionCommand {
 		
 		Subject subject = _subjectLocalService.getSubject(subjectId);
 		CRF crf = _crfLocalService.getCRFByDataTypeId(dataTypeId);
-//		dataContent = checkExcersizeJSON(answer, subject);
 		
 		if(!isUpdate) {
 			StructuredData sd = _dataTypeLocalService.addStructuredData(0, dataTypeId, dataContent, WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
@@ -185,23 +185,23 @@ public class UpdateCRFViewerActionCommand extends BaseMVCActionCommand {
 			}
 			
 			_linkCRFLocalService.addLinkCRF(subjectId, crfId, sd.getStructuredDataId(), linkServiceContext);
-			//_historyLocalService.addCRFHistory(subject.getName(), subjectId, subject.getSerialId(), sd.getPrimaryKey(), crfId, "", dataContent, 0, "1.0.0", crfHistoryServiceContext);
-			//_queryLocalService.checkQuery(sd.getPrimaryKey(), crfForm, JSONFactoryUtil.createJSONObject(dataContent), subjectId, crfId, queryServiceContext);
+			_historyLocalService.addCRFHistory(subject.getName(), subjectId, subject.getSerialId(), sd.getPrimaryKey(), crfId, "", dataContent, 0, "1.0.0", crfHistoryServiceContext);
+			_queryLocalService.checkQuery(sd.getPrimaryKey(), _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId).getJSONArray("terms"), JSONFactoryUtil.createJSONObject(dataContent), subjectId, crfId, queryServiceContext);
 		}
 		else {
 			// crf history by subject id & crf id
 					
-//			StructuredData sd =	_dataTypeLocalService.updateStructuredData(structuredDataId, 0, dataTypeId, dataContent, WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
-//			List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryByC_S(crfId, subjectId);
-//			
-//			CRFHistory prevHistory = prevHistoryList.get(prevHistoryList.size() - 1);
-//			for(int i =  prevHistoryList.size() - 1; i > -1; i--) {
-//				prevHistory = prevHistoryList.get(i);
-//				if(prevHistory.getStructuredDataId() == structuredDataId) break;
-//			}
+			StructuredData sd =	_dataTypeLocalService.updateStructuredData(structuredDataId, 0, dataTypeId, dataContent, WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
+			List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryByC_S(crfId, subjectId);
 			
-			//_historyLocalService.addCRFHistory(subject.getName(), subjectId, subject.getSerialId(), sd.getPrimaryKey(), crfId, prevHistory.getCurrentJSON(), dataContent, 0, "1.0.0", crfHistoryServiceContext);
-			//_queryLocalService.checkQuery(sd.getPrimaryKey(), crfForm, dataContent, subjectId, crfId, queryServiceContext);
+			CRFHistory prevHistory = prevHistoryList.get(prevHistoryList.size() - 1);
+			for(int i =  prevHistoryList.size() - 1; i > -1; i--) {
+				prevHistory = prevHistoryList.get(i);
+				if(prevHistory.getStructuredDataId() == structuredDataId) break;
+			}
+			
+			_historyLocalService.addCRFHistory(subject.getName(), subjectId, subject.getSerialId(), sd.getPrimaryKey(), crfId, prevHistory.getCurrentJSON(), dataContent, 0, "1.0.0", crfHistoryServiceContext);
+			_queryLocalService.checkQuery(sd.getPrimaryKey(), _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId).getJSONArray("terms"), JSONFactoryUtil.createJSONObject(dataContent), subjectId, crfId, queryServiceContext);
 		}
 		
 		String renderCommand = ECRFUserMVCCommand.RENDER_LIST_CRF_DATA;
