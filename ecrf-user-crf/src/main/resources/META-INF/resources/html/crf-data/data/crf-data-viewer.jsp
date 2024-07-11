@@ -96,8 +96,15 @@ if(<%=CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout()%> == 0){
 	align = "crf-align-vertical";
 }
 $('#<portlet:namespace/>btnTable').css("background-color","#5f73ff");
+
+let subjectInfo = new Object();
+let subjectGender = <%=subject.getGender()%>;
 let subjectBirth = new Date(<%=subject.getBirth().getTime()%>);
-let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectBirth);
+
+subjectInfo["subjectGender"] = subjectGender;
+subjectInfo["subjectBirth"] = subjectBirth;
+
+let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectInfo);
 console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
 

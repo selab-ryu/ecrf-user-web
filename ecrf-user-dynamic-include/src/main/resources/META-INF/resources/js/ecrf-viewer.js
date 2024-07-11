@@ -1,13 +1,18 @@
 let ECRFViewer = function(){
 	class Viewer{
 
-		constructor(DataStructure, align, structuredData, subjectBirth){
+		constructor(DataStructure, align, structuredData, subjectInfo){
 			var result = new Object();
 			renderUtil.align = align;
+			
 			autoCalUtil.crf = DataStructure;
+			autoCalUtil.riskCount = 0;
+			autoCalUtil.metabolicCount = 0;
+			autoCalUtil.gender = subjectInfo["subjectGender"];
+			autoCalUtil.age = autoCalUtil.calculateAge(subjectInfo["subjectBirth"]);
+
 			console.log("sd data", structuredData);
 			DataStructure.terms = renderUtil.flattenTerms(DataStructure.terms);
-			autoCalUtil.age = autoCalUtil.calculateAge(subjectBirth);
 			if(structuredData){
 				renderUtil.structuredData = structuredData;
 				result = structuredData;
@@ -85,7 +90,11 @@ let ECRFViewer = function(){
 			case "diabetes":
 			case "is_low_risk":
 			case "is_mid_risk":
+				if(this.age > 65){
+					$("#is_mid_risk").val("0").trigger('change');
+				}
 			case "is_high_risk":
+			case "is_high_risk_metabolic":
 				return true;
 				break;
 			case "par_q_under65":
@@ -152,28 +161,281 @@ let ECRFViewer = function(){
 						break; 
 					case "excercise_crf":
 						console.log("Exercise CRF Auto Calculation Running");
-						if(term.termName === "drug_diabetes") {
-							console.log(term.value[0]);
-							if(term.value[0] === '1'){
-								this.crf.terms.forEach(compareTerm=>{
-									if(compareTerm.termName === "diabetes"){
-										compareTerm.value = "1";
-										console.log($("#" + compareTerm.termName));
-										$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+						let beforeValue = term.termName + "_before_value";
+						switch(term.termName){
+							case "drug_diabetes":
+								if(term.value[0] === '1'){
+									this.crf.terms.forEach(compareTerm=>{
+										if(compareTerm.termName === "diabetes"){
+											compareTerm.value = "1";
+											$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+										}else if(compareTerm.termName === "is_high_risk"){
+											compareTerm.value = "0";
+											$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+										}
+									});
+								}else{
+									let highriskContentArr = new Array();
+									this.crf.terms.forEach(compareTerm=>{
+										if(compareTerm.termName === "diabetes"){
+											compareTerm.value = "0";
+											$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');							
+										}
+										if(compareTerm.termName === "drug_thyroid" || compareTerm.termName === "drug_cv" || compareTerm.termName === "drug_a_c" || compareTerm.termName === "drug_lung" || compareTerm.termName === "drug_respiratory" || compareTerm.termName === "drug_liver"){
+											console.log("comparing term",compareTerm.value);
+											highriskContentArr.push(compareTerm.value);												
+										}
+										
+									});
+									for(const index in highriskContentArr){
+										console.log("highriskContentArr", highriskContentArr);
+										console.log("highriskContentArr", highriskContentArr[index][0]);
+										if(highriskContentArr[index][0] !== "0"){
+											$("#is_high_risk").val("0").trigger('change');
+											break;
+										}else{
+											$("#is_high_risk").val("1").trigger('change');
+										}
 									}
-								});
-							}else{
-								this.crf.terms.forEach(compareTerm=>{
-									if(compareTerm.termName === "diabetes"){
-										compareTerm.value = "0";
-										$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');							
+								}
+								break;
+							case "waist_measurement":
+								if(this.gender == 0) {
+									if(this.beforeValue){
+										if(this.beforeValue < 90 && term.value >= 90) {
+											if(this.metabolicCount < 5){
+												this.metabolicCount++;
+												this.beforeValue = term.value;
+											}
+										}else if(this.beforeValue > 90 && term.value < 90){
+											if(this.metabolicCount > 0){
+												this.metabolicCount--;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}
+									}else{
+										console.log("dont have beforeValue");
+										if(term.value >= 85) {
+											if(this.metabolicCount < 5){
+												this.metabolicCount++;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}										
 									}
-								});
-							}
-						}
-						break;
+								}else{
+									if(this.beforeValue){
+										if(this.beforeValue < 85 && term.value >= 85) {
+											if(this.metabolicCount < 5){
+												this.metabolicCount++;
+												this.beforeValue = term.value;
+											}
+										}else if(this.beforeValue > 85 && term.value < 85){
+											if(this.metabolicCount > 0){
+												this.metabolicCount--;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}
+									}else{
+										console.log("dont have beforeValue");
+										if(term.value >= 85) {
+											if(this.metabolicCount < 5){
+												this.metabolicCount++;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}										
+									}
+								}
+								break;
+
+							case "myocardial_infarction":
+								if(this.beforeValue){
+									if(term.value[0] === '1' && term.value[0] !== this.beforeValue) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value[0];
+										}
+									}else{
+										if(this.riskCount > 0){
+											this.riskCount--;
+											this.beforeValue = term.value[0];
+										}
+									}
+								}else{
+									if(term.value[0] === '1') {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value[0];
+										}
+									}else{
+										this.beforeValue = term.value[0];
+									}
+								}
+								break;
+							case "smoke":
+								if(this.beforeValue){
+									if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this.beforeValue === '-1' || this.beforeValue === '1')) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value[0];
+										}
+									}else if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this.beforeValue === '2' || this.beforeValue === '3' || this.beforeValue === '4' || this.beforeValue === '5' || this.beforeValue === '6')){
+										this.beforeValue = term.value[0];
+									}else{
+										if(this.riskCount > 0){
+											this.riskCount--;
+											this.beforeValue = term.value[0];
+										}
+									}
+								}else{
+									if(term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value[0];
+										}
+									}else{
+										this.beforeValue = term.value[0];
+									}
+								}
+								break;
+							case "sedentary_life":
+								if(this.beforeValue){
+									if(term.value[0] === '1' && term.value[0] !== this.beforeValue) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value[0];
+										}
+									}else{
+										if(this.riskCount > 0){
+											this.riskCount--;
+											this.beforeValue = term.value[0];
+										}
+									}
+								}else{
+									if(term.value[0] === '1') {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value[0];
+										}
+									}else{
+										this.beforeValue = term.value[0];
+									}
+								}
+								break;
+							case "middle_stomach":
+								if(this.gender == 0) {
+									if(this.beforeValue){
+										if(this.beforeValue < 90 && term.value >= 90) {
+											if(this.riskCount < 10){
+												this.riskCount++;
+												this.beforeValue = term.value;
+											}
+										}else if(this.beforeValue > 90 && term.value < 90){
+											if(this.riskCount > 0){
+												this.riskCount--;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}
+									}else{
+										console.log("dont have beforeValue");
+										if(term.value >= 90) {
+											if(this.riskCount < 10){
+												this.riskCount++;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}										
+									}
+								}else{
+									if(this.beforeValue){
+										if(this.beforeValue < 80 && term.value >= 80) {
+											if(this.riskCount < 10){
+												this.riskCount++;
+												this.beforeValue = term.value;
+											}
+										}else if(this.beforeValue > 80 && term.value < 80){
+											if(this.riskCount > 0){
+												this.riskCount--;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}
+									}else{
+										console.log("dont have beforeValue");
+										if(term.value >= 80) {
+											if(this.riskCount < 10){
+												this.riskCount++;
+												this.beforeValue = term.value;
+											}
+										}else{
+											this.beforeValue = term.value;
+										}										
+									}
+								}
+								break;
+							case "survey_sbp":
+								if(this.beforeValue){
+									if(this.beforeValue < 140 && term.value >= 140) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											if(this.beforeValue < 130){
+												if(this.metabolicCount < 5){
+													this.metabolicCount++;
+												}
+											}
+											this.beforeValue = term.value;
+										}
+										
+									}else if(this.beforeValue >= 130 && term.value < 140){
+										if(this.riskCount > 0){
+											this.riskCount--;
+											this.beforeValue = term.value;
+										}
+										if(term.value < 130){
+											if(this.metabolicCount > 0){
+												this.metabolicCount--;
+												this.beforeValue = term.value;
+											}
+										}
+									}else{
+										this.beforeValue = term.value;
+									}
+								}else{
+									console.log("dont have beforeValue");
+									if(term.value >= 140) {
+										if(this.riskCount < 10){
+											this.riskCount++;
+											this.beforeValue = term.value;
+										}
+										if(this.metabolicCount < 5){
+											this.metabolicCount++;
+											this.beforeValue = term.value;
+										}
+									}else if(term.value >= 130){
+										if(this.metabolicCount < 5){
+											this.metabolicCount++;
+											this.beforeValue = term.value;
+										}
+									}else{
+										this.beforeValue = term.value;
+									}										
+								}
+								break;
+
+						}				 
+					break;						
 				}
-				 
 			}
 		}
 	}
