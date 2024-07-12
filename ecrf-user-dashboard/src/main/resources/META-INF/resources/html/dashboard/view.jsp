@@ -9,18 +9,18 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
 JSONObject obj = (JSONObject)renderRequest.getAttribute("chartDataObj");
 
-_log.info(obj);
+//_log.info(obj);
 
 JSONArray chartDataArr = obj.getJSONArray("chart-data");
 
 %>
 
 <style>
-.panel-title {
+.ecrf-user-dashboard .panel-title {
 	font-size:1.2rem;
 }
 
-.radius-shadow-container {
+.ecrf-user-dashboard .radius-shadow-container {
 	padding:0px;
 }
 </style>

@@ -165,7 +165,7 @@ _log.info("base url : " + baseURL);
 						
 						<% String auditFunctionCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 1); %>
 						<td>
-							<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view" : "ecrf-user.button.view-audit" %>" cssClass="ci-btn small-btn" onClick="<%=auditFunctionCall%>"></aui:button>
+							<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view-crf-data" : "ecrf-user.button.view-audit" %>" cssClass="ci-btn small-btn" onClick="<%=auditFunctionCall%>"></aui:button>
 						</td>
 						
 						</c:when>
@@ -177,7 +177,7 @@ _log.info("base url : " + baseURL);
 							
 							<% String viewFunctionCall = String.format("toViewCRF(%d)", link.getStructuredDataId()); %>
 							<td>
-								<aui:button name="viewCRF" type="button" value="View CRF Data" cssClass="ci-btn small-btn" onClick="<%=viewFunctionCall%>"></aui:button>
+								<aui:button name="viewCRF" type="button" value="ecrf-user.button.view-crf-data" cssClass="ci-btn small-btn" onClick="<%=viewFunctionCall%>"></aui:button>
 							</td>
 							
 							</c:when>
@@ -185,7 +185,7 @@ _log.info("base url : " + baseURL);
 							
 							<% String updateFunctionCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 0); %>
 							<td>
-								<aui:button name="updateCRF" type="button" value="Edit CRF Data" cssClass="ci-btn small-btn" onClick="<%=updateFunctionCall%>"></aui:button>
+								<aui:button name="updateCRF" type="button" value="ecrf-user.button.update-crf-data" cssClass="ci-btn small-btn" onClick="<%=updateFunctionCall%>"></aui:button>
 							</td>
 							
 							</c:otherwise>
@@ -202,6 +202,7 @@ _log.info("base url : " + baseURL);
 			</table>
 			</aui:col>
 		</aui:row>
+		
 		<%
 		String auditHidden = "";
 		String deleteHidden = "";
@@ -224,16 +225,13 @@ _log.info("base url : " + baseURL);
 		}
 		%>
 		
-		<c:if test="<%=!hasForm %>">
+		<c:if test="false">
 		<aui:row>
 			<aui:col cssClass="center">
 				<liferay-ui:message key="ecrf-user.validation.no-crf-form" />
 			</aui:col>
 		</aui:row>
-		</c:if>
 		
-		<c:choose>
-		<c:when test="<%=updateLock %>">
 		<aui:row>
 			<aui:col cssClass="center">
 				<span>
@@ -241,9 +239,23 @@ _log.info("base url : " + baseURL);
 				</span>
 			</aui:col>
 		</aui:row>
+		</c:if>
+		
+		<c:choose>
+		<c:when test="<%=!hasForm %>">
+		
+			<aui:button name="crfFormNotice" type="button" value="ecrf-user.validation.no-crf-form" cssClass="none-btn full-btn" disabled="true"></aui:button>
+		
+		</c:when>
+		<c:when test="<%=updateLock %>">
+		
+			<aui:button name="dbLockNotice" type="button" value="ecrf-user.crf-data.db-lock" cssClass="none-btn full-btn" disabled="true"></aui:button>
+		
 		</c:when>
 		<c:otherwise>
-			<aui:button name="addCRF" type="button" value="Add New CRF Data" cssClass="<%=auditHidden %>"></aui:button>
+		
+			<aui:button name="addCRF" type="button" value="ecrf-user.button.add-crf-data" cssClass="ci-btn full-btn"></aui:button>
+		
 		</c:otherwise>
 		</c:choose>
 	

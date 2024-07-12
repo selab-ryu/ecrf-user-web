@@ -97,7 +97,7 @@ public class DashboardPortlet extends MVCPortlet {
 				LinkCRF link = crfLinkList.get(linkIndex);
 				String answerFormStr = _dataTypeLocalService.getStructuredData(link.getStructuredDataId());
 				
-				_log.info(answerFormStr);
+				//_log.info(answerFormStr);
 				
 				JSONObject answerObj = null;
 				
@@ -110,7 +110,7 @@ public class DashboardPortlet extends MVCPortlet {
 				Date visitDate = null;
 				if(Validator.isNotNull(answerObj) && answerObj.has("visit_date")){
 					visitDate = new Date(Long.valueOf(answerObj.getString("visit_date")));
-					_log.info(sdf.format(visitDate));
+					//_log.info(sdf.format(visitDate));
 					
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(visitDate);
@@ -131,8 +131,8 @@ public class DashboardPortlet extends MVCPortlet {
 			yearArr = sortJSONArray(yearArr, "x");
 			monthArr = sortJSONArray(monthArr, "x");
 			
-			_log.info(yearArr.toString());
-			_log.info(monthArr.toString());
+			//_log.info(yearArr.toString());
+			//_log.info(monthArr.toString());
 				
 			dataObj.put("yearData", yearArr);
 			dataObj.put("monthData", monthArr);
@@ -189,7 +189,7 @@ public class DashboardPortlet extends MVCPortlet {
 		
 		for(String key : keySet) {
 			Integer value = map.get(key);
-			_log.info("key/value:/ " + key+"/"+value);
+			//_log.info("key/value:/ " + key+"/"+value);
 			
 			JSONObject obj = JSONFactoryUtil.createJSONObject();
 			

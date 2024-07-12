@@ -429,6 +429,10 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					<aui:button type="submit" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.add" ></aui:button>
 					</c:if>
 					
+					<c:if test="<%=fromLiferay %>">
+					<aui:button type="submit" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.add" ></aui:button>
+					</c:if>
+					
 					</c:otherwise>
 					</c:choose>			
 							
