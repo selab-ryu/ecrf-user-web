@@ -181,6 +181,7 @@ public class UpdateCRFViewerActionCommand extends BaseMVCActionCommand {
 					}
 				}
 				dataContent = answer.toJSONString();
+				//TODO: need folderId set function
 				_dataTypeLocalService.updateStructuredData(sd.getStructuredDataId(), 0, dataTypeId, dataContent, WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
 			}
 			

@@ -4,12 +4,9 @@ let ECRFViewer = function(){
 		constructor(DataStructure, align, structuredData, subjectInfo){
 			var result = new Object();
 			renderUtil.align = align;
-			
-			autoCalUtil.crf = DataStructure;
-			autoCalUtil.riskCount = 0;
-			autoCalUtil.metabolicCount = 0;
-			autoCalUtil.gender = subjectInfo["subjectGender"];
-			autoCalUtil.age = autoCalUtil.calculateAge(subjectInfo["subjectBirth"]);
+			let isProcessing = false;
+
+			autoCalUtil.initCalculatevalue(DataStructure, subjectInfo);
 
 			console.log("sd data", structuredData);
 			DataStructure.terms = renderUtil.flattenTerms(DataStructure.terms);
@@ -47,6 +44,7 @@ let ECRFViewer = function(){
             };
             
             Liferay.on('value_changed', function(event){
+
             	if(event.dataPacket.term){
             		let eventTerm = event.dataPacket.term;
             		console.log(eventTerm.value);
@@ -54,14 +52,32 @@ let ECRFViewer = function(){
             			renderUtil.activateTerms(eventTerm);
             		}
             		result[eventTerm.termName.toString()] = eventTerm.value;
-            		let autoTerm = autoCalUtil.checkAutoCal(eventTerm);
             		event.dataPacket.result = result;
+                	if(isProcessing) return;
+            		isProcessing = true;
+            		autoCalUtil.checkAutoCal(eventTerm);
             	}
+            	isProcessing = false;
             });
         }
 	};
 	
 	let autoCalUtil = {
+		initCalculatevalue: function(DataStructure, subjectInfo){
+			this.crf = DataStructure;
+
+			this.gender = subjectInfo["subjectGender"];
+			this.age = autoCalUtil.calculateAge(subjectInfo["subjectBirth"]);
+			
+			this.cogasScore = 0;
+			if(this.age >= 50){
+				this.cogasScore++;
+			}
+			
+			this.riskCount = 0;
+			this.metabolicCount = 0;
+			
+		},
 		calculateAge: function (birthDate) {
 			var birthYear = birthDate.getFullYear();
 			var birthMonth = birthDate.getMonth();
@@ -116,7 +132,6 @@ let ECRFViewer = function(){
 			}
 			
 		},
-		
 		checkAutoCal : function(term){
 			if(this.crf){				
 				switch(this.crf.dataTypeName){
@@ -124,6 +139,7 @@ let ECRFViewer = function(){
 						console.log("ER CRF Auto Calculation Running");
 						console.log(term.termName);
 						console.log(term.value);
+						var beforeValue = term.termName + "_before_value";
 						if(term.termName === "conciousness") {
 							this.crf.terms.forEach(compareTerm=>{
 								if(compareTerm.termName === "gcs"){
@@ -132,36 +148,50 @@ let ECRFViewer = function(){
 									switch(selectedValue) {
 									case '0':
 										compareTerm.value = 15;
-										console.log(compareTerm.value);
+										this.cogasScore--;
 										break;
 									case '1':
 										compareTerm.value = 12;
+										this.cogasScore--;
 										break;
 									case '2':
 										compareTerm.value = 10;
+										this.cogasScore++;
 										break;
 									case '3':
 										compareTerm.value = 8;
+										this.cogasScore++;
 										break;
 									case '4':
 										compareTerm.value = 5;
+										this.cogasScore++;
 										break;
 									case '5':
 										compareTerm.value = 3;
+										this.cogasScore++;
 										break;
 									default:
 										compareTerm.value = "";
+										this.cogasScore--;
 										break;
 									}
 									$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
 								}
 							});
 						}
+						if(term.termName === "shock") {
+							if(term.value[0] === '1'){
+								cogasScore++;
+							}else{
+								cogasScore--;
+							}
+						}
+						console.log(this.cogasScore);
 
 						break; 
 					case "excercise_crf":
 						console.log("Exercise CRF Auto Calculation Running");
-						let beforeValue = term.termName + "_before_value";
+						var beforeValue = term.termName + "_before_value";
 						switch(term.termName){
 							case "drug_diabetes":
 								if(term.value[0] === '1'){
@@ -201,307 +231,307 @@ let ECRFViewer = function(){
 								break;
 							case "waist_measurement":
 								if(this.gender == 0) {
-									if(this.beforeValue){
-										if(this.beforeValue < 90 && term.value >= 90) {
+									if(this[beforeValue]){
+										if(this[beforeValue] < 90 && term.value >= 90) {
 											if(this.metabolicCount < 5){
 												this.metabolicCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
-										}else if(this.beforeValue > 90 && term.value < 90){
+										}else if(this[beforeValue] > 90 && term.value < 90){
 											if(this.metabolicCount > 0){
 												this.metabolicCount--;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
 										console.log("dont have beforeValue");
 										if(term.value >= 85) {
 											if(this.metabolicCount < 5){
 												this.metabolicCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}										
 									}
 								}else{
-									if(this.beforeValue){
-										if(this.beforeValue < 85 && term.value >= 85) {
+									if(this[beforeValue]){
+										if(this[beforeValue] < 85 && term.value >= 85) {
 											if(this.metabolicCount < 5){
 												this.metabolicCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
-										}else if(this.beforeValue > 85 && term.value < 85){
+										}else if(this[beforeValue] > 85 && term.value < 85){
 											if(this.metabolicCount > 0){
 												this.metabolicCount--;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
 										console.log("dont have beforeValue");
 										if(term.value >= 85) {
 											if(this.metabolicCount < 5){
 												this.metabolicCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}										
 									}
 								}
 								break;
 
 							case "myocardial_infarction":
-								if(this.beforeValue){
-									if(term.value[0] === '1' && term.value[0] !== this.beforeValue) {
+								if(this[beforeValue]){
+									if(term.value[0] === '1' && term.value[0] !== this[beforeValue]) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
 									}else{
 										if(this.riskCount > 0){
 											this.riskCount--;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
 									}
 								}else{
 									if(term.value[0] === '1') {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
 									}else{
-										this.beforeValue = term.value[0];
+										this[beforeValue] = term.value[0];
 									}
 								}
 								break;
 							case "smoke":
-								if(this.beforeValue){
-									if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this.beforeValue === '-1' || this.beforeValue === '1')) {
+								if(this[beforeValue]){
+									if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this[beforeValue] === '-1' || this[beforeValue] === '1')) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
-									}else if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this.beforeValue === '2' || this.beforeValue === '3' || this.beforeValue === '4' || this.beforeValue === '5' || this.beforeValue === '6')){
-										this.beforeValue = term.value[0];
+									}else if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this[beforeValue] === '2' || this[beforeValue] === '3' || this[beforeValue] === '4' || this[beforeValue] === '5' || this[beforeValue] === '6')){
+										this[beforeValue] = term.value[0];
 									}else{
 										if(this.riskCount > 0){
 											this.riskCount--;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
 									}
 								}else{
 									if(term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
 									}else{
-										this.beforeValue = term.value[0];
+										this[beforeValue] = term.value[0];
 									}
 								}
 								break;
 							case "sedentary_life":
-								if(this.beforeValue){
-									if(term.value[0] === '1' && term.value[0] !== this.beforeValue) {
+								if(this[beforeValue]){
+									if(term.value[0] === '1' && term.value[0] !== this[beforeValue]) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
 									}else{
 										if(this.riskCount > 0){
 											this.riskCount--;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
 									}
 								}else{
 									if(term.value[0] === '1') {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value[0];
+											this[beforeValue] = term.value[0];
 										}
 									}else{
-										this.beforeValue = term.value[0];
+										this[beforeValue] = term.value[0];
 									}
 								}
 								break;
 							case "middle_stomach":
 								if(this.gender == 0) {
-									if(this.beforeValue){
-										if(this.beforeValue < 90 && term.value >= 90) {
+									if(this[beforeValue]){
+										if(this[beforeValue] < 90 && term.value >= 90) {
 											if(this.riskCount < 10){
 												this.riskCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
-										}else if(this.beforeValue >= 90 && term.value < 90){
+										}else if(this[beforeValue] >= 90 && term.value < 90){
 											if(this.riskCount > 0){
 												this.riskCount--;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
 										console.log("dont have beforeValue");
 										if(term.value >= 90) {
 											if(this.riskCount < 10){
 												this.riskCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}										
 									}
 								}else{
-									if(this.beforeValue){
-										if(this.beforeValue < 80 && term.value >= 80) {
+									if(this[beforeValue]){
+										if(this[beforeValue] < 80 && term.value >= 80) {
 											if(this.riskCount < 10){
 												this.riskCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
-										}else if(this.beforeValue >= 80 && term.value < 80){
+										}else if(this[beforeValue] >= 80 && term.value < 80){
 											if(this.riskCount > 0){
 												this.riskCount--;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
 										console.log("dont have beforeValue");
 										if(term.value >= 80) {
 											if(this.riskCount < 10){
 												this.riskCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}										
 									}
 								}
 								break;
 							case "survey_sbp":
-								if(this.beforeValue){
-									if(this.beforeValue < 140 && term.value >= 140) {
+								if(this[beforeValue]){
+									if(this[beforeValue] < 140 && term.value >= 140) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											if(this.beforeValue < 130){
+											if(this[beforeValue] < 130){
 												if(this.metabolicCount < 5){
 													this.metabolicCount++;
 												}
 											}
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 										
-									}else if(this.beforeValue >= 130 && term.value < 140){
+									}else if(this[beforeValue] >= 130 && term.value < 140){
 										if(this.riskCount > 0){
 											this.riskCount--;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 										if(term.value < 130){
 											if(this.metabolicCount > 0){
 												this.metabolicCount--;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}
 								}else{
 									console.log("dont have beforeValue");
 									if(term.value >= 140) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 										if(this.metabolicCount < 5){
 											this.metabolicCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else if(term.value >= 130){
 										if(this.metabolicCount < 5){
 											this.metabolicCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}										
 								}
 								break;
 							case "survey_dbp":
-								if(this.beforeValue){
-									if(this.beforeValue < 90 && term.value >= 90) {
+								if(this[beforeValue]){
+									if(this[beforeValue] < 90 && term.value >= 90) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
-									}else if(this.beforeValue >= 90 && term.value < 90){
+									}else if(this[beforeValue] >= 90 && term.value < 90){
 										if(this.riskCount > 0){
 											this.riskCount--;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}
 								}else{
 									console.log("dont have beforeValue");
 									if(term.value >= 90) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}										
 								}
 								break;
 							case "tc":
-								if(this.beforeValue){
-									if(this.beforeValue < 200 && term.value >= 200) {
+								if(this[beforeValue]){
+									if(this[beforeValue] < 200 && term.value >= 200) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
-									}else if(this.beforeValue >= 200 && term.value < 200){
+									}else if(this[beforeValue] >= 200 && term.value < 200){
 										if(this.riskCount > 0){
 											this.riskCount--;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}
 								}else{
 									console.log("dont have beforeValue");
 									if(term.value >= 200) {
 										if(this.riskCount < 10){
 											this.riskCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}										
 								}
 								break;
 							case "survey_glu_fasting":
-								if(this.beforeValue){
-									if(this.beforeValue < 100 && term.value >= 100) {
+								if(this[beforeValue]){
+									if(this[beforeValue] < 100 && term.value >= 100) {
 										if(this.riskCount < 10){
 											this.riskCount++;
 											this.metabolicCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
-									}else if(this.beforeValue >= 100 && term.value < 100){
+									}else if(this[beforeValue] >= 100 && term.value < 100){
 										if(this.riskCount > 0){
 											this.riskCount--;
 											this.metabolicCount--;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}
 								}else{
 									console.log("dont have beforeValue");
@@ -509,29 +539,29 @@ let ECRFViewer = function(){
 										if(this.riskCount < 10){
 											this.riskCount++;
 											this.metabolicCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}										
 								}
 								break;
 							case "survey_glu_postprandial":
-								if(this.beforeValue){
-									if(this.beforeValue < 140 && term.value >= 140) {
+								if(this[beforeValue]){
+									if(this[beforeValue] < 140 && term.value >= 140) {
 										if(this.riskCount < 10){
 											this.riskCount++;
 											this.metabolicCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
-									}else if(this.beforeValue >= 140 && term.value < 140){
+									}else if(this[beforeValue] >= 140 && term.value < 140){
 										if(this.riskCount > 0){
 											this.riskCount--;
 											this.metabolicCount--;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}
 								}else{
 									console.log("dont have beforeValue");
@@ -539,64 +569,64 @@ let ECRFViewer = function(){
 										if(this.riskCount < 10){
 											this.riskCount++;
 											this.metabolicCount++;
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
-										this.beforeValue = term.value;
+										this[beforeValue] = term.value;
 									}										
 								}
 								break;
 							case "hdl":
 								if(this.gender == 0) {
-									if(this.beforeValue){
-										if(this.beforeValue > 40 && term.value <= 40) {
+									if(this[beforeValue]){
+										if(this[beforeValue] > 40 && term.value <= 40) {
 											if(this.metabolicCount < 5){
 												this.metabolicCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
-										}else if(this.beforeValue < 40 && term.value > 40){
+										}else if(this[beforeValue] < 40 && term.value > 40){
 											if(this.metabolicCount > 0){
 												this.metabolicCount--;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
 										console.log("dont have beforeValue");
 										if(term.value < 40) {
 											if(this.metabolicCount < 5){
 												this.metabolicCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}										
 									}
 								}else{
-									if(this.beforeValue){
-										if(this.beforeValue > 50 && term.value <= 50) {
+									if(this[beforeValue]){
+										if(this[beforeValue] > 50 && term.value <= 50) {
 											if(this.metabolicCount < 5){
 												this.metabolicCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
-										}else if(this.beforeValue <= 50 && term.value < 50){
+										}else if(this[beforeValue] <= 50 && term.value < 50){
 											if(this.metabolicCount > 0){
 												this.metabolicCount--;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}
 									}else{
 										console.log("dont have beforeValue");
 										if(term.value < 50) {
 											if(this.metabolicCount < 5){
 												this.metabolicCount++;
-												this.beforeValue = term.value;
+												this[beforeValue] = term.value;
 											}
 										}else{
-											this.beforeValue = term.value;
+											this[beforeValue] = term.value;
 										}										
 									}
 								}
@@ -636,7 +666,28 @@ let ECRFViewer = function(){
 									}
 								}
 								break;
-						}				 
+						}
+					console.log("metabolic : " , this.metabolicCount, "risk : ", this.riskCount);		
+					if(this.metabolicCount >= 3){
+						console.log("metaBolic ON");
+						$("#is_high_risk_metabolic").val("0").trigger('change');
+					}else{
+						$("#is_high_risk_metabolic").val("1").trigger('change');
+					}
+					
+					if(this.riskCount == 1){
+						console.log("lowRisk ON");
+						$("#is_low_risk").val("0").trigger('change');
+					}else if(this.riskCount > 1){
+						$("#is_low_risk").val("0").trigger('change');
+						$("#is_mid_risk").val("0").trigger('change');
+						console.log("lowRisk ON");
+						console.log("midRisk ON");
+					}else{
+						$("#is_low_risk").val("1").trigger('change');
+						$("#is_mid_risk").val("1").trigger('change');
+					}
+						
 					break;						
 				}
 			}
