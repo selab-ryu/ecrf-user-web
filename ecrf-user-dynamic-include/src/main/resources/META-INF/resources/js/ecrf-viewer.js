@@ -6,11 +6,7 @@ let ECRFViewer = function(){
 			renderUtil.align = align;
 			let isProcessing = false;
 
-			autoCalUtil.crf = DataStructure;
-			autoCalUtil.riskCount = 0;
-			autoCalUtil.metabolicCount = 0;
-			autoCalUtil.gender = subjectInfo["subjectGender"];
-			autoCalUtil.age = autoCalUtil.calculateAge(subjectInfo["subjectBirth"]);
+			autoCalUtil.initCalculatevalue(DataStructure, subjectInfo);
 
 			console.log("sd data", structuredData);
 			DataStructure.terms = renderUtil.flattenTerms(DataStructure.terms);
@@ -67,6 +63,21 @@ let ECRFViewer = function(){
 	};
 	
 	let autoCalUtil = {
+		initCalculatevalue: function(DataStructure, subjectInfo){
+			this.crf = DataStructure;
+
+			this.gender = subjectInfo["subjectGender"];
+			this.age = autoCalUtil.calculateAge(subjectInfo["subjectBirth"]);
+			
+			this.cogasScore = 0;
+			if(this.age >= 50){
+				this.cogasScore++;
+			}
+			
+			this.riskCount = 0;
+			this.metabolicCount = 0;
+			
+		},
 		calculateAge: function (birthDate) {
 			var birthYear = birthDate.getFullYear();
 			var birthMonth = birthDate.getMonth();
@@ -128,6 +139,7 @@ let ECRFViewer = function(){
 						console.log("ER CRF Auto Calculation Running");
 						console.log(term.termName);
 						console.log(term.value);
+						var beforeValue = term.termName + "_before_value";
 						if(term.termName === "conciousness") {
 							this.crf.terms.forEach(compareTerm=>{
 								if(compareTerm.termName === "gcs"){
@@ -136,31 +148,45 @@ let ECRFViewer = function(){
 									switch(selectedValue) {
 									case '0':
 										compareTerm.value = 15;
-										console.log(compareTerm.value);
+										this.cogasScore--;
 										break;
 									case '1':
 										compareTerm.value = 12;
+										this.cogasScore--;
 										break;
 									case '2':
 										compareTerm.value = 10;
+										this.cogasScore++;
 										break;
 									case '3':
 										compareTerm.value = 8;
+										this.cogasScore++;
 										break;
 									case '4':
 										compareTerm.value = 5;
+										this.cogasScore++;
 										break;
 									case '5':
 										compareTerm.value = 3;
+										this.cogasScore++;
 										break;
 									default:
 										compareTerm.value = "";
+										this.cogasScore--;
 										break;
 									}
 									$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
 								}
 							});
 						}
+						if(term.termName === "shock") {
+							if(term.value[0] === '1'){
+								cogasScore++;
+							}else{
+								cogasScore--;
+							}
+						}
+						console.log(this.cogasScore);
 
 						break; 
 					case "excercise_crf":
