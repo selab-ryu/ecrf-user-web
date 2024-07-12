@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletURL"%>
 <%@page import="ecrf.user.service.CRFSearchLogLocalServiceUtil"%>
 <%@ include file="../../init.jsp" %>
 
@@ -62,6 +63,8 @@
 	}
 	
 	boolean hasDownloadExcelPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL);
+	
+	LiferayPortletURL baseURL = PortletURLFactoryUtil.create(request, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 %>
 
 <style>
@@ -102,6 +105,8 @@
 	
 		<liferay-ui:header backURL="<%=redirect %>" title='ecrf-user.crf-data.title.excel-download' />
 		
+		
+		
 		<div class="radius-shadow-container" style="width:auto;">
 			<div id="Search_Page"></div>
 		    	<span id="searchText"></span>
@@ -134,6 +139,22 @@
 
         function allcheck(id){
 
+        	let inputCheck = $("input[id = " + id + "]");
+        	let inputCheckChild = inputCheck.parent().children('div');
+			let isCheck = inputCheck[0].checked;
+			
+			for(var i = 0; i < inputCheckChild.length; i++){
+				inputCheckChild[i].children[0].checked = isCheck;
+				
+				if(inputCheckChild[i].id == 'Main_Category'){
+					for(var j = 0; j < inputCheckChild[i].children.length; j++){
+						if(inputCheckChild[i].children[j].id == 'Sub_Category'){
+							inputCheckChild[i].children[j].children[0].checked = isCheck;
+						}
+					}
+				}
+			}
+        	/* 
             let thisCheck = $("input[id = " + id + "]")[0].checked;
             let thisTermName = $("input[id = " + id + "]")[0].value;
             let childCheckbox = "";
@@ -163,7 +184,7 @@
                 
                 //If the depth is 3, check the subclassification of the subclassification.
                 allcheck(childCheckbox[i].id);
-            }
+            } */
 
         }
 
@@ -199,213 +220,254 @@
 	        let inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
 	        //console.log("inspectionData: " + inspectionData);
 			var termLabel = $(elem);
-			var termName = termLabel.attr("name");
-			var renderURL = Liferay.PortletURL.createRenderURL();
-			var isList = false;
+			var termName = termLabel.attr("name");			
+			var type = "";
+			var displayName = "";
 			for(var i = 0; i < inspectionData.length; i++){
 				if(inspectionData[i].termName === termName){
 					if(inspectionData[i].termType === "List"){
-						isList = true;
+						type = "List";
+						displayName = inspectionData[i].displayName.en_US;
+					}
+					else if(inspectionData[i].termType === "Numeric"){
+						type = "Numeric";
+						displayName = inspectionData[i].displayName.en_US;
 					}
 				}
 			}
-			if(isList){
-				renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-				renderURL.setPortletMode("edit");
-			    renderURL.setWindowState("pop_up");
-				renderURL.setParameter("termName", termName);
-				renderURL.setParameter("crfId", <%=crfId%>);
-				renderURL.setParameter("mvcRenderCommandName", "<%=ECRFUserMVCCommand.RENDER_DIALOG_CRF_DATA_GRAPH %>");
-				
-				Liferay.Util.openWindow(
-						{
-							dialog: {
-								cache: false,
-								destroyOnClose: true,
-								centered: true,
-								modal: true,
-								resizable: false,
-								height: 600,
-								width: 1200
-							},
-							title: 'Graph',
-							uri: renderURL.toString()
-						}
-				);
-			}
+			
+			createGraphPopupRenderURL("<%=themeDisplay.getPortletDisplay().getId() %>", termName, displayName, type, <%=crfId%>, "<%=ECRFUserMVCCommand.RENDER_DIALOG_CRF_DATA_GRAPH %>", "<%=baseURL.toString()%>");		
 		}
+		
+		function sort_list(obj){
+			var list_ordered = [];
+	        for(var i = 0; i < obj.length; i++){
+	        	list_ordered[obj[i].order - 1] = obj[i];
+	        }
+	        return list_ordered;
+		}
+		
+		function EntireCheck(id){
+            let Big_Checkbox = $("input[id = " + id + "]").parent().children().children('input');
+            for(var i = 0; i < Big_Checkbox.length; i++){
+            	Big_Checkbox[i].checked = $("input[id = " + id + "]")[0].checked;
+            	allcheck(Big_Checkbox[i].id);
+            }
+            console.log(Big_Checkbox);
+        }
     </script>
 
     <script>
+    
+    var ContentText = "";
+    var inspectionData = "";
+    
+    AUI().ready(function() {
+    	setUI();
+    	
+		document.getElementById("searchText").innerHTML = ContentText;
+    	
+    	for(var i = 0; i < inspectionData.length; i++){
+    		//console.log(inspectionData[i].termName);
+    		if(inspectionData[i].termType === "List"){
+    			var temp = document.getElementsByName(inspectionData[i].termName);
+    			temp[0].setAttribute("style", "color: red!important;");
+			}
+    		else if(inspectionData[i].termType === "Numeric"){
+    			var temp = document.getElementsByName(inspectionData[i].termName);
+    			temp[0].setAttribute("style", "color: blue!important;");
+			}
+    	}
+    	
+    	var hw = document.getElementById('btn_1');
+	    hw.addEventListener('click', download_excel);
+    });
+    
+ 	// Insert the UI to be printed so far into the text.
+   	$(document).ready(function(){
+    	
+   	}); 
+    
+   	function setUI() { 
         // Emergency Inspection Term Lsit Json to Object array
-        var inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
+        inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
 		//console.log("inspectionData: " + inspectionData);
         // Text in Html
-        var ContentText = "";
-        
-        // Survey object data to Each List
-        var Big_Category = [];
-        var Main_Category = [];
-        var Sub_Category = [];
-        var Sub_Category_only = [];
 
-        // Move each List
+        ContentText = "";
+        ContentText += '<input type = "checkbox" id = "EntireCheck" onClick = "EntireCheck(this.id)"/>';
+        ContentText += '<label class="w200" for ="EntireCheck">AllCheck</label>';
+        ContentText += '<hr style="border: solid 1px #787878">';
+        var category_first = [];
+        
+       
+        var list_no_group = [];
+
         for(var i = 0; i < inspectionData.length; i++){
             if(inspectionData[i].termType == 'Group'){
-                if('groupTermId' in inspectionData[i]){
-                    Main_Category.push(inspectionData[i]);
-                }
-                else{
-                    Big_Category.push(inspectionData[i]);
-                }
+            	if(!('groupTermId' in inspectionData[i])){
+            		category_first.push(inspectionData[i]);
+            	}
             }
             
             else if(inspectionData[i].termType != 'Group'){
-                if('groupTermId' in inspectionData[i]){
-                    Sub_Category.push(inspectionData[i]);
-                }
-                else{
-                    Sub_Category_only.push(inspectionData[i]);
+                if(!('groupTermId' in inspectionData[i])){
+                	category_first.push(inspectionData[i]);
+                	list_no_group.push(inspectionData[i]);
                 }
             }
         }
 
-        // Index to attach Each Category element id
+        category_first = sort_list(category_first);
+        
+        console.log("category_first: " + JSON.stringify(category_first));
+        //console.log("category_second: " + JSON.stringify(category_second));
+        //console.log("category_third: " + JSON.stringify(category_third));
+        console.log("list_no_group: " + JSON.stringify(list_no_group));
+        console.log("list_no_group: " + category_first.includes(list_no_group));
+        
+     	// Index to attach Each Category element id
         var indexA = 0;
         var indexB = 0;
         var indexC = 0;
-
-        // Index to new Line Sub Category
-        var Index_Sub_category = 0;
-
-        // Print Each Category
-        for(var i = 0; i < Big_Category.length; i++){
-            // First, Print Big Category
-            ContentText += '<div id = "Big_Category">';
-            ContentText += '<input type = "checkbox" id = "A_' + indexA + '" value = "' + Big_Category[i].termName + '" onClick = "allcheck(this.id)"/>';
-            ContentText += '<label class="w200" for ="A_' + indexA + '">' + Big_Category[i].displayName.en_US + '</label>';
-            indexA++;
-            
-            //After return Object, present Big Category Name is Key!
-            var List_Depth2_Sub_category = Upfnc(Big_Category, Sub_Category)[Big_Category[i].termName];
-
-            // Variables that count how many sections a line has
-            Index_Sub_category = 0;
-
-            // Variables for Design
-            var Flag_Sub_category = true;
-
-            // Print Sub Category but It hasn't Main Category
-            for(var j = 0; j < List_Depth2_Sub_category.length; j++){
-				var subCateClass = "";
-                // New line if 4 sections are printed per line
-                if(Index_Sub_category == 4){
-                    ContentText += '<br>';
-                    subCateClass = "padL478";
-                    //ContentText += '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;';
-                    Index_Sub_category = 0;
-                }
-
-                if(Flag_Sub_category){
-                	subCateClass = "padL264";
-                    //ContentText += '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;';
-                    Flag_Sub_category = false;
-                }
-
-                ContentText += '<div id = "Sub_Category"  class="' + subCateClass + '" >';
-                ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + List_Depth2_Sub_category[j] + '"name = "Section" onClick = "isAll(this.id)"/>'
-                ContentText += '<label style="margin-right: 10px;" name="' + Sub_Category.find(e => e.termName === List_Depth2_Sub_category[j]).termName + '" onClick="renderGraph(this);" for ="C_' + indexC + '">' + Sub_Category.find(e => e.termName === List_Depth2_Sub_category[j]).displayName.en_US + '</label>';
+        
+        for(var i = 0; i < category_first.length; i++){
+        	console.log("category_first: " + JSON.stringify(category_first[i]));
+        	if(list_no_group.includes(category_first[i])){
+        		ContentText += '<div id = "Sub_Category">';
+                ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_first[i].termName + '"name = "Section" onClick = "isAll(this.id)"/>'
+                ContentText += '<label class="w200" for ="C_' + indexC + '" name = "' + category_first[i].termName + '">' + category_first[i].displayName.en_US + '</label>';
                 indexC++;
-                Index_Sub_category++;
                 ContentText += '</div>';
-            }
-            
-            // Variables for Design
-            var Flag_Main_category = true;
-
-            //After return Object, present Big Category Name is Key!
-            var List_Main_category = Upfnc(Big_Category, Main_Category)[Big_Category[i].termName];
-
-            // Print Main Category
-            for(var j = 0; j < List_Main_category.length; j++){
-				var mainCateClass = "";
-                // First Printed Main Category needs this space 
-                if(Flag_Main_category){
-                    Flag_Main_category = false;
-                }
-                // other Main Category needs this space
-                else{
-                	mainCateClass = "padL214";
-                    //ContentText += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;";
-                }
-
-                ContentText += '<div id = "Main_Category" class="' + mainCateClass + '">';
-                ContentText += '<input type = "checkbox" id = "B_' + indexB + '" value = "' + List_Main_category[j] + '" onClick = "allcheck(this.id); isAll(this.id);"/>'
-                ContentText += '<label class="w250" for ="B_' + indexB + '">' + Main_Category.find(e => e.termName === List_Main_category[j]).displayName.en_US + '</label>';
-                indexB++;
+                ContentText += '<hr style="border: solid 1px #787878">';
+                //ContentText += '<label style="margin-right: 10px;" name="' + Sub_Category.find(e => e.termName === List_Depth2_Sub_category[j]).termName + '" onClick="renderGraph(this);" for ="C_' + indexC + '">' + Sub_Category.find(e => e.termName === List_Depth2_Sub_category[j]).displayName.en_US + '</label>';
                 
-                //Variables that count how many sections a line has
-                Index_Sub_category = 0;
-
-                // Variables for Design
-                Flag_Sub_category = true;
-
-                List_Sub_category = Upfnc(Main_Category, Sub_Category)[List_Main_category[j]];
+        	}
+        	else{
+        		// First, Print Big Category
+                ContentText += '<div id = "Big_Category">';
+                ContentText += '<input type = "checkbox" id = "A_' + indexA + '" value = "' + category_first[i].termName + '" onClick = "allcheck(this.id)"/>';
+                ContentText += '<label class="w200" for ="A_' + indexA + '">' + category_first[i].displayName.en_US + '</label>';
+                indexA++;
                 
-                // Print Sub Category
-                for(var k = 0; k < List_Sub_category.length; k++){
-                	var subCateClass = "";
-                    // New line if 4 sections are printed per line
-                    if(Index_Sub_category == 4){
-                        ContentText += '<br>';
-                        subCateClass = "padL478";
-                        Index_Sub_category = 0;
-                    }
-
-                    if(Flag_Sub_category){
-                        Flag_Sub_category =false;
-                    }
-
-                    ContentText += '<div id = "Sub_Category" class="' + subCateClass + '">';
-                    ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + List_Sub_category[k] + '"name = "Section" onClick = "isAll(this.id); "/>'
-                    ContentText += '<label style="margin-right: 10px;" name="'+ Sub_Category.find(e => e.termName === List_Sub_category[k]).termName + '" onClick="renderGraph(this);" for ="C_' + indexC + '">' + Sub_Category.find(e => e.termName === List_Sub_category[k]).displayName.en_US + '</label>';
-                    indexC++;
-                    Index_Sub_category++;
-                    ContentText += '</div>';
+                var category_second = [];
+                
+                for(var j = 0; j < inspectionData.length; j++){
+                	if('groupTermId' in inspectionData[j]
+                			&& inspectionData[j].groupTermId.name == category_first[i].termName){
+                		category_second.push(inspectionData[j]);
+                	}
                 }
-                ContentText += '<br>';
+                
+                category_second = sort_list(category_second);
+                
+                var isGroup = false;
+                
+                if(category_second.find(e => e.termType == 'Group') != undefined){
+                	isGroup = true;
+                }
+                //console.log("category_second: " + JSON.stringify(category_second));
+                /* console.log("category_second: " + JSON.stringify(category_second));
+                console.log(category_second.find(e => e.termType == 'Group')); */
+                var Flag_Sub_category = true;
+                var Flag_Main_category = true;
+                var Index_Sub_category = 0;
+                for(var j = 0; j < category_second.length; j++){
+                	if(isGroup){
+                		var mainCateClass = "";
+                        // First Printed Main Category needs this space 
+                        if(Flag_Main_category){
+                            Flag_Main_category = false;
+                        }
+                        // other Main Category needs this space
+                        else{
+                        	mainCateClass = "padL214";
+                            //ContentText += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;";
+                        }
+
+                        
+                        if(category_second[j].termType != 'Group'){
+                        	ContentText += '<div id = "Sub_Category" class="' + mainCateClass + '">';
+                            ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_second[j].termName + '" onClick = "isAll(this.id);"/>'
+                            ContentText += '<label class="w250" for ="C_' + indexC + '" name = "' + category_second[j].termName + '">' +category_second[j].displayName.en_US + '</label>';
+                        	ContentText += '</div>';
+                        	ContentText += '<br>';
+                        	indexC++;
+                        }
+                        else{
+                        	ContentText += '<div id = "Main_Category" class="' + mainCateClass + '">';
+                            ContentText += '<input type = "checkbox" id = "B_' + indexB + '" value = "' + category_second[j].termName + '" onClick = "allcheck(this.id); isAll(this.id);"/>'
+                            ContentText += '<label class="w250" for ="B_' + indexB + '">' + category_second[j].displayName.en_US + '</label>';
+                            indexB++;
+                            
+                            var category_third = [];
+                            
+                            for(var k = 0; k < inspectionData.length; k++){
+                            	if('groupTermId' in inspectionData[k]
+                            			&& inspectionData[k].groupTermId.name == category_second[j].termName){
+                            		category_third.push(inspectionData[k]);
+                            	}
+                            }
+                            
+                            category_third = sort_list(category_third);
+                            //console.log("category_third: " + JSON.stringify(category_third))
+                            var Index_Sub_category_1 = 0;
+                            var Flag_Sub_category_1 = true;
+                            for(var k = 0; k < category_third.length; k++){
+                            	var subCateClass = "";
+                                // New line if 4 sections are printed per line
+                                if(Index_Sub_category_1 == 2){
+                                    ContentText += '<br>';
+                                    subCateClass = "padL478";
+                                    Index_Sub_category_1 = 0;
+                                }
+
+                                if(Flag_Sub_category){
+                                	Flag_Sub_category_1 =false;
+                                }
+                                //console.log("category_third: " + JSON.stringify(category_third[k]))
+                                //console.log("category_third: " + JSON.stringify(category_third[k].termName))
+                                ContentText += '<div id = "Sub_Category" class="' + subCateClass + '">';
+                                ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_third[k].termName + '"name = "Section" onClick = "isAll(this.id); "/>'
+                                ContentText += '<label style="margin-right: 10px;" name="'+ category_third[k].termName + '" onClick="renderGraph(this);" for ="C_' + indexC + '">' + category_third[k].displayName.en_US + '</label>';
+                                indexC++;
+                                Index_Sub_category_1++;
+                                ContentText += '</div>';
+                            }
+                            ContentText += '<br>';
+                            ContentText += '</div>';
+                        }
+                        
+                	}
+                	else{
+                		var subCateClass = "";
+                        // New line if 4 sections are printed per line
+                        if(Index_Sub_category == 2){
+                            ContentText += '<br>';
+                            subCateClass = "padL478";
+                            //ContentText += '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;';
+                            Index_Sub_category = 0;
+                        }
+
+                        if(Flag_Sub_category){
+                        	subCateClass = "padL264";
+                            //ContentText += '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;';
+                            Flag_Sub_category = false;
+                        }
+
+                        ContentText += '<div id = "Sub_Category"  class="' + subCateClass + '" >';
+                        ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_second[j].termName + '"name = "Section" onClick = "isAll(this.id)"/>'
+                        ContentText += '<label style="margin-right: 10px;" name="' + category_second[j].termName + '" onClick="renderGraph(this);" for ="C_' + indexC + '">' + category_second[j].displayName.en_US + '</label>';
+                        indexC++;
+                        Index_Sub_category++;
+                        ContentText += '</div>';
+                	}
+                } 
+                
                 ContentText += '</div>';
-            }
-            ContentText += '</div>';
-            ContentText += '<hr style="border: solid 1px #787878">';
-        }
-
-        Index_Sub_category = 0;
-        Flag_Sub_category = true;
-
-        // Print Sub Category but It hasn't No group(Big, Main)
-        for(var i = 0; i < Sub_Category_only.length; i++){
-
-            if(Flag_Sub_category){
-                //ContentText += '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;';
-                Flag_Sub_category =false;
-            }
-
-            // New line if 4 sections are printed per line
-            if(Index_Sub_category == 4){
-                //ContentText += '<br>';
-                //ContentText += '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;';
-                Index_Sub_category = 0;
-            }
-
-            ContentText += '<div id = "Sub_Category">';
-            ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + Sub_Category_only[i].termName + '"name = "Section" onClick = "isAll(this.id)"/>'
-            ContentText += '<label onClick="renderGraph(this); " name="' + Sub_Category_only[i].termName + '" for ="C_' + indexC + '">' + Sub_Category_only[i].displayName.en_US + '</label>';
-            indexC++;
-            Index_Sub_category++;
-            ContentText += '</div>';
-        }
-        ContentText += '<br>';
+                ContentText += '<hr style="border: solid 1px #787878">';
+        	}
+        } 
 
         // move to html tag
         // xlsx Name Input Window
@@ -413,21 +475,8 @@
         // xlsx Output Button
         ContentText += '<button id="btn_1" <%=hasDownloadExcelPermission ? "" : "disabled"%> >Export xlsx</button>';
 		
-        // Insert the UI to be printed so far into the text.
-       	$(document).ready(function(){
-        	document.getElementById("searchText").innerHTML = ContentText;
-        	
-        	for(var i = 0; i < inspectionData.length; i++){
-        		if(inspectionData[i].termType === "List"){
-        			var temp = document.getElementsByName(inspectionData[i].termName);
-        			temp[0].setAttribute("style", "color: red!important;");
-				}
-        	}
-        	
-        	var hw = document.getElementById('btn_1');
-		    hw.addEventListener('click', download_excel);
-       	});
-	    
+  	}
+        
     	/*let $dialog = $('<div>');
     	let $table = $('<table style="width:100%;">').appendTo( $dialog );
     	
@@ -441,6 +490,10 @@
 				highr: 200,
 				buttons:dlgButtons
 		};*/
+		
+	</script>
+		
+	<script>		
         // Get answer data and patient information data.
         var answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
         var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));         
@@ -486,19 +539,27 @@
      // This function imports only the selected term values to Excel and downloads them to a file.
         function download_excel(){
         	
-        	var excelData;
-        	var Array_TotalSearch = new Array();
+        	var bool_is_grid = false;
         	
         	// Total list variable to enter Excel and list variable to enter each line
-        	var Array_Final = [];
         	var Array_row = [];
+        	var Array_Final = [];
         	
-        	// Check visit date
-        	var isCheckedVisit = false;
+        	// CRF information Row
+        	//-------------------------------------------------------------------------------------------
+        	
+        	Array_row.push("SebomCRF");
+        	Array_Final.push(Array_row);
+        	
+        	//-------------------------------------------------------------------------------------------
+        	
+        	// Total Search Option Row
+        	//-------------------------------------------------------------------------------------------
+        	var Array_TotalSearch = new Array();
+        	Array_row = [];
         	
         	// In the case of total search, only the id that meets the search conditions is added
         	if(<%=isSearch%>){
-        		excelData = JSON.parse(JSON.stringify(<%=excelPackage%>));
         		<% for (int i=0; i < searchSIds.size(); i++) { %>
         		Array_TotalSearch[<%= i %>] = "<%= searchSIds.get(i) %>";
         		<% } %>
@@ -519,169 +580,156 @@
             	Array_row.push(str_totalExcel);
             	Array_Final.push(Array_row);
         	}
+        	
+        	//-------------------------------------------------------------------------------------------
 
+        	// Top Category Row
+        	//-------------------------------------------------------------------------------------------
+        	
         	// list containing the basic information column of the subject
-        	var Array_Info = ["Subject No."/*, "Visit Date"*/, "Hospital Code", "Name", "Birth", "Gender",
-        		"Cohort study", "MRI study", "CRF", "Query", "contact_1",
-        		"contact_2"];
-
+        	var Array_Info = ["ID", "Sex", "Age", "Name"];
+        	Array_row = [];
+        	
         	// Gets the information of the term selected on the page
         	var CheckedList = $('input:checkbox[name="Section"]:checked');
+
+        	for(var i = 0; i < Array_Info.length; i++){
+        		Array_row.push(Array_Info[i]);
+        	}
         	
         	for(var i = 0; i < CheckedList.length; i++){
-        		if(CheckedList[i].value == 'visit_date'){
-        			isCheckedVisit = true;
-        			break;
+        		var data_input_excel = "";
+        		
+        		var term_first = inspectionData.find(v => v.termName === CheckedList[i].value);
+        		
+        		if(inspectionData.find(v => v.termName === term_first.termName).groupTermId == undefined){
+        			data_input_excel = "";
+        		}else{
+        			var term_second = inspectionData.find(v => v.termName === term_first.groupTermId.name);
+        			
+        			if(inspectionData.find(v => v.termName === term_second.termName).groupTermId == undefined){
+        				data_input_excel = term_second.displayName.en_US;
+            		}else{
+        				var term_third = inspectionData.find(v => v.termName === term_second.groupTermId.name);
+        				data_input_excel = term_third.displayName.en_US;
+        			}
         		}
+        		
+        		var length_grid = 1;
+        		
+				if(term_first.termType == 'Grid'){
+        			length_grid = Object.keys(term_first.columnDefs).length;
+        			bool_is_grid = true;
+        		}
+				
+				for(var j = 0; j < length_grid; j++){
+					Array_row.push(data_input_excel);
+				}
         	}
-        	//First Row
+        	Array_Final.push(Array_row);	
         	//-------------------------------------------------------------------------------------------
-        	Array_row = [];
-        	for(var j = 0; j < Array_Info.length; j++){
-        		Array_row.push(Array_Info[j]);
-        	}
-        	for(var j = 0; j < CheckedList.length; j++){
-    			if(CheckedList[j].value == 'visit_date'){
-    				Array_row.push("");
-    				continue;
-    			}
-    			else{
-    				var Term_Low = {};
-            		
-            		for(var i = 0; i < inspectionData.length; i++){
-            			if(inspectionData[i].termName == CheckedList[j].value){
-            				Term_Low = inspectionData[i];
-            				break;
-            			}
-            		}
-            		var Term_Middle = {};
-            		
-            		for(var i = 0; i < inspectionData.length; i++){
-            			if(inspectionData[i].termName == Term_Low.groupTermId.name){
-            				Term_Middle = inspectionData[i];
-            				break;
-            			}
-            		}
-
-            		var Term_top = {};
-
-            		var First_flag = false;
-            		try{
-            			for(var i = 0; i < inspectionData.length; i++){
-            				if(inspectionData[i].termName == Term_Middle.groupTermId.name){
-            					Term_top = inspectionData[i];
-            					First_flag = true;
-            					break;
-            				}
-            			}
-            		}catch(e){
-            			Term_top = Term_Middle;
-            		}
-            		
-            		if(First_flag == false){
-            			Term_top = Term_Middle;
-            		}
-            		
-            		Array_row.push(Term_top.displayName.en_US);
-    			}
-        	}
         	
-        	Array_Final.push(Array_row);
-        	//-------------------------------------------------------------------------------------------
-
-        	
-        	//Second Row
+        	// Middle Category Row
         	//-------------------------------------------------------------------------------------------
         	Array_row = [];
 
         	for(var j = 0; j < Array_Info.length; j++){
         		Array_row.push("");
         	}
-        	for(var j = 0; j < CheckedList.length; j++){
-    			if(CheckedList[j].value == 'visit_date'){
-    				Array_row.push("");
-    				continue;
-    			}
-    			else{
-    				var Term_Low = {};
-            		
-            		for(var i = 0; i < inspectionData.length; i++){
-            			if(inspectionData[i].termName == CheckedList[j].value){
-            				Term_Low = inspectionData[i];
-            				break;
-            			}
-            		}
+        	
+        	for(var i = 0; i < CheckedList.length; i++){
+        		var data_input_excel = "";
+        		
+        		var term_first = inspectionData.find(v => v.termName === CheckedList[i].value);
+        		
+        		if(inspectionData.find(v => v.termName === term_first.termName).groupTermId == undefined){
+        			data_input_excel = "";
+        		}else{
+        			var term_second = inspectionData.find(v => v.termName === term_first.groupTermId.name);
+        			if(inspectionData.find(v => v.termName === term_second.termName).groupTermId == undefined){
+        				data_input_excel = "";
+            		}else{
+        				var term_third = inspectionData.find(v => v.termName === term_second.groupTermId.name);
+        				data_input_excel = term_second.displayName.en_US;
+        			}
+        		}
+        		
+        		var length_grid = 1;
+        		
+				if(term_first.termType == 'Grid'){
+        			length_grid = Object.keys(term_first.columnDefs).length;
+        		}
+				
+				for(var j = 0; j < length_grid; j++){
+					Array_row.push(data_input_excel);
+				}
+        	}
+        	Array_Final.push(Array_row);
+        	//-------------------------------------------------------------------------------------------
+        	
+        	// Low Category Row
+        	//-------------------------------------------------------------------------------------------
+        	Array_row = [];
 
-            		var Term_Middle = {};
-            		
-            		for(var i = 0; i < inspectionData.length; i++){
-            			if(inspectionData[i].termName == Term_Low.groupTermId.name){
-            				Term_Middle = inspectionData[i];
-            				break
-            			}
-            		}
-            		
-            		var Term_top = {};
+        	for(var j = 0; j < Array_Info.length; j++){
+        		Array_row.push("");
+        	}
+        	
+        	for(var i = 0; i < CheckedList.length; i++){
+        		var data_input_excel = "";
+        		
+        		var term_first = inspectionData.find(v => v.termName === CheckedList[i].value);
+        		
+        		data_input_excel = term_first.displayName.en_US;
+        		
+        		var length_grid = 1;
+        		
+				if(term_first.termType == 'Grid'){
+        			length_grid = Object.keys(term_first.columnDefs).length;
+        		}
+				
+				for(var j = 0; j < length_grid; j++){
+					Array_row.push(data_input_excel);
+				}
+        	}
+        	Array_Final.push(Array_row);
+        	//-------------------------------------------------------------------------------------------
+        	
+        	//Gird Row
+        	//-------------------------------------------------------------------------------------------
+        	if(bool_is_grid){
+        		Array_row = [];
+            	
+            	for(var i = 0; i < Array_Info.length; i++){
+            		Array_row.push("");
+            	}
+            	
+            	for(var i = 0; i < CheckedList.length; i++){
+    				var term_first = inspectionData.find(v => v.termName === CheckedList[i].value);
 
-            		var Second_flag = false;
-            		
-            		try{
-            			for(var i = 0; i < inspectionData.length; i++){
-            				if(inspectionData[i].termName == Term_Middle.groupTermId.name){
-            					Term_top = inspectionData[i];
-            					Array_row.push(Term_Middle.displayName.en_US);
-            					Second_flag = true;
-            					break;
-            				}
+            		if(term_first.termType == 'Grid'){
+            			var length_grid = Object.keys(term_first.columnDefs).length;
+            			var array_grid_order = [];
+            			
+            			for(var j = 0; j < length_grid; j++){
+            				var data_key_grid = Object.keys(term_first.columnDefs)[j];
+    						var data_order_grid = JSON.stringify(term_first.columnDefs[data_key_grid].order);
+    						array_grid_order[data_order_grid - 1] = term_first.columnDefs[data_key_grid];
             			}
-            		}catch(e){
-            			Term_top = Term_Middle;
+            			
+            			for(var j = 0; j < length_grid; j++){
+    						Array_row.push(array_grid_order[j].displayName.en_US);
+    					}
+            		}else{
             			Array_row.push("");
             		}
-
-    			}
-        		
+            	}
+            	Array_Final.push(Array_row);
         	}
         	
-        	Array_Final.push(Array_row);
-        	
-        	//-------------------------------------------------------------------------------------------
-        	//Third Row
-        	//-------------------------------------------------------------------------------------------
-        	Array_row = [];
-
-        	for(var j = 0; j < Array_Info.length; j++){
-        		Array_row.push("");
+        	for(var i = 0; i < Array_Final.length; i++){
+        		console.log(i + ": " + Array_Final[i]);
         	}
-
-        	for(var j = 0; j < CheckedList.length; j++){
-        		var Term_Low = {};
-        		
-        		if(CheckedList[j].value == 'visit_date'){
-    				Array_row.push("visit_date");
-    				continue;
-    			}
-        		else{
-        			for(var i = 0; i < inspectionData.length; i++){
-            			if(inspectionData[i].termName == CheckedList[j].value){
-            				Term_Low = inspectionData[i];
-            				break;
-            			}
-            		}
-        			
-        			Array_row.push(Term_Low.displayName.en_US);
-        		}
-        		
-        	}
-        	
-        	Array_Final.push(Array_row);
-        	//-------------------------------------------------------------------------------------------
-        	/*for(var i = 0 ; i < Array_Final.length; i++){
-        		for(var j = 0; j < Array_Final[i].length; j++){
-        			console.log("Array_Final: " + Array_Final[i][j]);
-        		}
-        		
-        	}*/
         	// Real Data
 			//-------------------------------------------------------------------------------------------
 			// Total Search
@@ -725,54 +773,6 @@
             			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
 
             			// termType == 'Date' -> milliseconds to date
-                        if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
-                            console.log("Data_answer: " + Data_answer);
-                            var Data_date = new Date(Data_answer);
-                            console.log("Data_date: " + Data_date);
-                            Data_date.setHours(Data_date.getHours() - 9)
-                            
-                            if(Data_date.toLocaleString() == 'Invalid Date'){
-                            	Data_answer = Data_date.toLocaleString();
-                            }
-                         }
-                         
-                         if(typeof(Data_answer) == 'object'){
-                            Data_answer = Data_answer.toString();
-                         }
-                         console.log("Data_answer: " + Data_answer);
-                         Array_row.push(Data_answer);
-            		}
-            	}
-        	}
-        	else{
-        		for(var i = 0; i < answerData.length; i++){
-            		Array_row = [];
-            		var Obj_PatientInfo = {};
-            		
-            		for(var j = 0; j < patientData.length; j++){
-            			if(patientData[j].ID == answerData[i].ID){
-            				Obj_PatientInfo = patientData[j];
-            				break;
-            			}
-            		}
-            		
-            		Array_row.push(Obj_PatientInfo.ID);
-            		//Array_row.push(Obj_PatientInfo.Visit_date);
-            		Array_row.push("");
-            		Array_row.push(Obj_PatientInfo.Name);
-            		Array_row.push(Obj_PatientInfo.Age);
-            		Array_row.push(Obj_PatientInfo.Sex);
-            		Array_row.push("");
-            		Array_row.push("");
-            		Array_row.push("");
-            		Array_row.push("");
-            		Array_row.push("");
-            		Array_row.push("");
-            		for(var j = 0; j < CheckedList.length; j++){
-            			var Obj_PatientAnswer = answerData[i];
-            			var Data_answer ="";
-            			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
-            			// termType == 'Date' -> milliseconds to date
             			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
             				var Data_date = new Date(Data_answer);
             				Data_date.setHours(Data_date.getHours() - 9)
@@ -793,6 +793,183 @@
             		Array_Final.push(Array_row);
             	}
         	}
+        	else{
+        		var isGrid = false;
+        		for(var j = 0; j < CheckedList.length; j++){
+        			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Grid'){
+        				isGrid = true;
+        				break;
+        			}
+        		}
+        		
+        		if(isGrid){
+        			for(var i = 0; i < answerData.length; i++){
+        				
+        				// find patient info
+        				for(var j = 0; j < patientData.length; j++){
+                			if(patientData[j].ID == answerData[i].ID){
+                				Obj_PatientInfo = patientData[j];
+                				break;
+                			}
+                		}
+        				console.log(Obj_PatientInfo);
+        				// find grid's max length
+        				var length_grid_max = 0;
+        				
+        				for(var j = 0; j < CheckedList.length; j++){
+        					if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Grid'){
+        						if(CheckedList[j].value in answerData[i]){
+        							/* console.log("er: " + CheckedList[j].value);
+        							console.log("er: " + Object.keys(answerData[i][CheckedList[j].value]).length); */
+        							if(length_grid_max < Object.keys(answerData[i][CheckedList[j].value]).length){
+            							length_grid_max = Object.keys(answerData[i][CheckedList[j].value]).length;
+            						}
+        						}
+        						else{
+        							if(length_grid_max <= 1){
+        								length_grid_max = 1;
+        							}
+        							
+        						}
+        					}
+        				}
+        				/* console.log("length_grid_max:" + length_grid_max); */
+        				//console.log("Data_answer:" + JSON.stringify(answerData));
+        				// insert real data per grid max length
+        				for(var j = 0; j < length_grid_max; j++){
+        					Array_row = [];
+        					//insert info
+        					Array_row.push(Obj_PatientInfo.ID);
+        					Array_row.push(Obj_PatientInfo.Age);
+        					Array_row.push(Obj_PatientInfo.Sex);
+                    		Array_row.push(Obj_PatientInfo.Name);
+
+                    		for(var k = 0; k < CheckedList.length; k++){
+                    			var Data_answer = "";
+                    			if(CheckedList[k].value in answerData[i]){
+                    				Data_answer = answerData[i][CheckedList[k].value];
+                    			}
+                    			else{
+                    				if(inspectionData.find(v => v.termName === CheckedList[k].value).termType == 'Grid'){
+                    					var no_answer = Object.keys(inspectionData.find(v => v.termName === CheckedList[k].value).columnDefs).length;
+                        				for(var l = 0; l < no_answer; l++){
+                        					Array_row.push("");
+                        				}
+                    				}
+                    				else{
+                    					Array_row.push("");
+                    				}
+                    				continue;
+                    			}
+            					/* console.log("Data_answer:" + JSON.stringify(Data_answer)); */
+            					if(j == 0){
+            						if(inspectionData.find(v => v.termName === CheckedList[k].value).termType == 'Date'){
+            							var Data_date = new Date(Data_answer);
+                        				Data_date.setHours(Data_date.getHours() - 9)
+                        				
+                        				if(Data_date.toLocaleString() == 'Invalid Date'){
+                        					Data_answer = "";
+                        				}
+                        				else{
+                        					Data_answer = Data_date.toLocaleString();
+                        				}
+            						}
+            						else if(inspectionData.find(v => v.termName === CheckedList[k].value).termType == 'Grid'){
+            							var gridInfo = inspectionData.find(v => v.termName === CheckedList[k].value).columnDefs;
+            							var list_key = Object.keys(gridInfo);
+            							var list_order = [];
+            							for(var l = 0; l < list_key.length; l++){
+            								list_order[gridInfo[list_key[l]].order - 1] = gridInfo[list_key[l]].termName;
+            							}
+            							for(var l = 0; l < list_order.length; l++){
+            								var strIndex = (j + 1).toString();
+            								Array_row.push(Data_answer[strIndex][list_order[l]]);
+            								//console.log("list_order: " + JSON.stringify(Data_answer[(j + 1).toString()]));
+            							}
+            							continue;
+            							
+            						}
+            						
+            						Array_row.push(Data_answer);
+            					}
+            					else{
+            						if(inspectionData.find(v => v.termName === CheckedList[k].value).termType == 'Grid'){
+            							var gridInfo = inspectionData.find(v => v.termName === CheckedList[k].value).columnDefs;
+            							var list_key = Object.keys(gridInfo);
+            							if(j < Object.keys(Data_answer).length){
+            								var list_order = [];
+                							for(var l = 0; l < list_key.length; l++){
+                								list_order[gridInfo[list_key[l]].order - 1] = gridInfo[list_key[l]].termName;
+                							}
+                							for(var l = 0; l < list_order.length; l++){
+                								var strIndex = (j + 1).toString();
+                								Array_row.push(Data_answer[strIndex][list_order[l]]);
+                								//console.log("list_order: " + list_order[l]);
+                							}
+            							}
+            							else{
+            								for(var l = 0; l < list_key.length; l++){
+            									Array_row.push("");
+                							}
+            							}
+            						}
+            						else{
+            							Array_row.push("");
+            						}
+            					}
+                    		}
+                    		Array_Final.push(Array_row);
+                    		console.log("Array_row: " + Array_row);
+        				}
+        				
+        			}
+        		}
+        		else{
+        			for(var i = 0; i < answerData.length; i++){
+            			//console.log("sKey:" + JSON.stringify(answerData[i]));
+                		Array_row = [];
+                		var Obj_PatientInfo = {};
+                		
+                		for(var j = 0; j < patientData.length; j++){
+                			if(patientData[j].ID == answerData[i].ID){
+                				Obj_PatientInfo = patientData[j];
+                				break;
+                			}
+                		}
+                		
+                		Array_row.push(Obj_PatientInfo.ID);
+    					Array_row.push(Obj_PatientInfo.Age);
+    					Array_row.push(Obj_PatientInfo.Sex);
+                		Array_row.push(Obj_PatientInfo.Name);
+                		for(var j = 0; j < CheckedList.length; j++){
+                			var Obj_PatientAnswer = answerData[i];
+                			var Data_answer ="";
+                			
+                			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
+                			// termType == 'Date' -> milliseconds to date
+                			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
+                				var Data_date = new Date(Data_answer);
+                				Data_date.setHours(Data_date.getHours() - 9)
+                				
+                				if(Data_date.toLocaleString() == 'Invalid Date'){
+                					Data_answer = "";
+                				}
+                				else{
+                					Data_answer = Data_date.toLocaleString();
+                				}
+                			}
+                			
+                			if(typeof(Data_answer) == 'object'){
+                				//console.log("ob: " + JSON.stringify(Data_answer));
+                				Data_answer = Data_answer.toString();
+                			}
+                			Array_row.push(Data_answer);
+                		}
+                		Array_Final.push(Array_row);
+                	}
+        		}
+        		
+        	}
         	
         	// Name each sheet, put the aoa variable in Excel, and put the aoa variable in the sheet
         	var excelHandler = {
@@ -809,16 +986,15 @@
         	
         	// Create xlsx workbook 
             var wb = XLSX.utils.book_new();
-
             // Create xlsx sheet 
             var newWorksheet = excelHandler.getWorksheet();
-            
+            //var newWorksheet1 = excelHandler.getWorksheet();
          	// It puts coordinates for merging the cell of the initial patient information data.
-            var merge = [];
+            <%-- let merge = [];
          	
             if(<%=isSearch%>){
-            	for(var i = 0; i < 11; i++){
-                    var test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
+            	for(var i = 0; i < 3; i++){
+                    let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
                     merge.push(test);
                 }
             	
@@ -841,9 +1017,16 @@
                 }
             }
             else{
-            	for(var i = 0; i < 11; i++){
-                    var test = { s: {c: i, r: 0}, e: {c: i, r: 2}};
-                    merge.push(test);
+            	var length_info = 0;
+            	if(bool_is_grid){
+            		length_info = 4;
+            	}else{
+            		length_info = 3;
+            	}
+
+            	for(var i = 0; i < 4; i++){
+                    let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
+                    merge.push(range_info);
                 }
 
                 for(var i = 0; i < 2; i++){
@@ -866,9 +1049,16 @@
             }
             
          	// If you put all the coordinate information, cell merge.
-            newWorksheet["!merges"] = merge;
+            newWorksheet["!merges"] = merge; --%>
+         	
+            newWorksheet.s = {
+            	aligment: {
+            		wrapText: true
+            	}
+            }
          	// Give a name to the newly created worksheet in the workbook.
             XLSX.utils.book_append_sheet(wb, newWorksheet);
+            //XLSX.utils.book_append_sheet(wb, newWorksheet1);
             
             // Create xlsx File
             var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
