@@ -106,36 +106,12 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 				for(String deleteKey : deleteKeys) {
 					answerForm.remove(deleteKey);
 				}
-
 				Subject subject = _subjectLocalService.getSubjectBySerialId(serialId);
 				if(Validator.isNotNull(subject)) {
-					List<LinkCRF> linkList = _linkLocalService.getLinkCRFByC_S(crfId, subject.getSubjectId());
-					if(linkList.size() > 0) {
-						for(int j = 0; j < linkList.size(); j++) {
-							long sdId = linkList.get(j).getStructuredDataId();
-							JSONObject compareSd = JSONFactoryUtil.createJSONObject(_dataTypeLocalService.getStructuredData(sdId));
-							if(compareSd.getString("visit_date").equals(answerForm.getString("visit_date"))){
-								_dataTypeLocalService.updateStructuredData(sdId, 0, dataTypeId, answerForm.toJSONString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
-								
-								List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryByC_S(crfId, subject.getSubjectId());
-
-								CRFHistory prevHistory = prevHistoryList.get(prevHistoryList.size() - 1);
-								for(int k = prevHistoryList.size() - 1; k > -1; k--) {
-									prevHistory = prevHistoryList.get(k);
-									if(prevHistory.getStructuredDataId() == sdId) break;
-								}
-								
-								_historyLocalService.addCRFHistory(subject.getName(), subject.getSubjectId(), subject.getSerialId(), sdId, crfId, prevHistory.getCurrentJSON(), answerForm.toJSONString(), 0, "1.0.0", crfHistoryServiceContext);
-								_queryLocalService.checkQuery(sdId, _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId).getJSONArray("terms"), answerForm, subject.getSubjectId(), crfId, queryServiceContext);
-							}
-							
-						}
-					}else {
-						StructuredData storedData = _dataTypeLocalService.addStructuredData(0, dataTypeId, answerForm.toJSONString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
-						_linkLocalService.addLinkCRF(subject.getSubjectId(), crfId, storedData.getStructuredDataId(), linkServiceContext);
-						_historyLocalService.addCRFHistory(subject.getName(), subject.getSubjectId(), subject.getSerialId(), storedData.getPrimaryKey(), crfId, "", answerForm.toJSONString(), 0, "1.0.0", crfHistoryServiceContext);
-						_queryLocalService.checkQuery(storedData.getPrimaryKey(), _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId).getJSONArray("terms"), answerForm, subject.getSubjectId(), crfId, queryServiceContext);
-					}
+					StructuredData storedData = _dataTypeLocalService.addStructuredData(0, dataTypeId, answerForm.toJSONString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
+					_linkLocalService.addLinkCRF(subject.getSubjectId(), crfId, storedData.getStructuredDataId(), linkServiceContext);
+					_historyLocalService.addCRFHistory(subject.getName(), subject.getSubjectId(), subject.getSerialId(), storedData.getPrimaryKey(), crfId, "", answerForm.toJSONString(), 0, "1.0.0", crfHistoryServiceContext);
+					_queryLocalService.checkQuery(storedData.getPrimaryKey(), _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId).getJSONArray("terms"), answerForm, subject.getSubjectId(), crfId, queryServiceContext);
 				}
 			}else {
 				System.out.println("Wrong file input");
