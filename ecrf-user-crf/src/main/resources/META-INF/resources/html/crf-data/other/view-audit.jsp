@@ -28,6 +28,21 @@
 	_log.info("answerForm : " + answerForm);
 %>
 
+<style>
+
+.collapse-panel .panel-body {
+	overflow-x:scroll;
+	padding-right:0rem;
+	padding-left:0rem;
+} 
+
+.collapse-panel .panel-collapse {
+	margin-left: 0.6rem;
+	margin-right: 0.6rem;
+}
+
+</style>
+
 <liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_REDIRECT_UPDATE_CRF_QUERY %>" var="redirectUpdateQuery">
 </liferay-portlet:actionURL>
 
@@ -77,7 +92,7 @@
 		</aui:fieldset-group>
 		
 		<aui:fieldset-group markupView="lexicon">
-			<aui:fieldset cssClass="search-option radius-shadow-container pad8" style="" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.crf-data.title.audit-trail">
+			<aui:fieldset cssClass="search-option radius-shadow-container pad8 collapse-panel" style="" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.crf-data.title.audit-trail">
 				<table class="crf-max-width  table crfHistory">
 					<tbody id="canvasPanel">
 					</tbody>
@@ -188,7 +203,7 @@ function createCRFTable(mainGroupKeys, subGroupKeys, sectionKeys, answerFormArr,
 						}
 					}
 			const answerTd = document.createElement("td");
-			var non_excuted="<liferay-ui:message key='SxcrfForm.history.non-execution'/>";
+			var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 			let answer = "";
 			if(answerFormArr.hasOwnProperty(sectionKeys[k].termName)){
 				if(sectionKeys[k].termType==="List"){
@@ -270,7 +285,7 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 						}
 					}
 					const answerTd = document.createElement("td");
-					var non_excuted="<liferay-ui:message key='SxcrfForm.history.non-execution'/>";
+					var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 					let answer = "";
 					if(answerFormArr.hasOwnProperty(sectionKeys[k].termName)){
 						if(sectionKeys[k].termType==="List"){
@@ -349,7 +364,7 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 						}
 					}
 			const answerTd = document.createElement("td");
-			var non_excuted="<liferay-ui:message key='SxcrfForm.history.non-execution'/>";
+			var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 			let answer = "";
 			if(answerFormArr.hasOwnProperty(sectionKeys[k].termName)){
 				if(sectionKeys[k].termType==="List"){
@@ -451,7 +466,7 @@ function createSectionCol(group, sectionKeys, answerFormArr, results, queryComfi
 						}
 					}
 			const answerTd = document.createElement("td");
-			var non_excuted="<liferay-ui:message key='SxcrfForm.history.non-execution'/>";
+			var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 			let answer = "";
 			if(answerFormArr.hasOwnProperty(sectionKeys[k].termName)){
 				if(sectionKeys[k].termType==="List"){
@@ -530,7 +545,7 @@ function createSmallSectionCol(sectionKeys, answerFormArr, results, queryComfirm
 						}
 					}
 		const answerTd = document.createElement("td");
-		var non_excuted="<liferay-ui:message key='SxcrfForm.history.non-execution'/>";
+		var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 		let answer = "";
 		if(answerFormArr.hasOwnProperty(sectionKeys[k].termName)){
 				if(sectionKeys[k].termType==="List"){

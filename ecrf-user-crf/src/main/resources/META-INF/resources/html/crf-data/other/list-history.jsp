@@ -59,14 +59,14 @@ if(isSearch) {
 %>
 
 <portlet:renderURL var="searchURL">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA_HISTORY %>"/>	
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA_HISTORY %>"/>
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 	<portlet:param name="isSearch" value="true" />
-	<portlet:param name="redirect" value="<%=currentURL %>" />
 </portlet:renderURL>
 
 <portlet:renderURL var="clearSearchURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA_HISTORY %>"/>
-<portlet:param name="redirect" value="<%=currentURL %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
 
 <div class="ecrf-user-crf-data ecrf-user">

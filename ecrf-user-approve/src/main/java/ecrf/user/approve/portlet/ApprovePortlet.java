@@ -18,7 +18,7 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 		"com.liferay.portlet.display-category=category.ecrf-user",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
 		"com.liferay.portlet.instanceable=false",
-		"javax.portlet.display-name=Approve",
+		"javax.portlet.display-name=Approval",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/html/approve/view-membership.jsp",
 		"javax.portlet.name=" + ECRFUserPortletKeys.APPROVE,

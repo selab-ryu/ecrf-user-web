@@ -29,8 +29,5 @@
 			<aui:button cssClass="<%="sub-menu-bar " + (menu.equals("subject-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.add" onClick="<%=addSubjectRenderURL%>"/>
 		</div>
 		</c:if>
-		<div>
-			<aui:button cssClass="<%="normal-cursor sub-menu-bar " + (menu.equals("subject-list-delete") ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.delete" onClick="<%=deleteListURL%>"/>
-		</div>
 		<!-- Subject Management -->		
 	</div>

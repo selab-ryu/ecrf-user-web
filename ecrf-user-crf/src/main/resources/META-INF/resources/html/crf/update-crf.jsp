@@ -351,7 +351,7 @@ function fetchResearcherArr() {
 			}
 		},
 		function(obj) {
-			console.log(obj);
+			//console.log(obj);
 			
 			crfResearcherInfoArr = obj;
 			refreshResearcherTable();
@@ -368,7 +368,7 @@ function fetchSubjectArr() {
 			}
 		},
 		function(obj) {
-			console.log(obj);
+			//console.log(obj);
 			
 			crfSubjectInfoArr = obj;
 			refreshSubjectTable();
@@ -407,7 +407,7 @@ Liferay.provide(window, "closePopup", function(dialogId, type, data) {
 	console.log(data);
 	
 	if(type == "save") {
-		console.log("is it called?");	// check equals
+		//console.log("is it called?");	// check equals
 		
 		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" ) {
 			crfSubjectInfoArr = data;
@@ -544,7 +544,7 @@ function tableLoading() {
 				data:"updateLock",
 				render: function(data, type, row) {
 					// check and return value
-					console.log("updatelock : " + data);
+					//console.log("updatelock : " + data);
 					let lockStr = "N";
 					if(data == true) {
 						lockStr = "Y";

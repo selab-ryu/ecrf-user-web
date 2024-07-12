@@ -57,11 +57,13 @@ _log.info("current url : " + url);
 
 <portlet:renderURL var="searchURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA%>"/>
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 	<portlet:param name="isSearch" value="true" />
 </portlet:renderURL>
 
 <portlet:renderURL var="clearSearchURL">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA%>"/>	
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA%>"/>
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
 
 <div class="ecrf-user-crf-data ecrf-user">
@@ -159,7 +161,7 @@ _log.info("current url : " + url);
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
+							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="button" value="ecrf-user.button.search"></aui:button>
 							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
 						</aui:button-row>
 					</aui:col>
@@ -201,8 +203,11 @@ _log.info("current url : " + url);
 				value="<%=String.valueOf(++count) %>"
 			/>
 			
-			<% long rowSubjectId = rowSubject.getSubjectId(); _log.info("subject id : " + rowSubjectId); %>
-			
+			<% 
+				long rowSubjectId = rowSubject.getSubjectId();
+				//_log.info("subject id : " + rowSubjectId); 
+			%>
+
 			<%
 				boolean hasCRF = false;
 				int crfDataCount = LinkCRFLocalServiceUtil.countLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
@@ -285,7 +290,6 @@ _log.info("current url : " + url);
 			</portlet:renderURL>
 			
 			<liferay-ui:search-container-column-text
-				href="<%=viewURL.toString() %>"
 				cssClass="min-width-80"
 				name="ecrf-user.subject.name"
 				value="<%=Validator.isNull(rowSubject.getName()) ? "-" : ECRFUserUtil.anonymousName(rowSubject.getName()) %>"
@@ -322,7 +326,7 @@ _log.info("current url : " + url);
 			</liferay-ui:search-container-column-text>	
 			<%
 				boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, rowSubjectId);
-				_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
+				//_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
 				
 				String lockBtnKey = "";
 				String lockClass = "";
@@ -468,11 +472,9 @@ $(document).ready(function() {
 	});
 	$("#<portlet:namespace/>birthEnd").mask("0000/00/00");
 });
-</script>
 
-<aui:script use="aui-base">
-A.one('#<portlet:namespace/>search').on('click', function() {
-	var isBirthDateValid = dateCheck("birthStart", "birthEnd", '<portlet:namespace/>');
+Liferay.provide(window, "openValidPopup", function() {
+	var A = AUI();
 	
 	var dialog = new A.Modal({
 		headerContent: '<h3><liferay-ui:message key="Date validation"/></h3>',
@@ -481,16 +483,38 @@ A.one('#<portlet:namespace/>search').on('click', function() {
 		modal: true,
 		height: 200,
 		width: 400,
-		render: '#body-div',
 		zIndex: 1100,
 		close: true
-	});
+	}).render();
+	
+}, ['aui-modal']
+);
+
+</script>
+
+<aui:script use="aui-base aui-modal">
+A.one('#<portlet:namespace/>search').on('click', function() {
+	var isBirthDateValid = dateCheck("birthStart", "birthEnd", '<portlet:namespace/>');
 	
 	if(isBirthDateValid) {
 		var form = $('#<portlet:namespace/>searchOptionFm');
 		form.submit();
 	} else if(!isBirthDateValid) {
-		dialog.render();
+	
+		openValidPopup();
+		/*
+		var dialog = new A.Modal({
+			headerContent: '<h3><liferay-ui:message key="Date validation"/></h3>',
+			bodyContent: '<span style="color:red;"><liferay-ui:message key="Start Date is greater than End Date"/></span>',
+			centered: true,
+			modal: true,
+			height: 200,
+			width: 400,
+			render: '#body-div',
+			zIndex: 1100,
+			close: true
+		}).render();
+		*/
 	}
 });
 </aui:script>
