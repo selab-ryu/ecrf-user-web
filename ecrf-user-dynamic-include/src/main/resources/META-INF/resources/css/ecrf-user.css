@@ -4,6 +4,9 @@
 .right { float:right }
 .left { float:left }
 
+.text-right { text-align:right; }
+.text-left { text-align:left; }
+
 .pad1R{ padding:1rem; }
 .padTr { padding-top: 1rem; }
 .padBr { padding-bottom: 1rem; }

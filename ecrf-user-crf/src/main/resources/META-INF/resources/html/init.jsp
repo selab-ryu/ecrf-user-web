@@ -9,6 +9,8 @@
 <%@ taglib prefix="liferay-frontend" uri="http://liferay.com/tld/frontend" %>
 <%@ taglib prefix="liferay-util" uri="http://liferay.com/tld/util" %>
 <%@ taglib prefix="clay" uri="http://liferay.com/tld/clay" %>
+<%@ taglib prefix="chart" uri="http://liferay.com/tld/chart" %>
+
 
 <%@ page import="javax.portlet.PortletURL" %>
 <%@ page import="javax.portlet.PortletRequest"%>
@@ -56,8 +58,10 @@
 
 <%@ page import="com.liferay.frontend.taglib.chart.model.point.bar.BarChartConfig" %>
 <%@ page import="com.liferay.frontend.taglib.chart.model.point.line.LineChartConfig" %>
+<%@ page import="com.liferay.frontend.taglib.chart.model.percentage.donut.DonutChartConfig" %>
 <%@ page import="com.liferay.frontend.taglib.chart.model.SingleValueColumn" %>
 <%@ page import="com.liferay.frontend.taglib.chart.model.MultiValueColumn" %>
+<%@ page import="com.liferay.frontend.taglib.chart.model.AxisX" %>
 
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.List" %>
