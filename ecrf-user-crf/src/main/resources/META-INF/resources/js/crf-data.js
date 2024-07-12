@@ -243,3 +243,40 @@ Liferay.provide(window, 'deleteCRFData', function(linkCrfId, dialogId, portletId
 	
 	window.location.href = actionURL.toString();
 },['liferay-util-window', 'liferay-portlet-url']);
+
+Liferay.provide(window, 'createGraphPopupRenderURL', function(portletId, termName, displayName, termType, crfId, renderCommand, baseURL) {
+	var renderURL = Liferay.Util.PortletURL.createRenderURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'p_auth': Liferay.authToken,
+				'p_p_mode' : 'edit',
+				'p_p_state' : 'pop_up',
+				'mvcRenderCommandName' : renderCommand,
+				'termName' : termName,
+				'crfId' : crfId
+			}
+	);
+	
+	console.log(renderURL.toString());
+		
+	Liferay.Util.openWindow(
+		{
+			dialog: {
+				cache: false,
+				destroyOnClose: true,
+				centered: true,
+				modal: true,
+				resizable: false,
+				height: 600,
+				width: 1200
+			},
+			id: "graphPopup",
+			title: displayName + "(" + termType + ")",
+			uri: renderURL.toString()
+		}
+	);
+	
+	const elements = document.getElementsByClassName('modal-title');
+	elements[0].style.textAlign = "center";
+	
+}, ['liferay-util-window', 'liferay-portlet-url']);
