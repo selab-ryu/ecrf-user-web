@@ -3,6 +3,8 @@
 <%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf-data/crf-data-viewer_jsp"); %>
 
 <%
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/M/d");
+
 long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0); 
 long sdId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.STRUCTURED_DATA_ID, 0);
 
@@ -49,6 +51,44 @@ _log.info("is update : " + isUpdate);
 	<%@ include file="../other/sidebar.jspf" %>	
 	<div class="page-content">
 		<liferay-ui:header backURL="<%=redirect %>" title='<%=isUpdate ? "Update CRF" : "ADD CRF" %>' />
+		
+		<aui:fieldset-group markupView="lexicon">
+			<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.subject.title.subject-info">
+				<aui:container>
+					<aui:row cssClass="top-border">
+						<aui:col md="3" cssClass="marTr">
+							<aui:field-wrapper
+								name="serialId"
+								label="ecrf-user.subject.serial-id">
+								<p><%=Validator.isNull(subject) ? "-" : String.valueOf(subject.getSerialId()) %></p>
+							</aui:field-wrapper>
+						</aui:col>
+						<aui:col md="3" cssClass="marTr">
+							<aui:field-wrapper
+								name="name"
+								label="ecrf-user.subject.name">
+								<p><%=Validator.isNull(subject) ? "-" : subject.getName() %></p>
+							</aui:field-wrapper>
+						</aui:col>
+						<aui:col md="3" cssClass="marTr">
+							<aui:field-wrapper
+								name="gender"
+								label="ecrf-user.subject.gender">
+								<p><%=Validator.isNull(subject) ? "-" : (subject.getGender() == 0 ? "male" : "female") %></p>
+							</aui:field-wrapper>
+						</aui:col>
+						<aui:col md="3" cssClass="marTr">
+							<aui:field-wrapper
+								name="birth"
+								label="ecrf-user.subject.birth-age">
+								<p><%=Validator.isNull(subject) ? "-" : dateFormat.format(subject.getBirth()) + " (" + Math.abs(124 - subject.getBirth().getYear()) + ")" %></p>
+							</aui:field-wrapper>
+						</aui:col>
+					</aui:row>
+				</aui:container>
+			</aui:fieldset>
+		</aui:fieldset-group>
+		
 		<div class="marBr" style="display: none;">
 			<aui:button-row>
 				<aui:button type="button" id="btnTable" value="Table"></aui:button>
