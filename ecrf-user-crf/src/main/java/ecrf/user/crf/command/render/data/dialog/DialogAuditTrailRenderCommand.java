@@ -48,13 +48,13 @@ public class DialogAuditTrailRenderCommand implements MVCRenderCommand {
 		long sdId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.STRUCTURED_DATA_ID, 0);
 		String displayName = ParamUtil.getString(renderRequest, ECRFUserCRFDataAttributes.DISPLAY_NAME);
 		
-		_log.info("displayName : " + displayName + " subId : " + subjectId + " crfId : " + crfId + " sdId : "+ sdId);
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		long groupId = themeDisplay.getScopeGroupId();
+		long groupId = ParamUtil.getLong(renderRequest, "groupId", 0);
 		
 		List<CRFHistory> crfHistoryList = _crfHistoryLocalService.getCRFHistoryByG_S_C_SD(groupId, subjectId, crfId, sdId);
-		
+		_log.info("groupId : " + groupId +"displayName : " + displayName + " subId : " + subjectId + " crfId : " + crfId + " sdId : "+ sdId);
+
 		_log.info("history list size : " + crfHistoryList.size());
 		
 		JSONObject currentHistory = null;

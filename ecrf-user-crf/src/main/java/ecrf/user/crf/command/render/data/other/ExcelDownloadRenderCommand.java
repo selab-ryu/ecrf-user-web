@@ -71,7 +71,7 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
+		System.out.println(before_option);
 		String option = String.valueOf(before_option.get("query")).replace("(", "").replace(")", "");
 		
 		String[] options = option.split("\\s+OR\\s+|\\s+AND\\s+");
