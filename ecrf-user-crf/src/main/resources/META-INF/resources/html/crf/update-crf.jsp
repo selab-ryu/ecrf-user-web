@@ -504,7 +504,7 @@ function tableLoading() {
             	text : 'Manage Subject',
             	className : 'small-btn marRr marBrh',
             	action : function( e, dt, node, config) {
-            		openManageSubjectDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr);            		
+            		openManageSubjectDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr, "<%=baseURL.toString()%>");            		
             	}
             },
             {

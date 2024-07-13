@@ -91,18 +91,39 @@ Liferay.provide(window, 'openManageResearcherDialog', function(groupId, portletI
 	});
 }, ['liferay-util-window', 'liferay-portlet-url']);
 
-Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, crfId, crfSubjectInfoArr) {
-	var renderURL = Liferay.PortletURL.createRenderURL();
+Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, crfId, crfSubjectInfoArr, baseURL) {   
+	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'p_auth': Liferay.authToken,
+				'p_p_mode' : 'edit',
+				'p_p_state' : 'pop_up',
+				'mvcPath' : '/html/crf/dialog/manage-subject.jsp',
+				//'mvcRenderCommandName' : '/render/crf/dialog-manage-crf-subject',
+				'groupId' : groupId,
+				'crfId' : crfId,
+				'crfSubjectInfoJsonStr' : JSON.stringify(crfSubjectInfoArr),
+				'crfSubjectInfo' : crfSubjectInfoArr
+				
+			}
+	);
 	
-	renderURL.setPortletId(portletId);
-	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up");
-    
-    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-subject.jsp");
-    renderURL.setParameter("groupId", groupId);
-    renderURL.setParameter("crfId", crfId);
-    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
-    
+	console.log(url);
+	
+	// resource url? / save log by ajax / open dialog when ajax is complete
+	var actionURL = Liferay.Util.PortletURL.createActionURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'javax.portlet.action' : '/action/crf/redirect-crf-subject-dialog',
+				'p_auth': Liferay.authToken,
+				'groupId' : groupId,
+				'crfId' : crfId,
+				'crfSubjectInfo' : crfSubjectInfoArr
+			});
+	
+//	console.log(actionURL);
+//	console.log(actionURL.toString());
+	
     Liferay.Util.openWindow({
 		dialog: {
 			width:800,
@@ -112,7 +133,7 @@ Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, 
 		},
 		id: "manageSubjectPopup",
 		title: "Manage CRF Subject",
-		uri: renderURL.toString()
+		uri: url.toString()
 	});
 }, ['liferay-util-window', 'liferay-portlet-url']);
 

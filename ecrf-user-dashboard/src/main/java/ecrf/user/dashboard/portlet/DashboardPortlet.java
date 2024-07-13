@@ -145,9 +145,9 @@ public class DashboardPortlet extends MVCPortlet {
 		
 		// json format
 		// {chart-data : [ {crfid:{}}, {crfid:{}}, ... ]}
-		// crfid : { annual : [], monthly : [] }
-		// { annual : [ {year : freq}, ...] }
-		// { monthly : [ {year-month : freq}, ... ]
+		// crfid : { yearData : [], monthData : [] }
+		// { yearData : [ {x : year, y : freq}, ...] }
+		// { monthData : [ {x : year-month, y : freq}, ... ]
 		
 		renderRequest.setAttribute("chartDataObj", object);
 		
