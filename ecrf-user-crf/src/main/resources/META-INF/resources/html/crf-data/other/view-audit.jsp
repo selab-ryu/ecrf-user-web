@@ -225,7 +225,7 @@ function createCRFTable(mainGroupKeys, subGroupKeys, sectionKeys, answerFormArr,
 					var date = new Date(dateValue);
 					answer = date.toLocaleDateString("ko-KR") + " " + date.toLocaleTimeString("ko-KR");
 				}
-				else{
+				else if(sectionKeys[k].termType !== "File" && sectionKeys[k].termType !== "Grid"){
 					if(Number.isInteger(answerFormArr[sectionKeys[k].termName])){
 						answer = answerFormArr[sectionKeys[k].termName];
 						if(sectionKeys[k].hasOwnProperty("unit")){
@@ -249,9 +249,15 @@ function createCRFTable(mainGroupKeys, subGroupKeys, sectionKeys, answerFormArr,
 				answer = non_excuted;				
 			}
 			const answerNode = document.createTextNode(answer);
+			let displayName = sectionKeys[k].displayName.en_US;
+			let subjectId = <%=subjectId %>;
+			let sdId = <%=sdId %>;
+			let crfId = <%=crfId %>;
+			let groupId = <%=scopeGroupId %>;
+			let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
 			answerTd.setAttribute("id", sectionKeys[k].termName);
 			answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
-			answerTd.setAttribute("onClick", "openHistoryDialog(id)");
+			answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ", '" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 			answerTd.appendChild(answerNode);
 			answerTr.appendChild(answerTd);
 			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
@@ -307,7 +313,7 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 							var date = new Date(dateValue);
 							answer = date.toLocaleDateString("ko-KR") + " " + date.toLocaleTimeString("ko-KR");
 						}
-						else{
+						else if(sectionKeys[k].termType !== "File" && sectionKeys[k].termType !== "Grid"){
 							if(Number.isInteger(answerFormArr[sectionKeys[k].termName])){
 								answer = answerFormArr[sectionKeys[k].termName];
 								if(sectionKeys[k].hasOwnProperty("unit")){
@@ -331,9 +337,15 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 						answer = non_excuted;				
 					}
 					const answerNode = document.createTextNode(answer);
+					let displayName = sectionKeys[k].displayName.en_US;
+					let subjectId = <%=subjectId %>;
+					let sdId = <%=sdId %>;
+					let crfId = <%=crfId %>;
+					let groupId = <%=scopeGroupId %>;				
+					let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
 					answerTd.setAttribute("id", sectionKeys[k].termName);
-					answerTd.setAttribute("style", " background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
-					answerTd.setAttribute("onClick", "openHistoryDialog(id)");
+					answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
+					answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 					answerTd.appendChild(answerNode);
 					answerTr.appendChild(answerTd);
 					sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
@@ -386,7 +398,7 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 					var date = new Date(dateValue);
 					answer = date.toLocaleDateString("ko-KR") + " " + date.toLocaleTimeString("ko-KR");
 				}
-				else{
+				else if(sectionKeys[k].termType !== "File" && sectionKeys[k].termType !== "Grid"){
 					if(Number.isInteger(answerFormArr[sectionKeys[k].termName])){
 						answer = answerFormArr[sectionKeys[k].termName];
 						if(sectionKeys[k].hasOwnProperty("unit")){
@@ -410,9 +422,15 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 				answer = non_excuted;				
 			}
 			const answerNode = document.createTextNode(answer);
+			let displayName = sectionKeys[k].displayName.en_US;
+			let subjectId = <%=subjectId %>;
+			let sdId = <%=sdId %>;
+			let crfId = <%=crfId %>;
+			let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
+			let groupId = <%=scopeGroupId %>;		
 			answerTd.setAttribute("id", sectionKeys[k].termName);
-			answerTd.setAttribute("style", " background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
-			answerTd.setAttribute("onClick", "openHistoryDialog(id)");
+			answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
+			answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 			answerTd.appendChild(answerNode);
 			answerTr.appendChild(answerTd);
 			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
@@ -488,7 +506,7 @@ function createSectionCol(group, sectionKeys, answerFormArr, results, queryComfi
 					var date = new Date(dateValue);
 					answer = date.toLocaleDateString("ko-KR") + " " + date.toLocaleTimeString("ko-KR");
 				}
-				else{
+				else if(sectionKeys[k].termType !== "File" && sectionKeys[k].termType !== "Grid"){
 					if(Number.isInteger(answerFormArr[sectionKeys[k].termName])){
 						answer = answerFormArr[sectionKeys[k].termName];
 						if(sectionKeys[k].hasOwnProperty("unit")){
@@ -512,9 +530,15 @@ function createSectionCol(group, sectionKeys, answerFormArr, results, queryComfi
 				answer = non_excuted;				
 			}
 			const answerNode = document.createTextNode(answer);
+			let displayName = sectionKeys[k].displayName.en_US;
+			let subjectId = <%=subjectId %>;
+			let sdId = <%=sdId %>;
+			let crfId = <%=crfId %>;
+			let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
+			let groupId = <%=scopeGroupId %>;		
 			answerTd.setAttribute("id", sectionKeys[k].termName);
-			answerTd.setAttribute("style", " background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
-			answerTd.setAttribute("onClick", "openHistoryDialog(id)");
+			answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
+			answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 			answerTd.appendChild(answerNode);
 			answerTr.appendChild(answerTd);
 			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
@@ -567,7 +591,7 @@ function createSmallSectionCol(sectionKeys, answerFormArr, results, queryComfirm
 					var date = new Date(dateValue);
 					answer = date.toLocaleDateString("ko-KR") + " " + date.toLocaleTimeString("ko-KR");
 				}
-				else{
+				else if(sectionKeys[k].termType !== "File" && sectionKeys[k].termType !== "Grid"){
 					if(Number.isInteger(answerFormArr[sectionKeys[k].termName])){
 						answer = answerFormArr[sectionKeys[k].termName];
 						if(sectionKeys[k].hasOwnProperty("unit")){
@@ -591,9 +615,15 @@ function createSmallSectionCol(sectionKeys, answerFormArr, results, queryComfirm
 				answer = non_excuted;				
 			}
 		const answerNode = document.createTextNode(answer);
-		answerTd.setAttribute("id", sectionKeys[k].termName);
-		answerTd.setAttribute("style", " background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
-		answerTd.setAttribute("onClick", "openHistoryDialog(id)");
+		let displayName = sectionKeys[k].displayName.en_US;
+			let subjectId = <%=subjectId %>;
+			let sdId = <%=sdId %>;
+			let crfId = <%=crfId %>;
+			let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
+			let groupId = <%=scopeGroupId %>;
+			answerTd.setAttribute("id", sectionKeys[k].termName);
+			answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
+			answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 		answerTd.appendChild(answerNode);
 		answerTr.appendChild(answerTd);
 		sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
@@ -603,26 +633,40 @@ function createSmallSectionCol(sectionKeys, answerFormArr, results, queryComfirm
 	$("#canvasPanel").append(answerTr);
 }
 
-function openHistoryDialog(id){
-	console.log("function activate");
-	let crfFormArr = JSON.parse('<%=crfForm%>');
-	var displayName = "";
-	for(var i = 0; i < crfFormArr.length; i++){
-		if(crfFormArr[i].termName === id){
-			displayName = crfFormArr[i].displayName.en_US;
-		}
+function openQuery(termName, value, isQuery){
+	var form = document.getElementById('<portlet:namespace/>fm');
+	var termNameId = termName.id;
+	if(isQuery){
+		var termNameInput = form.querySelector("#<portlet:namespace/>termName");
+		var termValueInput = form.querySelector("#<portlet:namespace/>termValue");
+		termNameInput.setAttribute("value", termNameId);
+		termValueInput.setAttribute("value", value);
+		
+		form.submit();
 	}
-	var termName = id;
+}
+
+</aui:script>
+
+<script>
+
+Liferay.provide(window, 'openHistoryDialog', function(groupId, portletId, subjectId, sdId, crfId, termName, displayName) {
+	console.log("function activate");
+	
 	var renderURL = Liferay.PortletURL.createRenderURL();
-	renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+	
+	renderURL.setPortletId(portletId);
 	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up"); 
-	renderURL.setParameter("subjectId", <%=subjectId %>);
-	renderURL.setParameter("crfId", <%=crfId %>);
-	renderURL.setParameter("<%=ECRFUserCRFDataAttributes.STRUCTURED_DATA_ID %>", <%=sdId %>);
+    renderURL.setWindowState("pop_up");
+    
+	renderURL.setParameter("groupId", groupId);
+	renderURL.setParameter("subjectId", subjectId);
+	renderURL.setParameter("crfId", crfId);
+	renderURL.setParameter("structuredDataId", sdId);
 	renderURL.setParameter("displayName", displayName);
 	renderURL.setParameter("termName", termName);
-	renderURL.setParameter("mvcRenderCommandName", "<%=ECRFUserMVCCommand.RENDER_DIALOG_AUDIT %>");
+	renderURL.setParameter("mvcRenderCommandName", "/render/crf-data/dialog-audit");
+	
 	Liferay.Util.openWindow(
 			{
 				dialog: {
@@ -639,20 +683,6 @@ function openHistoryDialog(id){
 				uri: renderURL.toString()
 			}
 		);
-}
+}, ['liferay-util-window', 'liferay-portlet-url']);
 
-function openQuery(termName, value, isQuery){
-	var form = document.getElementById('<portlet:namespace/>fm');
-	var termNameId = termName.id;
-	console.log(<%=subjectId %>, <%=sdId %>, termNameId, value, isQuery);
-	if(isQuery){
-		var termNameInput = form.querySelector("#<portlet:namespace/>termName");
-		var termValueInput = form.querySelector("#<portlet:namespace/>termValue");
-		termNameInput.setAttribute("value", termNameId);
-		termValueInput.setAttribute("value", value);
-		
-		form.submit();
-	}
-}
-
-</aui:script>
+</script>
