@@ -93,8 +93,8 @@
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="SxcrfForm.list.search-btn"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="SxcrfForm.list.clear-btn" onClick="<%=clearSearchURL %>"></aui:button>
+							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
+							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -213,9 +213,20 @@
 					value="<%=Validator.isNull(crfAutoquery.getQueryComfirmDate()) ? "-" : sdf.format(crfAutoquery.getQueryComfirmDate()) %>"
 				/>
 				
+				<%
+					User publisher = null;
+					String publisherName = StringPool.DASH;
+					try {
+						publisher = UserLocalServiceUtil.getUser(crfAutoquery.getUserId());
+						publisherName = publisher.getLastName() + StringPool.SPACE + publisher.getFirstName();
+					} catch(Exception e) {
+						_log.info("cannot find user");
+					}
+				%>
+												
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.query.publisher"
-					property="userName"
+					value="<%=publisherName %>"
 				/>
 				
 				<%
@@ -262,7 +273,7 @@
 					</c:when>
 					<c:otherwise>
 					
-					<aui:button name="updateQuery" type="button" value="SXcrfAutoquery.query.edit-btn" cssClass="edit-btn small-btn" onClick="<%=updateQueryURL%>" disabled="<%=hasUpdateQueryPermission ? false : true %>"></aui:button>
+					<aui:button name="updateQuery" type="button" value="ecrf-user.button.update" cssClass="edit-btn small-btn" onClick="<%=updateQueryURL%>" disabled="<%=hasUpdateQueryPermission ? false : true %>"></aui:button>
 					
 					</c:otherwise>
 					</c:choose>
