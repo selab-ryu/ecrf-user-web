@@ -12,9 +12,52 @@
 
 	String subjectJson = (String)renderRequest.getAttribute("subjectJson");
 	String answerJson = (String)renderRequest.getAttribute("answerJson");
+	String options = (String)renderRequest.getAttribute("options");
+	String searchSdIds = (String)renderRequest.getAttribute("searchSdIds");
 	String json = (String)renderRequest.getAttribute("json");
-	long searchLogId = ParamUtil.getLong(renderRequest, "searchLogId", 0);
 	
+	boolean isSearch = false;
+	if(searchSdIds.length() > 0){
+		isSearch = true;
+	}
+	_log.info("subjectJson : " + subjectJson);
+	_log.info("answerJson : " + answerJson);
+	
+	
+	JSONArray subObj = null;
+	try {
+		subObj = JSONFactoryUtil.createJSONArray(answerJson);
+	} catch (Exception e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	/*for(int i = 0 ; i < subObj.length(); i++){
+		_log.info("subObj : " + subObj.get(i));
+	}*/
+	
+	
+	JSONArray ansObj = null;
+	try {
+		ansObj = JSONFactoryUtil.createJSONArray(subjectJson);
+	} catch (Exception e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	/*for(int i = 0 ; i < ansObj.length(); i++){
+		_log.info("ansObj : " + ansObj.get(i));
+	}*/
+	
+	String[] arr_options = options.split(",");
+	String[] arr_searchSdIds = searchSdIds.split(",");
+	
+	for(String a : arr_options){
+		_log.info("options : " + a);
+	}
+	for(String a : arr_searchSdIds){
+		_log.info("searchSdIds : " + a);
+	}
+	/*long searchLogId = ParamUtil.getLong(renderRequest, "searchLogId", 0);
+	_log.info("answerJson : " + answerJson);
 	String excelPackage = "";
 	if(searchLogId > 0){
 		_log.info("search log id : " + searchLogId);
@@ -31,9 +74,9 @@
 	
 	if(excelPackage.length() > 0){
 		isSearch = true;
-	}
+	}*/
 	
-	if(isSearch){
+	/*if(isSearch){
 		JSONArray jArray_ep = JSONFactoryUtil.createJSONArray(excelPackage);
 		
 		for(int i = 0; i < jArray_ep.length(); i++){
@@ -60,7 +103,7 @@
 			String str_ep_final = jObject_ep.get("fieldName").toString();
 			searchTermName.add(str_ep_final);
 		}
-	}
+	}*/
 	
 	boolean hasDownloadExcelPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL);
 	
@@ -279,8 +322,8 @@
 			}
     	}
     	
-    	var hw = document.getElementById('btn_1');
-	    hw.addEventListener('click', download_excel);
+    	/* var hw = document.getElementById('btn_1');
+	    hw.addEventListener('click', download_excel); */
     });
     
  	// Insert the UI to be printed so far into the text.
@@ -320,11 +363,11 @@
 
         category_first = sort_list(category_first);
         
-        console.log("category_first: " + JSON.stringify(category_first));
+        //console.log("category_first: " + JSON.stringify(category_first));
         //console.log("category_second: " + JSON.stringify(category_second));
         //console.log("category_third: " + JSON.stringify(category_third));
-        console.log("list_no_group: " + JSON.stringify(list_no_group));
-        console.log("list_no_group: " + category_first.includes(list_no_group));
+        //console.log("list_no_group: " + JSON.stringify(list_no_group));
+        //console.log("list_no_group: " + category_first.includes(list_no_group));
         
      	// Index to attach Each Category element id
         var indexA = 0;
@@ -332,7 +375,7 @@
         var indexC = 0;
         
         for(var i = 0; i < category_first.length; i++){
-        	console.log("category_first: " + JSON.stringify(category_first[i]));
+        	//console.log("category_first: " + JSON.stringify(category_first[i]));
         	if(list_no_group.includes(category_first[i])){
         		ContentText += '<div id = "Sub_Category">';
                 ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_first[i].termName + '"name = "Section" onClick = "isAll(this.id)"/>'
@@ -388,7 +431,7 @@
                         
                         if(category_second[j].termType != 'Group'){
                         	ContentText += '<div id = "Sub_Category" class="' + mainCateClass + '">';
-                            ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_second[j].termName + '" onClick = "isAll(this.id);"/>'
+                            ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_second[j].termName + '"name = "Section" onClick = "isAll(this.id);"/>'
                             ContentText += '<label class="w250" for ="C_' + indexC + '" name = "' + category_second[j].termName + '">' +category_second[j].displayName.en_US + '</label>';
                         	ContentText += '</div>';
                         	ContentText += '<br>';
@@ -496,7 +539,14 @@
 	<script>		
         // Get answer data and patient information data.
         var answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
-        var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));         
+        var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));
+        
+        
+        window.onload = function(){
+		    var hw = document.getElementById('btn_1');
+		    console.log("i: " + hw);
+		    hw.addEventListener('click', download_excel);
+		}
         
         // This function finds the range of cells to merge in Excel.
         function search_range(arr){
@@ -555,12 +605,52 @@
         	
         	// Total Search Option Row
         	//-------------------------------------------------------------------------------------------
-        	var Array_TotalSearch = new Array();
+        	
         	Array_row = [];
         	
         	// In the case of total search, only the id that meets the search conditions is added
         	if(<%=isSearch%>){
-        		<% for (int i=0; i < searchSIds.size(); i++) { %>
+        		var arr_options = new Array();
+        		
+        		<% for (int i=0; i < arr_options.length; i++) { %>
+        			arr_options[<%= i %>] = "<%= arr_options[i] %>";
+        		<% } %>
+        		
+        		var final_option = "Choose Term: ";
+        		
+        		for(var i = 0; i < arr_options.length; i++){
+        			//console.log("options: " + arr_options[i]);
+        			var extract_termName = null;
+        			
+        			if(arr_options[i].includes("EXACT")){
+        				extract_termName = arr_options[i].split(" EXACT ");
+        				final_option += inspectionData.find(v => v.termName === extract_termName[0]).displayName.en_US;
+        				
+        				var json_options = inspectionData.find(v => v.termName === extract_termName[0]).options;
+        				final_option += " => (";
+						final_option += json_options.find(v => v.value == extract_termName[1]).label.en_US;
+						final_option += ")";
+        			}
+        			else if(arr_options[i].includes("RANGE")){
+        				extract_termName = arr_options[i].split(" RANGE ");
+        				final_option += inspectionData.find(v => v.termName === extract_termName[0]).displayName.en_US;
+        				final_option += " => (";
+						final_option += extract_termName[1];
+						final_option += ")";
+        			}
+        			
+        			if((i + 1) != arr_options.length){
+        				final_option += " / ";
+        			}
+        		}
+        		
+        		console.log("options: " + final_option);
+        		Array_row.push(final_option);
+            	Array_Final.push(Array_row);
+        		
+
+        		//console.log("options: " + options);
+        		<%-- <% for (int i=0; i < searchSIds.size(); i++) { %>
         		Array_TotalSearch[<%= i %>] = "<%= searchSIds.get(i) %>";
         		<% } %>
         		
@@ -578,7 +668,7 @@
             	<% } %>
             	
             	Array_row.push(str_totalExcel);
-            	Array_Final.push(Array_row);
+            	Array_Final.push(Array_row); --%>
         	}
         	
         	//-------------------------------------------------------------------------------------------
@@ -727,14 +817,57 @@
             	Array_Final.push(Array_row);
         	}
         	
-        	for(var i = 0; i < Array_Final.length; i++){
+        	/*for(var i = 0; i < Array_Final.length; i++){
         		console.log(i + ": " + Array_Final[i]);
-        	}
+        	}*/
         	// Real Data
 			//-------------------------------------------------------------------------------------------
 			// Total Search
         	if(<%=isSearch%>){
-        		for(var i = 0; i < Array_TotalSearch.length; i++){
+        		for(var i = 0; i < answerData.length; i++){
+        			console.log("patientData: " + JSON.stringify(patientData[i]));
+                	console.log("answerData: " + JSON.stringify(answerData[i]));
+        			Array_row = [];
+					//insert info
+					Array_row.push(patientData[i].ID);
+					Array_row.push(patientData[i].Age);
+					Array_row.push(patientData[i].Sex);
+            		Array_row.push(patientData[i].Name);
+            		for(var j = 0; j < CheckedList.length; j++){
+            			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Grid'){
+            				isGrid = true;
+            				break;
+            			}
+            		}
+            		for(var j = 0; j < CheckedList.length; j++){
+            			var Obj_PatientAnswer = answerData[i];
+            			var Data_answer ="";
+            			//console.log("gg:" + Obj_PatientAnswer);
+            			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
+            			// termType == 'Date' -> milliseconds to date
+            			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
+            				var Data_date = new Date(Data_answer);
+            				Data_date.setHours(Data_date.getHours() - 9)
+            				
+            				if(Data_date.toLocaleString() == 'Invalid Date'){
+            					Data_answer = "";
+            				}
+            				else{
+            					Data_answer = Data_date.toLocaleString();
+            				}
+            			}
+            			
+            			if(typeof(Data_answer) == 'object'){
+            				//console.log("ob: " + JSON.stringify(Data_answer));
+            				Data_answer = Data_answer.toString();
+            			}
+            			Array_row.push(Data_answer);
+            		}
+            		Array_Final.push(Array_row);
+            		console.log("Array_row: " + Array_row);
+            		
+                }
+        		/* for(var i = 0; i < Array_TotalSearch.length; i++){
             		Array_row = [];
             		var Obj_PatientInfo = {};
             		
@@ -791,7 +924,7 @@
             			Array_row.push(Data_answer);
             		}
             		Array_Final.push(Array_row);
-            	}
+            	} */
         	}
         	else{
         		var isGrid = false;
@@ -812,7 +945,7 @@
                 				break;
                 			}
                 		}
-        				console.log(Obj_PatientInfo);
+        				
         				// find grid's max length
         				var length_grid_max = 0;
         				
@@ -926,7 +1059,7 @@
         		}
         		else{
         			for(var i = 0; i < answerData.length; i++){
-            			//console.log("sKey:" + JSON.stringify(answerData[i]));
+            			console.log("sKey:" + JSON.stringify(answerData[i]));
                 		Array_row = [];
                 		var Obj_PatientInfo = {};
                 		
@@ -944,7 +1077,7 @@
                 		for(var j = 0; j < CheckedList.length; j++){
                 			var Obj_PatientAnswer = answerData[i];
                 			var Data_answer ="";
-                			
+                			//console.log("gg:" + Obj_PatientAnswer);
                 			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
                 			// termType == 'Date' -> milliseconds to date
                 			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
@@ -993,9 +1126,9 @@
             <%-- let merge = [];
          	
             if(<%=isSearch%>){
-            	for(var i = 0; i < 3; i++){
-                    let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
-                    merge.push(test);
+            	for(var i = 0; i < 4; i++){
+                    let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
+                    merge.push(range_info);
                 }
             	
             	for(var i = 1; i < 3; i++){
@@ -1028,12 +1161,26 @@
                     let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
                     merge.push(range_info);
                 }
-
-                for(var i = 0; i < 2; i++){
-                	var same_range = search_range(Array_Final[i]);
-
+				
+                for(var i = 1; i < 3; i++){
+                	var start = 0;
+                	for(var j = 0 ; j <= Array_Final[i].length; j++){
+                		console.log(Array_Final[i][j]);
+            			console.log((Array_Final[i][start]));
+                		if(j == Array_Final[i].length || !(Array_Final[i][j] == Array_Final[i][start])){
+                			let range_data = { s: {c: start, r: i}, e: {c: (j - 1), r: i}};
+                			console.log(start);
+                			console.log((j-1));
+                			
+                			merge.push(range_data);
+                			start = j;
+                		}
+                	}
+                	/* var same_range = search_range(Array_Final[i]);
+                	console.log("a: " + Array_Final[i]);
                 	for(var j = 0; j < same_range.length; j++){
-                		if(i == 1 && j == 0){
+                		console.log("a: " + same_range[j]);
+                		if(i == 2 && j == 0){
                 			j = 1;
                 		}
                 			
@@ -1044,7 +1191,7 @@
                 			
                 		}
                 		
-                	}
+                	} */
                 }
             }
             

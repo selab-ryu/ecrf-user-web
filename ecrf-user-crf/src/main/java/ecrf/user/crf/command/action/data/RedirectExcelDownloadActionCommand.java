@@ -1,5 +1,8 @@
 package ecrf.user.crf.command.action.data;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -18,6 +21,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
+import ecrf.user.crf.command.render.data.dialog.DialogGraphRenderCommand;
 import ecrf.user.model.CRFSearchLog;
 import ecrf.user.service.CRFSearchLogLocalService;
 
@@ -37,17 +41,22 @@ public class RedirectExcelDownloadActionCommand extends BaseMVCActionCommand{
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		String excelPackage = actionRequest.getParameter("excelParam");
-		
-		ServiceContext searchServiceContext = ServiceContextFactory.getInstance(CRFSearchLog.class.getName(), actionRequest);
+		String crfId = actionRequest.getParameter("crfId");
 
+		ServiceContext searchServiceContext = ServiceContextFactory.getInstance(CRFSearchLog.class.getName(), actionRequest);
 		//CRFSearchLog searchLog = _searchLocalService.addSearchLog(excelPackage, searchServiceContext);
 		
 		String renderCommand = ECRFUserMVCCommand.RENDER_CRF_DATA_EXCEL_DOWNLOAD;
 		PortletURL renderURL = PortletURLFactoryUtil.create(actionRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+		//_log.info(String.valueOf(excelPackage));
 		renderURL.setParameter("mvcRenderCommandName", renderCommand);
 		//renderURL.setParameter("searchLogId", String.valueOf(searchLog.getSearchLogId()));
+		renderURL.setParameter("crfId", String.valueOf(crfId));
+		renderURL.setParameter("excelPackage", String.valueOf(excelPackage));
+		
 		actionResponse.sendRedirect(renderURL.toString());	
 	}
 	@Reference
 	private CRFSearchLogLocalService _searchLocalService;
+	private Log _log = LogFactoryUtil.getLog(DialogGraphRenderCommand.class);
 }
