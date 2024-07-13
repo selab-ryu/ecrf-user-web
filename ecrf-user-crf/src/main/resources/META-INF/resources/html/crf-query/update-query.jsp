@@ -54,7 +54,15 @@
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
 
-<div class="ecrf-user">
+<style>
+
+.ecrf-query .sub-title-bottom-border {
+	margin-bottom:0rem;
+}
+
+</style>
+
+<div class="ecrf-user ecrf-query">
 
 	<%@ include file="sidebar.jspf" %>
 	
@@ -67,7 +75,8 @@
 				<aui:col md="12">
 					<aui:form name="updateQueryFm" action="<%=updateQueryURL%>" autocomplete="off">
 						<aui:container>	
-							<aui:row cssClass="marBrh">
+							
+							<aui:row cssClass="">
 								<aui:col md="12" cssClass="sub-title-bottom-border">
 									<span class="sub-title-span">
 										<liferay-ui:message key="ecrf-user.crf-query.title.query-info" />
@@ -75,7 +84,7 @@
 								</aui:col>
 							</aui:row>
 							
-							<aui:row cssClass="top-border">
+							<aui:row cssClass="padT20">
 								<aui:col md="3">
 									<aui:field-wrapper
 										name="crfTitle"
@@ -102,7 +111,7 @@
 								</aui:col>
 							</aui:row>
 							
-							<aui:row cssClass="top-border">
+							<aui:row cssClass="top-border padT20">
 								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryTermName"
@@ -142,7 +151,7 @@
 								</aui:col>
 							</aui:row>
 							
-							<aui:row cssClass="top-border">
+							<aui:row cssClass="top-border padT20">
 								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryType"
@@ -176,7 +185,18 @@
 								</aui:col>
 							</aui:row>
 							
-							<aui:row cssClass="top-border">
+							<%
+								User publisher = null;
+								String publisherName = StringPool.DASH;
+								try {
+									publisher = UserLocalServiceUtil.getUser(query.getUserId());
+									publisherName = publisher.getLastName() + StringPool.SPACE + publisher.getFirstName();
+								} catch(Exception e) {
+									_log.info("cannot find user");
+								}
+							%>
+							
+							<aui:row cssClass="top-border padT20">
 								<aui:col md="3">
 									<aui:field-wrapper
 										name="userName"
@@ -187,7 +207,7 @@
 									</aui:field-wrapper>
 								</aui:col>
 								<aui:col md="3">
-									<p><%=Validator.isNull(query) ? StringPool.BLANK : query.getUserName()%></p>
+									<p><%=Validator.isNull(query) ? StringPool.BLANK : publisherName %></p>
 								</aui:col>
 								<aui:col md="3">
 									<aui:field-wrapper
@@ -204,7 +224,7 @@
 							</aui:row>
 							
 							
-							<aui:row cssClass="marBrh">
+							<aui:row cssClass="">
 								<aui:col md="12" cssClass="sub-title-bottom-border">
 									<span class="sub-title-span">
 										<liferay-ui:message key="ecrf-user.crf-query.title.validation-info" />
@@ -212,7 +232,7 @@
 								</aui:col>
 							</aui:row>
 							
-							<aui:row cssClass="top-border">
+							<aui:row cssClass="padT20">
 								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryChangeValue"
@@ -234,7 +254,7 @@
 								</aui:col>
 							</aui:row>
 							
-							<aui:row cssClass="top-border">
+							<aui:row cssClass="top-border padT20">
 								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryComment"
@@ -257,7 +277,7 @@
 							</aui:row>
 							
 							
-							<aui:row cssClass="marBrh">
+							<aui:row cssClass="">
 								<aui:col md="12" cssClass="sub-title-bottom-border">
 									<span class="sub-title-span">
 										<liferay-ui:message key="ecrf-user.crf-query.title.confirm-info" />
@@ -265,7 +285,7 @@
 								</aui:col>
 							</aui:row>
 							
-							<aui:row cssClass="top-border">
+							<aui:row cssClass="padT20">
 							<!-- TODO: change to enum -->
 								<% 
 									boolean processing = false;
@@ -296,7 +316,18 @@
 								</aui:col>
 							</aui:row>
 							
-							<aui:row cssClass="top-border">
+							<aui:row cssClass="top-border padT20">
+							<%
+								User confirmUser = null;
+								String confirmUserName = StringPool.DASH;
+								try {
+									confirmUser = user;
+									confirmUserName = confirmUser.getLastName() + StringPool.SPACE + confirmUser.getFirstName();
+								} catch(Exception e) {
+									_log.info("cannot find user");
+								}
+							%>
+							
 								<aui:col md="3">
 									<aui:field-wrapper
 										name="queryComfirmUserName"
@@ -307,7 +338,7 @@
 									</aui:field-wrapper>
 								</aui:col>
 								<aui:col md="3">
-									<p><%=Validator.isNull(user) ? StringPool.BLANK : user.getFullName() %></p>
+									<p><%=Validator.isNull(user) ? StringPool.BLANK : confirmUserName %></p>
 								</aui:col>
 								<aui:col md="3">
 									<aui:field-wrapper
