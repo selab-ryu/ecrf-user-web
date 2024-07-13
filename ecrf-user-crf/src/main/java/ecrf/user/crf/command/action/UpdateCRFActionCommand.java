@@ -70,6 +70,8 @@ public class UpdateCRFActionCommand extends BaseMVCActionCommand {
 		ServiceContext crfSubjectSC = ServiceContextFactory.getInstance(CRFSubject.class.getName(), actionRequest);
 		ServiceContext crfResearcherSC = ServiceContextFactory.getInstance(CRFResearcher.class.getName(), actionRequest);
 		
+		//_log.info("crf Title : " + crfTitleMap);
+		
 		// get crf-subject list
 		String subjectlistJsonStr = ParamUtil.getString(actionRequest, "subjectListInput");
 		_log.info(subjectlistJsonStr);
