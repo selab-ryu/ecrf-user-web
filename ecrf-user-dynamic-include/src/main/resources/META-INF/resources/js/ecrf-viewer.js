@@ -139,55 +139,295 @@ let ECRFViewer = function(){
 						console.log("ER CRF Auto Calculation Running");
 						console.log(term.termName);
 						console.log(term.value);
-						var beforeValue = term.termName + "_before_value";
 						if(term.termName === "conciousness") {
 							this.crf.terms.forEach(compareTerm=>{
 								if(compareTerm.termName === "gcs"){
 									console.log("find", compareTerm.value);
 									let selectedValue = term.value[0];
+									var beforeValue = compareTerm.termName + "_before_value";
 									switch(selectedValue) {
 									case '0':
 										compareTerm.value = 15;
-										this.cogasScore--;
+										if(this[beforeValue]){
+											if(this[beforeValue] < 12){
+												this.cogasScore--;
+												this[beforeValue] = compareTerm.value;
+											}else{
+												this[beforeValue] = compareTerm.value;
+											}
+										}else{
+											this[beforeValue] = compareTerm.value;
+											
+										}									
 										break;
 									case '1':
 										compareTerm.value = 12;
-										this.cogasScore--;
+										if(this[beforeValue]){
+											if(this[beforeValue] < 12){
+												this.cogasScore--;
+												this[beforeValue] = compareTerm.value;
+											}else{
+												this[beforeValue] = compareTerm.value;
+											}
+										}else{
+											this[beforeValue] = compareTerm.value;
+											
+										}			
 										break;
 									case '2':
 										compareTerm.value = 10;
-										this.cogasScore++;
+										if(this[beforeValue]){
+											if(this[beforeValue] > 12){
+												this.cogasScore++;
+												this[beforeValue] = compareTerm.value;
+											}else{
+												this[beforeValue] = compareTerm.value;
+											}
+										}else{
+											this.cogasScore++;
+											this[beforeValue] = compareTerm.value;
+										}			
 										break;
 									case '3':
 										compareTerm.value = 8;
-										this.cogasScore++;
+										if(this[beforeValue]){
+											if(this[beforeValue] > 12){
+												this.cogasScore++;
+												this[beforeValue] = compareTerm.value;
+											}else{
+												this[beforeValue] = compareTerm.value;
+											}
+										}else{
+											this.cogasScore++;
+											this[beforeValue] = compareTerm.value;
+										}		
 										break;
 									case '4':
 										compareTerm.value = 5;
-										this.cogasScore++;
+										if(this[beforeValue]){
+											if(this[beforeValue] > 12){
+												this.cogasScore++;
+												this[beforeValue] = compareTerm.value;
+											}else{
+												this[beforeValue] = compareTerm.value;
+											}
+										}else{
+											this.cogasScore++;
+											this[beforeValue] = compareTerm.value;
+										}		
 										break;
 									case '5':
 										compareTerm.value = 3;
-										this.cogasScore++;
+										if(this[beforeValue]){
+											if(this[beforeValue] > 12){
+												this.cogasScore++;
+												this[beforeValue] = compareTerm.value;
+											}else{
+												this[beforeValue] = compareTerm.value;
+											}
+										}else{
+											this.cogasScore++;
+											this[beforeValue] = compareTerm.value;
+										}		
 										break;
 									default:
-										compareTerm.value = "";
-										this.cogasScore--;
+										compareTerm.value = -1;
+										if(this[beforeValue]){
+											if(this[beforeValue] < 12){
+												this.cogasScore--;
+												this[beforeValue] = compareTerm.value;
+											}else{
+												this[beforeValue] = compareTerm.value;
+											}
+										}else{
+											this[beforeValue] = compareTerm.value;
+											
+										}		
 										break;
 									}
 									$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
 								}
 							});
 						}
+						
 						if(term.termName === "shock") {
-							if(term.value[0] === '1'){
-								cogasScore++;
+							if(this[beforeValue]){
+								if(term.value[0] === '1' && this[beforeValue] !== '1'){
+									this.cogasScore++;
+									this[beforeValue] = term.value[0];
+								}else{
+									this.cogasScore--;
+									this[beforeValue] = term.value[0];
+								}
 							}else{
-								cogasScore--;
+								if(term.value[0] === '1'){
+									this.cogasScore++;
+									this[beforeValue] = term.value[0];
+								}
 							}
+							
 						}
-						console.log(this.cogasScore);
+						
+						if(term.termName === "hbotTrial") {
+							if(this[beforeValue]){
+								if(term.value[0] === '0' && this[beforeValue] !== '0'){
+									this.cogasScore++;
+									this[beforeValue] = term.value[0];
+								}else{
+									this.cogasScore--;
+									this[beforeValue] = term.value[0];
+								}
+							}else{
+								if(term.value[0] === '0'){
+									this.cogasScore++;
+									this[beforeValue] = term.value[0];
+								}
+							}
+							
+						}
+						
+						if(term.termName === "ck_0") {
+							if(this[beforeValue]){
+								if(term.value[0] >= 320 && this[beforeValue] < 320){
+									this.cogasScore++;
+									this[beforeValue] = term.value[0];
+								}else{
+									this.cogasScore--;
+									this[beforeValue] = term.value[0];
+								}
+							}else{
+								if(term.value[0] >= 320){
+									cogasScore++;
+									this[beforeValue] = term.value[0];
+								}
+							}
+							
+						}
+						
+						if(this.cogasScore > 0){
+							console.log(this.cogasScore);
+							$("#cogas_score").val(this.cogasScore).trigger('change');
+						}
+						
+						if(term.termName === "out_hp_date"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "visit_date"){
+									let visitDate = new Date(compareTerm.value);
+									let outDate = new Date(term.value)
+									const diffDate = outDate.getTime() - visitDate.getTime();
+									let totalDate = Math.abs(diffDate / (1000 * 60 * 60 * 24));
+									$("#total_hp_date").val(totalDate).trigger('change');
+								}
+							});
+						}
+								
+						if(term.termName === "alt_0"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "alp_0"){
+									var divValue = term.value / compareTerm.value;
+									$("#alt_alp_0").val(divValue).trigger('change');
+								}
+							});
+						}
+						
+						if(term.termName === "alp_0"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "alt_0"){
+									var divValue = term.value / compareTerm.value;
+									$("#alt_alp_0").val(divValue).trigger('change');
+								}
+							});
+						}
 
+						if(term.termName === "alt_1"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "alp_1"){
+									var divValue = term.value / compareTerm.value;
+									$("#alt_alp_1").val(divValue).trigger('change');
+								}
+							});
+						}
+						
+						if(term.termName === "alp_1"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "alt_1"){
+									var divValue = term.value / compareTerm.value;
+									$("#alt_alp_1").val(divValue).trigger('change');
+								}
+							});
+						}
+						
+						if(term.termName === "alt_2"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "alp_2"){
+									var divValue = term.value / compareTerm.value;
+									$("#alt_alp_2").val(divValue).trigger('change');
+								}
+							});
+						}
+						
+						if(term.termName === "alp_2"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "alt_2"){
+									var divValue = term.value / compareTerm.value;
+									$("#alt_alp_2").val(divValue).trigger('change');
+								}
+							});
+						}
+						
+						if(term.termName === "first_hbot_time"){
+							let hbotTime = new Date(term.value);
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "detect_time"){
+									let detectTime = new Date(compareTerm.value);
+									var hour = (hbotTime.getTime() - detectTime.getTime()) / 3600000;
+									$("#detect_to_1st_hbot").val(hour).trigger('change');
+								}
+								else if(compareTerm.termName === "hp_arrived"){
+									let arrivedTime = new Date(compareTerm.value);
+									var hour = (hbotTime.getTime() - arrivedTime.getTime()) / 3600000;
+									$("#detect_to_1st_hbot").val(hour).trigger('change');
+								}
+							});
+						}
+						
+						if(term.termName === "second_hbot_time"){
+							let hbotTime = new Date(term.value);
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "hp_arrived"){
+									let arrivedTime = new Date(compareTerm.value);
+									var divValue = term.value / compareTerm.value;
+									$("#arrive_to_2nd_hbot").val(hour).trigger('change');
+								}
+							});
+						}
+						
+						if(term.termName === "hp_hbot_num"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "out_hbot_num"){
+									var total = term.value + compareTerm.value;
+									$("#total_hbot").val(total).trigger('change');
+								}
+							});
+						}						
+
+						if(term.termName === "lymphocyte_0"){
+							this.crf.terms.forEach(compareTerm=>{
+								if(compareTerm.termName === "neutropil_0"){
+									var divValue = term.value / compareTerm.value;
+									$("#nrl_0").val(hour).trigger('change');
+								}
+								else if(compareTerm.termName === "monocyte_0"){
+									var divValue = term.value / compareTerm.value;
+									$("#mlr_0").val(hour).trigger('change');
+								}
+								else if(compareTerm.termName === "plt_0"){
+									var divValue = term.value / compareTerm.value;
+									$("#plr_0").val(hour).trigger('change');
+								}
+							});
+						}
+						
 						break; 
 					case "excercise_crf":
 						console.log("Exercise CRF Auto Calculation Running");
@@ -1054,12 +1294,19 @@ let ECRFViewer = function(){
 					let index = 1;
 					term.options.forEach((option)=>{
 						let $radioTag = $( '<input type="radio">' );
+						let check = false;
+						if(term.value){
+							if(term.value[0] === option.value && term.value !== "-1"){								
+								check = true;
+							}
+						}
 						$radioTag.prop({
-							class :"field",
+							class :"field marLr",
 							id: term.termName + "_" + index,
 							name: term.termName,
 							disabled: term.disabled,
-							value: option.value
+							value: option.value,
+							checked: check
 						});
 						let $nameTag = $('<span>').text(option.label.localizedMap.en_US); 
 						$inputTag.append($radioTag);

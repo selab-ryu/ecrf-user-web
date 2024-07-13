@@ -64,8 +64,6 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
 //        	dataTypeId = _crfLocalSerivice.getDataTypeId(crfId);
         	
         	try {
-
-            	_dataTypeLocalService.removeStructuredData(sdId, 0);
             	_linkCRFLocalService.deleteLinkCRF(linkCRFId);
             	// need to delete related query ?
             } catch (Exception e) {
