@@ -17,7 +17,7 @@
 	
 	long groupId = ParamUtil.getLong(renderRequest, "groupId");
 	
-	String crfSubjectInfoJsonStr = ParamUtil.getString(renderRequest, "crfSubjectInfoJsonStr");
+	String crfSubjectInfoJsonStr = ParamUtil.getString(renderRequest, "crfSubjectInfoJsonStr", StringPool.BLANK);
 	_log.info("json str : " + crfSubjectInfoJsonStr);
 	
 	if(crfId > 0) {

@@ -188,7 +188,7 @@ if(isSearch) {
 				<liferay-ui:search-container-column-text
 					
 					name="ecrf-user.list.crf-title"
-					value="<%=Validator.isNull(datatype.getDisplayName(locale)) ? "-" : datatype.getDisplayName(locale) %>"
+					value="<%=Validator.isNull(datatype) ? "-" : datatype.getDisplayName(locale) %>"
 				/>
 								
 				<liferay-ui:search-container-column-text

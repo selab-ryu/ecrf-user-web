@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSON"%>
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html/dashboard/view_jsp"); %>
@@ -12,6 +14,8 @@ JSONObject obj = (JSONObject)renderRequest.getAttribute("chartDataObj");
 //_log.info(obj);
 
 JSONArray chartDataArr = obj.getJSONArray("chart-data");
+
+String chartDataStr = chartDataArr.toJSONString();
 
 %>
 
@@ -109,7 +113,6 @@ JSONArray chartDataArr = obj.getJSONArray("chart-data");
 				
 				MultiValueColumn monthCol = new MultiValueColumn("Frequency", monthFreqList);
 				monthChartConfig.addColumn(monthCol);
-				
 				
 		%>
 			<aui:fieldset-group markupView="lexicon">
@@ -227,8 +230,10 @@ JSONArray chartDataArr = obj.getJSONArray("chart-data");
 <!-- get billboard js object from liferay Loaded JS -->
 <aui:script require="frontend-taglib-chart$billboard.js@1.5.1/dist/billboard as myChart">
 function setMonthChart(id, freqData, timeData) {
+	console.log("chart id : " + id)
+	
 	var monthChart = myChart.bb.generate({
-		bindto: "id",
+		bindto: id,
 		data: {
 			x:"x",
 			json: {
@@ -260,7 +265,32 @@ function setMonthChart(id, freqData, timeData) {
 	});
 }
 
+var chartDataArr = [];
+
 $(document).ready(function() {
+	var freqData = [25, 23, 12, 45, 54, 34, 32, 12];
+	var timeData = ["2022-12", "2023-4", "2023-5", "2023-6", "2023-8", "2023-10", "2024-1", "2024-3"];
+	
+	let jsonStr = <%=chartDataStr %>;
+	
+	console.log(jsonStr);
+	
+	console.log(jsonStr[0].data.monthData);
+	
+	try {
+		chartDataArr = JSON.parse(JSON.stringify(jsonStr));
+		
+		console.log(chartDataArr);
+		
+		let monthDataArr = chartDataArr[0].data.monthData;
+		
+		console.log(monthDataArr);
+	} catch(e) {
+		console.log("json parse error");
+	}
+
+	setMonthChart('#monthChart0', freqData, timeData);
+	
 	/*
 	var monthChart = myChart.bb.generate({
 		bindto: "#monthChart",
