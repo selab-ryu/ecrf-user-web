@@ -44,11 +44,12 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException{
 		_log.info("Render Excel Download");
 		
-		String[] searchSdIds = (String[])renderRequest.getAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST);
+		//String[] searchSdIds = (String[])renderRequest.getAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST);
 		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
 		long dataTypeId = _crfLocalService.getDataTypeId(crfId);
 		
-		String searchLogId = ParamUtil.getString(renderRequest, "searchLogId");
+		//String searchLogId = ParamUtil.getString(renderRequest, "searchLogId");
+		String excelPackage = ParamUtil.getString(renderRequest, "excelPackage");
 		
 		String json = "";
 		try {
@@ -57,44 +58,65 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		List<Subject> allSub = _subjectLocalService.getAllSubject();
 		JSONArray subJsons = JSONFactoryUtil.createJSONArray();
 		JSONArray ansJsons = JSONFactoryUtil.createJSONArray();
-		for(int i = 0; i < allSub.size(); i++) {
-			JSONObject subJson = JSONFactoryUtil.createJSONObject();
-			Subject subTemp = allSub.get(i);
-			subJson.put("ID", subTemp.getSerialId());
-			subJson.put("Name", subTemp.getName());
-			subJson.put("Age", (Math.abs(124 - subTemp.getBirth().getYear())));
-			subJson.put("Sex", subTemp.getGender());
-			subJsons.put(subJson);
-			LinkCRF link = null;
-			if(_linkCRFLocalService.countLinkBySubjectId(subTemp.getSubjectId()) > 0) {
-				try {
-					link = _linkCRFLocalService.getLinkCRFBySId(subTemp.getSubjectId());
-				} catch (Exception e) {
-					e.printStackTrace();
-				} 
-				String ansTemp = _dataTypeLocalService.getStructuredData(link.getStructuredDataId());
-				JSONObject ansObj =  null;
-				try {
-					 ansObj = JSONFactoryUtil.createJSONObject(ansTemp);
-					 ansObj.put("ID", subTemp.getSerialId());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				//ansJsons.put(subTemp.getSerialId());
-				ansJsons.put(ansObj);
-			}
+		
+		JSONObject before_option = null;
+		try {
+			before_option = JSONFactoryUtil.createJSONObject(excelPackage);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
 		}
+		
+		String option = String.valueOf(before_option.get("query")).replace("(", "").replace(")", "");
+		
+		String[] options = option.split("\\s+OR\\s+|\\s+AND\\s+");
+		
+		String searchSdId = String.valueOf(before_option.get("hits")).replace("[", "").replace("]", "").replace("\"", "").replace(",", " ");
+		String[] searchSdIds = searchSdId.split(" ");
+		
+		for(String sdId : searchSdIds) {
+			LinkCRF link = null;
+			try {
+				link = _linkCRFLocalService.getLinkCRFBySdId(Long.parseLong(sdId));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			
+			for(Subject subInfo : allSub) {
+				if(link.getSubjectId() == subInfo.getSubjectId()) {
+					JSONObject subJson = JSONFactoryUtil.createJSONObject();
+					subJson.put("ID", subInfo.getSerialId());
+					subJson.put("Sex", subInfo.getGender());
+					subJson.put("Age", (Math.abs(124 - subInfo.getBirth().getYear())));
+					subJson.put("Name", subInfo.getName());
+					subJsons.put(subJson);
+					_log.info("subJson: " + subJson.toJSONString());
+					
+					JSONObject ansObj = null;
+					try {
+						ansObj = JSONFactoryUtil.createJSONObject(_dataTypeLocalService.getStructuredData(Long.parseLong(sdId)));
+						ansObj.put("ID", subInfo.getSerialId());
+						ansJsons.put(ansObj);
+					} catch (Exception e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+				}
+			}
+		}		
 		
 		renderRequest.setAttribute("subjectJson", subJsons.toJSONString());
 		renderRequest.setAttribute("answerJson", ansJsons.toJSONString());
+		renderRequest.setAttribute("options", String.join(",", options));
+		renderRequest.setAttribute("searchSdIds", String.join(",", searchSdIds));
+		
 		renderRequest.setAttribute("json", json);
-		renderRequest.setAttribute("searchLogId", searchLogId);
 		
 		return ECRFUserJspPaths.JSP_CRF_DATA_EXCEL_DOWNLOAD;
 	}
