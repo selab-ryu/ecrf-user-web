@@ -43,8 +43,9 @@
 
 </style>
 
-<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_REDIRECT_UPDATE_CRF_QUERY %>" var="redirectUpdateQuery">
-</liferay-portlet:actionURL>
+<portlet:renderURL var="redirectUpdateQuery">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_UPDATE_CRF_QUERY%>"/>
+</portlet:renderURL>
 
 <div class="ecrf-user-crf-data ecrf-user">
 
@@ -103,10 +104,10 @@
 		<!-- change input name -->
 		<aui:form name="fm" action="${redirectUpdateQuery}">
 			<aui:input type="hidden" name="termName"></aui:input>
-			<aui:input type="hidden" name="termValue"></aui:input>
-			<aui:input type="hidden" name="subjectId" value="<%=subjectId%>"></aui:input>
+			<aui:input type="hidden" name="value"></aui:input>
+			<aui:input type="hidden" name="sId" value="<%=subjectId%>"></aui:input>
 			<aui:input type="hidden" name="crfId" value="<%=crfId %>"></aui:input>
-			<aui:input type="hidden" name ="<%=ECRFUserCRFDataAttributes.STRUCTURED_DATA_ID %>" value="<%=sdId%>"></aui:input>
+			<aui:input type="hidden" name ="sdId" value="<%=sdId%>"></aui:input>
 		</aui:form>
 	</div>
 </div>
@@ -638,7 +639,7 @@ function openQuery(termName, value, isQuery){
 	var termNameId = termName.id;
 	if(isQuery){
 		var termNameInput = form.querySelector("#<portlet:namespace/>termName");
-		var termValueInput = form.querySelector("#<portlet:namespace/>termValue");
+		var termValueInput = form.querySelector("#<portlet:namespace/>value");
 		termNameInput.setAttribute("value", termNameId);
 		termValueInput.setAttribute("value", value);
 		
