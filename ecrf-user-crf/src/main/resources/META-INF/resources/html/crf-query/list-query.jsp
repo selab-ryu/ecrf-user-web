@@ -10,7 +10,7 @@
 	ArrayList<CRFAutoquery> queryList = new ArrayList<CRFAutoquery>();
 	queryList.addAll(CRFAutoqueryLocalServiceUtil.getQueryByGroupCRF(scopeGroupId, crfId));
 	
-	PortletURL portletURL = renderResponse.createRenderURL();
+	PortletURL portletURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
 	
 	portletURL.setParameter("jspPage", ECRFUserJspPaths.JSP_LIST_QUERY);
 %>

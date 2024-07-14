@@ -786,8 +786,8 @@
         			Array_row = [];
 					//insert info
 					Array_row.push(patientData[i].ID);
-					Array_row.push(patientData[i].Age);
 					Array_row.push(patientData[i].Sex);
+					Array_row.push(patientData[i].Age);
             		Array_row.push(patientData[i].Name);
             		for(var j = 0; j < CheckedList.length; j++){
             			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Grid'){
@@ -870,8 +870,8 @@
         					Array_row = [];
         					//insert info
         					Array_row.push(Obj_PatientInfo.ID);
-        					Array_row.push(Obj_PatientInfo.Age);
         					Array_row.push(Obj_PatientInfo.Sex);
+        					Array_row.push(Obj_PatientInfo.Age);
                     		Array_row.push(Obj_PatientInfo.Name);
 
                     		for(var k = 0; k < CheckedList.length; k++){

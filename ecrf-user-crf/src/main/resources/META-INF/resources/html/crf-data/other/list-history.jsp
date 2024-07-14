@@ -27,6 +27,8 @@ boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false);
 
 PortletURL portletURL = null;
 
+portletURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+
 if(isSearch) {
 	// DO SEARCH
 	HistorySearch historySearch = new HistorySearch();

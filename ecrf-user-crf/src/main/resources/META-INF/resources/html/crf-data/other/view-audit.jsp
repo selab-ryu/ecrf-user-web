@@ -24,8 +24,8 @@
 	CRFGroupCaculation groupApi = new CRFGroupCaculation();
 	groupApi.getEachGroupProgress(dataTypeId, JSONFactoryUtil.createJSONObject(answerForm));
 	
-	_log.info("crfForm : " + crfForm);
-	_log.info("answerForm : " + answerForm);
+	//_log.info("crfForm : " + crfForm);
+	//_log.info("answerForm : " + answerForm);
 %>
 
 <style>
