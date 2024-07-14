@@ -22,8 +22,25 @@ PortletURL portletURL = null;
 portletURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
 _log.info("portletURL : " + portletURL);
 
-PortletURL iteratorURL = renderResponse.createRenderURL();
-_log.info("iterator URL : " + portletURL);
+boolean isUpdate = false;
+CRF crf = null;
+DataType dataType = null;
+
+_log.info("crf id : " + crfId);
+
+if(crfId > 0) {
+	crf = CRFLocalServiceUtil.getCRF(crfId);
+	isUpdate = true;	
+}
+
+if(isUpdate) {
+	dataTypeId = crf.getDatatypeId();
+	
+	if(dataTypeId > 0) {
+		_log.info("dataType id : " + dataTypeId);
+		dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+	}
+}
 
 if(isSearch) {
 	CRFDataSearchUtil searchUtil = new CRFDataSearchUtil();
@@ -49,9 +66,6 @@ String progressPercentage = "0%";
 
 LiferayPortletURL baseURL = PortletURLFactoryUtil.create(request, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 _log.info("url : " + baseURL.toString());
-
-String url = themeDisplay.getURLCurrent();
-_log.info("current url : " + url);
 
 %>
 

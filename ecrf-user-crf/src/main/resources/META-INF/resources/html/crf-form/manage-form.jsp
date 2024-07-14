@@ -8,11 +8,24 @@
 	_log.info("crf id : " + crfId);	
 	_log.info("dataType id : " + dataTypeId);
 	
-	CRF crf = null;	
+	boolean isUpdate = false;
+	CRF crf = null;
 	DataType dataType = null;
+
+	_log.info("crf id : " + crfId);
+
+	if(crfId > 0) {
+		crf = CRFLocalServiceUtil.getCRF(crfId);
+		isUpdate = true;	
+	}
+
+	if(isUpdate) {
+		dataTypeId = crf.getDatatypeId();
 		
-	if(dataTypeId > 0) {
-		dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+		if(dataTypeId > 0) {
+			_log.info("dataType id : " + dataTypeId);
+			dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+		}
 	}
 		
 	String menu = "crf-form-manage";
