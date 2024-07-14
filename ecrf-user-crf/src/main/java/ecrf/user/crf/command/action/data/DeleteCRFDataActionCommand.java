@@ -48,8 +48,6 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
         ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         
         long crfId = 0;
-        long dataTypeId = 0;
-        long sdId = 0;
         
         long linkCRFId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.LINK_CRF_ID, 0);
         _log.info("link crf id : " + linkCRFId);
@@ -59,13 +57,9 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
         if(linkCRFId > 0) {
         	linkCRF = _linkCRFLocalService.getLinkCRF(linkCRFId);
         	
-        	sdId = linkCRF.getStructuredDataId();
-        	crfId = linkCRF.getCrfId();
-//        	dataTypeId = _crfLocalSerivice.getDataTypeId(crfId);
-        	
         	try {
-            	_linkCRFLocalService.deleteLinkCRF(linkCRFId);
-            	// need to delete related query ?
+            	_linkCRFLocalService.deleteLinkCRF(linkCRF.getLinkId());
+
             } catch (Exception e) {
             	e.printStackTrace();
             }

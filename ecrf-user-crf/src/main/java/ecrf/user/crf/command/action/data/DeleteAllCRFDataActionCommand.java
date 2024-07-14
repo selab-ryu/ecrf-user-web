@@ -1,5 +1,6 @@
 package ecrf.user.crf.command.action.data;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
@@ -24,8 +25,12 @@ import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.ECRFUserWebKeys;
+import ecrf.user.constants.attribute.ECRFUserAttributes;
 import ecrf.user.constants.attribute.ECRFUserCRFDataAttributes;
+import ecrf.user.model.CRFAutoquery;
+import ecrf.user.model.CRFHistory;
 import ecrf.user.model.LinkCRF;
+import ecrf.user.service.CRFAutoqueryLocalService;
 import ecrf.user.service.CRFHistoryLocalService;
 import ecrf.user.service.LinkCRFLocalService;
 import ecrf.user.service.SubjectLocalService;
@@ -45,18 +50,30 @@ public class DeleteAllCRFDataActionCommand extends BaseMVCActionCommand {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		long subjectId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0);
         long crfId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.CRF_ID, 0); 
 		
-		List<LinkCRF> allLink = _linkCRFLocalService.getLinkCRFByC_S(crfId, subjectId);
-		for(int j = 0; j < allLink.size(); j++) {
-			LinkCRF linkCRF = allLink.get(j);
-			long linkId = linkCRF.getLinkId();
-			_linkCRFLocalService.deleteLinkCRF(linkId);
-			
-			long sdId = linkCRF.getStructuredDataId();
-			_dataTypeLocalService.removeStructuredData(sdId, 0);
+        try {
+			List<LinkCRF> allLink = _linkCRFLocalService.getLinkCRFByG_C(themeDisplay.getScopeGroupId(), crfId);
+			for(int j = 0; j < allLink.size(); j++) {
+				LinkCRF linkCRF = allLink.get(j);
+				long linkId = linkCRF.getLinkId();
+				
+				_linkCRFLocalService.deleteLinkCRF(linkId);
+			}
+        } catch (PortalException e) {
+			e.printStackTrace();
 		}
+        
+		String renderCommand = ECRFUserMVCCommand.RENDER_LIST_CRF_DATA;
+		PortletURL renderURL = PortletURLFactoryUtil.create(
+				actionRequest, 
+				themeDisplay.getPortletDisplay().getId(), 
+				themeDisplay.getPlid(), 
+				PortletRequest.RENDER_PHASE);
+		renderURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, renderCommand);
+		renderURL.setParameter(ECRFUserCRFDataAttributes.CRF_ID, String.valueOf(crfId));
+		
+		actionResponse.sendRedirect(renderURL.toString());
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(DeleteAllCRFDataActionCommand.class);

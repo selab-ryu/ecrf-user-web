@@ -73,14 +73,13 @@ _log.info("hi");
 		
 		<aui:row>
 			<aui:col md="4">
-				<div class=" sub-title-bottom-border marBr">
+				<div id="title_table_statistics" class=" sub-title-bottom-border marBr">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.crf-data.title.standard-derivation-statistics" />
+						<liferay-ui:message key="ecrf-user.crf-data.title.statistics" />
 					</span>
 				</div>
 				
 				<table id="table_statistics" class="table table-bordered table-striped left">
-				    <caption style="text-align: center;">Statistics</caption>
 				    <thead>
 						<tr>
 							<th>Name</th>
@@ -100,14 +99,13 @@ _log.info("hi");
 			</aui:col>
 			
 			<aui:col md="4">
-				<div class=" sub-title-bottom-border marBr">
+				<div id="title_table_quartiles" class=" sub-title-bottom-border marBr">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.crf.title.year-chart" />
+						<liferay-ui:message key="ecrf-user.crf-data.title.quartiles" />
 					</span>
 				</div>
 				
 				<table id="table_quartiles" class="table table-bordered table-striped left">
-				    <caption style="text-align: center;">Quartiles</caption>
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -127,14 +125,13 @@ _log.info("hi");
 			</aui:col>
 
 			<aui:col md="4">
-				<div class=" sub-title-bottom-border marBr">
+				<div id="title_table_normality" class=" sub-title-bottom-border marBr">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.crf.title.year-chart" />
+						<liferay-ui:message key="ecrf-user.crf-data.title.normality" />
 					</span>
 				</div>
 				
 				<table id="table_normality" class="table table-bordered table-striped left">
-					<caption style="text-align: center;">Normality Test</caption>
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -166,13 +163,19 @@ _log.info("hi");
 	// Outputs the statistical table only when the Term type is Numeric
 	if('<%=type%>' == 'Numeric'){
 		document.getElementById('table_statistics').style.display = "";
+		document.getElementById('title_table_statistics').style.display = "";
 		document.getElementById('table_quartiles').style.display = "";
+		document.getElementById('title_table_quartiles').style.display = "";
 		document.getElementById('table_normality').style.display = "";
+		document.getElementById('title_table_normality').style.display = "";
 	}
 	else{
 		document.getElementById('table_statistics').style.display = "none";
+		document.getElementById('title_table_statistics').style.display = "none";
 		document.getElementById('table_quartiles').style.display = "none";
+		document.getElementById('title_table_quartiles').style.display = "none";
 		document.getElementById('table_normality').style.display = "none";
+		document.getElementById('title_table_normality').style.display = "none";
 	}
 	
 	// Press each radio button to output a graph of each type

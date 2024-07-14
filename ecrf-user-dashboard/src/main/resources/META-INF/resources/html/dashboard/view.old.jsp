@@ -34,20 +34,21 @@ String chartDataStr = chartDataArr.toJSONString();
 	<div class="mar16px">
 		<liferay-ui:header title="ecrf-user.dashboard.title.view-dashboard" />
 		
-		<% BarChartConfig _barChartConfig = new BarChartConfig(); %>
-		
-		<!-- add chart css by adding chart:bar tag -->
-		<div class="hide">
-			<chart:bar config="<%=_barChartConfig %>" />
-		</div>
-		
-		<!-- CRF 단위 visit date 기준 연도별 / 월별 데이터 현황 -->
 		<%
+		ArrayList<BarChartConfig> yearChartConfigList = new ArrayList<>();
+		ArrayList<BarChartConfig> monthChartConfigList = new ArrayList<>();
+		
+		// add Configs for each CRF 
+		for(int i=0; i<chartDataArr.length(); i++) {
+			yearChartConfigList.add(new BarChartConfig());
+			monthChartConfigList.add(new BarChartConfig());
+		}
 		
 		for(int i=0; i<chartDataArr.length(); i++) {
 			JSONObject crfObj = chartDataArr.getJSONObject(i);
 			
 			long crfId = crfObj.getLong("id");
+			JSONObject dataObj = crfObj.getJSONObject("data");
 			
 			CRF crf = null;
 			DataType datatype = null;
@@ -61,6 +62,57 @@ String chartDataStr = chartDataArr.toJSONString();
 			}
 			
 			if(Validator.isNotNull(datatype)) {
+				// TODO : refactoring
+				
+				// set year chart config
+				BarChartConfig yearChartConfig = yearChartConfigList.get(i);
+				yearChartConfig.getAxisX().setType(AxisX.Type.CATEGORY);
+				
+				List<String> yearCategories = new ArrayList<>();
+				JSONArray yearDataArr = dataObj.getJSONArray("yearData");
+				
+				List<Integer> yearFreqList = new ArrayList<>();
+				// year chart category and values
+				for(int j=0; j<yearDataArr.length(); j++) {
+					JSONObject yearDataObj = yearDataArr.getJSONObject(j);
+					
+					String xVal = yearDataObj.getString("x");
+					yearCategories.add(xVal);
+					
+					int yVal = yearDataObj.getInt("y");
+					yearFreqList.add(yVal);
+				}
+				
+				yearChartConfig.getAxisX().addCategories(yearCategories);
+				
+				MultiValueColumn yearCol = new MultiValueColumn("Frequency", yearFreqList);
+				yearChartConfig.addColumn(yearCol);
+				
+				
+				// set month chart config
+				BarChartConfig monthChartConfig = monthChartConfigList.get(i);
+				monthChartConfig.getAxisX().setType(AxisX.Type.CATEGORY);
+					
+				List<String> monthCategories = new ArrayList<>();			
+				JSONArray monthDataArr = dataObj.getJSONArray("monthData");
+				
+				List<Integer> monthFreqList = new ArrayList<>();
+				// month chart category
+				for(int j=0; j<monthDataArr.length(); j++) {
+					JSONObject monthDataObj = monthDataArr.getJSONObject(j);
+					
+					String xVal = monthDataObj.getString("x");
+					monthCategories.add(xVal);
+					
+					int yVal = monthDataObj.getInt("y");
+					monthFreqList.add(yVal);
+				}
+				
+				monthChartConfig.getAxisX().addCategories(monthCategories);
+				
+				MultiValueColumn monthCol = new MultiValueColumn("Frequency", monthFreqList);
+				monthChartConfig.addColumn(monthCol);
+				
 		%>
 			<aui:fieldset-group markupView="lexicon">
 				<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="false" collapsible="true" label="<%=datatype.getDisplayName() %>">
@@ -147,7 +199,15 @@ String chartDataStr = chartDataArr.toJSONString();
 				
 				</aui:fieldset>
 			</aui:fieldset-group>
-
+			
+			<!--
+			<script>
+			$(document).ready(function() {
+				setMonthChart('monthChart<%=i%>', "<%=monthFreqList%>", "<%=monthCategories%>");
+			});
+			</script>
+			-->
+		
 		<%
 			}
 		}
@@ -159,34 +219,31 @@ String chartDataStr = chartDataArr.toJSONString();
 
 <!-- get billboard js object from liferay Loaded JS -->
 <aui:script require="frontend-taglib-chart$billboard.js@1.5.1/dist/billboard as myChart">
-function setYearChart(id, yearFreqData, yearTimeData) {	
-	let rowData = [];
+function setYearChart(id, yearFreqData, yearTimeData) {
+	console.log("chart id : " + id)
 	
+	rowData = [];
 	rowData[0] = yearTimeData;
 	rowData[1] = yearFreqData;
+	
+	console.log(rowData);
 	
 	var chart = myChart.bb.generate({
 		bindto: id,
 		data: {
 			rows: rowData, 
+			xFormat: "%Y-%m",
 			type: "bar"
 		},
 		bar: {
-			padding: 10
-		},
-		tooltip: {
-			format: {
-				title: function(d) {
-					return 'Frequency';
-				}
-			}
+			padding: 5
 		}
 	});
-	
-	chart.category(0, "Frequency");
 }
 
 function setMonthChart(id, freqData, timeData) {
+	console.log("chart id : " + id)
+	
 	var chart = myChart.bb.generate({
 		bindto: id,
 		data: {
@@ -201,11 +258,8 @@ function setMonthChart(id, freqData, timeData) {
 		axis: {
 			x: {
 				tick: {
-					text: {
-			        	inner: true
-			        },
 					format: "%Y-%m",
-					fit: false,
+					fit:true,
 					count: 10
 				},
  				type: "timeseries"
@@ -225,12 +279,28 @@ function setMonthChart(id, freqData, timeData) {
 
 var chartDataArr = [];
 
+const monthChartDiv = document.querySelector('<portlet:namespace/>monthChartRow');
+
+const observer = new ResizeObserver(entries => {
+  for (let entry of entries) {
+    const {width, height} = entry.contentRect;
+    console.log(entry);
+  }
+});
+
+console.log(observer);
 
 $(document).ready(function() {
+	var freqData = [25, 23, 12, 45, 54, 34, 32, 12];
+	var timeData = ["2022-12", "2023-4", "2023-5", "2023-6", "2023-8", "2023-10", "2024-1", "2024-3"];
+	
 	let jsonStr = <%=chartDataStr %>;
 		
 	try {
 		chartDataArr = JSON.parse(JSON.stringify(jsonStr));
+		
+		console.log(chartDataArr);
+					
 	} catch(e) {
 		console.log("json parse error");
 	}
@@ -240,9 +310,13 @@ $(document).ready(function() {
 		let yearDataArr = chartDataArr[i].data.yearData;
 		let monthDataArr = chartDataArr[i].data.monthData;
 		
+		console.log(crfId);
+		console.log(yearDataArr);
+		console.log(monthDataArr);
+		
 		let yearFreqData = [];
 		let yearTimeData = [];
-					
+		
 		for(let j=0; j < yearDataArr.length; j++) {
 			yearTimeData[j] = yearDataArr[j].x;
 			yearFreqData[j] = yearDataArr[j].y;
