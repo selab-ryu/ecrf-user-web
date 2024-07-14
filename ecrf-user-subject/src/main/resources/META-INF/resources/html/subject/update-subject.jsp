@@ -34,7 +34,7 @@ if(isUpdate) {
 	Date now = new Date();
 	birthAge = now.getYear() - subject.getBirth().getYear();
 	if(Validator.isNotNull(subject.getLunarBirth())){
-		lunarBirthAge = now.getYear() - Integer.getInteger(subject.getLunarBirth().split("/")[0]);
+		lunarBirthAge = now.getYear() - (Integer.parseInt(subject.getLunarBirth().split("/")[0]) - 1900);
 	}
 	if(now.getMonth() - subject.getBirth().getMonth() < 0){
 		birthAge =  birthAge + 1;

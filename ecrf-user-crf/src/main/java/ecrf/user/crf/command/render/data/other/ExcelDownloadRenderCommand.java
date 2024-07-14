@@ -85,7 +85,18 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 		List<Subject> allSub = _subjectLocalService.getAllSubject();
 		JSONArray subJsons = JSONFactoryUtil.createJSONArray();
 		JSONArray ansJsons = JSONFactoryUtil.createJSONArray();
+		
 		for(int i = 0; i < allSub.size(); i++) {
+			LinkCRF tmpkinglink = null;
+	         try {
+	            tmpkinglink = _linkCRFLocalService.getLinkCRFBySId(allSub.get(i).getSubjectId());
+	            if(crfId != tmpkinglink.getCrfId()) {
+	               continue;
+	            }
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         }
+			
 			if(!searchLog.isEmpty()) {
 				Boolean flag = false;
 				for(String sdId : searchSdIds) {
