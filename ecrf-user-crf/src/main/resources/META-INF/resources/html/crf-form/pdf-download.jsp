@@ -5,7 +5,7 @@
 
     String json = DataTypeLocalServiceUtil.getDataTypeStructure(dataTypeId);
     
-    _log.info(json);
+    //_log.info(json);
     
     boolean hasDownloadPermisson = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_PDF);
 %>

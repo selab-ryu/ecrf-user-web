@@ -253,9 +253,11 @@ _log.info("base url : " + baseURL);
 		
 		</c:when>
 		<c:otherwise>
-		
+			
+			<c:if test="<%=!isAudit && !isDelete %>">
 			<aui:button name="addCRF" type="button" value="ecrf-user.button.add-crf-data" cssClass="ci-btn full-btn"></aui:button>
-		
+			</c:if>
+			
 		</c:otherwise>
 		</c:choose>
 	

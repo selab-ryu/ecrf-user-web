@@ -16,6 +16,8 @@ boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false);
 
 PortletURL portletURL = null;
 
+portletURL = PortletURLUtil.getCurrent(renderRequest, renderResponse);
+
 if(isSearch) {
 	_log.info("search");
 		
