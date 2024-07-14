@@ -193,14 +193,9 @@ public class UpdateCRFViewerActionCommand extends BaseMVCActionCommand {
 			// crf history by subject id & crf id
 					
 			StructuredData sd =	_dataTypeLocalService.updateStructuredData(structuredDataId, 0, dataTypeId, dataContent, WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
-			List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryByC_S(crfId, subjectId);
-			
-			CRFHistory prevHistory = prevHistoryList.get(prevHistoryList.size() - 1);
-			for(int i =  prevHistoryList.size() - 1; i > -1; i--) {
-				prevHistory = prevHistoryList.get(i);
-				if(prevHistory.getStructuredDataId() == structuredDataId) break;
-			}
-			
+			List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryByG_S_C_SD(themeDisplay.getScopeGroupId(), subjectId, crfId, structuredDataId);
+			CRFHistory prevHistory = prevHistoryList.get(0);
+
 			_historyLocalService.addCRFHistory(subject.getName(), subjectId, subject.getSerialId(), sd.getPrimaryKey(), crfId, prevHistory.getCurrentJSON(), dataContent, 0, "1.0.0", crfHistoryServiceContext);
 			_queryLocalService.checkQuery(sd.getPrimaryKey(), _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId).getJSONArray("terms"), JSONFactoryUtil.createJSONObject(dataContent), subjectId, crfId, queryServiceContext);
 		}
