@@ -443,6 +443,13 @@ _log.info("current url : " + url);
 				searchContainer="<%=searchContainer2 %>"
 			/>
 		</liferay-ui:search-container>
+		
+		<c:if test="<%=isAdmin %>">
+			<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_ALL_CRF_DATA %>" var="deleteAllCRFDataURL">
+			</liferay-portlet:actionURL>
+			
+			<aui:button type="button" name="deleteAll" value="Delete All CRF Data" cssClass="delete-btn medium-btn radius-btn marTr" onClick="<%=deleteAllCRFDataURL %>"></aui:button>
+		</c:if>
 	</div>
 </div>
 

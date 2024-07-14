@@ -59,12 +59,12 @@
 				<aui:button cssClass="sub-main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.crf-form" onClick="<%=moveManageFormURL %>" />	
 			</div>
 			<div>
-				<aui:button cssClass="sub-main-sub-menu-bar active-sub-menu-bar" type="button" value="ecrf-user.menu.crf-form.manage-form" onClick="<%=moveManageFormURL %>" />
+				<aui:button cssClass="<%="sub-main-sub-menu-bar " + (menu.equals("crf-form-manage") ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.crf-form.manage-form" onClick="<%=moveManageFormURL %>" />
 			</div>
 			
 			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_PDF) %>">
 			<div>
-				<aui:button cssClass="sub-main-sub-menu-bar deactive-sub-menu-bar" type="button" value="ecrf-user.menu.crf-form.pdf-download" onClick="<%=movePDFDownloadURL %>" />
+				<aui:button cssClass="<%="sub-main-sub-menu-bar " + (menu.equals("crf-pdf") ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.crf-form.pdf-download" onClick="<%=movePDFDownloadURL %>" />
 			</div>
 			</c:if>
 			
