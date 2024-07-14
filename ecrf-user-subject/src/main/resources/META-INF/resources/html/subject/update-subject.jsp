@@ -31,6 +31,7 @@ int birthAge = 0;
 int lunarBirthAge = 0;
 if(isUpdate) {
 	subjectBirthStr = ECRFUserUtil.getDateStr(subject.getBirth());
+	
 	Date now = new Date();
 	birthAge = now.getYear() - subject.getBirth().getYear();
 	if(Validator.isNotNull(subject.getLunarBirth())){
@@ -173,7 +174,7 @@ if(isUpdate) {
 						name="<%=ECRFUserSubjectAttributes.LUNARBIRTH %>" 
 						label="" 
 						placeholder="yyyy/mm/dd"						
-						value="<%=Validator.isNull(subject) ? StringPool.BLANK : "" %>" 
+						value="<%=Validator.isNull(subject) ? StringPool.BLANK : subject.getLunarBirth() %>" 
 						>
 						</aui:input>
 				</aui:col>
