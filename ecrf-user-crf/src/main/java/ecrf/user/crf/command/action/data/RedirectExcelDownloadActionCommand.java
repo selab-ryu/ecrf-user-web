@@ -42,17 +42,17 @@ public class RedirectExcelDownloadActionCommand extends BaseMVCActionCommand{
 
 		String excelPackage = actionRequest.getParameter("excelParam");
 		String crfId = actionRequest.getParameter("crfId");
-
-		ServiceContext searchServiceContext = ServiceContextFactory.getInstance(CRFSearchLog.class.getName(), actionRequest);
-		//CRFSearchLog searchLog = _searchLocalService.addSearchLog(excelPackage, searchServiceContext);
 		
+		ServiceContext searchServiceContext = ServiceContextFactory.getInstance(CRFSearchLog.class.getName(), actionRequest);
+		CRFSearchLog searchLog = _searchLocalService.addSearchLog(excelPackage, searchServiceContext);
+		//_log.info(searchLog);
 		String renderCommand = ECRFUserMVCCommand.RENDER_CRF_DATA_EXCEL_DOWNLOAD;
 		PortletURL renderURL = PortletURLFactoryUtil.create(actionRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 		//_log.info(String.valueOf(excelPackage));
 		renderURL.setParameter("mvcRenderCommandName", renderCommand);
-		//renderURL.setParameter("searchLogId", String.valueOf(searchLog.getSearchLogId()));
+		renderURL.setParameter("searchLogId", String.valueOf(searchLog.getSearchLogId()));
 		renderURL.setParameter("crfId", String.valueOf(crfId));
-		renderURL.setParameter("excelPackage", String.valueOf(excelPackage));
+		renderURL.setParameter("searchLog", String.valueOf(searchLog));
 		
 		actionResponse.sendRedirect(renderURL.toString());	
 	}
