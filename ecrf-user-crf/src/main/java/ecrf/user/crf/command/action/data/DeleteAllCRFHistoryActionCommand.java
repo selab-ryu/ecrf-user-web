@@ -41,9 +41,8 @@ public class DeleteAllCRFHistoryActionCommand extends BaseMVCActionCommand{
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		long crfId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
-		long subjectId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0);
 		
-		List<CRFHistory> allHis = _crfHistoryLocalService.getCRFHistoryByC_S(crfId, subjectId);
+		List<CRFHistory> allHis = _crfHistoryLocalService.getCRFHistoryByG_C(themeDisplay.getScopeGroupId(), crfId);
 		
 		for(int i = 0; i < allHis.size(); i++) {
 			long historyId = allHis.get(i).getHistoryId();
@@ -57,7 +56,10 @@ public class DeleteAllCRFHistoryActionCommand extends BaseMVCActionCommand{
 				themeDisplay.getPortletDisplay().getId(), 
 				themeDisplay.getPlid(), 
 				PortletRequest.RENDER_PHASE);
+		
 		renderURL.setParameter("mvcRenderCommandName", renderCommand);
+		renderURL.setParameter(ECRFUserCRFDataAttributes.CRF_ID, String.valueOf(crfId));
+		
 		actionResponse.sendRedirect(renderURL.toString());
 		_log.info("CRF History delete Action End");
 	}

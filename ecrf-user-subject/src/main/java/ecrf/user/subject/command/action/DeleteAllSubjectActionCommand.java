@@ -51,7 +51,7 @@ public class DeleteAllSubjectActionCommand extends BaseMVCActionCommand {
 		try {
 			_subjectLocalService.deleteAllSubject(themeDisplay.getScopeGroupId());
 		} catch(PortalException e) {
-			_log.info("");
+			e.printStackTrace();
 		}
 		
 		String renderCommand = ECRFUserMVCCommand.RENDER_LIST_SUBJECT;
