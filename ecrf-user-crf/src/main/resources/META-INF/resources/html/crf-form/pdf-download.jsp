@@ -28,7 +28,8 @@
 
 <script>
     $(document).ready(function(){
-        let crfForm = JSON.parse('<%=json%>');
+    	// change json parsing code
+        let crfForm = JSON.parse(JSON.stringify(<%=json%>));
         let crfFormArr = crfForm.terms;
         var mainGroupKeys = new Array();
         var subGroupKeys = new Array();

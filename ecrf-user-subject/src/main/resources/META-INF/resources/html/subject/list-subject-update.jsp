@@ -313,7 +313,7 @@ if(isSearch) {
 			<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_ALL_SUBJECT %>" var="deleteAllSubjectURL">
 			</liferay-portlet:actionURL>
 			
-			<aui:button type="button" name="deleteAll" value="Delete All Subject" cssClass="add-btn medium-btn radius-btn marTr" onClick="<%=deleteAllSubjectURL %>"></aui:button>
+			<aui:button type="button" name="deleteAll" value="Delete All Subject" cssClass="delete-btn medium-btn radius-btn marTr" onClick="<%=deleteAllSubjectURL %>"></aui:button>
 		</c:if>
 	</div>
 </div>
