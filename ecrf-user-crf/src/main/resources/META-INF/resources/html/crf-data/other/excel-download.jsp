@@ -36,6 +36,10 @@
 	List<String> searchTermName = new ArrayList();
 	List<String> searchNum = new ArrayList();
 	
+	Long dtypeId = CRFLocalServiceUtil.getCRF(crfId).getDatatypeId();
+	String dType = DataTypeLocalServiceUtil.getDataType(dtypeId).getDisplayName();
+	String[] dName = dType.split(">");
+	String[] fin_dName = dName[3].split("<");
 	
 	boolean isEmpty = false;
 	
@@ -230,6 +234,7 @@
 			var termName = termLabel.attr("name");			
 			var type = "";
 			var displayName = "";
+						
 			for(var i = 0; i < inspectionData.length; i++){
 				if(inspectionData[i].termName === termName){
 					if(inspectionData[i].termType === "List"){
@@ -243,7 +248,9 @@
 				}
 			}
 			
-			createGraphPopupRenderURL("<%=themeDisplay.getPortletDisplay().getId() %>", termName, displayName, type, <%=crfId%>, "<%=ECRFUserMVCCommand.RENDER_DIALOG_CRF_DATA_GRAPH %>", "<%=baseURL.toString()%>");		
+			// TODO : if there is not exist data, then dont call popup function
+			if(type === "List" || type === "Numeric")
+				createGraphPopupRenderURL("<%=themeDisplay.getPortletDisplay().getId() %>", termName, displayName, type, <%=crfId%>, "<%=ECRFUserMVCCommand.RENDER_DIALOG_CRF_DATA_GRAPH %>", "<%=baseURL.toString()%>");
 		}
 		
 		function sort_list(obj){
@@ -555,7 +562,7 @@
         	// CRF information Row
         	//-------------------------------------------------------------------------------------------
         	
-        	Array_row.push("SebomCRF");
+        	Array_row.push("<%=fin_dName[0]%>");
         	Array_Final.push(Array_row);
         	
         	//-------------------------------------------------------------------------------------------

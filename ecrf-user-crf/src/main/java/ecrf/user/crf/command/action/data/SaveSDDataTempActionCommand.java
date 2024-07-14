@@ -116,13 +116,9 @@ public class SaveSDDataTempActionCommand extends BaseMVCActionCommand {
 					dataTypeId, 
 					dataContent, 
 					WorkflowConstants.STATUS_APPROVED, sdServiceContext);
-			List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryByC_S(crf.getCrfId(), subjectId);
 			
-			CRFHistory prevHistory = prevHistoryList.get(prevHistoryList.size() - 1);
-			for(int i =  prevHistoryList.size() - 1; i > -1; i--) {
-				prevHistory = prevHistoryList.get(i);
-				if(prevHistory.getStructuredDataId() == structuredDataId) break;
-			}
+			List<CRFHistory> prevHistoryList = _historyLocalService.getCRFHistoryByG_C_S_SD(themeDisplay.getScopeGroupId(), crf.getCrfId(), subjectId, structuredDataId);
+			CRFHistory prevHistory = prevHistoryList.get(0);
 			
 			_historyLocalService.addCRFHistory(subject.getName(), subjectId, subject.getSerialId(), storedData.getPrimaryKey(), crf.getCrfId(), prevHistory.getCurrentJSON(), dataContent, 0, "1.0.0", historyServiceContext);
 		}
