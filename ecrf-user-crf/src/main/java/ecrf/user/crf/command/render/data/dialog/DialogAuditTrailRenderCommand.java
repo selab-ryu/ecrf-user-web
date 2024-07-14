@@ -52,7 +52,7 @@ public class DialogAuditTrailRenderCommand implements MVCRenderCommand {
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long groupId = ParamUtil.getLong(renderRequest, "groupId", 0);
 		
-    List<CRFHistory> crfHistoryList = _crfHistoryLocalService.getCRFHistoryByG_C_S_SD(groupId, crfId, subjectId, sdId);
+		List<CRFHistory> crfHistoryList = _crfHistoryLocalService.getCRFHistoryByG_C_S_SD(groupId, crfId, subjectId, sdId);
     
 		_log.info("groupId : " + groupId +"displayName : " + displayName + " subId : " + subjectId + " crfId : " + crfId + " sdId : "+ sdId);
 

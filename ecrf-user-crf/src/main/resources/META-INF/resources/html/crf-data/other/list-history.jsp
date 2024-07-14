@@ -10,6 +10,26 @@ String menu="crf-data-history";
 
 ArrayList<CRFHistory> wholeHistoryList = new ArrayList<CRFHistory>();
 
+boolean isUpdate = false;
+CRF crf = null;
+DataType dataType = null;
+
+_log.info("crf id : " + crfId);
+
+if(crfId > 0) {
+	crf = CRFLocalServiceUtil.getCRF(crfId);
+	isUpdate = true;	
+}
+
+if(isUpdate) {
+	dataTypeId = crf.getDatatypeId();
+	
+	if(dataTypeId > 0) {
+		_log.info("dataType id : " + dataTypeId);
+		dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+	}
+}
+
 if(dataTypeId > 0){
 	wholeHistoryList.addAll(CRFHistoryLocalServiceUtil.getCRFHistoryByG_C(scopeGroupId, crfId));
 }
