@@ -12,69 +12,33 @@
 
 	String subjectJson = (String)renderRequest.getAttribute("subjectJson");
 	String answerJson = (String)renderRequest.getAttribute("answerJson");
-	String options = (String)renderRequest.getAttribute("options");
-	String searchSdIds = (String)renderRequest.getAttribute("searchSdIds");
 	String json = (String)renderRequest.getAttribute("json");
-	
+	String options = (String)renderRequest.getAttribute("options");
 	boolean isSearch = false;
-	if(searchSdIds.length() > 0){
+	String[] arr_options = null;
+	arr_options = options.split(",");
+	_log.info(arr_options.length);
+	if(options == "noSearch"){
+		isSearch = false;
+		
+		arr_options[0] = "";
+		//_log.info(arr_options.length);
+	}
+	else{
 		isSearch = true;
+		arr_options = options.split(",");
+		_log.info("search");
 	}
-	_log.info("subjectJson : " + subjectJson);
-	_log.info("answerJson : " + answerJson);
 	
 	
-	JSONArray subObj = null;
-	try {
-		subObj = JSONFactoryUtil.createJSONArray(answerJson);
-	} catch (Exception e2) {
-		// TODO Auto-generated catch block
-		e2.printStackTrace();
-	}
-	/*for(int i = 0 ; i < subObj.length(); i++){
-		_log.info("subObj : " + subObj.get(i));
-	}*/
-	
-	
-	JSONArray ansObj = null;
-	try {
-		ansObj = JSONFactoryUtil.createJSONArray(subjectJson);
-	} catch (Exception e2) {
-		// TODO Auto-generated catch block
-		e2.printStackTrace();
-	}
-	/*for(int i = 0 ; i < ansObj.length(); i++){
-		_log.info("ansObj : " + ansObj.get(i));
-	}*/
-	
-	String[] arr_options = options.split(",");
-	String[] arr_searchSdIds = searchSdIds.split(",");
-	
-	for(String a : arr_options){
-		_log.info("options : " + a);
-	}
-	for(String a : arr_searchSdIds){
-		_log.info("searchSdIds : " + a);
-	}
-	/*long searchLogId = ParamUtil.getLong(renderRequest, "searchLogId", 0);
-	_log.info("answerJson : " + answerJson);
-	String excelPackage = "";
-	if(searchLogId > 0){
-		_log.info("search log id : " + searchLogId);
-		excelPackage = CRFSearchLogLocalServiceUtil.getCRFSearchLog(searchLogId).getSearchLog();
-		_log.info("excel package : " + excelPackage);
-	}
 	
 	List<String> searchSIds = new ArrayList();
 	List<String> searchTermName = new ArrayList();
 	List<String> searchNum = new ArrayList();
 	
-	boolean isSearch = false;
+	
 	boolean isEmpty = false;
 	
-	if(excelPackage.length() > 0){
-		isSearch = true;
-	}*/
 	
 	/*if(isSearch){
 		JSONArray jArray_ep = JSONFactoryUtil.createJSONArray(excelPackage);
@@ -322,8 +286,8 @@
 			}
     	}
     	
-    	/* var hw = document.getElementById('btn_1');
-	    hw.addEventListener('click', download_excel); */
+    	var hw = document.getElementById('btn_1');
+	    hw.addEventListener('click', download_excel);
     });
     
  	// Insert the UI to be printed so far into the text.
@@ -431,7 +395,7 @@
                         
                         if(category_second[j].termType != 'Group'){
                         	ContentText += '<div id = "Sub_Category" class="' + mainCateClass + '">';
-                            ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_second[j].termName + '"name = "Section" onClick = "isAll(this.id);"/>'
+                            ContentText += '<input type = "checkbox" id = "C_' + indexC + '" value = "' + category_second[j].termName + '" onClick = "isAll(this.id);"/>'
                             ContentText += '<label class="w250" for ="C_' + indexC + '" name = "' + category_second[j].termName + '">' +category_second[j].displayName.en_US + '</label>';
                         	ContentText += '</div>';
                         	ContentText += '<br>';
@@ -539,14 +503,7 @@
 	<script>		
         // Get answer data and patient information data.
         var answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
-        var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));
-        
-        
-        window.onload = function(){
-		    var hw = document.getElementById('btn_1');
-		    console.log("i: " + hw);
-		    hw.addEventListener('click', download_excel);
-		}
+        var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));         
         
         // This function finds the range of cells to merge in Excel.
         function search_range(arr){
@@ -605,19 +562,35 @@
         	
         	// Total Search Option Row
         	//-------------------------------------------------------------------------------------------
-        	
+        	var Array_TotalSearch = new Array();
         	Array_row = [];
         	
         	// In the case of total search, only the id that meets the search conditions is added
         	if(<%=isSearch%>){
-        		var arr_options = new Array();
+        		<%-- <% for (int i=0; i < searchSIds.size(); i++) { %>
+        		Array_TotalSearch[<%= i %>] = "<%= searchSIds.get(i) %>";
+        		<% } %>
+        		
+        		// Add the termName selected in the total search.
+            	var str_totalExcel = "Search Sequence: ";
+
+            	<% for (int i=0; i < searchNum.size(); i++) { %>
+            	if(<%= i %> != 0){
+            	str_totalExcel += ", ";
+            	}
+            	str_totalExcel += inspectionData.find(v => v.termName === "<%= searchTermName.get(i) %>").displayName.en_US;
+            	str_totalExcel += "(";
+            	str_totalExcel += <%= searchNum.get(i) %>;
+            	str_totalExcel += ")";
+            	<% } %> --%>
+            	
+				var arr_options = new Array();
         		
         		<% for (int i=0; i < arr_options.length; i++) { %>
         			arr_options[<%= i %>] = "<%= arr_options[i] %>";
         		<% } %>
         		
         		var final_option = "Choose Term: ";
-        		
         		for(var i = 0; i < arr_options.length; i++){
         			//console.log("options: " + arr_options[i]);
         			var extract_termName = null;
@@ -643,36 +616,12 @@
         				final_option += " / ";
         			}
         		}
-        		
-        		console.log("options: " + final_option);
+            	
         		Array_row.push(final_option);
             	Array_Final.push(Array_row);
-        		
-
-        		//console.log("options: " + options);
-        		<%-- <% for (int i=0; i < searchSIds.size(); i++) { %>
-        		Array_TotalSearch[<%= i %>] = "<%= searchSIds.get(i) %>";
-        		<% } %>
-        		
-        		// Add the termName selected in the total search.
-            	var str_totalExcel = "Search Sequence: ";
-
-            	<% for (int i=0; i < searchNum.size(); i++) { %>
-            	if(<%= i %> != 0){
-            	str_totalExcel += ", ";
-            	}
-            	str_totalExcel += inspectionData.find(v => v.termName === "<%= searchTermName.get(i) %>").displayName.en_US;
-            	str_totalExcel += "(";
-            	str_totalExcel += <%= searchNum.get(i) %>;
-            	str_totalExcel += ")";
-            	<% } %>
-            	
-            	Array_row.push(str_totalExcel);
-            	Array_Final.push(Array_row); --%>
         	}
-        	
         	//-------------------------------------------------------------------------------------------
-
+			
         	// Top Category Row
         	//-------------------------------------------------------------------------------------------
         	
@@ -817,16 +766,16 @@
             	Array_Final.push(Array_row);
         	}
         	
-        	/*for(var i = 0; i < Array_Final.length; i++){
+        	/* for(var i = 0; i < Array_Final.length; i++){
         		console.log(i + ": " + Array_Final[i]);
-        	}*/
+        	} */
         	// Real Data
 			//-------------------------------------------------------------------------------------------
 			// Total Search
         	if(<%=isSearch%>){
         		for(var i = 0; i < answerData.length; i++){
-        			console.log("patientData: " + JSON.stringify(patientData[i]));
-                	console.log("answerData: " + JSON.stringify(answerData[i]));
+        			//console.log("patientData: " + JSON.stringify(patientData[i]));
+                	//console.log("answerData: " + JSON.stringify(answerData[i]));
         			Array_row = [];
 					//insert info
 					Array_row.push(patientData[i].ID);
@@ -864,67 +813,8 @@
             			Array_row.push(Data_answer);
             		}
             		Array_Final.push(Array_row);
-            		console.log("Array_row: " + Array_row);
-            		
-                }
-        		/* for(var i = 0; i < Array_TotalSearch.length; i++){
-            		Array_row = [];
-            		var Obj_PatientInfo = {};
-            		
-            		for(var j = 0; j < patientData.length; j++){
-            			if(patientData[j].ID == Array_TotalSearch[i]){
-            				Obj_PatientInfo = patientData[j];
-            				break;
-            			}
-            		}
-            		
-            		Array_row.push(Obj_PatientInfo.ID);
-            		
-            		//Array_row.push(Obj_PatientInfo.Visit_date);
-            		Array_row.push("");
-            		Array_row.push(Obj_PatientInfo.Name);
-            		Array_row.push(Obj_PatientInfo.Age);
-            		Array_row.push(Obj_PatientInfo.Sex);
-            		Array_row.push("");
-            		Array_row.push("");
-            		Array_row.push("");
-            		Array_row.push("");
-            		Array_row.push("");
-            		Array_row.push("");
-					
-            		for(var j = 0; j < CheckedList.length; j++){
-            			var Obj_PatientAnswer = {};
-			
-            			for(var k = 0; k < answerData.length; k++){
-            				if(answerData[k].ID == Array_TotalSearch[i]){
-            					Obj_PatientAnswer = answerData[k];
-            					break;
-            				}
-            			}
-						
-            			var Data_answer ="";
-            			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
-
-            			// termType == 'Date' -> milliseconds to date
-            			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
-            				var Data_date = new Date(Data_answer);
-            				Data_date.setHours(Data_date.getHours() - 9)
-            				
-            				if(Data_date.toLocaleString() == 'Invalid Date'){
-            					Data_answer = "";
-            				}
-            				else{
-            					Data_answer = Data_date.toLocaleString();
-            				}
-            			}
-            			
-            			if(typeof(Data_answer) == 'object'){
-            				Data_answer = Data_answer.toString();
-            			}
-            			Array_row.push(Data_answer);
-            		}
-            		Array_Final.push(Array_row);
-            	} */
+            		//console.log("Array_row: " + Array_row);
+        		}
         	}
         	else{
         		var isGrid = false;
@@ -945,7 +835,7 @@
                 				break;
                 			}
                 		}
-        				
+        				//console.log(Obj_PatientInfo);
         				// find grid's max length
         				var length_grid_max = 0;
         				
@@ -1052,14 +942,14 @@
             					}
                     		}
                     		Array_Final.push(Array_row);
-                    		console.log("Array_row: " + Array_row);
+                    		//console.log("Array_row: " + Array_row);
         				}
         				
         			}
         		}
         		else{
         			for(var i = 0; i < answerData.length; i++){
-            			console.log("sKey:" + JSON.stringify(answerData[i]));
+            			//console.log("sKey:" + JSON.stringify(answerData[i]));
                 		Array_row = [];
                 		var Obj_PatientInfo = {};
                 		
@@ -1077,7 +967,7 @@
                 		for(var j = 0; j < CheckedList.length; j++){
                 			var Obj_PatientAnswer = answerData[i];
                 			var Data_answer ="";
-                			//console.log("gg:" + Obj_PatientAnswer);
+                			
                 			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
                 			// termType == 'Date' -> milliseconds to date
                 			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
@@ -1126,9 +1016,9 @@
             <%-- let merge = [];
          	
             if(<%=isSearch%>){
-            	for(var i = 0; i < 4; i++){
-                    let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
-                    merge.push(range_info);
+            	for(var i = 0; i < 3; i++){
+                    let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
+                    merge.push(test);
                 }
             	
             	for(var i = 1; i < 3; i++){
@@ -1161,26 +1051,12 @@
                     let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
                     merge.push(range_info);
                 }
-				
-                for(var i = 1; i < 3; i++){
-                	var start = 0;
-                	for(var j = 0 ; j <= Array_Final[i].length; j++){
-                		console.log(Array_Final[i][j]);
-            			console.log((Array_Final[i][start]));
-                		if(j == Array_Final[i].length || !(Array_Final[i][j] == Array_Final[i][start])){
-                			let range_data = { s: {c: start, r: i}, e: {c: (j - 1), r: i}};
-                			console.log(start);
-                			console.log((j-1));
-                			
-                			merge.push(range_data);
-                			start = j;
-                		}
-                	}
-                	/* var same_range = search_range(Array_Final[i]);
-                	console.log("a: " + Array_Final[i]);
+
+                for(var i = 0; i < 2; i++){
+                	var same_range = search_range(Array_Final[i]);
+
                 	for(var j = 0; j < same_range.length; j++){
-                		console.log("a: " + same_range[j]);
-                		if(i == 2 && j == 0){
+                		if(i == 1 && j == 0){
                 			j = 1;
                 		}
                 			
@@ -1191,7 +1067,7 @@
                 			
                 		}
                 		
-                	} */
+                	}
                 }
             }
             
