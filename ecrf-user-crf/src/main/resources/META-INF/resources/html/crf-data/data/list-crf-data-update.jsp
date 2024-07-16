@@ -324,11 +324,16 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="menu" value="crf-data-list-update" />
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
-			
+			<% 
+				String name = ECRFUserUtil.anonymousName(rowSubject.getName());
+				if(crfDataCount > 1){
+					name = name + " [" + crfDataCount  + "]";
+				}
+			%>
 			<liferay-ui:search-container-column-text
 				cssClass="min-width-80"
 				name="ecrf-user.subject.name"
-				value="<%=Validator.isNull(rowSubject.getName()) ? "-" : ECRFUserUtil.anonymousName(rowSubject.getName()) + " [ " + crfDataCount  + " ]"%>"
+				value="<%=Validator.isNull(rowSubject.getName()) ? "-" : name%>"
 			/>
 			
 			<%
