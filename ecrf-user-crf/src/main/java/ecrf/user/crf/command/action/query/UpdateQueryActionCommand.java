@@ -78,18 +78,30 @@ public class UpdateQueryActionCommand extends BaseMVCActionCommand{
 		CRFAutoquery query = _queryLocalService.getCRFAutoquery(queryId);
 		JSONObject answerForm = JSONFactoryUtil.createJSONObject(answerFormStr);
 		
+		_log.info(crfForm);
+		
 		boolean isNumeric = false;
 		double forNumericValue = 0;
 		for(int i = 0; i < crfForm.length(); i++) {
-			if(crfForm.getJSONObject(i).getString("termType").equals("List")) {	
-				JSONArray tempArr = JSONFactoryUtil.createJSONArray();
-				tempArr.put(queryChangeValue);
-				queryChangeValue = tempArr.toString();
+			JSONObject tempObj = crfForm.getJSONObject(i);
+			
+			// term name check
+			if(queryTermName.equals(tempObj.getString("termName"))) {
+				//_log.info(tempObj.getString("termName") + " / " + tempObj.getString("termType") + " / " + queryChangeValue);
+				
+				// make queryTermValue as sd value
+				// transform value as string
+				if(crfForm.getJSONObject(i).getString("termType").equals("List")) {	
+					JSONArray tempArr = JSONFactoryUtil.createJSONArray();
+					tempArr.put(queryChangeValue);
+					queryChangeValue = tempArr.toString();
+				}
+				if(crfForm.getJSONObject(i).getString("termType").equals("Numeric")) {
+					
+					forNumericValue = Float.parseFloat(queryChangeValue);
+					isNumeric = true;
+				}
 			}
-			if(crfForm.getJSONObject(i).getString("termType").equals("Numeric")) {
-				forNumericValue = Float.parseFloat(queryChangeValue);
-				isNumeric = true;
-			}	
 		}
 		
 		switch(queryComfirm) {
