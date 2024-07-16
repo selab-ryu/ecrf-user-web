@@ -47,6 +47,7 @@
 	<portlet:param name="sId" value="<%=String.valueOf(sId) %>" />
 	<portlet:param name="sdId" value="<%=String.valueOf(sdId) %>" />
 	<portlet:param name="queryId" value="<%=String.valueOf(query.getAutoQueryId())%>" />
+	<portlet:param name="crfId" value="<%=String.valueOf(crfId)%>" />
 </liferay-portlet:actionURL>
 
 <portlet:renderURL var="listCRFQueryURL">
