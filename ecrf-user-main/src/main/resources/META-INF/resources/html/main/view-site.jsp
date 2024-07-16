@@ -8,8 +8,15 @@
 	if(!signedIn) _log.info("not logged in");
 %>
 
+<style>
+.list-group-item-flex .autofit-col {
+    justify-content: center;
+}
+</style>
 
 <liferay-ui:error embed="<%= false %>" key="membershipAlreadyRequested" message="membership-was-already-requested" />
+
+<div class="ecrf-user pad1R">
 
 <liferay-ui:header title="ecrf-user.main.title.view-my-site" />
 
@@ -70,14 +77,42 @@
 				</div>
 			</c:if>
 			
+
+			<%
+			List<CRF> crfList = CRFLocalServiceUtil.getCRFByGroupId(group.getGroupId());
+			
+			_log.info(crfList.size());
+			
+			for(int i=0; i<crfList.size(); i++ ) {
+				CRF crf = crfList.get(i);
+				DataType dataType = DataTypeLocalServiceUtil.getDataType(crf.getDatatypeId());
+				if(Validator.isNotNull(dataType)) {
+					JSONObject obj = DataTypeLocalServiceUtil.getDataTypeStructureJSONObject(dataType.getDataTypeId());
+					String dataTypePrint = "";
+					JSONArray termsArr = obj.getJSONArray("terms");
+					dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName() + StringPool.SPACE + "(" + termsArr.length() + ")";
+			%>
+			
+			<div class="text-default">
+				<strong><%=dataTypePrint %></strong>
+			</div>
+			
+			<%
+				}
+			}
+			%>
+			
 			<%
 			int usersCount = siteDisplayContext.getGroupUsersCount(group.getGroupId());
 			%>
 			
+				
+			<c:if test="false">
 			<c:if test="<%= usersCount > 0 %>">
 			<div class="text-default">
 				<strong><liferay-ui:message arguments="<%= usersCount %>" key='<%= (usersCount > 1) ? "x-users" : "x-user" %>' /></strong>
 			</div>
+			</c:if>
 			</c:if>
 			
 		</liferay-ui:search-container-column-text>
@@ -180,3 +215,5 @@
 	/>
 	
 </liferay-ui:search-container>
+
+</div>

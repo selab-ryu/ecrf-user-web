@@ -1,5 +1,8 @@
 Bundle-Name: ecrf-user-main
 Bundle-SymbolicName: ecrf.user.main
 Bundle-Version: 1.0.0
-Export-Package: ecrf.user.main.constants
--privatepackage: ecrf.user.constants
+
+-privatepackage: \
+	ecrf.user.constants,\
+	ecrf.user.model.custom,\
+	com.sx.icecap.constant

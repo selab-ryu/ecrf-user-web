@@ -91,9 +91,27 @@ String chartDataStr = chartDataArr.toJSONString();
 								</aui:row>
 								
 								<%
+									JSONObject formObj = DataTypeLocalServiceUtil.getDataTypeStructureJSONObject(datatype.getDataTypeId());
+									JSONArray termsArr = formObj.getJSONArray("terms");
+								%>
+								
+								<aui:row>
+									<aui:col md="3">
+										<aui:field-wrapper
+											label="ecrf-user.crf-form.form-count"
+										>
+										</aui:field-wrapper>
+									</aui:col>
+									<aui:col md="9">
+										<p><%=String.valueOf(termsArr.length()) %></p>
+									</aui:col>
+								</aui:row>
+								
+								<%
 									int crfSubjectCount = CRFSubjectLocalServiceUtil.countCRFSubjectByCRFId(scopeGroupId, crf.getCrfId());
 									int linkCount = LinkCRFLocalServiceUtil.countLinkCRFByG_C(scopeGroupId, crf.getCrfId());
 								%>
+								
 								<aui:row>
 									<aui:col md="3">
 										<aui:field-wrapper

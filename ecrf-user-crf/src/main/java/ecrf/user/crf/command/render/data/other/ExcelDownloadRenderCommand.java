@@ -6,7 +6,10 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
 
@@ -80,6 +83,8 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			e1.printStackTrace();
 		}
 		
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		List<Subject> allSub = _subjectLocalService.getAllSubject();
@@ -87,12 +92,15 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 		JSONArray ansJsons = JSONFactoryUtil.createJSONArray();
 		
 		for(int i = 0; i < allSub.size(); i++) {
-			LinkCRF tmpkinglink = null;
-	         try {
-	            tmpkinglink = _linkCRFLocalService.getLinkCRFBySId(allSub.get(i).getSubjectId());
-	            if(crfId != tmpkinglink.getCrfId()) {
-	               continue;
-	            }
+			List<LinkCRF> tmpLinkList = null;
+	        try {
+	        	tmpLinkList = _linkCRFLocalService.getLinkCRFBySubjectId(allSub.get(i).getSubjectId());
+	        	if(tmpLinkList.size() > 0) {
+	        		LinkCRF tmpLink = tmpLinkList.get(0);
+		            if(crfId != tmpLink.getCrfId()) {
+		               continue;
+		            }
+	         	}
 	         } catch (Exception e) {
 	            e.printStackTrace();
 	         }
@@ -102,7 +110,7 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 				for(String sdId : searchSdIds) {
 					LinkCRF tmplink = null;
 					try {
-						tmplink = _linkCRFLocalService.getLinkCRFBySdId(Long.parseLong(sdId));
+						tmplink = _linkCRFLocalService.getLinkCRFByStructuredDataId(Long.parseLong(sdId));
 						if(allSub.get(i).getSubjectId() == tmplink.getSubjectId()) {
 							flag = true;
 							break;
@@ -124,13 +132,10 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			subJson.put("Age", (Math.abs(124 - subTemp.getBirth().getYear())));
 			subJson.put("Sex", subTemp.getGender());
 			subJsons.put(subJson);
-			LinkCRF link = null;
+			
 			if(_linkCRFLocalService.countLinkBySubjectId(subTemp.getSubjectId()) > 0) {
-				try {
-					link = _linkCRFLocalService.getLinkCRFBySId(subTemp.getSubjectId());
-				} catch (Exception e) {
-					e.printStackTrace();
-				} 
+				List<LinkCRF> linkList = _linkCRFLocalService.getLinkCRFByG_S_C(themeDisplay.getScopeGroupId(), subTemp.getSubjectId(), crfId);
+				LinkCRF link = linkList.get(0);				
 				String ansTemp = _dataTypeLocalService.getStructuredData(link.getStructuredDataId());
 				JSONObject ansObj =  null;
 				try {
