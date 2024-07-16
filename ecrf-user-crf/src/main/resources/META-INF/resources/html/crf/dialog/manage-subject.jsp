@@ -16,10 +16,7 @@
 	_log.info("crf id : " + crfId);
 	
 	long groupId = ParamUtil.getLong(renderRequest, "groupId");
-	
-	String crfSubjectInfoJsonStr = ParamUtil.getString(renderRequest, "crfSubjectInfoJsonStr", StringPool.BLANK);
-	_log.info("json str : " + crfSubjectInfoJsonStr);
-	
+		
 	if(crfId > 0) {
 		isUpdate = true;
 		menu = "crf-update";
@@ -130,10 +127,25 @@ var notIncludedSubjectArr = [];
 // parameter from update-crf.jsp
 var crfSubjectInfoArr = [];
 
+$(document).ready( function() {
+	console.group();
+	
+	// set init arr by Session Data	
+	var getValue = sessionStorage.getItem('subjectArr');
+	var parseVal = JSON.parse(decodeURIComponent(getValue)); 
+    console.log(parseVal);
+    crfSubjectInfoArr = parseVal;
+    tableLoading();
+    
+	$('#<portlet:namespace/>closeDialog').on("click", function() {
+		Liferay.Util.getOpener().closePopup('manageSubjectPopup', "close", null);
+	});	
+});
+
 function initTable(type) {
 	if(type == 0) {
-		console.log(crfSubjectInfoArr);
-		
+		//console.log(crfSubjectInfoArr);
+				
 		if(crfSubjectInfoArr.length > 0) {
 			currentSubjectArr = crfSubjectInfoArr;
 			initCurrentSubjectArr = crfSubjectInfoArr;
@@ -141,9 +153,8 @@ function initTable(type) {
 			currentSubjectTable.rows.add(currentSubjectArr).draw();
 		}
 	} else if (type == 1) {
-		console.log("group id : " + Liferay.ThemeDisplay.getScopeGroupId())
-		
-		console.log("group id : " + <%=groupId%>)
+		//console.log("group id : " + Liferay.ThemeDisplay.getScopeGroupId())
+		//console.log("group id : " + <%=groupId%>)
 		
 		Liferay.Service(
 			{
@@ -153,16 +164,16 @@ function initTable(type) {
 				}
 			},
 			function(obj) {
-				console.log(obj);
+				//console.log(obj);
 				// remove item matched current crf subject info arr
 				
 				for(let i=0; i<initCurrentSubjectArr.length; i++) {
 					let subject = initCurrentSubjectArr[i];
-					console.log(subject);
+					//console.log(subject);
 					const itemToFind = obj.find(function(item) {return item.subjectId == subject.subjectId});
 					const idx = obj.indexOf(itemToFind);
 					if(idx>-1) {
-						console.log("remove idx : " + idx);
+						//console.log("remove idx : " + idx);
 						obj.splice(idx, 1);
 					}
 				}				
@@ -212,26 +223,6 @@ function chkAllCtrl(table) {
 		}
 	}
 }
-
-$(document).ready( function() {
-	console.group();
-		
-	// parameter from jsp is object, not string (is need ""?)
-	let jsonStr = <%=crfSubjectInfoJsonStr%>;
-	try {
-		crfSubjectInfoArr = JSON.parse(JSON.stringify(jsonStr));
-	} catch(e) {
-		console.log("json is empty")
-	}
-	
-	// set init arr by 
-	
-	tableLoading();
-	
-	$('#<portlet:namespace/>closeDialog').on("click", function() {
-		Liferay.Util.getOpener().closePopup('manageSubjectPopup', "close", null);
-	});	
-});
 
 function tableLoading() {
 	currentSubjectTable = $('#currentSubjectList').DataTable({
@@ -347,7 +338,7 @@ function setSaveButtonEvent() {
 			// make json data that send with api request
 			// crfId & subjectId
 	
-		console.log("save button clicked");
+		//console.log("save button clicked");
 		
 		Liferay.Util.getOpener().closePopup('manageSubjectPopup', "save", currentSubjectArr);
 				
@@ -403,18 +394,18 @@ function setMiddleButtonEvent() {
 		
 		for(var i=0; i<rowsSelectedCurrent.length; i++) {
 			var serialId = rowsSelectedCurrent[i];
-			console.log(serialId);
+			//console.log(serialId);
 			
 			let matchedRow = currentSubjectTable.row((idx, data) => data.serialId === serialId);
 			let rowData = matchedRow.data(); 
-			console.log(rowData);
+			//console.log(rowData);
 			
 			notIncludedSubjectTable.row.add(rowData);
 			matchedRow.remove();
 			
 			notIncludedSubjectArr.push(rowData)
 			let removeIdx = currentSubjectArr.indexOf(rowData);
-			console.log(removeIdx);
+			//console.log(removeIdx);
 			currentSubjectArr.splice(removeIdx, 1);
 		}
 		
@@ -500,9 +491,3 @@ function setCheckboxEvent() {
 	);
 }
 </script>
-
-<aui:script>
-
-
-
-</aui:script>

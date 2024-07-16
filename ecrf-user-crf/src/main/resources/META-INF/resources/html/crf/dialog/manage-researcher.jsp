@@ -135,6 +135,21 @@ var notIncludedArr = [];
 // parameter from update-crf.jsp
 var crfResearcherInfoArr = [];
 
+$(document).ready( function() {
+	console.group("manage researcher popup");
+		
+	// set init arr by Session Data	
+	var getValue = sessionStorage.getItem('researcherArr');
+	var parseVal = JSON.parse(decodeURIComponent(getValue)); 
+    console.log(parseVal);
+    crfResearcherInfoArr = parseVal;
+    tableLoading();
+	
+	$('#<portlet:namespace/>closeDialog').on("click", function() {
+		Liferay.Util.getOpener().closePopup('manageResearcherPopup', "close", null);
+	});	
+});
+
 function initTable(type) {
 	if(type == 0) {
 		console.log(crfResearcherInfoArr);
@@ -209,25 +224,6 @@ function chkAllCtrl(table) {
 		}
 	}
 }
-
-$(document).ready( function() {
-	console.group("manage researcher popup");
-		
-	// parameter from jsp is object, not string
-	let jsonStr = <%=crfResearcherInfoJsonStr%>;
-	try {
-		// set info arr by parent's arr
-		crfResearcherInfoArr = JSON.parse(JSON.stringify(jsonStr));
-	} catch(e) {
-		console.log("json is empty")
-	}
-	
-	tableLoading();
-	
-	$('#<portlet:namespace/>closeDialog').on("click", function() {
-		Liferay.Util.getOpener().closePopup('manageResearcherPopup', "close", null);
-	});	
-});
 
 function tableLoading() {
 	console.group("table loading");

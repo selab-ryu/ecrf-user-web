@@ -342,86 +342,6 @@ var crfSubjectInfoArr = [];
 var crfId = "<%=String.valueOf(crfId) %>";
 var dataTypeId = "<%=String.valueOf(dataTypeId) %>";
 
-function fetchResearcherArr() {
-	Liferay.Service(
-		{
-			'/ec.crf-researcher/get-crf-researcher-list' : {
-				"groupId" : Liferay.ThemeDisplay.getScopeGroupId(),
-				"crfId" : <%=crfId%>
-			}
-		},
-		function(obj) {
-			//console.log(obj);
-			
-			crfResearcherInfoArr = obj;
-			refreshResearcherTable();
-		}
-	);
-}
-
-function fetchSubjectArr() {
-	Liferay.Service(
-		{
-			'/ec.crf-subject/get-crf-subject-list' : {
-				"groupId" : Liferay.ThemeDisplay.getScopeGroupId(),
-				"crfId" : <%=crfId%>
-			}
-		},
-		function(obj) {
-			//console.log(obj);
-			
-			crfSubjectInfoArr = obj;
-			refreshSubjectTable();
-		}
-	);
-}
-
-function refreshResearcherTable() {
-	console.group(refreshResearcherTable.name);
-	console.log("researcher table refresh and print current researcher arr");
-	console.log(crfResearcherInfoArr);
-	researcherTable.clear();
-	researcherTable.rows.add(crfResearcherInfoArr).draw();
-	console.groupEnd();
-}
-
-function refreshSubjectTable() {
-	console.group(refreshSubjectTable.name);
-	console.log("subject table refresh and print current subject arr");
-	console.log(crfSubjectInfoArr);
-	subjectTable.clear();
-	subjectTable.rows.add(crfSubjectInfoArr).draw();
-	console.groupEnd();
-}
-
-Liferay.provide(window, "closePopup", function(dialogId, type, data) {
-	var A = AUI();
-	var dialog = Liferay.Util.Window.getById(dialogId);
-	dialog.destroy();
-	console.groupEnd();
-	
-	console.group("closePopup Function");
-	console.log("closePopup called");
-	console.log(dialogId);
-	console.log(type);
-	console.log(data);
-	
-	if(type == "save") {
-		//console.log("is it called?");	// check equals
-		
-		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" ) {
-			crfSubjectInfoArr = data;
-			refreshSubjectTable();
-		} else if (dialogId == "manageResearcherPopup") {
-			crfResearcherInfoArr = data;
-			refreshResearcherTable();	
-		}
-	}
-	
-	console.groupEnd();
-}, ['liferay-util-window']
-);
-
 $('#<portlet:namespace/>saveBtn').on("click", function(e) {
 	let form = $('#<portlet:namespace/>updateCRFFm');
 	let researcherListInput = $('#<portlet:namespace/>researcherListInput');
@@ -442,9 +362,87 @@ AUI().ready(function() {
 Liferay.Portlet.ready(
 function(portletId, node) {
 	var date = new Date();
-	console.log(date);
-	console.log(portletId);		
+	//console.log(date);
+	//console.log(portletId);		
 });
+
+function fetchResearcherArr() {
+	Liferay.Service(
+		{
+			'/ec.crf-researcher/get-crf-researcher-list' : {
+				"groupId" : Liferay.ThemeDisplay.getScopeGroupId(),
+				"crfId" : <%=crfId%>
+			}
+		},
+		function(obj) {
+			//console.log(obj);	
+			crfResearcherInfoArr = obj;
+			refreshResearcherTable();
+		}
+	);
+}
+
+function fetchSubjectArr() {
+	Liferay.Service(
+		{
+			'/ec.crf-subject/get-crf-subject-list' : {
+				"groupId" : Liferay.ThemeDisplay.getScopeGroupId(),
+				"crfId" : <%=crfId%>
+			}
+		},
+		function(obj) {
+			//console.log(obj);
+			crfSubjectInfoArr = obj;
+			refreshSubjectTable();
+		}
+	);
+}
+
+function refreshResearcherTable() {
+	//console.group(refreshResearcherTable.name);
+	//console.log("researcher table refresh and print current researcher arr");
+	//console.log(crfResearcherInfoArr);
+	researcherTable.clear();
+	researcherTable.rows.add(crfResearcherInfoArr).draw();
+	//console.groupEnd();
+}
+
+function refreshSubjectTable() {
+	//console.group(refreshSubjectTable.name);
+	//console.log("subject table refresh and print current subject arr");
+	//console.log(crfSubjectInfoArr);
+	subjectTable.clear();
+	subjectTable.rows.add(crfSubjectInfoArr).draw();
+	//console.groupEnd();
+}
+
+Liferay.provide(window, "closePopup", function(dialogId, type, data) {
+	var A = AUI();
+	var dialog = Liferay.Util.Window.getById(dialogId);
+	dialog.destroy();
+	console.groupEnd();
+	
+	//console.group("closePopup Function");
+	//console.log("closePopup called");
+	//console.log(dialogId);
+	//console.log(type);
+	//console.log(data);
+	
+	if(type == "save") {
+		//console.log("is it called?");	// check equals
+		
+		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" ) {
+			crfSubjectInfoArr = data;
+			refreshSubjectTable();
+		} else if (dialogId == "manageResearcherPopup") {
+			crfResearcherInfoArr = data;
+			refreshResearcherTable();	
+		}
+	}
+	
+	//console.groupEnd();
+}, ['liferay-util-window']
+);
 
 function tableLoading() {
 	console.group("table load start");
@@ -464,7 +462,7 @@ function tableLoading() {
             	text : 'Manage Researhcer',
             	className : 'small-btn marBrh',
             	action : function( e, dt, node, config) {
-            		openManageResearcherDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfResearcherInfoArr);     
+            		openManageResearcherDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfResearcherInfoArr, "<%=baseURL.toString()%>");
             	}
             }
 		],
@@ -511,7 +509,7 @@ function tableLoading() {
             	text : 'Manage Update Lock',
             	className : 'small-btn marRr marBrh',
             	action : function( e, dt, node, config) {
-            		openManageUpdateLockDialog("<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr);            		
+            		openManageUpdateLockDialog("<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr, "<%=baseURL.toString()%>");
             	}
             },
 		],
@@ -544,7 +542,6 @@ function tableLoading() {
 				data:"updateLock",
 				render: function(data, type, row) {
 					// check and return value
-					//console.log("updatelock : " + data);
 					let lockStr = "N";
 					if(data == true) {
 						lockStr = "Y";

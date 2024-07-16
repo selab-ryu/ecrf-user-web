@@ -22,8 +22,8 @@ dependencies {
 	
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
 	compileOnly group: 'com.liferay', name: 'com.liferay.trash.api'
-	compileOnly group: 'com.liferay', name: 'com.liferay.petra.string'
 	
+	compileOnly group: 'com.liferay', name: 'com.liferay.petra.string'
 	compileOnly group: "com.liferay", name: "com.liferay.petra.function"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.model.adapter"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.reflect"
