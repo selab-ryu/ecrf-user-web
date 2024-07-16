@@ -1,16 +1,22 @@
 package ecrf.user.crf.command.render.data.other;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.sx.icecap.model.StructuredData;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.sx.icecap.service.DataTypeLocalService;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.portlet.PortletException;
@@ -27,6 +33,8 @@ import ecrf.user.constants.attribute.ECRFUserCRFDataAttributes;
 import ecrf.user.model.LinkCRF;
 import ecrf.user.model.Subject;
 import ecrf.user.service.CRFLocalService;
+import ecrf.user.service.CRFSearchLogLocalService;
+import ecrf.user.service.CRFSubjectLocalService;
 import ecrf.user.service.LinkCRFLocalService;
 import ecrf.user.service.SubjectLocalService;
 
@@ -44,28 +52,35 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException{
 		_log.info("Render Excel Download");
 		
-		//String[] searchSdIds = (String[])renderRequest.getAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST);
 		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
 		long dataTypeId = _crfLocalService.getDataTypeId(crfId);
-		
-		//String searchLogId = ParamUtil.getString(renderRequest, "searchLogId");
-		String searchLog = ParamUtil.getString(renderRequest, "searchLog");
-		String[] options = null;
-		String[] searchSdIds = null;
-		if(!searchLog.isEmpty()) {
-			_log.info("excelPackage : " + searchLog);
-			
+		String searchLogId = ParamUtil.getString(renderRequest, "searchLogId");
+		String searchLog = null;
+		//_log.info("Download: " + searchLogId.isEmpty());
+		if(!searchLogId.isEmpty()) {
 			try {
-				JSONObject obj_searchLog = JSONFactoryUtil.createJSONObject(searchLog);
-				String real_searchLog = String.valueOf(obj_searchLog.get("searchLog"));
-				JSONObject before_option = JSONFactoryUtil.createJSONObject(real_searchLog);
+				searchLog = _crfSearchLogLocalService.getCRFSearchLog(Long.parseLong(searchLogId)).getSearchLog();
+			}catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+
+		String[] options = null;
+		List<String> searchSdIds = null;
+		
+		if(!searchLogId.isEmpty()) {
+			try {
+
+				JSONObject before_option = JSONFactoryUtil.createJSONObject(searchLog);
 				String option = String.valueOf(before_option.get("query")).replace("(", "").replace(")", "");
 				
 				options = option.split("\\s+OR\\s+|\\s+AND\\s+");
 				
 				String searchSdId = String.valueOf(before_option.get("hits")).replace("[", "").replace("]", "").replace("\"", "").replace(",", " ");
 				
-				searchSdIds = searchSdId.split(" ");
+				searchSdIds = Arrays.asList(searchSdId.split(" "));
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -80,161 +95,102 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			e1.printStackTrace();
 		}
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		List<Subject> allSub = _subjectLocalService.getAllSubject();
+		List<LinkCRF> allLinkCRFList = _linkCRFLocalService.getLinkCRFByG_C(themeDisplay.getScopeGroupId(), crfId);
 		JSONArray subJsons = JSONFactoryUtil.createJSONArray();
 		JSONArray ansJsons = JSONFactoryUtil.createJSONArray();
 		
-		for(int i = 0; i < allSub.size(); i++) {
-			LinkCRF tmpkinglink = null;
-	         try {
-	            tmpkinglink = _linkCRFLocalService.getLinkCRFBySId(allSub.get(i).getSubjectId());
-	            if(crfId != tmpkinglink.getCrfId()) {
-	               continue;
-	            }
-	         } catch (Exception e) {
-	            e.printStackTrace();
-	         }
+		for(LinkCRF i : allLinkCRFList) {
+			Subject subject = null;
+			Boolean flag = true;
 			
-			if(!searchLog.isEmpty()) {
-				Boolean flag = false;
-				for(String sdId : searchSdIds) {
-					LinkCRF tmplink = null;
+			if(!searchLogId.isEmpty() && !(searchSdIds.contains(String.valueOf(i.getStructuredDataId())))) {
+				flag = false;
+			}
+			if(flag) {
+				try {
+					subject = _subjectLocalService.getSubject(i.getSubjectId());
+					
+					JSONObject subJson = JSONFactoryUtil.createJSONObject();
+					subJson.put("ID", subject.getSerialId());
+					subJson.put("Name", subject.getName());
+					subJson.put("Age", (Math.abs(124 - subject.getBirth().getYear())));
+					subJson.put("Sex", subject.getGender());
+					subJson.put("LinkId", i.getStructuredDataId());
+					subJsons.put(subJson);
+					
+					String str_sd = _dataTypeLocalService.getStructuredData(i.getStructuredDataId());
+					JSONObject ansObj =  JSONFactoryUtil.createJSONObject();
 					try {
-						tmplink = _linkCRFLocalService.getLinkCRFBySdId(Long.parseLong(sdId));
-						if(allSub.get(i).getSubjectId() == tmplink.getSubjectId()) {
-							flag = true;
-							break;
-						}
-						//_log.info("link : " + link.getSubjectId());
+						 ansObj = JSONFactoryUtil.createJSONObject(str_sd);
+						 ansObj.put("ID", subject.getSerialId());
+						 ansObj.put("LinkId", i.getStructuredDataId());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}
-				if(flag == false) {
-					continue;
-				}
-			}
-			//_log.info("allSub : " + allSub);
-			JSONObject subJson = JSONFactoryUtil.createJSONObject();
-			Subject subTemp = allSub.get(i);
-			subJson.put("ID", subTemp.getSerialId());
-			subJson.put("Name", subTemp.getName());
-			subJson.put("Age", (Math.abs(124 - subTemp.getBirth().getYear())));
-			subJson.put("Sex", subTemp.getGender());
-			subJsons.put(subJson);
-			LinkCRF link = null;
-			if(_linkCRFLocalService.countLinkBySubjectId(subTemp.getSubjectId()) > 0) {
-				try {
-					link = _linkCRFLocalService.getLinkCRFBySId(subTemp.getSubjectId());
-				} catch (Exception e) {
-					e.printStackTrace();
-				} 
-				String ansTemp = _dataTypeLocalService.getStructuredData(link.getStructuredDataId());
-				JSONObject ansObj =  null;
-				try {
-					 ansObj = JSONFactoryUtil.createJSONObject(ansTemp);
-					 ansObj.put("ID", subTemp.getSerialId());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				//ansJsons.put(subTemp.getSerialId());
-				ansJsons.put(ansObj);
+					ansJsons.put(ansObj);
+			    } catch(PortalException e) {
+		            e.printStackTrace();
+		        }
 			}
 		}
-		renderRequest.setAttribute("subjectJson", subJsons.toJSONString());
-		renderRequest.setAttribute("answerJson", ansJsons.toJSONString());
+
+		List<JSONObject> jsonValues = new ArrayList<JSONObject>();
+	    for (int i = 0; i < subJsons.length(); i++) {
+	        jsonValues.add(subJsons.getJSONObject(i));
+	    }
+	    Collections.sort( jsonValues, new Comparator<JSONObject>() {
+	        @Override
+	        public int compare(JSONObject a, JSONObject b) {
+	            String valA = a.getString("Name");
+	            String valB = b.getString("Name");
+
+	            return valA.compareTo(valB);
+	        }
+	    });
+	    
+	    JSONArray fin_subJsons = JSONFactoryUtil.createJSONArray();
+		JSONArray fin_ansJsons = JSONFactoryUtil.createJSONArray();
+
+		for(int i = 0; i < subJsons.length(); i++) {
+			JSONObject fin_subJson = JSONFactoryUtil.createJSONObject();
+			
+			fin_subJson.put("ID", jsonValues.get(i).get("ID"));
+			fin_subJson.put("Name", jsonValues.get(i).get("Name"));
+			fin_subJson.put("Age", jsonValues.get(i).get("Age"));
+			fin_subJson.put("Sex", jsonValues.get(i).get("Sex"));
+			fin_subJsons.put(fin_subJson);
+			
+			JSONObject fin_ansObj =  JSONFactoryUtil.createJSONObject();
+			
+			for(int j = 0; j < ansJsons.length(); j++) {
+				if(jsonValues.get(i).get("LinkId").equals(ansJsons.getJSONObject(j).get("LinkId"))) {
+					ansJsons.getJSONObject(j).remove("LinkId");
+					fin_ansObj = ansJsons.getJSONObject(j);
+					break;
+				}
+			}
+			
+			fin_ansJsons.put(fin_ansObj);
+		}
+		for(int i = 0; i < fin_subJsons.length(); i++) {
+			_log.info("fin_subJsons: " + fin_subJsons.getJSONObject(i));
+		}
+		for(int i = 0; i < fin_ansJsons.length(); i++) {
+			_log.info("fin_ansJsons: " + fin_ansJsons.getJSONObject(i));
+		}
+		renderRequest.setAttribute("subjectJson", fin_subJsons.toJSONString());
+		renderRequest.setAttribute("answerJson", fin_ansJsons.toJSONString());
 		renderRequest.setAttribute("json", json);
-		if(!searchLog.isEmpty()) {
+		if(!searchLogId.isEmpty()) {
 			renderRequest.setAttribute("options", String.join(",", options));
 		}
 		else {
 			renderRequest.setAttribute("options", "noSearch");
 		}
 		
-		
 		return ECRFUserJspPaths.JSP_CRF_DATA_EXCEL_DOWNLOAD;
-		/*_log.info("Render Excel Download");
-		
-		//String[] searchSdIds = (String[])renderRequest.getAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST);
-		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
-		long dataTypeId = _crfLocalService.getDataTypeId(crfId);
-		
-		String searchLogId = ParamUtil.getString(renderRequest, "searchLogId");
-		String excelPackage = ParamUtil.getString(renderRequest, "excelPackage");
-		
-		_log.info("sibal1: " + searchLogId);
-		_log.info("sibal2: " + excelPackage);
-		
-		String json = "";
-		try {
-			json = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
-		List<Subject> allSub = _subjectLocalService.getAllSubject();
-		JSONArray subJsons = JSONFactoryUtil.createJSONArray();
-		JSONArray ansJsons = JSONFactoryUtil.createJSONArray();
-		
-		JSONObject before_option = null;
-		try {
-			before_option = JSONFactoryUtil.createJSONObject(excelPackage);
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		System.out.println(before_option);
-		String option = String.valueOf(before_option.get("query")).replace("(", "").replace(")", "");
-		
-		String[] options = option.split("\\s+OR\\s+|\\s+AND\\s+");
-		
-		String searchSdId = String.valueOf(before_option.get("hits")).replace("[", "").replace("]", "").replace("\"", "").replace(",", " ");
-		String[] searchSdIds = searchSdId.split(" ");
-		
-		for(String sdId : searchSdIds) {
-			LinkCRF link = null;
-			try {
-				link = _linkCRFLocalService.getLinkCRFBySdId(Long.parseLong(sdId));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			
-			for(Subject subInfo : allSub) {
-				if(link.getSubjectId() == subInfo.getSubjectId()) {
-					JSONObject subJson = JSONFactoryUtil.createJSONObject();
-					subJson.put("ID", subInfo.getSerialId());
-					subJson.put("Sex", subInfo.getGender());
-					subJson.put("Age", (Math.abs(124 - subInfo.getBirth().getYear())));
-					subJson.put("Name", subInfo.getName());
-					subJsons.put(subJson);
-					//_log.info("subJson: " + subJson.toJSONString());
-					
-					JSONObject ansObj = null;
-					try {
-						ansObj = JSONFactoryUtil.createJSONObject(_dataTypeLocalService.getStructuredData(Long.parseLong(sdId)));
-						ansObj.put("ID", subInfo.getSerialId());
-						ansJsons.put(ansObj);
-					} catch (Exception e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-				}
-			}
-		}		
-		
-		renderRequest.setAttribute("subjectJson", subJsons.toJSONString());
-		renderRequest.setAttribute("answerJson", ansJsons.toJSONString());
-		renderRequest.setAttribute("options", String.join(",", options));
-		renderRequest.setAttribute("searchSdIds", String.join(",", searchSdIds));
-		
-		renderRequest.setAttribute("json", json);
-		
-		return ECRFUserJspPaths.JSP_CRF_DATA_EXCEL_DOWNLOAD;*/
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(ExcelDownloadRenderCommand.class);
@@ -250,4 +206,10 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 	
 	@Reference
 	LinkCRFLocalService _linkCRFLocalService;
+	
+	@Reference
+	private CRFSubjectLocalService _crfSubjectLocalService;
+	
+	@Reference
+	private CRFSearchLogLocalService _crfSearchLogLocalService;
 }
