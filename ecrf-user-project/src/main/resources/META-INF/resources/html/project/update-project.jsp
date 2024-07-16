@@ -70,6 +70,7 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 					<hr align="center" class="marV5"></hr>
 				</aui:col>
 			</aui:row>
+			
 			<aui:row>
 				<aui:col md="12">
 					<aui:input

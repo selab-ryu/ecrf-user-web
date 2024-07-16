@@ -3,6 +3,7 @@ dependencies {
 	compileOnly project(":modules:SXIcecap:SXIcecap-api")
 
 	compileOnly project(":modules:ecrf-user:ecrf-user-api")
+	compileOnly project(":modules:ecrf-user-web:ecrf-user-panel-category")
 	
 	compileOnly group: "com.liferay", name: "com.liferay.asset.taglib"
 	compileOnly group: "com.liferay", name: "com.liferay.comment.taglib"
@@ -24,8 +25,13 @@ dependencies {
 	
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
 	compileOnly group: 'com.liferay', name: 'com.liferay.trash.api'
+	
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.string'
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.function'
+	compileOnly group: "com.liferay", name: "com.liferay.petra.model.adapter"
+	compileOnly group: "com.liferay", name: "com.liferay.petra.reflect"
+	
+	compileOnly group: "com.liferay", name: "com.liferay.application.list.api", version: "4.2.5"
 	
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.chart"
 }

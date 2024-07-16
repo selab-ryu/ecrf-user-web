@@ -36,6 +36,10 @@
 <%@ page import="com.liferay.portal.kernel.log.Log" %>
 <%@ page import="com.liferay.portal.kernel.log.LogFactoryUtil" %>
 
+<%@ page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@ page import="com.liferay.portal.kernel.json.JSONArray"%>
+<%@ page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
@@ -61,6 +65,14 @@
 <%@ page import="ecrf.user.constants.attribute.ECRFUserMainAttributes"%>
 
 <%@ page import="ecrf.user.model.Researcher"%>
+<%@ page import="ecrf.user.model.CRF"%>
+
+<%@ page import="ecrf.user.service.CRFLocalServiceUtil"%>
+
+<%@ page import="com.sx.icecap.model.DataTypeStructure"%>
+<%@ page import="com.sx.icecap.service.DataTypeStructureLocalServiceUtil"%>
+<%@ page import="com.sx.icecap.model.DataType"%>
+<%@ page import="com.sx.icecap.service.DataTypeLocalServiceUtil"%>
 
 <%@ page import="ecrf.user.main.display.context.SiteDisplayContext"%>
 
