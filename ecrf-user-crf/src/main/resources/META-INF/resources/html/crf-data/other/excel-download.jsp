@@ -37,41 +37,13 @@
 	List<String> searchNum = new ArrayList();
 	
 	Long dtypeId = CRFLocalServiceUtil.getCRF(crfId).getDatatypeId();
-	String dType = DataTypeLocalServiceUtil.getDataType(dtypeId).getDisplayName();
+	DataType dataType = DataTypeLocalServiceUtil.getDataType(dtypeId);
+	String dType = dataType.getDisplayName();
 	String[] dName = dType.split(">");
 	String[] fin_dName = dName[3].split("<");
 	
 	boolean isEmpty = false;
 	
-	
-	/*if(isSearch){
-		JSONArray jArray_ep = JSONFactoryUtil.createJSONArray(excelPackage);
-		
-		for(int i = 0; i < jArray_ep.length(); i++){
-			String str_ep = jArray_ep.get(i).toString();
-			JSONObject jObject_ep = JSONFactoryUtil.createJSONObject(str_ep);
-			JSONArray jArray_ep_final = (JSONArray) jObject_ep.get("results");
-			searchNum.add(Integer.toString(jArray_ep_final.length()));
-		}
-		
-		String str_ep = jArray_ep.get(jArray_ep.length() - 1).toString();
-		JSONObject jObject_ep = JSONFactoryUtil.createJSONObject(str_ep);
-		JSONArray jArray_ep_final = (JSONArray) jObject_ep.get("results");
-		
-		for(int i = 0; i < jArray_ep_final.length(); i++){
-			long IdSd = Long.parseLong(jArray_ep_final.get(i).toString());
-			long IdLinkCrf = LinkCRFLocalServiceUtil.getLinkCRFBySdId(IdSd).getSubjectId();
-			String Idsubject = SubjectLocalServiceUtil.getSubject(IdLinkCrf).getSerialId();
-			searchSIds.add(Idsubject);	
-		}
-		
-		for(int i = 0; i < jArray_ep.length(); i++){
-			str_ep = jArray_ep.get(i).toString();
-			jObject_ep = JSONFactoryUtil.createJSONObject(str_ep);
-			String str_ep_final = jObject_ep.get("fieldName").toString();
-			searchTermName.add(str_ep_final);
-		}
-	}*/
 	
 	boolean hasDownloadExcelPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL);
 	
@@ -106,6 +78,14 @@
 	.w200 { width:200px; }
 	.w250 { width:250px; }
 
+	.crfinfo{
+		background-image: linear-gradient(90deg, red, orange, yellow, green, blue, navy, purple);
+		-webkit-background-clip: text;
+		color: transparent;
+		
+		font-weight: bold;
+		font-size: 40px;
+	}
 </style>
 
 <div class="ecrf-user-crf-data ecrf-user">
@@ -116,7 +96,42 @@
 	
 		<liferay-ui:header backURL="<%=redirect %>" title='ecrf-user.crf-data.title.excel-download' />
 		
-		
+		<aui:fieldset-group markupView="lexicon">
+			<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.crf.title.crf-info">
+				<aui:container>
+					<aui:row cssClass="top-border">
+						<aui:col md="3" cssClass="marTr">
+							<aui:field-wrapper
+								name="title"
+								label="ecrf-user.crf.crf-title">
+								<p><%=Validator.isNull(dataType)?StringPool.BLANK:dataType.getDisplayName() %></p>
+							</aui:field-wrapper>
+						</aui:col>
+						<aui:col md="3" cssClass="marTr">
+							<aui:field-wrapper
+								name="version"
+								label="ecrf-user.crf.version">
+								<p><%=Validator.isNull(dataType)?StringPool.BLANK:dataType.getDataTypeVersion() %></p>
+							</aui:field-wrapper>
+						</aui:col>
+						<aui:col md="3" cssClass="marTr">
+							<aui:field-wrapper
+								name="count-subejct"
+								label="ecrf-user.crf.crf-subject-count">
+								<p><%=CRFSubjectLocalServiceUtil.countCRFSubjectByCRFId(scopeGroupId, crfId) %></p>
+							</aui:field-wrapper>
+						</aui:col>
+						<aui:col md="3" cssClass="marTr">
+							<aui:field-wrapper
+								name="data-subejct"
+								label="ecrf-user.crf.crf-data-count">
+								<p><%=LinkCRFLocalServiceUtil.countLinkCRFByG_C(scopeGroupId, crfId) %></p>
+							</aui:field-wrapper>
+						</aui:col>
+					</aui:row>
+				</aui:container>
+			</aui:fieldset>
+		</aui:fieldset-group>
 		
 		<div class="radius-shadow-container" style="width:auto;">
 			<div id="Search_Page"></div>
@@ -512,6 +527,10 @@
         var answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
         var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));         
         
+        for(var i = 0; i < patientData.length; i++){
+        	console.log("I: " + JSON.stringify(patientData[i]));
+        }
+        
         // This function finds the range of cells to merge in Excel.
         function search_range(arr){
         	var range = {};
@@ -781,24 +800,16 @@
 			// Total Search
         	if(<%=isSearch%>){
         		for(var i = 0; i < answerData.length; i++){
-        			//console.log("patientData: " + JSON.stringify(patientData[i]));
-                	//console.log("answerData: " + JSON.stringify(answerData[i]));
-        			Array_row = [];
-					//insert info
-					Array_row.push(patientData[i].ID);
-					Array_row.push(patientData[i].Sex);
+    				Array_row = [];
+    				Array_row.push(patientData[i].ID);
 					Array_row.push(patientData[i].Age);
+					Array_row.push(patientData[i].Sex);
             		Array_row.push(patientData[i].Name);
-            		for(var j = 0; j < CheckedList.length; j++){
-            			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Grid'){
-            				isGrid = true;
-            				break;
-            			}
-            		}
+            		
             		for(var j = 0; j < CheckedList.length; j++){
             			var Obj_PatientAnswer = answerData[i];
             			var Data_answer ="";
-            			//console.log("gg:" + Obj_PatientAnswer);
+            			
             			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
             			// termType == 'Date' -> milliseconds to date
             			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
@@ -820,8 +831,7 @@
             			Array_row.push(Data_answer);
             		}
             		Array_Final.push(Array_row);
-            		//console.log("Array_row: " + Array_row);
-        		}
+    			}
         	}
         	else{
         		var isGrid = false;
@@ -833,24 +843,14 @@
         		}
         		
         		if(isGrid){
+        			
         			for(var i = 0; i < answerData.length; i++){
-        				
-        				// find patient info
-        				for(var j = 0; j < patientData.length; j++){
-                			if(patientData[j].ID == answerData[i].ID){
-                				Obj_PatientInfo = patientData[j];
-                				break;
-                			}
-                		}
-        				//console.log(Obj_PatientInfo);
-        				// find grid's max length
+						// find grid's max length
         				var length_grid_max = 0;
         				
         				for(var j = 0; j < CheckedList.length; j++){
         					if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Grid'){
         						if(CheckedList[j].value in answerData[i]){
-        							/* console.log("er: " + CheckedList[j].value);
-        							console.log("er: " + Object.keys(answerData[i][CheckedList[j].value]).length); */
         							if(length_grid_max < Object.keys(answerData[i][CheckedList[j].value]).length){
             							length_grid_max = Object.keys(answerData[i][CheckedList[j].value]).length;
             						}
@@ -863,8 +863,6 @@
         						}
         					}
         				}
-        				/* console.log("length_grid_max:" + length_grid_max); */
-        				//console.log("Data_answer:" + JSON.stringify(answerData));
         				// insert real data per grid max length
         				for(var j = 0; j < length_grid_max; j++){
         					Array_row = [];
@@ -873,7 +871,7 @@
         					Array_row.push(Obj_PatientInfo.Sex);
         					Array_row.push(Obj_PatientInfo.Age);
                     		Array_row.push(Obj_PatientInfo.Name);
-
+                    		
                     		for(var k = 0; k < CheckedList.length; k++){
                     			var Data_answer = "";
                     			if(CheckedList[k].value in answerData[i]){
@@ -951,26 +949,16 @@
                     		Array_Final.push(Array_row);
                     		//console.log("Array_row: " + Array_row);
         				}
-        				
         			}
         		}
         		else{
         			for(var i = 0; i < answerData.length; i++){
-            			//console.log("sKey:" + JSON.stringify(answerData[i]));
-                		Array_row = [];
-                		var Obj_PatientInfo = {};
+        				Array_row = [];
+        				Array_row.push(patientData[i].ID);
+    					Array_row.push(patientData[i].Age);
+    					Array_row.push(patientData[i].Sex);
+                		Array_row.push(patientData[i].Name);
                 		
-                		for(var j = 0; j < patientData.length; j++){
-                			if(patientData[j].ID == answerData[i].ID){
-                				Obj_PatientInfo = patientData[j];
-                				break;
-                			}
-                		}
-                		
-                		Array_row.push(Obj_PatientInfo.ID);
-    					Array_row.push(Obj_PatientInfo.Age);
-    					Array_row.push(Obj_PatientInfo.Sex);
-                		Array_row.push(Obj_PatientInfo.Name);
                 		for(var j = 0; j < CheckedList.length; j++){
                 			var Obj_PatientAnswer = answerData[i];
                 			var Data_answer ="";
@@ -996,7 +984,50 @@
                 			Array_row.push(Data_answer);
                 		}
                 		Array_Final.push(Array_row);
-                	}
+        			}
+        			/*for(var i = 0; i < answerData.length; i++){
+            			//console.log("sKey:" + JSON.stringify(answerData[i]));
+                		Array_row = [];
+                		var Obj_PatientInfo = {};
+                		
+                		for(var j = 0; j < patientData.length; j++){
+                			if(patientData[j].ID == answerData[i].ID){
+                				Obj_PatientInfo = patientData[j];
+                				break;
+                			}
+                		}
+                		
+                		Array_row.push(Obj_PatientInfo.ID);
+    					Array_row.push(Obj_PatientInfo.Age);
+    					Array_row.push(Obj_PatientInfo.Sex);
+                		Array_row.push(Obj_PatientInfo.Name);
+                		console.log("Array_row: " + Array_row);
+                		for(var j = 0; j < CheckedList.length; j++){
+                			var Obj_PatientAnswer = answerData[i];
+                			var Data_answer ="";
+                			
+                			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
+                			// termType == 'Date' -> milliseconds to date
+                			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
+                				var Data_date = new Date(Data_answer);
+                				Data_date.setHours(Data_date.getHours() - 9)
+                				
+                				if(Data_date.toLocaleString() == 'Invalid Date'){
+                					Data_answer = "";
+                				}
+                				else{
+                					Data_answer = Data_date.toLocaleString();
+                				}
+                			}
+                			
+                			if(typeof(Data_answer) == 'object'){
+                				//console.log("ob: " + JSON.stringify(Data_answer));
+                				Data_answer = Data_answer.toString();
+                			}
+                			Array_row.push(Data_answer);
+                		}
+                		Array_Final.push(Array_row);
+                	}*/
         		}
         		
         	}
