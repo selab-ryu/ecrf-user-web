@@ -47,36 +47,28 @@ Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portlet
 }, ['liferay-portlet-url']); 
 
 
-Liferay.provide(window, 'openManageResearcherDialog', function(groupId, portletId, crfId, crfResearcherInfoArr) {
-// delete baseURL parameter from function definition
-//	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
-//			{
-//				'p_p_id' : portletId,
-//				'p_auth': Liferay.authToken,
-//				
-//				
-//				'mvcPath' : '/html/crf/dialog/manage-researcher.jsp',
-//				'groupId' : groupId,
-//				'crfId' : crfId,
-//				'crfResearcherInfoJsonStr' : JSON.stringify(crfResearcherInfoArr)
-//			}
-//		);
-//	
-//	console.log(url);
-//	console.log("render url : " + url.toString());
+Liferay.provide(window, 'openManageResearcherDialog', function(groupId, portletId, crfId, crfResearcherInfoArr, baseURL) {
+	var sessionValue = encodeURIComponent(JSON.stringify(crfResearcherInfoArr));
 	
-	var renderURL = Liferay.PortletURL.createRenderURL();
+	if(window.sessionStorage) {
+        sessionStorage.clear();
+        sessionStorage.setItem('researcherArr', sessionValue);
+    }
+    else {
+        alert("세션을 사용할 수 없는 브라우저입니다.");
+    }
 	
-	renderURL.setPortletId(portletId);
-	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up");
-    
-    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-researcher.jsp");
-    renderURL.setParameter("groupId", groupId);
-    renderURL.setParameter("crfId", crfId);
-    renderURL.setParameter("crfResearcherInfoJsonStr", JSON.stringify(crfResearcherInfoArr));
-    
-//    console.log(renderURL);
+	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'p_auth': Liferay.authToken,
+				'p_p_mode' : 'edit',
+				'p_p_state' : 'pop_up',
+				'mvcPath' : '/html/crf/dialog/manage-researcher.jsp',
+				'groupId' : groupId,
+				'crfId' : crfId
+			}
+	);
     
     Liferay.Util.openWindow({
 		dialog: {
@@ -87,11 +79,21 @@ Liferay.provide(window, 'openManageResearcherDialog', function(groupId, portletI
 		},
 		id: "manageResearcherPopup",
 		title: "Manage CRF Researcher",
-		uri: renderURL.toString()
+		uri: url.toString()
 	});
 }, ['liferay-util-window', 'liferay-portlet-url']);
 
-Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, crfId, crfSubjectInfoArr, baseURL) {   
+Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, crfId, crfSubjectInfoArr, baseURL) {
+	var sessionValue = encodeURIComponent(JSON.stringify(crfSubjectInfoArr));
+	
+	if(window.sessionStorage) {
+        sessionStorage.clear();
+        sessionStorage.setItem('subjectArr', sessionValue);
+    }
+    else {
+        alert("세션을 사용할 수 없는 브라우저입니다.");
+    }
+	
 	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
 			{
 				'p_p_id' : portletId,
@@ -99,31 +101,13 @@ Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, 
 				'p_p_mode' : 'edit',
 				'p_p_state' : 'pop_up',
 				'mvcPath' : '/html/crf/dialog/manage-subject.jsp',
-				//'mvcRenderCommandName' : '/render/crf/dialog-manage-crf-subject',
 				'groupId' : groupId,
-				'crfId' : crfId,
-				'crfSubjectInfoJsonStr' : JSON.stringify(crfSubjectInfoArr),
-				'crfSubjectInfo' : crfSubjectInfoArr
-				
+				'crfId' : crfId
 			}
 	);
 	
 	console.log(url);
-	
-	// resource url? / save log by ajax / open dialog when ajax is complete
-	var actionURL = Liferay.Util.PortletURL.createActionURL(baseURL,
-			{
-				'p_p_id' : portletId,
-				'javax.portlet.action' : '/action/crf/redirect-crf-subject-dialog',
-				'p_auth': Liferay.authToken,
-				'groupId' : groupId,
-				'crfId' : crfId,
-				'crfSubjectInfo' : crfSubjectInfoArr
-			});
-	
-//	console.log(actionURL);
-//	console.log(actionURL.toString());
-	
+		
     Liferay.Util.openWindow({
 		dialog: {
 			width:800,
@@ -135,19 +119,30 @@ Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, 
 		title: "Manage CRF Subject",
 		uri: url.toString()
 	});
-}, ['liferay-util-window', 'liferay-portlet-url']);
+}, ['liferay-util-window', 'liferay-portlet-url', 'frontend-js-web']);
 
-Liferay.provide(window, 'openManageUpdateLockDialog', function(portletId, crfId, crfSubjectInfoArr) {
-	var renderURL = Liferay.PortletURL.createRenderURL();
+Liferay.provide(window, 'openManageUpdateLockDialog', function(portletId, crfId, crfSubjectInfoArr, baseURL) {	
+	var sessionValue = encodeURIComponent(JSON.stringify(crfSubjectInfoArr));
 	
-	renderURL.setPortletId(portletId);
-	renderURL.setPortletMode("edit");
-    renderURL.setWindowState("pop_up");
-    
-    renderURL.setParameter("mvcPath", "/html/crf/dialog/manage-subject-update-lock.jsp");
-    renderURL.setParameter("crfId", crfId);
-    renderURL.setParameter("crfSubjectInfoJsonStr", JSON.stringify(crfSubjectInfoArr));
-    
+	if(window.sessionStorage) {
+        sessionStorage.clear();
+        sessionStorage.setItem('subjectArr', sessionValue);
+    }
+    else {
+        alert("세션을 사용할 수 없는 브라우저입니다.");
+    }
+	
+	var url = Liferay.Util.PortletURL.createRenderURL(baseURL,
+			{
+				'p_p_id' : portletId,
+				'p_auth': Liferay.authToken,
+				'p_p_mode' : 'edit',
+				'p_p_state' : 'pop_up',
+				'mvcPath' : '/html/crf/dialog/manage-subject-update-lock.jsp',
+				'crfId' : crfId
+			}
+	);
+	    
     Liferay.Util.openWindow({
 		dialog: {
 			width:800,
@@ -157,7 +152,7 @@ Liferay.provide(window, 'openManageUpdateLockDialog', function(portletId, crfId,
 		},
 		id: "manageUpdateLockPopup",
 		title: "Manage Update Lock",
-		uri: renderURL.toString()
+		uri: url.toString()
 	});
 }, ['liferay-util-window', 'liferay-portlet-url']);
 

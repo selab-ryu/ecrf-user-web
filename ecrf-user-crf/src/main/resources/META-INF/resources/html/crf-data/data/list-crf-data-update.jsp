@@ -262,13 +262,35 @@ _log.info("url : " + baseURL.toString());
 									if(percent >= 100){
 										progressSrc = renderRequest.getContextPath()+"/img/complete_progress.png";
 										if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
-											progressSrc = renderRequest.getContextPath()+"/img/complete_autoqueryerror.png";
+											int hasQuery = 0;
+											List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(rowSubjectId);
+											for(int i = 0; i < queryList.size(); i++){
+												CRFAutoquery query = queryList.get(i);
+												if(query.getQueryComfirm() != 2){
+													hasQuery = 1;
+													break;
+												}
+											}
+											if(hasQuery == 1){
+												progressSrc = renderRequest.getContextPath()+"/img/complete_autoqueryerror.png";
+											}
 										}
 									}
 									else {
 										progressSrc = renderRequest.getContextPath()+"/img/incomplete_progress.png";
 										if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
-											progressSrc = renderRequest.getContextPath()+"/img/incomplete_autoqueryerror.png";
+											int hasQuery = 0;
+											List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(rowSubjectId);
+											for(int i = 0; i < queryList.size(); i++){
+												CRFAutoquery query = queryList.get(i);
+												if(query.getQueryComfirm() != 2){
+													hasQuery = 1;
+													break;
+												}
+											}
+											if(hasQuery == 1){
+												progressSrc = renderRequest.getContextPath()+"/img/incomplete_autoqueryerror.png";
+											}
 										}
 									}
 								}else{
@@ -302,11 +324,16 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="menu" value="crf-data-list-update" />
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
-			
+			<% 
+				String name = ECRFUserUtil.anonymousName(rowSubject.getName());
+				if(crfDataCount > 1){
+					name = name + " [" + crfDataCount  + "]";
+				}
+			%>
 			<liferay-ui:search-container-column-text
 				cssClass="min-width-80"
 				name="ecrf-user.subject.name"
-				value="<%=Validator.isNull(rowSubject.getName()) ? "-" : ECRFUserUtil.anonymousName(rowSubject.getName()) %>"
+				value="<%=Validator.isNull(rowSubject.getName()) ? "-" : name%>"
 			/>
 			
 			<%

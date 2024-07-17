@@ -10,7 +10,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
 
 import java.util.ArrayList;
@@ -96,7 +98,8 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 		}
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    		
 		List<LinkCRF> allLinkCRFList = _linkCRFLocalService.getLinkCRFByG_C(themeDisplay.getScopeGroupId(), crfId);
 		JSONArray subJsons = JSONFactoryUtil.createJSONArray();
 		JSONArray ansJsons = JSONFactoryUtil.createJSONArray();
@@ -108,6 +111,7 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			if(!searchLogId.isEmpty() && !(searchSdIds.contains(String.valueOf(i.getStructuredDataId())))) {
 				flag = false;
 			}
+      
 			if(flag) {
 				try {
 					subject = _subjectLocalService.getSubject(i.getSubjectId());
@@ -122,6 +126,7 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 					
 					String str_sd = _dataTypeLocalService.getStructuredData(i.getStructuredDataId());
 					JSONObject ansObj =  JSONFactoryUtil.createJSONObject();
+          
 					try {
 						 ansObj = JSONFactoryUtil.createJSONObject(str_sd);
 						 ansObj.put("ID", subject.getSerialId());
@@ -129,28 +134,30 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+          
 					ansJsons.put(ansObj);
 			    } catch(PortalException e) {
-		            e.printStackTrace();
-		        }
+            e.printStackTrace();
+        }
 			}
 		}
 
 		List<JSONObject> jsonValues = new ArrayList<JSONObject>();
-	    for (int i = 0; i < subJsons.length(); i++) {
-	        jsonValues.add(subJsons.getJSONObject(i));
-	    }
-	    Collections.sort( jsonValues, new Comparator<JSONObject>() {
-	        @Override
-	        public int compare(JSONObject a, JSONObject b) {
-	            String valA = a.getString("Name");
-	            String valB = b.getString("Name");
+    for (int i = 0; i < subJsons.length(); i++) {
+        jsonValues.add(subJsons.getJSONObject(i));
+    }
+    
+    Collections.sort( jsonValues, new Comparator<JSONObject>() {
+        @Override
+        public int compare(JSONObject a, JSONObject b) {
+            String valA = a.getString("Name");
+            String valB = b.getString("Name");
 
-	            return valA.compareTo(valB);
-	        }
-	    });
-	    
-	    JSONArray fin_subJsons = JSONFactoryUtil.createJSONArray();
+            return valA.compareTo(valB);
+        }
+    });
+
+    JSONArray fin_subJsons = JSONFactoryUtil.createJSONArray();
 		JSONArray fin_ansJsons = JSONFactoryUtil.createJSONArray();
 
 		for(int i = 0; i < subJsons.length(); i++) {
@@ -174,15 +181,19 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			
 			fin_ansJsons.put(fin_ansObj);
 		}
+    
 		for(int i = 0; i < fin_subJsons.length(); i++) {
 			_log.info("fin_subJsons: " + fin_subJsons.getJSONObject(i));
 		}
+        
 		for(int i = 0; i < fin_ansJsons.length(); i++) {
 			_log.info("fin_ansJsons: " + fin_ansJsons.getJSONObject(i));
 		}
+        
 		renderRequest.setAttribute("subjectJson", fin_subJsons.toJSONString());
 		renderRequest.setAttribute("answerJson", fin_ansJsons.toJSONString());
 		renderRequest.setAttribute("json", json);
+        
 		if(!searchLogId.isEmpty()) {
 			renderRequest.setAttribute("options", String.join(",", options));
 		}

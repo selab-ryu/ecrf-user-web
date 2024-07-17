@@ -265,7 +265,24 @@ div.page-content-sub {
    	background-color:#4c51b7; 
    	border-color:#4c51b7; 
    	color:white;
+   	font-size:0.8rem;
+   	line-height:1.2rem;
+   	
+   	padding:4px 12px;
+   	
+   	width:100%;
+   	margin-top:4px;
+   	margin-bottom:4px;
+   	
+   	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
+
+.active-version-bar:hover {
+	background-color:#4c51b7; 
+   	border-color:#4c51b7; 
+   	color:white;
+}
+
 /* The side navigation menu */
 
 

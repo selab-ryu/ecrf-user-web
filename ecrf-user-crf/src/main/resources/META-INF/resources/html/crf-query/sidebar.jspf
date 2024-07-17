@@ -72,6 +72,18 @@
 			<aui:button cssClass="<%="sub-menu-bar last-menu " + ( menu.equals("crf-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.add" onClick="<%=moveAddCRFURL %>" />
 		</div>
 		</c:if>
+		
+	<c:if test="<%=(crfId > 0) %>">
+	<%
+	CRF curCRF = CRFLocalServiceUtil.getCRF(crfId);
+	DataType curDataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+	%>
+	<div>
+		<div class="main-menu-bar active-version-bar">
+			<strong><%=curDataType.getDisplayName()%></strong>
+		</div>
+	</div>
+	</c:if>
 	<!-- CRF Management -->
 	
 </div>

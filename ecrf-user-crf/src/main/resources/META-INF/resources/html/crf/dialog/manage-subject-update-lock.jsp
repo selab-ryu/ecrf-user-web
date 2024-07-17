@@ -16,10 +16,7 @@
 	_log.info("crf id : " + crfId);
 	
 	long groupId = ParamUtil.getLong(renderRequest, "groupId");
-	
-	String crfSubjectInfoJsonStr = ParamUtil.getString(renderRequest, "crfSubjectInfoJsonStr");
-	_log.info("json str : " + crfSubjectInfoJsonStr);
-	
+		
 	if(crfId > 0) {
 		isUpdate = true;
 		menu = "crf-update";
@@ -128,6 +125,22 @@ var unlockSubjectArr = [];
 //parameter from update-crf.jsp
 var crfSubjectInfoArr = [];
 
+$(document).ready( function() {
+	console.group();
+		
+	// set init arr by Session Data	
+	var getValue = sessionStorage.getItem('subjectArr');
+	var parseVal = JSON.parse(decodeURIComponent(getValue)); 
+    console.log(parseVal);
+    crfSubjectInfoArr = parseVal;
+    tableLoading();
+	
+	$('#<portlet:namespace/>closeDialog').on("click", function() {
+		Liferay.Util.getOpener().closePopup('manageSubjectPopup', "close", null);
+	});	
+});
+
+
 function initTable(type) {
 	if(type == 0) {
 		// get data by update lock (true)
@@ -184,26 +197,6 @@ function chkAllCtrl(table) {
 		}
 	}
 }
-
-$(document).ready( function() {
-	console.group();
-		
-	// parameter from jsp is object, not string (is need ""?)
-	let jsonStr = <%=crfSubjectInfoJsonStr%>;
-	try {
-		crfSubjectInfoArr = JSON.parse(JSON.stringify(jsonStr));
-		console.log("crf subject info arr");
-		console.log(crfSubjectInfoArr);
-	} catch(e) {
-		console.log("json is empty")
-	}
-	
-	tableLoading();
-	
-	$('#<portlet:namespace/>closeDialog').on("click", function() {
-		Liferay.Util.getOpener().closePopup('manageSubjectPopup', "close", null);
-	});	
-});
 
 function tableLoading() {
 	lockSubjectTable = $('#lockSubjectList').DataTable({

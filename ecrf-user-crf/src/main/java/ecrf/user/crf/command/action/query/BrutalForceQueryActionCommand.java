@@ -68,11 +68,7 @@ public class BrutalForceQueryActionCommand extends BaseMVCActionCommand {
 		for(int i = 0; i < sdList.size(); i++) {
 			long sdId = sdList.get(i).getStructuredDataId();
 			LinkCRF link = null;
-			try {
-				link = _linkLocalService.getLinkCRFBySdId(sdId);
-			}catch(PortalException e) {
-				e.printStackTrace();
-			}
+			link = _linkLocalService.getLinkCRFByStructuredDataId(sdId);
 			if(Validator.isNotNull(link)) {
 				JSONObject answerForm = JSONFactoryUtil.createJSONObject(sdList.get(i).getStructuredData());
 				if(Validator.isNotNull(answerForm) && !answerForm.equals("")) {
