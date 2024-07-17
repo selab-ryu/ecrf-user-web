@@ -92,7 +92,7 @@
 						name="crfTitle"
 						label="ecrf-user.crf.crf-title"
 						required="true"
-						helpMessage="ecrf-user.crf-title-help">
+						helpMessage="ecrf-user.crf.crf-title.help">
 						<liferay-ui:input-localized
 							xml="<%= Validator.isNull(dataType)?StringPool.BLANK:dataType.getDisplayName() %>" 
 							name="crfTitle">
@@ -105,7 +105,7 @@
 					<aui:field-wrapper
 						name="description"
 						label="ecrf-user.crf.description"
-						helpMessage="datatype-description-help">
+						helpMessage="ecrf-user.crf.description.help">
 						<liferay-ui:input-localized 
 							type="textarea" 
 							xml="<%= Validator.isNull(dataType)?StringPool.BLANK:dataType.getDescription() %>" 
@@ -121,7 +121,7 @@
 						label="ecrf-user.crf.crf-var-name"
 						required="true"
 						value="<%= Validator.isNull(dataType)?StringPool.BLANK:dataType.getDataTypeName() %>"
-						helpMessage="ecrf-user.crf-var-name-help">
+						helpMessage="ecrf-user.crf.crf-var-name.help">
 					</aui:input>
 				</aui:col>
 				<aui:col md="4">
@@ -131,7 +131,7 @@
 						required="true" 
 						placeholder="1.0.0"
 						value="<%= Validator.isNull(dataType)?StringPool.BLANK:dataType.getDataTypeVersion() %>"
-						helpMessage="ecrf-user.crf-version-help">
+						helpMessage="ecrf-user.crf.version.help">
 					</aui:input>
 				</aui:col>
 			</aui:row>		

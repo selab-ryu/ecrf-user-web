@@ -83,8 +83,8 @@ if(isSearch) {
 					<aui:col md="4">
 						<aui:field-wrapper
 							name="<%=ECRFUserCRFDataAttributes.SERIAL_ID %>"
-							label="ecrf-user.subject.serial-id"
-							helpMessage="ecrf-user.subject.serial-id.help"
+							label="ecrf-user.crf-data.serial-id"
+							helpMessage="ecrf-user.crf-data.serial-id.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -98,8 +98,8 @@ if(isSearch) {
 					<aui:col md="4">
 						<aui:field-wrapper
 							name="<%=ECRFUserCRFDataAttributes.SUBJECT_NAME %>"
-							label="ecrf-user.subject.name"
-							helpMessage="ecrf-user.subject.name.help"
+							label="ecrf-user.crf-data.subject-name"
+							helpMessage="ecrf-user.crf-data.subject-name.help"
 							cssClass="marBrh"
 						>
 							<aui:input

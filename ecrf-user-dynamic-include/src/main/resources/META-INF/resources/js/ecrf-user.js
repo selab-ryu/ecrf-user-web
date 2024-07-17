@@ -45,14 +45,6 @@ function dateCheck(startDateId, endDateId, namespace) {
 	return isValidDate;
 }
 
-function dateMilToFormat(miliSecond) {
-	let date = new Date(miliSecond);
-	let dateStr = date.getFullYear() + "/";
-	dateStr += ( (date.getMonth() + 1) > 9 ? (date.getMonth()+1).toString() : "0" + (date.getMonth()+1) ) + "/"; 
-	dateStr += (date.getDate() > 9 ? date.getDate().toString() : "0" + date.getDate().toString() );
-	return dateStr;
-}
-
 function genderToStr(gender) {
 	let str = "Male";
 	if(gender == 1) {

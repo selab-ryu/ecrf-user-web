@@ -93,7 +93,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserResearcherAttributes.EMAIL %>"
 							label="ecrf-user.researcher.email"
-							helpMessage=""
+							helpMessage="ecrf-user.researcher.email.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -108,7 +108,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserResearcherAttributes.SCREEN_NAME %>"
 							label="ecrf-user.researcher.screen-name"
-							helpMessage=""
+							helpMessage="ecrf-user.researcher.screen-name.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -123,7 +123,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserResearcherAttributes.NAME %>"
 							label="ecrf-user.researcher.name"
-							helpMessage=""
+							helpMessage="ecrf-user.researcher.name.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -140,7 +140,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserResearcherAttributes.BIRTH_START %>"
 							label="ecrf-user.researcher.birth.start"
-							helpMessage=""
+							helpMessage="ecrf-user.researcher.birth.start.help"
 							cssClass="marBrh"
 						>
 							<aui:input 
@@ -153,7 +153,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserResearcherAttributes.BIRTH_END %>"
 							label="ecrf-user.researcher.birth.end"
-							helpMessage=""
+							helpMessage="ecrf-user.researcher.birth.end.help"
 							cssClass="marBrh"
 						>
 							<aui:input 
@@ -166,7 +166,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserResearcherAttributes.GENDER %>"
 							label="ecrf-user.general.gender"
-							helpMessage=""
+							helpMessage="ecrf-user.general.gender.help"
 							cssClass="marBrh"
 						>
 							<aui:fieldset cssClass="radio-one-line radio-align">
@@ -248,7 +248,7 @@ if(isSearch) {
 				%>
 				
 				<liferay-ui:search-container-column-text
-					href="<%=rowURL.toString() %>"
+					href="<%=hasViewPermission ? rowURL.toString() : StringPool.BLANK %>"
 					name="ecrf-user.list.name"
 					value="<%=Validator.isNull(researcher.getName()) ? "-" : researcher.getName() %>"
 				/>
@@ -258,10 +258,12 @@ if(isSearch) {
 					value="<%=Validator.isNull(researcher.getBirth()) ? "-" : sdf.format(researcher.getBirth()) %>"
 				/>
 				
+				<c:if test="false">
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.position"
 					value="<%=Validator.isNull(researcher.getPosition()) ? "-" : ResearcherPosition.findByLower(researcher.getPosition()).getFull() %>"
 				/>
+				</c:if>
 				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.institution"

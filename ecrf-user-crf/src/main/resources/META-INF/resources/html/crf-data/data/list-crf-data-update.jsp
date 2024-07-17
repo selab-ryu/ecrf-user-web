@@ -92,8 +92,8 @@ _log.info("url : " + baseURL.toString());
 					<aui:col md="4">
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.SERIAL_ID %>"
-							label="ecrf-user.subject.serial-id"
-							helpMessage="ecrf-user.subject.serial-id.help"
+							label="ecrf-user.crf-data.serial-id"
+							helpMessage="ecrf-user.crf-data.serial-id.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -107,8 +107,8 @@ _log.info("url : " + baseURL.toString());
 					<aui:col md="4">
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.NAME %>"
-							label="ecrf-user.subject.name"
-							helpMessage="ecrf-user.subject.name.help"
+							label="ecrf-user.crf-data.subject-name"
+							helpMessage="ecrf-user.crf-data.subject.name.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -121,8 +121,8 @@ _log.info("url : " + baseURL.toString());
 					</aui:col>
 					<aui:col md="4">
 						<aui:field-wrapper
-							label="ecrf-user.subject.gender"
-							helpMessage="ecrf-user.subject.gender.help"
+							label="ecrf-user.crf-data.subject-gender"
+							helpMessage="ecrf-user.crf-data.subject-gender.help"
 							cssClass="marBrh"
 						>
 							<aui:fieldset cssClass="radio-one-line radio-align">
@@ -146,8 +146,8 @@ _log.info("url : " + baseURL.toString());
 					<aui:col md="3">
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.BIRTH_START %>"
-							label="ecrf-user.subject.birth.start"
-							helpMessage="ecrf-user.subject.birth-start.help"
+							label="ecrf-user.crf-data.subject-birth.start"
+							helpMessage="ecrf-user.crf-data.subject-birth.start.help"
 							cssClass="marBrh"
 						>
 							<aui:input 
@@ -160,8 +160,8 @@ _log.info("url : " + baseURL.toString());
 					<aui:col md="3">
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.BIRTH_END %>"
-							label="ecrf-user.subject.birth.end"
-							helpMessage="ecrf-user.subject.birth-end.help"
+							label="ecrf-user.crf-data.subject-birth.end"
+							helpMessage="ecrf-user.crf-data.subject-birth.end.help"
 							cssClass="marBrh"
 						>
 							<aui:input 
