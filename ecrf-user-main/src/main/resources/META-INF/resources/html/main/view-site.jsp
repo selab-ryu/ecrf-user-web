@@ -80,19 +80,37 @@
 
 			<%
 			List<CRF> crfList = CRFLocalServiceUtil.getCRFByGroupId(group.getGroupId());
-			
+			List<DataType> dataTypeList = new ArrayList<>(); 
 			_log.info(crfList.size());
 			
 			for(int i=0; i<crfList.size(); i++ ) {
 				CRF crf = crfList.get(i);
 				DataType dataType = DataTypeLocalServiceUtil.getDataType(crf.getDatatypeId());
 				if(Validator.isNotNull(dataType)) {
+					_log.info("datatype check");
 					JSONObject obj = DataTypeLocalServiceUtil.getDataTypeStructureJSONObject(dataType.getDataTypeId());
+					_log.info(obj);
+					
 					String dataTypePrint = "";
-					JSONArray termsArr = obj.getJSONArray("terms");
-					dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName() + StringPool.SPACE + "(" + termsArr.length() + ")";
+					JSONArray termsArr = null;
+					boolean isEmpty = false;
+					
+					if(Validator.isNull(obj)) {
+						isEmpty = true;	// crf form not exist 
+					} else {
+						termsArr = obj.getJSONArray("terms");
+						_log.info(termsArr);
+						
+						if(Validator.isNull(termsArr)) isEmpty = true;	// crf form dosent have term
+					}
+					
+					if(isEmpty) {
+						dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName() + StringPool.SPACE + "(0)";
+					} else {
+						dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName() + StringPool.SPACE + "(" + termsArr.length() + ")";	
+					}					
 			%>
-			
+
 			<div class="text-default">
 				<strong><%=dataTypePrint %></strong>
 			</div>

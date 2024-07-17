@@ -2,7 +2,6 @@ package ecrf.user.crf.command.render.data.other;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -10,11 +9,10 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,7 +66,6 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			}
 		}
 		
-
 		String[] options = null;
 		List<String> searchSdIds = null;
 		
@@ -98,7 +95,7 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 		}
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     		
 		List<LinkCRF> allLinkCRFList = _linkCRFLocalService.getLinkCRFByG_C(themeDisplay.getScopeGroupId(), crfId);
 		JSONArray subJsons = JSONFactoryUtil.createJSONArray();
@@ -182,14 +179,16 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			fin_ansJsons.put(fin_ansObj);
 		}
     
+		/*
 		for(int i = 0; i < fin_subJsons.length(); i++) {
 			_log.info("fin_subJsons: " + fin_subJsons.getJSONObject(i));
 		}
-        
+		
 		for(int i = 0; i < fin_ansJsons.length(); i++) {
 			_log.info("fin_ansJsons: " + fin_ansJsons.getJSONObject(i));
 		}
-        
+        */
+		
 		renderRequest.setAttribute("subjectJson", fin_subJsons.toJSONString());
 		renderRequest.setAttribute("answerJson", fin_ansJsons.toJSONString());
 		renderRequest.setAttribute("json", json);

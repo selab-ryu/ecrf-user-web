@@ -242,16 +242,17 @@ Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit,
 	window.location.href = url.toString();	
 },['liferay-util-window', 'liferay-portlet-url']);
 
-Liferay.provide(window, 'deleteCRFData', function(linkCrfId, dialogId, portletId, plId, baseURL) {
+Liferay.provide(window, 'deleteCRFData', function(linkCrfId, crfId, dialogId, portletId, plId, baseURL) {
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
 	
 	var actionURL = Liferay.Util.PortletURL.createActionURL(baseURL,
 			{
 				'p_p_id' : portletId,
+				'p_auth': Liferay.authToken
 				'javax.portlet.action' : '/action/crf-data/delete-crf-data',
 				'linkCrfId' : linkCrfId,
-				'p_auth': Liferay.authToken
+				'crfId' : crfId
 			});
 	
 //	console.log(actionURL);
