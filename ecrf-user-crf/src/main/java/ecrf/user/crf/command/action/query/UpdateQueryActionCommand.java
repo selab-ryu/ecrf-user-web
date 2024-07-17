@@ -68,6 +68,8 @@ public class UpdateQueryActionCommand extends BaseMVCActionCommand{
 		String queryValue = ParamUtil.getString(actionRequest, "queryValue");
 		int queryComfirm = ParamUtil.getInteger(actionRequest, "queryComfirm");
 		String queryComment = ParamUtil.getString(actionRequest, "queryComment");
+		
+		_log.info("term info : " + queryTermName + " / " + queryValue + " / " + queryChangeValue);
 		_log.info("edit action : " + sId + " / " + sdId + " / " + queryId + " / " + queryComfirm + " / " + queryComment);
 		
 		long dataTypeId = _crfLocalService.getDataTypeId(crfId);

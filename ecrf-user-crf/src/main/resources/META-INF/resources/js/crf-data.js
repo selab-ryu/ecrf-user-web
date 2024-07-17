@@ -249,7 +249,7 @@ Liferay.provide(window, 'deleteCRFData', function(linkCrfId, crfId, dialogId, po
 	var actionURL = Liferay.Util.PortletURL.createActionURL(baseURL,
 			{
 				'p_p_id' : portletId,
-				'p_auth': Liferay.authToken
+				'p_auth': Liferay.authToken,
 				'javax.portlet.action' : '/action/crf-data/delete-crf-data',
 				'linkCrfId' : linkCrfId,
 				'crfId' : crfId

@@ -118,8 +118,9 @@ $(document).ready(function(){
 
 	let crfFormArr = JSON.parse('<%=crfForm%>');
 	var answerFormArr = JSON.parse('<%=answerForm%>');
+	console.log(answerFormArr);
 	console.log("json parse end");
-		
+	
 	var mainGroupKeys = new Array();
 	var subGroupKeys = new Array();
 	var sectionKeys = new Array();
@@ -142,11 +143,17 @@ $(document).ready(function(){
 	    subjectId: <%=subjectId %>
 	  },
 	  function(obj) {
+	  	//console.log(obj);
 	  	var results = new Array();
 	  	var queryComfirm = new Array();
-	  	for(var i = 0; i < obj. length; i++){
+	  	for(var i = 0; i < obj.length; i++){
 	  		if(obj[i].queryTermId == <%=sdId %>){
-	  			results.push(obj[i].queryTermName);
+	  			var queryInfo = {};
+	  			queryInfo = obj[i];
+	  			//console.log(queryInfo);
+	  			
+	  			//results.push(obj[i].queryTermName);
+	  			results.push(queryInfo);
 	  			queryComfirm.push(obj[i].queryComfirm);
 	  		}
 	  	}
@@ -184,25 +191,32 @@ function createCRFTable(mainGroupKeys, subGroupKeys, sectionKeys, answerFormArr,
 			createSectionCol(mainGroupKeys[i], sectionKeys, answerFormArr, results, queryComfirm);
 		}
 	}
+	
 	createGroupCol("No Group");
 	const sectionTr = document.createElement("tr");
 	const answerTr = document.createElement("tr");
+	
 	for(var k = 0; k < sectionKeys.length; k++){
 		if(!sectionKeys[k].hasOwnProperty("groupTermId")){
 			const sectionTd = document.createElement("td");
 			const sectionNode = document.createTextNode(sectionKeys[k].displayName.en_US);
 			sectionTd.appendChild(sectionNode);
 			sectionTd.setAttribute("style", "background: #727272; color: white; border: solid 1px #000; text-align: center;");
+			
 			let isQuery = false;
+			var queryValue = "";
+			
 			for(var i = 0; i < results.length; i++){
-						if(results[i] === sectionKeys[k].termName){
-							sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
-							isQuery = true;
-							if(queryComfirm[i] == 2){
-								sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
-							}
-						}
+				if(results[i].queryTermName === sectionKeys[k].termName){
+					sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
+					isQuery = true;
+					queryValue = results[i].queryValue;
+					if(queryComfirm[i] == 2){
+						sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
 					}
+				}
+			}
+			
 			const answerTd = document.createElement("td");
 			var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 			let answer = "";
@@ -261,7 +275,7 @@ function createCRFTable(mainGroupKeys, subGroupKeys, sectionKeys, answerFormArr,
 			answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ", '" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 			answerTd.appendChild(answerNode);
 			answerTr.appendChild(answerTd);
-			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
+			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + ", '" + queryValue  + "'," + isQuery +")");
 			sectionTr.appendChild(sectionTd);
 		}
 	}
@@ -274,6 +288,7 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 		createGroupCol(mainGroupKeys[i].displayName.en_US);
 		const sectionTr = document.createElement("tr");
 		const answerTr = document.createElement("tr");
+		
 		for(var k = 0; k < sectionKeys.length; k++){
 			if(sectionKeys[k].hasOwnProperty("groupTermId")){
 				if(sectionKeys[k].groupTermId.name === mainGroupKeys[i].termName){
@@ -281,16 +296,21 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 					const sectionNode = document.createTextNode(sectionKeys[k].displayName.en_US);
 					sectionTd.appendChild(sectionNode);
 					sectionTd.setAttribute("style", "background: #727272; color: white; border: solid 1px #000; text-align: center;");
+					
 					let isQuery = false;
+					let queryValue = "";
+					
 					for(var i = 0; i < results.length; i++){
-						if(results[i] === sectionKeys[k].termName){
+						if(results[i].queryTermName === sectionKeys[k].termName){
 							sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
 							isQuery = true;
+							queryValue = results[i].queryValue;
 							if(queryComfirm[i] == 2){
 								sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
 							}
 						}
 					}
+					
 					const answerTd = document.createElement("td");
 					var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 					let answer = "";
@@ -349,7 +369,7 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 					answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 					answerTd.appendChild(answerNode);
 					answerTr.appendChild(answerTd);
-					sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
+					sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + ", '" + queryValue + "'," + isQuery +")");
 					sectionTr.appendChild(sectionTd);
 				}
 			}
@@ -357,28 +377,36 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 		$("#canvasPanel").append(sectionTr);
 		$("#canvasPanel").append(answerTr);
 	}
+	
 	createGroupCol("No Group");
 	const sectionTr = document.createElement("tr");
 	const answerTr = document.createElement("tr");
+	
 	for(var k = 0; k < sectionKeys.length; k++){
 		if(!sectionKeys[k].hasOwnProperty("groupTermId")){
 			const sectionTd = document.createElement("td");
 			const sectionNode = document.createTextNode(sectionKeys[k].displayName.en_US);
 			sectionTd.appendChild(sectionNode);
 			sectionTd.setAttribute("style", "background: #727272; color: white; border: solid 1px #000; text-align: center;");
+			
 			let isQuery = false;
+			let queryValue = "";
+			
 			for(var i = 0; i < results.length; i++){
-						if(results[i] === sectionKeys[k].termName){
-							sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
-							isQuery = true;
-							if(queryComfirm[i] == 2){
-								sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
-							}
-						}
+				if(results[i].queryTermName === sectionKeys[k].termName){
+					sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
+					isQuery = true;
+					queryValue = results[i].queryValue;
+					if(queryComfirm[i] == 2){
+						sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
 					}
+				}
+			}
+			
 			const answerTd = document.createElement("td");
 			var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 			let answer = "";
+			
 			if(answerFormArr.hasOwnProperty(sectionKeys[k].termName)){
 				if(sectionKeys[k].termType==="List"){
 					for(var idx = 0; idx < sectionKeys[k].options.length; idx++){
@@ -422,19 +450,21 @@ function createMediumCRFTable(mainGroupKeys, sectionKeys, answerFormArr, results
 			}else{
 				answer = non_excuted;				
 			}
+			
 			const answerNode = document.createTextNode(answer);
 			let displayName = sectionKeys[k].displayName.en_US;
 			let subjectId = <%=subjectId %>;
 			let sdId = <%=sdId %>;
 			let crfId = <%=crfId %>;
 			let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
-			let groupId = <%=scopeGroupId %>;		
+			let groupId = <%=scopeGroupId %>;	
+			
 			answerTd.setAttribute("id", sectionKeys[k].termName);
 			answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
 			answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 			answerTd.appendChild(answerNode);
 			answerTr.appendChild(answerTd);
-			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
+			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + ", '" + queryValue + "'," + isQuery +")");
 			sectionTr.appendChild(sectionTd);
 		}
 	}
@@ -474,19 +504,25 @@ function createSectionCol(group, sectionKeys, answerFormArr, results, queryComfi
 			const sectionNode = document.createTextNode(sectionKeys[k].displayName.en_US);
 			sectionTd.appendChild(sectionNode);
 			sectionTd.setAttribute("style", "background: #727272; color: white; border: solid 1px #000; text-align: center;");
+			
 			let isQuery = false;
+			let queryValue = "";
+			
 			for(var i = 0; i < results.length; i++){
-						if(results[i] === sectionKeys[k].termName){
-							sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
-							isQuery = true;
-							if(queryComfirm[i] == 2){
-								sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
-							}
-						}
+				if(results[i].queryTermName === sectionKeys[k].termName){
+					sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
+					isQuery = true;
+					queryValue = results[i].queryValue;
+					if(queryComfirm[i] == 2){
+						sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
 					}
+				}
+			}
+			
 			const answerTd = document.createElement("td");
 			var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 			let answer = "";
+			
 			if(answerFormArr.hasOwnProperty(sectionKeys[k].termName)){
 				if(sectionKeys[k].termType==="List"){
 					for(var idx = 0; idx < sectionKeys[k].options.length; idx++){
@@ -530,19 +566,21 @@ function createSectionCol(group, sectionKeys, answerFormArr, results, queryComfi
 			}else{
 				answer = non_excuted;				
 			}
+			
 			const answerNode = document.createTextNode(answer);
 			let displayName = sectionKeys[k].displayName.en_US;
 			let subjectId = <%=subjectId %>;
 			let sdId = <%=sdId %>;
 			let crfId = <%=crfId %>;
 			let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
-			let groupId = <%=scopeGroupId %>;		
+			let groupId = <%=scopeGroupId %>;
+			
 			answerTd.setAttribute("id", sectionKeys[k].termName);
 			answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
 			answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 			answerTd.appendChild(answerNode);
 			answerTr.appendChild(answerTd);
-			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
+			sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + ", '" + queryValue + "'," + isQuery +")");
 			sectionTr.appendChild(sectionTd);	
 		}
 	}
@@ -554,80 +592,89 @@ function createSmallSectionCol(sectionKeys, answerFormArr, results, queryComfirm
 	//create section node
 	const sectionTr = document.createElement("tr");
 	const answerTr = document.createElement("tr");
+	
 	for(var k = 0; k < sectionKeys.length; k++){
 		const sectionTd = document.createElement("td");
 		const sectionNode = document.createTextNode(sectionKeys[k].displayName.en_US);
 		sectionTd.appendChild(sectionNode);
 		sectionTd.setAttribute("style", "background: #727272; color: white; border: solid 1px #000; text-align: center;");
+		
 		let isQuery = false;
+		let queryValue = "";
+		
 		for(var i = 0; i < results.length; i++){
-						if(results[i] === sectionKeys[k].termName){
-							sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
-							isQuery = true;
-							if(queryComfirm[i] == 2){
-								sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
-							}
-						}
-					}
+			if(results[i].queryTermName === sectionKeys[k].termName){
+				sectionTd.setAttribute("style", "background: #727272; color: red; border: solid 1px #000; text-align: center;");
+				isQuery = true;
+				queryValue = results[i].queryValue;
+				if(queryComfirm[i] == 2){
+					sectionTd.setAttribute("style", "background: #727272; color: green; border: solid 1px #000; text-align: center;");						
+				}
+			}
+		}
+		
 		const answerTd = document.createElement("td");
 		var non_excuted="<liferay-ui:message key='ecrf-user.crf-data.history.non-execution'/>";
 		let answer = "";
+		
 		if(answerFormArr.hasOwnProperty(sectionKeys[k].termName)){
-				if(sectionKeys[k].termType==="List"){
-					for(var idx = 0; idx < sectionKeys[k].options.length; idx++){
-						if(sectionKeys[k].options[idx].value === answerFormArr[sectionKeys[k].termName][0]){
-							answer = sectionKeys[k].options[idx].label.en_US;
-							break;
-						}else{
-							answer = non_excuted;
-						}
-					}
-				}else if(sectionKeys[k].termType==="Date"){
-					var dateValue = "";
-					if(typeof answerFormArr[sectionKeys[k].termName] === 'string'){
-						dateValue = parseFloat(answerFormArr[sectionKeys[k].termName]);
+			if(sectionKeys[k].termType==="List"){
+				for(var idx = 0; idx < sectionKeys[k].options.length; idx++){
+					if(sectionKeys[k].options[idx].value === answerFormArr[sectionKeys[k].termName][0]){
+						answer = sectionKeys[k].options[idx].label.en_US;
+						break;
 					}else{
-						dateValue = answerFormArr[sectionKeys[k].termName];
-					}
-					var date = new Date(dateValue);
-					answer = date.toLocaleDateString("ko-KR") + " " + date.toLocaleTimeString("ko-KR");
-				}
-				else if(sectionKeys[k].termType !== "File" && sectionKeys[k].termType !== "Grid"){
-					if(Number.isInteger(answerFormArr[sectionKeys[k].termName])){
-						answer = answerFormArr[sectionKeys[k].termName];
-						if(sectionKeys[k].hasOwnProperty("unit")){
-							answer = answer + " " + sectionKeys[k].unit;
-						}			
-					}else if(typeof answerFormArr[sectionKeys[k].termName] === 'string'){
-						answer = answerFormArr[sectionKeys[k].termName];
-					}else if(answerFormArr[sectionKeys[k].termName].toString().split(".")[1].length > 1){
-						answer = answerFormArr[sectionKeys[k].termName].toFixed(2);
-						if(sectionKeys[k].hasOwnProperty("unit")){
-							answer = answer + " " + sectionKeys[k].unit;
-						}	
-					}else{
-						answer = answerFormArr[sectionKeys[k].termName].toFixed(1);
-						if(sectionKeys[k].hasOwnProperty("unit")){
-							answer = answer + " " + sectionKeys[k].unit;
-						}	
+						answer = non_excuted;
 					}
 				}
-			}else{
-				answer = non_excuted;				
+			}else if(sectionKeys[k].termType==="Date"){
+				var dateValue = "";
+				if(typeof answerFormArr[sectionKeys[k].termName] === 'string'){
+					dateValue = parseFloat(answerFormArr[sectionKeys[k].termName]);
+				}else{
+					dateValue = answerFormArr[sectionKeys[k].termName];
+				}
+				var date = new Date(dateValue);
+				answer = date.toLocaleDateString("ko-KR") + " " + date.toLocaleTimeString("ko-KR");
 			}
+			else if(sectionKeys[k].termType !== "File" && sectionKeys[k].termType !== "Grid"){
+				if(Number.isInteger(answerFormArr[sectionKeys[k].termName])){
+					answer = answerFormArr[sectionKeys[k].termName];
+					if(sectionKeys[k].hasOwnProperty("unit")){
+						answer = answer + " " + sectionKeys[k].unit;
+					}			
+				}else if(typeof answerFormArr[sectionKeys[k].termName] === 'string'){
+					answer = answerFormArr[sectionKeys[k].termName];
+				}else if(answerFormArr[sectionKeys[k].termName].toString().split(".")[1].length > 1){
+					answer = answerFormArr[sectionKeys[k].termName].toFixed(2);
+					if(sectionKeys[k].hasOwnProperty("unit")){
+						answer = answer + " " + sectionKeys[k].unit;
+					}	
+				}else{
+					answer = answerFormArr[sectionKeys[k].termName].toFixed(1);
+					if(sectionKeys[k].hasOwnProperty("unit")){
+						answer = answer + " " + sectionKeys[k].unit;
+					}	
+				}
+			}
+		}else{
+			answer = non_excuted;				
+		}
+		
 		const answerNode = document.createTextNode(answer);
 		let displayName = sectionKeys[k].displayName.en_US;
-			let subjectId = <%=subjectId %>;
-			let sdId = <%=sdId %>;
-			let crfId = <%=crfId %>;
-			let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
-			let groupId = <%=scopeGroupId %>;
-			answerTd.setAttribute("id", sectionKeys[k].termName);
-			answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
-			answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
+		let subjectId = <%=subjectId %>;
+		let sdId = <%=sdId %>;
+		let crfId = <%=crfId %>;
+		let portletId = '<%=themeDisplay.getPortletDisplay().getId()%>';
+		let groupId = <%=scopeGroupId %>;
+		
+		answerTd.setAttribute("id", sectionKeys[k].termName);
+		answerTd.setAttribute("style", "background: #FFFFFF; color: black; border: solid 1px #000; text-align: center;");
+		answerTd.setAttribute("onClick", "openHistoryDialog(" + groupId + ",'" + portletId + "', '" + subjectId + "', '" + sdId + "', '" + crfId + "', id, '" + displayName + "')");
 		answerTd.appendChild(answerNode);
 		answerTr.appendChild(answerTd);
-		sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + "," + answerFormArr[sectionKeys[k].termName] + "," + isQuery +")");
+		sectionTd.setAttribute("onClick", "openQuery(" + sectionKeys[k].termName + ", '" + queryValue + "'," + isQuery +")");
 		sectionTr.appendChild(sectionTd);		
 	}
 	$("#canvasPanel").append(sectionTr);

@@ -215,6 +215,8 @@
 			
 		</liferay-ui:search-container-column-text>
 		
+		<c:if test="<%=signedIn %>">
+		
 		<liferay-ui:search-container-column-text>
 			<portlet:renderURL var="requestMembershipURL">
 				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_REQUEST_MEMBERSHIP %>" />
@@ -225,6 +227,7 @@
 			<aui:button type="button" value="Join" onClick="<%=requestMembershipURL.toString() %>" />
 		</liferay-ui:search-container-column-text>
 		
+		</c:if>
 	</liferay-ui:search-container-row>
 	
 	<liferay-ui:search-iterator

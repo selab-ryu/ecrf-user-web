@@ -11,16 +11,16 @@ import com.sx.icecap.service.DataTypeLocalServiceUtil;
 import java.util.Iterator;
 
 public class CRFGroupCaculation {
-	private Log _log;
+	private Log _log = LogFactoryUtil.getLog(this.getClass().getName());
 	
 	public CRFGroupCaculation() {
-		_log = LogFactoryUtil.getLog(this.getClass().getName());
+		//_log = LogFactoryUtil.getLog(this.getClass().getName());
 	}
 	
 	public int getTotalLength(long dataTypeId) {
 		int totalLength = 0;
 		JSONArray crfForm = null;
-		System.out.println(dataTypeId);
+		//_log.info(dataTypeId);
 		try {
 			String crfFormStr = DataTypeLocalServiceUtil.getDataTypeStructure(dataTypeId);
 			JSONObject crfFormTmp = JSONFactoryUtil.createJSONObject(crfFormStr);
@@ -109,7 +109,7 @@ public class CRFGroupCaculation {
 			}
 		}
 		
-		System.out.println(termPackage.toJSONString());
+		//_log.info(termPackage.toJSONString());
 		return termPackage;
 	}
 	
