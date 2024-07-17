@@ -275,7 +275,7 @@ function toEachCRF(sdId, isAudit){
 }
 
 function deleteEachCRF(linkCrfId){
-	Liferay.Util.getOpener().deleteCRFData(linkCrfId, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
+	Liferay.Util.getOpener().deleteCRFData(linkCrfId, <%=crfId%>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
 }
 </script>
 

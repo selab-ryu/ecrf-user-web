@@ -91,8 +91,13 @@ String chartDataStr = chartDataArr.toJSONString();
 								</aui:row>
 								
 								<%
+									int formCount = 0;
+																	
 									JSONObject formObj = DataTypeLocalServiceUtil.getDataTypeStructureJSONObject(datatype.getDataTypeId());
-									JSONArray termsArr = formObj.getJSONArray("terms");
+									if(Validator.isNotNull(formObj)) {
+										JSONArray termsArr = formObj.getJSONArray("terms");
+										if(Validator.isNotNull(termsArr)) formCount = termsArr.length();	 
+									}
 								%>
 								
 								<aui:row>
@@ -103,7 +108,7 @@ String chartDataStr = chartDataArr.toJSONString();
 										</aui:field-wrapper>
 									</aui:col>
 									<aui:col md="9">
-										<p><%=String.valueOf(termsArr.length()) %></p>
+										<p><%=String.valueOf(formCount) %></p>
 									</aui:col>
 								</aui:row>
 								

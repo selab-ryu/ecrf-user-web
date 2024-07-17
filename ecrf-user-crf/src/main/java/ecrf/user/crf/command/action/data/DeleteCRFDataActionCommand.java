@@ -47,7 +47,7 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         
-        long crfId = 0;
+        long crfId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
         
         long linkCRFId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.LINK_CRF_ID, 0);
         _log.info("link crf id : " + linkCRFId);
