@@ -225,7 +225,7 @@
 							</aui:row>
 							
 							
-							<aui:row cssClass="">
+							<aui:row cssClass="marTr">
 								<aui:col md="12" cssClass="sub-title-bottom-border">
 									<span class="sub-title-span">
 										<liferay-ui:message key="ecrf-user.crf-query.title.validation-info" />
@@ -278,7 +278,7 @@
 							</aui:row>
 							
 							
-							<aui:row cssClass="">
+							<aui:row cssClass="marTr">
 								<aui:col md="12" cssClass="sub-title-bottom-border">
 									<span class="sub-title-span">
 										<liferay-ui:message key="ecrf-user.crf-query.title.confirm-info" />

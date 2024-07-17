@@ -167,7 +167,7 @@ public class UpdateResearcherActionCommand extends BaseMVCActionCommand {
 		String officeContact = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.OFFICE_CONTACT);
 		
 		String position = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.POSITION);
-		//position = "researcher";
+		position = "researcher";
 		
 		Researcher researcher = null;
 		

@@ -75,7 +75,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.SERIAL_ID %>"
 							label="ecrf-user.subject.serial-id"
-							helpMessage=""
+							helpMessage="ecrf-user.subject.serial-id.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -90,7 +90,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.NAME %>"
 							label="ecrf-user.subject.name"
-							helpMessage=""
+							helpMessage="ecrf-user.subject.name.help"
 							cssClass="marBrh"
 						>
 							<aui:input
@@ -105,7 +105,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.GENDER %>"
 							label="ecrf-user.subject.gender"
-							helpMessage=""
+							helpMessage="ecrf-user.subject.gender.help"
 							cssClass="marBrh"
 						>
 							<aui:fieldset cssClass="radio-one-line radio-align">
@@ -130,7 +130,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.BIRTH_START %>"
 							label="ecrf-user.subject.birth.start"
-							helpMessage=""
+							helpMessage="ecrf-user.subject.birth.start.help"
 							cssClass="marBrh"
 						>
 							<aui:input 
@@ -144,7 +144,7 @@ if(isSearch) {
 						<aui:field-wrapper
 							name="<%=ECRFUserSubjectAttributes.BIRTH_END %>"
 							label="ecrf-user.subject.birth.end"
-							helpMessage=""
+							helpMessage="ecrf-user.subject.birth.end.help"
 							cssClass="marBrh"
 						>
 							<aui:input 

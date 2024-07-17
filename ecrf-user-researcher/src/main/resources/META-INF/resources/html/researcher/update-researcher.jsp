@@ -374,6 +374,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 			</aui:col>
 		</aui:row>
 		
+		<c:if test="false">
 		<aui:row>
 			<aui:col md="3">
 				<aui:field-wrapper
@@ -406,6 +407,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 				</aui:select>
 			</aui:col>
 		</aui:row>
+		</c:if>
 		
 		<aui:row>
 			<aui:col md="12">
@@ -481,9 +483,6 @@ var rules = {
 	},
 	<portlet:namespace/>institution: {
   		required: true
-	},
-	<portlet:namespace/>position: {
-  		required: true
 	}
 };
 
@@ -512,10 +511,7 @@ var fieldStrings = {
 	},
 	<portlet:namespace/>institution: {
   		required: '<p><liferay-ui:message key="ecrf-user.validation.require"/></p>'
-	},
-	<portlet:namespace/>position: {
-  		required: '<p><liferay-ui:message key="ecrf-user.validation.require"/></p>'
-	},
+	}
 };
 
 function validFocus(elem) {

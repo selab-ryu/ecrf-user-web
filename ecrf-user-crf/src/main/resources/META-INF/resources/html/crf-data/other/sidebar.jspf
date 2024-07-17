@@ -85,7 +85,7 @@
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ADVANCED_SEARCH) %>">
 				<div>
-					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("search-crf-data") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.search-crf-data" onClick="<%=moveSearchCRFDataURL %>" />
+					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("search-crf-data") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.search-data" onClick="<%=moveSearchCRFDataURL %>" />
 				</div>
 				</c:if>
 			

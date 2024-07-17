@@ -82,6 +82,39 @@ if(isSearch) {
 								></aui:input>
 						</aui:field-wrapper>
 					</aui:col>
+					
+					<aui:col md="3">
+						<aui:field-wrapper
+							name="<%=ECRFUserCRFAttributes.APPLY_DATE_START%>"
+							label="ecrf-user.crf.apply-date.start"
+							helpMessage="ecrf-user.crf.apply-date.start.help"
+							cssClass="marBrh"
+						>
+							<aui:input 
+								name="<%=ECRFUserCRFAttributes.APPLY_DATE_START%>"
+								cssClass="date"
+								placeholder="yyyy/mm/dd"
+								label="" />
+						</aui:field-wrapper>
+					</aui:col>
+					<aui:col md="3">
+						<aui:field-wrapper
+							name="<%=ECRFUserCRFAttributes.APPLY_DATE_END%>"
+							label="ecrf-user.crf.apply-date.end"
+							helpMessage="ecrf-user.crf.apply-date.end.help"
+							cssClass="marBrh"
+						>
+							<aui:input 
+								name="<%=ECRFUserCRFAttributes.APPLY_DATE_END%>"
+								cssClass="date"
+								placeholder="yyyy/mm/dd"
+								label="" />
+						</aui:field-wrapper>
+					</aui:col>
+				</aui:row>
+				
+				<c:if test="false">
+				<aui:row>
 					<aui:col md="6">
 						<aui:field-wrapper
 							name="<%=ECRFUserCRFAttributes.CRF_STATUS%>"
@@ -112,36 +145,8 @@ if(isSearch) {
 						</aui:field-wrapper>
 					</aui:col>
 				</aui:row>
-				<aui:row>
-					<aui:col md="3">
-						<aui:field-wrapper
-							name="<%=ECRFUserCRFAttributes.APPLY_DATE_START%>"
-							label="ecrf-user.crf.apply-date.start"
-							helpMessage="ecrf-user.crf.apply-date.start.help"
-							cssClass="marBrh"
-						>
-							<aui:input 
-								name="<%=ECRFUserCRFAttributes.APPLY_DATE_START%>"
-								cssClass="date"
-								placeholder="yyyy/mm/dd"
-								label="" />
-						</aui:field-wrapper>
-					</aui:col>
-					<aui:col md="3">
-						<aui:field-wrapper
-							name="<%=ECRFUserCRFAttributes.APPLY_DATE_END%>"
-							label="ecrf-user.crf.apply-date.end"
-							helpMessage="ecrf-user.crf.apply-date.end.help"
-							cssClass="marBrh"
-						>
-							<aui:input 
-								name="<%=ECRFUserCRFAttributes.APPLY_DATE_END%>"
-								cssClass="date"
-								placeholder="yyyy/mm/dd"
-								label="" />
-						</aui:field-wrapper>
-					</aui:col>
-				</aui:row>
+				</c:if>
+				
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
