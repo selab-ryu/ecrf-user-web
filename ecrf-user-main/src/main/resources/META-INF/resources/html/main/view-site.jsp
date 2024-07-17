@@ -81,15 +81,15 @@
 			<%
 			List<CRF> crfList = CRFLocalServiceUtil.getCRFByGroupId(group.getGroupId());
 			List<DataType> dataTypeList = new ArrayList<>(); 
-			_log.info(crfList.size());
+			//_log.info(crfList.size());
 			
 			for(int i=0; i<crfList.size(); i++ ) {
 				CRF crf = crfList.get(i);
 				DataType dataType = DataTypeLocalServiceUtil.getDataType(crf.getDatatypeId());
 				if(Validator.isNotNull(dataType)) {
-					_log.info("datatype check");
+					//_log.info("datatype check");
 					JSONObject obj = DataTypeLocalServiceUtil.getDataTypeStructureJSONObject(dataType.getDataTypeId());
-					_log.info(obj);
+					//_log.info(obj);
 					
 					String dataTypePrint = "";
 					JSONArray termsArr = null;
@@ -99,7 +99,7 @@
 						isEmpty = true;	// crf form not exist 
 					} else {
 						termsArr = obj.getJSONArray("terms");
-						_log.info(termsArr);
+						//_log.info(termsArr);
 						
 						if(Validator.isNull(termsArr)) isEmpty = true;	// crf form dosent have term
 					}
