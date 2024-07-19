@@ -74,24 +74,24 @@ public class UpdateCRFActionCommand extends BaseMVCActionCommand {
 		
 		// get crf-subject list
 		String subjectlistJsonStr = ParamUtil.getString(actionRequest, "subjectListInput");
-		_log.info(subjectlistJsonStr);
+		//_log.info(subjectlistJsonStr);
 		
 		JSONArray crfSubjectJsonArr = JSONFactoryUtil.createJSONArray(subjectlistJsonStr); 
 		ArrayList<CRFSubject> crfSubjectList = ECRFUserUtil.toCRFSubjectList(crfSubjectJsonArr);
 		
 		for(CRFSubject crfSubject : crfSubjectList) {
-			_log.info(crfSubject.toString());
+			//_log.info(crfSubject.toString());
 		}
 		
 		// get crf-researcher list
 		String researcherListJsonStr = ParamUtil.getString(actionRequest, "researcherListInput");
-		_log.info(researcherListJsonStr);
+		//_log.info(researcherListJsonStr);
 		
 		JSONArray crfResearcherJsonArr = JSONFactoryUtil.createJSONArray(researcherListJsonStr);
 		ArrayList<CRFResearcher> crfResearcherList = ECRFUserUtil.toCRFResearcherList(crfResearcherJsonArr);
 		
 		for(CRFResearcher crfResearcher : crfResearcherList) {
-			_log.info(crfResearcher.toString());
+			//_log.info(crfResearcher.toString());
 		}
 		
 		int crfStatus = CRFStatus.IN_PROGRESS.getNum();

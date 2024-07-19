@@ -30,8 +30,6 @@
 		_log.info("search");
 	}
 	
-	
-	
 	List<String> searchSIds = new ArrayList();
 	List<String> searchTermName = new ArrayList();
 	List<String> searchNum = new ArrayList();
