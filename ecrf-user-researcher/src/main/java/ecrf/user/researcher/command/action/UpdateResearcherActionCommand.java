@@ -237,11 +237,12 @@ public class UpdateResearcherActionCommand extends BaseMVCActionCommand {
 		String email = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.EMAIL);
 		String password1 = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.PASSWORD1, StringPool.BLANK);
 		String password2 = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.PASSWORD2);
+		boolean notChange = ParamUtil.getBoolean(actionRequest, ECRFUserResearcherAttributes.NOT_CHANGE, false);
 		
 		String screenName = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.SCREEN_NAME);
 		String firstName = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.FIRST_NAME);
 		String lastName = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.LAST_NAME);
-				
+		
 		int gender = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.GENDER, 0);
 		boolean male = false;
 		if(gender == 0) { male = true; }
@@ -260,9 +261,18 @@ public class UpdateResearcherActionCommand extends BaseMVCActionCommand {
 		String officeContact = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.OFFICE_CONTACT);
 		
 		String position = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.POSITION);
-		//position = "researcher";
+		position = "researcher";
 		
-		Researcher researcher = null;
+		Researcher researcher = _researcherLocalService.getResearcher(researcherId);
+		User researcherUser = null;
+		
+		if(Validator.isNotNull(researcher)) {
+			researcherUser = _userLocalService.getUser(researcher.getResearcherUserId());
+		} else {
+			_log.info("researcher is null");
+		}
+		
+		if(notChange) password1 = researcherUser.getPasswordUnencrypted();
 		
 		researcher = _researcherLocalService.updateResearcherWithUser(
 				researcherId,
@@ -273,14 +283,6 @@ public class UpdateResearcherActionCommand extends BaseMVCActionCommand {
 				userServiceContext, researcherServiceContext);
 				
 		SessionMessages.add(actionRequest, "researcherWithUserUpdated");
-		
-		User researcherUser = null;
-		
-		if(Validator.isNotNull(researcher)) {
-			researcherUser = _userLocalService.getUser(researcher.getResearcherUserId());
-		} else {
-			_log.info("researcher is null");
-		}
 		
 		if(Validator.isNotNull(researcherUser)) {
 			_log.info("user is updated / " + researcherUser.getEmailAddress());

@@ -71,10 +71,7 @@
 	    display:flex;
 	    justify-content: center;
 	}
-	.search-input {
-	    background-color:white;
-	    border-color:#72aee6;
-	}
+	
 	.min-width{
 	    width: min-content;
 	}
@@ -129,10 +126,6 @@
 		word-break:keep-all;
 		word-wrap:break-word;
 	}
-	.search-input:disabled {
-		background-color: #f1f2f5;
-		border-color: #f1f2f5;
-    }
 
     .table-hover tbody tr:hover, 
     .table-hover tbody tr:hover td {
