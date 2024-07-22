@@ -48,7 +48,9 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 						<aui:form name="fm" action="${excelDownloadActionURL}" method="POST">
 							<aui:input type="hidden" name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=crfId %>" />
 							<aui:input type="hidden" name="excelParam"></aui:input>
-							<aui:button type="button" name="download" value="Excel Download" cssClass="add-btn medium-btn radius-btn"></aui:button>
+							<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL) %>">
+							<aui:button type="button" name="download" value="ecrf-user.button.download-excel" cssClass="add-btn medium-btn radius-btn"></aui:button>
+							</c:if>
 						</aui:form>
 					</aui:button-row>
 				</aui:col>

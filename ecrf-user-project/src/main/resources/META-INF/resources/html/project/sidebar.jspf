@@ -1,3 +1,5 @@
+<%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
+<%@page import="ecrf.user.project.security.permission.resource.ProjectPermission"%>
 <portlet:renderURL var="moveViewProjectURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_PROJECT%>" />
 </portlet:renderURL>
@@ -29,9 +31,11 @@
 				<aui:button cssClass="<%="sub-main-menu-bar " + ( menu.equals("exp-group") || menu.equals("update-exp-group") ? "active-menu-bar" : "deactive-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group.list" onClick="<%=moveExpGroupURL %>" />
 			</div>
 			
+			<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_EXP_GROUP) %>">
 			<div>
 				<aui:button cssClass="<%="sub-main-menu-bar " + ( menu.equals("add-exp-group") ? "active-menu-bar" : "deactive-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group.add" onClick="<%=moveAddExpGroupURL %>" />
 			</div>
+			</c:if>
 			
 			</c:if>
 	<!-- Project Management -->		

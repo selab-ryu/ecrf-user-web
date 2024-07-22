@@ -101,9 +101,14 @@ table.crf-grid-table {
     padding-top: 0.5rem;
 }
 
+.form-control {
+	background-color:#FCFCFC;
+	border-color:#72AEE6;
+}
+
 .search-input {
-	background-color:#E7E7ED;
-	border-color:#72aee6;
+	backgroud-color:#FCFCFC;
+	border-color:#72AEE6;
 }
 
 .search-input:disabled {
