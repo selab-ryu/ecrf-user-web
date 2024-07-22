@@ -126,6 +126,85 @@ let ECRFViewer = function(){
 				}else {
 					return true;
 				}
+				break;
+			case "treadmill_9min":
+				if(this.gender == 1){
+					$("#treadmill_9min_outerDiv").hide();
+				}
+			case "long_term_round_run_15m":
+				if(this.age > 10 && this.age < 13){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "running_selection":
+			case "dexterity_adult_selection":
+				if(this.age > 12 && this.age < 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "jump_or_sit_up_selection":	
+			case "time_of_flight":
+			case "eye_hand_coordination_sec":
+			case "eye_hand_coordination_repeat":
+			case "illinois_agility":
+				if(this.age > 12 && this.age < 19){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "third_by_third_button_press":	
+			case "shuttle_run_5m":
+				if(this.age < 11){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "wall_pass":
+			case "repeat_side_jump":
+				if(this.age>10 && this.age < 13){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "standing_long_jump":
+				if(this.age >19 && this.age < 13){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "lower_limb_function":
+			case "walking_6min":
+			case "walking_2min":
+			case "equilibrium_property":
+			case "coordination_elderly":
+				if(this.age>64){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "cardio_pulmonary_function":
+				if(this.age > 10 && this.age < 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "dexterity":
+				if(this.age < 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
 			default:
 				return false;
 				break;
@@ -267,7 +346,7 @@ let ECRFViewer = function(){
 							}
 							
 						}
-						
+
 						if(term.termName === "hbotTrial") {
 							if(this[beforeValue]){
 								if(term.value[0] === '0' && this[beforeValue] !== '0'){
@@ -433,6 +512,11 @@ let ECRFViewer = function(){
 						console.log("Exercise CRF Auto Calculation Running");
 						var beforeValue = term.termName + "_before_value";
 						switch(term.termName){
+							case "running_selection":
+								if(this.gender == 0 && term.value[0] === '3'){
+									$("#treadmill_9min_outerDiv").show();
+								}
+								break;
 							case "drug_diabetes":
 								if(term.value[0] === '1'){
 									this.crf.terms.forEach(compareTerm=>{
