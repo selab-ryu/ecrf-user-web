@@ -27,11 +27,12 @@
 			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("researcher-list") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.researcher.list" onClick="<%=researcherListURL %>" />
 		</div>
 		
-		<!-- notice about selete crf -->
-		
+		<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
 		<div>
 			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("researcher-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.researcher.add" onClick="<%=moveAddResearcherURL %>" />
 		</div>
+		</c:if>
+		
 		<!-- Researcher Management -->
 				
 	</div>

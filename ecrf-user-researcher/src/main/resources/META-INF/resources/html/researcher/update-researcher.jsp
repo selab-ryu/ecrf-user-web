@@ -29,7 +29,7 @@ if(researcherId > 0) {
 String birthStr = null;
 boolean isMale = true;
 
-boolean isPasswordUpdate = false;
+boolean ownPasswordUpdate = false;
 
 if(isUpdate) {
 	birthStr = ECRFUserUtil.getDateStr(researcher.getBirth());
@@ -40,7 +40,7 @@ if(isUpdate) {
 	
 	if( (researcher.getResearcherUserId() == user.getUserId()) ) {
 		_log.info("has password update permission");
-		isPasswordUpdate = true;
+		ownPasswordUpdate = true;
 	}
 }
 
@@ -123,8 +123,8 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 
 	<div class="page-content">
 	</c:if>
-
-	<liferay-ui:header backURL="<%=listResearcherURL %>" title="<%=headerTitle %>" />
+	
+	<liferay-ui:header backURL="<%=fromLiferay ? StringPool.BLANK : listResearcherURL %>" title="<%=headerTitle %>" />
 	
 	<aui:form name="updateResearhcerFm" action="<%=isUpdate ? updateResearcherURL : addResearcherURL %>" method="post" autocomplete="off">
 	<aui:container cssClass="radius-shadow-container">	
@@ -159,7 +159,25 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 			</aui:col>
 		</aui:row>
 		
-		<c:if test="<%=!isPasswordUpdate %>">
+		<!-- Add : show -->
+		<!-- Update => by self : show | by PI : show | by Admin : show | by others : dont show -->
+		<%
+		boolean passwordShow = false;
+		
+		// Update => by self : show | by PI : show | by Admin : show | by others : dont show 		
+		if(ownPasswordUpdate) {
+			passwordShow = true;
+		} else if ( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) ) {
+			passwordShow = true;
+		} else if (isAdmin) {
+			passwordShow = true;
+		}
+		
+		// Add : show
+		if(!isUpdate) passwordShow = true;
+		%>
+		
+		<c:if test="<%=passwordShow %>">
 		<aui:row>
 			<aui:col md="3">
 				<aui:field-wrapper
@@ -179,14 +197,16 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					>
 				</aui:input>
 			</aui:col>
+			<c:if test="<%=isUpdate %>">
 			<aui:col md="3">
 				<aui:input
 					type="checkbox"
-					name="notChange"
+					name="<%=ECRFUserResearcherAttributes.NOT_CHANGE %>"
 					label="ecrf-user.researcher.not-change"
 					checked="false"
 				/>
 			</aui:col>
+			</c:if>
 		</aui:row>
 		<aui:row>
 			<aui:col md="3">
@@ -416,11 +436,16 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					<c:choose>
 					<c:when test="<%=isUpdate %>">
 					
-					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) %>">
+					<%
+						boolean hasOwnPermission = false;
+						if(user.getUserId() == researcher.getResearcherUserId()) hasOwnPermission = true; 
+					%>
+										
+					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) || hasOwnPermission ) %>">
 					<aui:button type="submit" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.update" ></aui:button>
 					</c:if>
 					
-					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_RESEARCHER) %>">
+					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_RESEARCHER) || hasOwnPermission )%>">
 					<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete"  onClick="<%=deleteResearcherURL %>"></aui:button>
 					</c:if>
 					

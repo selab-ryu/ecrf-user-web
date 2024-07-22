@@ -111,7 +111,7 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 		String institution = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.INSTITUTION);
 		String officeContact = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.OFFICE_CONTACT);
 		String position = ParamUtil.getString(actionRequest, ECRFUserResearcherAttributes.POSITION);
-		//position = "researcher";
+		position = "researcher";
 		
 		Researcher researcher = null;
 		try {
