@@ -77,14 +77,12 @@
 				</div>
 			</c:if>
 			
-
 			<%
-			List<CRF> crfList = CRFLocalServiceUtil.getCRFByGroupId(group.getGroupId());
-			List<DataType> dataTypeList = new ArrayList<>(); 
+			List<CRF> mySiteCRFList = CRFLocalServiceUtil.getCRFByGroupId(group.getGroupId()); 
 			//_log.info(crfList.size());
 			
-			for(int i=0; i<crfList.size(); i++ ) {
-				CRF crf = crfList.get(i);
+			for(int i=0; i<mySiteCRFList.size(); i++ ) {
+				CRF crf = mySiteCRFList.get(i);
 				DataType dataType = DataTypeLocalServiceUtil.getDataType(crf.getDatatypeId());
 				if(Validator.isNotNull(dataType)) {
 					//_log.info("datatype check");
@@ -204,13 +202,56 @@
 			</c:if>
 			
 			<%
+			List<CRF> availSiteCRFList = CRFLocalServiceUtil.getCRFByGroupId(group.getGroupId()); 
+			//_log.info(crfList.size());
+			
+			for(int i=0; i<availSiteCRFList.size(); i++ ) {
+				CRF crf = availSiteCRFList.get(i);
+				DataType dataType = DataTypeLocalServiceUtil.getDataType(crf.getDatatypeId());
+				if(Validator.isNotNull(dataType)) {
+					//_log.info("datatype check");
+					JSONObject obj = DataTypeLocalServiceUtil.getDataTypeStructureJSONObject(dataType.getDataTypeId());
+					//_log.info(obj);
+					
+					String dataTypePrint = "";
+					JSONArray termsArr = null;
+					boolean isEmpty = false;
+					
+					if(Validator.isNull(obj)) {
+						isEmpty = true;	// crf form not exist 
+					} else {
+						termsArr = obj.getJSONArray("terms");
+						//_log.info(termsArr);
+						
+						if(Validator.isNull(termsArr)) isEmpty = true;	// crf form dosent have term
+					}
+					
+					if(isEmpty) {
+						dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName() + StringPool.SPACE + "(0)";
+					} else {
+						dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName() + StringPool.SPACE + "(" + termsArr.length() + ")";	
+					}					
+			%>
+
+			<div class="text-default">
+				<strong><%=dataTypePrint %></strong>
+			</div>
+			
+			<%
+				}
+			}
+			%>
+			
+			<%
 			int usersCount = siteDisplayContext.getGroupUsersCount(group.getGroupId());
 			%>
 			
+			<c:if test="false">
 			<c:if test="<%= usersCount > 0 %>">
 			<div class="text-default">
 				<strong><liferay-ui:message arguments="<%= usersCount %>" key='<%= (usersCount > 1) ? "x-users" : "x-user" %>' /></strong>
 			</div>
+			</c:if>
 			</c:if>
 			
 		</liferay-ui:search-container-column-text>
