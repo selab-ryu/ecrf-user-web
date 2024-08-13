@@ -44,8 +44,8 @@ public class CRFViewerRenderCommand implements MVCRenderCommand {
 		long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0);
 		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
 		long sdId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.STRUCTURED_DATA_ID, 0);
-		
-		_log.info("s / c / sd : " + subjectId + " / " + crfId + " / " + sdId);
+		boolean isAudit = ParamUtil.getBoolean(renderRequest, "isAudit", false);
+		_log.info("s / c / sd / isAudit : " + subjectId + " / " + crfId + " / " + sdId + " / " + isAudit);
 		
 		Subject subject = null;
 		
@@ -87,6 +87,7 @@ public class CRFViewerRenderCommand implements MVCRenderCommand {
 		
 		renderRequest.setAttribute("crfId", crfId);
 		renderRequest.setAttribute("dataTypeId", dataTypeId);
+		renderRequest.setAttribute("isAudit", isAudit);
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.CRF_FORM, crfFormStr);
 		return ECRFUserJspPaths.JSP_CRF_VIEWER;
 	}

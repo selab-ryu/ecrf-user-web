@@ -215,7 +215,7 @@ Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit,
 	
 	var renderCommand = "/render/crf-data/crf-viewer";
 	if(isAudit){
-    		renderCommand = "/render/crf-data/view-audit";
+    		renderCommand = "/render/crf-data/crf-viewer";
 	} else{
 		if(displayViewerId == 0 || displayViewerId == 1){
         renderCommand = "/render/crf-data/crf-viewer";
@@ -232,6 +232,7 @@ Liferay.provide(window, 'moveUpdateCRFData', function(sId, crfId, sdId, isAudit,
 				'mvcRenderCommandName' : renderCommand,
 				'subjectId' : sId,
 				'crfId' : crfId,
+				'isAudit' : isAudit,
 				'structuredDataId' : sdId
 			}
 		);
