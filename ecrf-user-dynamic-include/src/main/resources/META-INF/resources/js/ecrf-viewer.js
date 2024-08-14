@@ -1,13 +1,16 @@
 let ECRFViewer = function(){
 	class Viewer{
 
-		constructor(DataStructure, align, structuredData, subjectInfo){
+		constructor(DataStructure, align, structuredData, subjectInfo, isAudit){
 			var result = new Object();
 			renderUtil.align = align;
+			renderUtil.isAudit = isAudit;
+			
+			if(isAudit){
+				renderUtil.align = "crf-align-table";
+			}
 			let isProcessing = false;
-
 			autoCalUtil.initCalculatevalue(DataStructure, subjectInfo);
-
 			console.log("sd data", structuredData);
 			DataStructure.terms = renderUtil.flattenTerms(DataStructure.terms);
 			if(structuredData){
@@ -990,6 +993,75 @@ let ECRFViewer = function(){
 									}
 								}
 								break;
+							case "fitness_hand_grip":
+								if(this.gender == 0){
+									if(term.value < 27){
+										$("#is_sarcopenia_ewgsop2").val("1").trigger('change');
+										$("#is_sarcopenia_awgs2").val("1").trigger('change');
+									}else if(term.value < 28){
+										$("#is_sarcopenia_awgs2").val("1").trigger('change');
+									}
+								}else{
+									if(term.value < 16){
+										$("#is_sarcopenia_ewgsop2").val("1").trigger('change');
+										$("#is_sarcopenia_awgs2").val("1").trigger('change');
+									}else if(term.value < 18){
+										$("#is_sarcopenia_awgs2").val("1").trigger('change');
+									}
+								}
+								
+							case "walking_6m":
+								if(term.value < 0.8){
+									$("#is_low_physical_performance_awgs2").val("1").trigger('change');
+									$("#is_low_physical_performance_ewgsop2").val("1").trigger('change');
+								}else if(term.value < 1.0){
+									$("#is_low_physical_performance_awgs2").val("1").trigger('change');
+								}
+								break;
+							case "alm":
+								let alm_val = term.value;
+								let height = 0;
+								let weight = 0;
+								this.crf.terms.forEach(compareTerm=>{
+									if(compareTerm.termName === "inbody_height"){
+										if(compareTerm.value){
+											height = compareTerm.value;
+										}
+									}else if (compareTerm.termName === "inbody_weight"){
+										if(compareTerm.value){
+											weight = compareTerm.value;
+										}
+									}
+								});
+								let bmi = weight / (height*height);
+								let alm_height = alm_val / (height*height);
+								let alm_bmi = alm_val / bmi;
+								//TODO: exception control
+								$("#alm_ht_div").val(alm_height).trigger('change');
+								$("#alm_bmi_div").val(alm_bmi).trigger('change');
+								if(this.gender == 0){
+									if(alm_height < 7.0){
+										$("#is_alm_ht_div_awgs").val("1").trigger('change');
+										$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
+									}else if(alm < 20){
+										$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
+									}
+									if(alm_bmi < 0.789){
+										$("#is_low_alm_bmi_div").val("1").trigger('change');
+									}
+								}else{
+									if(alm_height < 5.5){
+										$("#is_alm_ht_div_awgs").val("1").trigger('change');
+										$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
+									}else if(alm < 15){
+										$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
+									}
+									if(alm_bmi < 0.512){
+										$("#is_low_alm_bmi_div").val("1").trigger('change');
+									}
+								}
+								break;
+								
 						}
 					console.log("metabolic : " , this.metabolicCount, "risk : ", this.riskCount);		
 					if(this.metabolicCount >= 3){
@@ -1047,6 +1119,9 @@ let ECRFViewer = function(){
         		id:term.termName + "_outerDiv"
         	});
         	let $accordionTab = $('<div class="card-horizontal main-content-card" style="min-height:0px;">');
+        	if(this.isAudit){
+        		$accordionTab = $('<div class="card-horizontal main-content-card pad1R">');
+        	}
 			let $groupBody = $('<div id="'+ term.termName +'">');
 			let $groupName = $('<h3>').text(displayName);
 			$accordionTab.append($groupName);
@@ -1075,15 +1150,17 @@ let ECRFViewer = function(){
 			}
 			
 			$accordionTab.append($groupBody);
-			$accordionTab.accordion({
-                collapsible: true,
-				highStyle: 'content',
-				disabled: false,
-				active: false,
-				activate: function(event, ui){
-					ui.newPanel.css('height', 'auto');
-				}
-            });
+			if(!this.isAudit){
+				$accordionTab.accordion({
+	                collapsible: true,
+					highStyle: 'content',
+					disabled: false,
+					active: false,
+					activate: function(event, ui){
+						ui.newPanel.css('height', 'auto');
+					}
+	            });
+			}
 			$GroupOuterDiv.append($accordionTab);
 			return $GroupOuterDiv;
         },
@@ -1229,13 +1306,46 @@ let ECRFViewer = function(){
 				$btnArea.append($deleteBtn);
 				$inputLabel.append($btnArea);
 			}else{
-				$inputLabel.append(this.buildTermInput(term));
+				if(this.isAudit){
+					$inputLabel.append(this.buildTermAuditValue(term));
+				}else{
+					$inputLabel.append(this.buildTermInput(term));
+				}
 			}
 			$section.append($inputLabel);
 			
 			return $container;
         },
-        
+        buildTermAuditValue : function(term){
+			let $inputTag = $('<p class="field form-control">');
+			$inputTag.prop({
+				id: term.termName,
+				name: term.termName
+			});
+			
+			var termValue = "non-execution";
+			if(term.termType === "List"){
+				term.options.forEach(option => {
+					if(term.value == option.value){
+						termValue = option.label.localizedMap.en_US;
+					}
+				});
+			}else if(term.termType === "Date"){
+				
+			}else if(term.termType === "File"){
+				
+			}
+			else{
+				if(term.value) termValue = term.value;
+			}
+			let $outerDiv = $('<div>'); 
+			$inputTag.append(termValue);
+			if(termValue !== "non-execution"){
+				$inputTag.attr('onclick', 'openHistoryDialog("'+ term.termName + '", "' + term.displayName.localizedMap.en_US + '")');
+			}
+			$outerDiv.append($inputTag);
+        	return $outerDiv;
+        },
         buildTermInput : function(term){
 			let $inputTag = $('<input class="field form-control" type="text">');
 			switch(term.termType){
@@ -1343,6 +1453,17 @@ let ECRFViewer = function(){
 			case "List":
 				if(term.displayStyle === "select"){
 					$inputTag = $( '<select class="form-control">' );
+					if(term.placeHolder){
+						console.log("has placeHolder", term.placeHolder.localizedMap.en_US);
+						let $nonExecutionTag = $('<option>');
+						$nonExecutionTag.prop({
+							disabled: true,
+							selected: true,
+							hidden: true
+						});
+						$nonExecutionTag.text(term.placeHolder.localizedMap.en_US);
+						$inputTag.append($nonExecutionTag);
+					}
 					term.options.forEach((option)=>{
 						let $optionTag = $('<option>').text(option.label.localizedMap.en_US);
 						$optionTag.val(option.value);
@@ -1712,6 +1833,37 @@ let ECRFViewer = function(){
 					});
 				}
 				break;
+			}
+			
+			if(this.isAudit){
+				let $inputTag = $('<p class="field form-control">');
+				$inputTag.prop({
+					id: term.termName,
+					name: term.termName
+				});
+				
+				var termValue = "non-execution";
+				if(term.termType === "List"){
+					term.options.forEach(option => {
+						if(cellValue == option.value){
+							termValue = option.label.localizedMap.en_US;
+						}
+					});
+				}else if(term.termType === "Date"){
+					
+				}else if(term.termType === "File"){
+					
+				}
+				else{
+					if(term.value) termValue = cellValue;
+				}
+				let $outerDiv = $('<div>'); 
+				$inputTag.append(termValue);
+				if(termValue !== "non-execution"){
+					$inputTag.attr('onclick', 'openHistoryDialog("'+ term.termName + '", "' + term.displayName.localizedMap.en_US + '")');
+				}
+				$outerDiv.append($inputTag);
+	        	return $outerDiv;
 			}
         	return $gridInputTag;
         },
