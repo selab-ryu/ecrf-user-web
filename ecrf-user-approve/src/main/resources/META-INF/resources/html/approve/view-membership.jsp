@@ -1,3 +1,4 @@
+<%@page import="ecrf.user.service.CRFResearcherLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@page import="ecrf.user.constants.type.ResearcherPosition"%>
 <%@page import="com.liferay.portal.kernel.service.RoleLocalServiceUtil"%>
@@ -102,6 +103,7 @@ if(membershipRequestCount <= 0) {
 				
 				<%
 				Researcher researcher = ResearcherLocalServiceUtil.getResearcherByUserId(siteUser.getUserId());
+				CRFResearcher crfResearcher = CRFResearcherLocalServiceUtil.getCRFResearcherByC_R(crfId, researcher.getResearcherId());
 				%>
 				
 				<liferay-ui:search-container-column-text>
