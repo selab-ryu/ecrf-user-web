@@ -2,9 +2,20 @@ Bundle-Name: ecrf-user-crf
 Bundle-SymbolicName: ecrf.user.crf
 Bundle-Version: 1.0.0
 
-Web-ContextPath: /ecrf.user.crf
+Web-ContextPath: /ecrf.user.crf 
 
+Bundle-ClassPath:\
+	.,\
+	lib/commons-math3-3.6.1.jar,\
+
+Include-Resource:\
+	lib/commons-math3-3.6.1.jar=commons-math3-3.6.1.jar,\
+	
 -privatepackage: \
 	ecrf.user.constants,\
 	com.sx.icecap.constant,\
 	ecrf.user.model.custom
+
+Import-Package: \
+	!org.apache.commons.math3.*,\
+	*

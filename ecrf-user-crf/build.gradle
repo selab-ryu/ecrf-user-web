@@ -29,6 +29,7 @@ dependencies {
 	compileOnly group: 'com.liferay', name: 'com.liferay.petra.function'
 	
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.chart"
-	
 	compileOnly group: "com.liferay", name: "com.liferay.application.list.api", version: "4.2.5"
+	
+	compileInclude group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 }
