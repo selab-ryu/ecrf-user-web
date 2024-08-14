@@ -7,6 +7,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/M/d");
 
 long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0); 
 long sdId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.STRUCTURED_DATA_ID, 0);
+boolean isAudit = ParamUtil.getBoolean(renderRequest, "isAudit", false);
 
 Subject subject = null;
 if(subjectId > 0){
@@ -39,6 +40,7 @@ if(sdId > 0) {
 }
 
 _log.info("is update : " + isUpdate);
+_log.info("is audit : " + isAudit);
 
 %>
 
@@ -144,7 +146,7 @@ let subjectBirth = new Date(<%=subject.getBirth().getTime()%>);
 subjectInfo["subjectGender"] = subjectGender;
 subjectInfo["subjectBirth"] = subjectBirth;
 
-let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectInfo);
+let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectInfo, <%=isAudit%>);
 console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
 
@@ -185,5 +187,40 @@ $('#<portlet:namespace/>btnVert').on( 'click', function(event){
 });
 
 });
+
+Liferay.provide(window, 'openHistoryDialog', function(termName, displayName) {
+	console.log("function activate");
+	
+	var renderURL = Liferay.PortletURL.createRenderURL();
+	
+	renderURL.setPortletId('<%=themeDisplay.getPortletDisplay().getId()%>');
+	renderURL.setPortletMode("edit");
+    renderURL.setWindowState("pop_up");
+    
+	renderURL.setParameter("groupId", <%=scopeGroupId %>);
+	renderURL.setParameter("subjectId", <%=subjectId %>);
+	renderURL.setParameter("crfId", <%=crfId %>);
+	renderURL.setParameter("structuredDataId", <%=sdId %>);
+	renderURL.setParameter("displayName", displayName);
+	renderURL.setParameter("termName", termName);
+	renderURL.setParameter("mvcRenderCommandName", "/render/crf-data/dialog-audit");
+	
+	Liferay.Util.openWindow(
+			{
+				dialog: {
+					cache: false,
+					destroyOnClose: true,
+					centered: true,
+					constrain2view: true,
+					modal: true,
+					resizable: false,
+					height: 700,
+					width: 1000
+				},
+				title: 'Audit Trail',
+				uri: renderURL.toString()
+			}
+		);
+}, ['liferay-util-window', 'liferay-portlet-url']);
 
 </script>
