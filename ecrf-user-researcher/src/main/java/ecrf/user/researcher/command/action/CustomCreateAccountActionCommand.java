@@ -137,6 +137,7 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 			_log.info("researcher is null");
 		}
 		
+		/*
 		if(Validator.isNotNull(user)) {
 			_log.info("user is added / " + user.getEmailAddress());
 			ServiceContext membershipServiceContext = ServiceContextFactory.getInstance(MembershipRequest.class.getName(), actionRequest);
@@ -149,7 +150,7 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 		} else {
 			_log.info("user is null");
 		}
-		
+		*/
 	}
 	
 	public void updateResearcherWithUser(ActionRequest actionRequest, ActionResponse actionResponse) {
