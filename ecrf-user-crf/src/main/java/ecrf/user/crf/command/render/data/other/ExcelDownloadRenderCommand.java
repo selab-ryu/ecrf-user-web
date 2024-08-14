@@ -12,7 +12,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.sx.icecap.service.DataTypeLocalService;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,65 +53,85 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 		
 		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
 		long dataTypeId = _crfLocalService.getDataTypeId(crfId);
+		
 		String searchLogId = ParamUtil.getString(renderRequest, "searchLogId");
 		String searchLog = null;
-		//_log.info("Download: " + searchLogId.isEmpty());
-		if(!searchLogId.isEmpty()) {
+		
+		// If Search Data (when there is an option set)
+		boolean isSearch = false;
+		
+		if(!(searchLogId.isEmpty())) {
+			isSearch = true;
+		}
+		// End
+		
+		// Variables to capture preprocessed options in integrated searches
+		String[] options = null;
+		List<String> searchSdIds = null;
+		
+		if(isSearch) {
+			_log.info("If Search Data, Get the Options User Set");
 			try {
 				searchLog = _crfSearchLogLocalService.getCRFSearchLog(Long.parseLong(searchLogId)).getSearchLog();
+				
+				_log.info("0.1. Hand Out Option Items");
+				JSONObject before_option = JSONFactoryUtil.createJSONObject(searchLog);
+				
+				// Task of handing out options
+				String option = String.valueOf(before_option.get("query"));
+				option = option.replace("(", "");
+				option = option.replace(")", "");
+				
+				options = option.split("\\s+OR\\s+|\\s+AND\\s+");
+				// End
+				
+				// Distribute the sdId of the patient who meets the conditions
+				String searchSdId = String.valueOf(before_option.get("hits"));
+				searchSdId = searchSdId.replace("[", "");
+				searchSdId = searchSdId.replace("]", "");
+				searchSdId = searchSdId.replace("\"", "");
+				
+				searchSdIds = Arrays.asList(searchSdId.split(","));
+				// End
+				_log.info("0.1. End");
 			}catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
-		
-		String[] options = null;
-		List<String> searchSdIds = null;
-		
-		if(!searchLogId.isEmpty()) {
-			try {
+		// End
 
-				JSONObject before_option = JSONFactoryUtil.createJSONObject(searchLog);
-				String option = String.valueOf(before_option.get("query")).replace("(", "").replace(")", "");
-				
-				options = option.split("\\s+OR\\s+|\\s+AND\\s+");
-				
-				String searchSdId = String.valueOf(before_option.get("hits")).replace("[", "").replace("]", "").replace("\"", "").replace(",", " ");
-				
-				searchSdIds = Arrays.asList(searchSdId.split(" "));
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-		
 		String json = "";
 		try {
+			_log.info("0.2. Get JSON For CRF");
 			json = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
+			_log.info("0.2. End");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
+		
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    		
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	
+		// Get LinkCRF for CRF
 		List<LinkCRF> allLinkCRFList = _linkCRFLocalService.getLinkCRFByG_C(themeDisplay.getScopeGroupId(), crfId);
 		JSONArray subJsons = JSONFactoryUtil.createJSONArray();
 		JSONArray ansJsons = JSONFactoryUtil.createJSONArray();
 		
+		_log.info("0.3. Get Patient Information, Answer Data and Put it in");
 		for(LinkCRF i : allLinkCRFList) {
 			Subject subject = null;
-			Boolean flag = true;
-			
-			if(!searchLogId.isEmpty() && !(searchSdIds.contains(String.valueOf(i.getStructuredDataId())))) {
-				flag = false;
+
+			// 1. searchLogId is not empty (select option) 2. not a patient who meets the conditions
+			if(isSearch && !(searchSdIds.contains(String.valueOf(i.getStructuredDataId())))) {
+				continue;
 			}
-      
-			if(flag) {
+			else {
 				try {
+					// Get patient information and put it in
 					subject = _subjectLocalService.getSubject(i.getSubjectId());
-					
 					JSONObject subJson = JSONFactoryUtil.createJSONObject();
 					subJson.put("ID", subject.getSerialId());
 					subJson.put("Name", subject.getName());
@@ -120,43 +139,51 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 					subJson.put("Sex", subject.getGender());
 					subJson.put("LinkId", i.getStructuredDataId());
 					subJsons.put(subJson);
+					// End
 					
+					// Get patient Answer and put it in
 					String str_sd = _dataTypeLocalService.getStructuredData(i.getStructuredDataId());
 					JSONObject ansObj =  JSONFactoryUtil.createJSONObject();
           
 					try {
-						 ansObj = JSONFactoryUtil.createJSONObject(str_sd);
-						 ansObj.put("ID", subject.getSerialId());
-						 ansObj.put("LinkId", i.getStructuredDataId());
+						ansObj = JSONFactoryUtil.createJSONObject(str_sd);
+						ansObj.put("ID", subject.getSerialId());
+						ansObj.put("LinkId", i.getStructuredDataId());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
           
 					ansJsons.put(ansObj);
+					// End
 			    } catch(PortalException e) {
-            e.printStackTrace();
-        }
+		            e.printStackTrace();
+		        }
 			}
 		}
-
+		_log.info("0.3. End");
+		
+		// Sort it in order of name
 		List<JSONObject> jsonValues = new ArrayList<JSONObject>();
-    for (int i = 0; i < subJsons.length(); i++) {
-        jsonValues.add(subJsons.getJSONObject(i));
-    }
+	    for (int i = 0; i < subJsons.length(); i++) {
+	        jsonValues.add(subJsons.getJSONObject(i));
+	    }
     
-    Collections.sort( jsonValues, new Comparator<JSONObject>() {
-        @Override
-        public int compare(JSONObject a, JSONObject b) {
-            String valA = a.getString("Name");
-            String valB = b.getString("Name");
+	    Collections.sort( jsonValues, new Comparator<JSONObject>() {
+	    	@Override
+	        public int compare(JSONObject a, JSONObject b) {
+	    		String valA = a.getString("Name");
+	            String valB = b.getString("Name");
+	
+	            return valA.compareTo(valB);
+	        }
+	    });
+	    // End
 
-            return valA.compareTo(valB);
-        }
-    });
-
-    JSONArray fin_subJsons = JSONFactoryUtil.createJSONArray();
+	    // Put the data that I put in after sorting it out
+	    JSONArray fin_subJsons = JSONFactoryUtil.createJSONArray();
 		JSONArray fin_ansJsons = JSONFactoryUtil.createJSONArray();
-
+		
+		_log.info("0.4. put the data");	
 		for(int i = 0; i < subJsons.length(); i++) {
 			JSONObject fin_subJson = JSONFactoryUtil.createJSONObject();
 			
@@ -168,6 +195,7 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			
 			JSONObject fin_ansObj =  JSONFactoryUtil.createJSONObject();
 			
+			// Remove key value to fit patient information
 			for(int j = 0; j < ansJsons.length(); j++) {
 				if(jsonValues.get(i).get("LinkId").equals(ansJsons.getJSONObject(j).get("LinkId"))) {
 					ansJsons.getJSONObject(j).remove("LinkId");
@@ -177,29 +205,22 @@ public class ExcelDownloadRenderCommand implements MVCRenderCommand{
 			}
 			
 			fin_ansJsons.put(fin_ansObj);
+			// End
 		}
-    
-		/*
-		for(int i = 0; i < fin_subJsons.length(); i++) {
-			_log.info("fin_subJsons: " + fin_subJsons.getJSONObject(i));
-		}
-		
-		for(int i = 0; i < fin_ansJsons.length(); i++) {
-			_log.info("fin_ansJsons: " + fin_ansJsons.getJSONObject(i));
-		}
-        */
+		// End
+		_log.info("0.4. End");
 		
 		renderRequest.setAttribute("subjectJson", fin_subJsons.toJSONString());
 		renderRequest.setAttribute("answerJson", fin_ansJsons.toJSONString());
 		renderRequest.setAttribute("json", json);
         
-		if(!searchLogId.isEmpty()) {
+		if(isSearch) {
 			renderRequest.setAttribute("options", String.join(",", options));
 		}
 		else {
 			renderRequest.setAttribute("options", "noSearch");
 		}
-		
+
 		return ECRFUserJspPaths.JSP_CRF_DATA_EXCEL_DOWNLOAD;
 	}
 	

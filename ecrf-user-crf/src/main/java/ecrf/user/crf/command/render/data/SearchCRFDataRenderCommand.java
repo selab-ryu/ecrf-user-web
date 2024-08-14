@@ -45,18 +45,18 @@ public class SearchCRFDataRenderCommand implements MVCRenderCommand{
 		
 		DataType dataType = null;
 		JSONObject dataStructure = null;
-		
 		try {
-			dataType = _dataTypeLocalService.getDataType( dataTypeId );
+			dataType = _dataTypeLocalService.getDataType(dataTypeId);
 			dataStructure = _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId);
 			
 			renderRequest.setAttribute(ECRFUserCRFDataAttributes.DATATYPE_ID, dataTypeId);
 			renderRequest.setAttribute(ECRFUserCRFDataAttributes.DATATYPE, dataType);
 			renderRequest.setAttribute(ECRFUserCRFDataAttributes.DATA_STRUCTURE, dataStructure);
+			
 		} catch (Exception e) {
-			throw new PortletException( "Cannot find data type: " + dataTypeId );
+			throw new PortletException("Cannot find data type: " + dataTypeId);
 		}
-
+		_log.info("0. end");
 		return ECRFUserJspPaths.JSP_SEARCH_CRF_DATA;
 	}
 	
