@@ -1018,6 +1018,12 @@ let ECRFViewer = function(){
 									$("#is_low_physical_performance_awgs2").val("1").trigger('change');
 								}
 								break;
+							case "inbody_height":
+								$("#sarcopenia_height").val(term.value).trigger('change');
+								break;
+							case "inbody_weight":
+								$("#sarcopenia_weight").val(term.value).trigger('change');
+								break;
 							case "alm":
 								let alm_val = term.value;
 								let height = 0;
