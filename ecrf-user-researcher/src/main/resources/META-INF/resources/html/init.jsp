@@ -58,6 +58,8 @@
 
 <%@ page import="com.liferay.portal.kernel.service.UserLocalServiceUtil" %>
 
+<%@ page import="com.liferay.portal.kernel.portlet.PortletURLUtil"%>
+
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
@@ -79,7 +81,15 @@
 <%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
 <%@ page import="ecrf.user.constants.ECRFUserUtil"%>
+<%@ page import="ecrf.user.constants.ECRFUserActionKeys"%>
 
+<%@ page import="ecrf.user.constants.type.Gender"%>
+
+<%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
+<%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
+<%@ page import="ecrf.user.constants.ECRFUserConstants"%>
+
+<%@ page import="ecrf.user.constants.attribute.ECRFUserSubjectAttributes"%>
 <%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
 <%@ page import="ecrf.user.constants.attribute.ECRFUserResearcherAttributes"%>
 
@@ -90,7 +100,13 @@
 <%@ page import="ecrf.user.researcher.security.permission.resource.ResearcherModelPermission" %>
 
 <%@ page import="ecrf.user.constants.type.ResearcherPosition"%>
- 
+
+<%@ page import="ecrf.user.researcher.util.SearchUtil"%>
+
+<%@ page import="com.liferay.portal.kernel.exception.UserEmailAddressException" %>
+<%@ page import="com.liferay.portal.kernel.exception.UserScreenNameException"%>
+<%@ page import="com.liferay.portal.kernel.exception.GroupFriendlyURLException"%>
+
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
 

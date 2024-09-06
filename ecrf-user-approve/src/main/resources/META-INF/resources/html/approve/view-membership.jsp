@@ -1,3 +1,7 @@
+<%@page import="ecrf.user.constants.attribute.ECRFUserResearcherAttributes"%>
+<%@page import="com.liferay.portal.kernel.model.UserGroupRole"%>
+<%@page import="com.liferay.portal.kernel.service.UserGroupRoleLocalServiceUtil"%>
+<%@page import="ecrf.user.model.CRFResearcher"%>
 <%@page import="ecrf.user.service.CRFResearcherLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@page import="ecrf.user.constants.type.ResearcherPosition"%>
@@ -103,7 +107,7 @@ if(membershipRequestCount <= 0) {
 				
 				<%
 				Researcher researcher = ResearcherLocalServiceUtil.getResearcherByUserId(siteUser.getUserId());
-				CRFResearcher crfResearcher = CRFResearcherLocalServiceUtil.getCRFResearcherByC_R(crfId, researcher.getResearcherId());
+				
 				%>
 				
 				<liferay-ui:search-container-column-text>
@@ -118,19 +122,45 @@ if(membershipRequestCount <= 0) {
 				
 				<%
 					// get researhcer role
+								
+				List<UserGroupRole> userGroupRoleList = UserGroupRoleLocalServiceUtil.getUserGroupRoles(siteUser.getUserId(), scopeGroupId);
+				
+				String roleStr = "";
+				
+				if(userGroupRoleList != null) {
+					for(int i=0; i<userGroupRoleList.size(); i++) {
+						UserGroupRole userGroupRole = userGroupRoleList.get(i); 
+						Role role = RoleLocalServiceUtil.getRole(userGroupRole.getRoleId());
+		
+						roleStr += role.getName();	
+						if(i<userGroupRoleList.size()-1) roleStr += StringPool.COMMA_AND_SPACE; 						
+					}
 					
+				}
+ 				
 				%>
 				
 				<liferay-ui:search-container-column-text>
 					<h6>
-						<span><%=Validator.isNull(researcher) ? StringPool.DASH : ResearcherPosition.findByLower(researcher.getPosition()).getFull() %></span>
+						<span><%=Validator.isNull(roleStr) ? StringPool.DASH : roleStr %></span>
 					</h6>
 					
 					<h6>
 						<span><%=Validator.isNull(researcher) ? StringPool.DASH : researcher.getInstitution() %></span>
 					</h6>
-				
 				</liferay-ui:search-container-column-text>
+				
+				<!-- 
+				<liferay-ui:search-container-column-text>
+					<portlet:renderURL var="updateSiteRoleURL">
+						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_UPDATE_SITE_ROLE %>" />
+						<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
+					</portlet:renderURL>
+				
+					<aui:button name="siteRole" type="button" value="ecrf-user.button.site-role" cssClass="small-btn none-btn" onClick="<%=updateSiteRoleURL %>" ></aui:button>
+				</liferay-ui:search-container-column-text>
+				-->
+				 
 			</liferay-ui:search-container-row>
 		
 			<liferay-ui:search-iterator

@@ -426,7 +426,7 @@ Liferay.provide(window, "closePopup", function(dialogId, type, data) {
 	//console.log("closePopup called");
 	//console.log(dialogId);
 	//console.log(type);
-	//console.log(data);
+	console.log(data);
 	
 	if(type == "save") {
 		//console.log("is it called?");	// check equals
@@ -441,8 +441,7 @@ Liferay.provide(window, "closePopup", function(dialogId, type, data) {
 	}
 	
 	//console.groupEnd();
-}, ['liferay-util-window']
-);
+}, ['liferay-util-window'] );
 
 function tableLoading() {
 	console.group("table load start");

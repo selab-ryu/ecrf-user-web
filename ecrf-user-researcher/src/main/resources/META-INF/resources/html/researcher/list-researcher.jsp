@@ -1,16 +1,3 @@
-<%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
-<%@page import="ecrf.user.constants.type.ResearcherPosition"%>
-<%@ page import="com.liferay.portal.kernel.portlet.PortletURLUtil"%>
-<%@ page import="ecrf.user.researcher.util.SearchUtil"%>
-<%@ page import="ecrf.user.constants.type.Gender"%>
-<%@ page import="ecrf.user.constants.attribute.ECRFUserSubjectAttributes"%>
-<%@ page import="ecrf.user.constants.attribute.ECRFUserResearcherAttributes"%>
-<%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
-<%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
-<%@ page import="ecrf.user.constants.ECRFUserConstants"%>
-<%@ page import="ecrf.user.model.Researcher"%>
-<%@ page import="ecrf.user.service.ResearcherLocalServiceUtil"%>
-
 <%@ include file="../init.jsp" %>
 
 <liferay-ui:success key="researcherWithUserAdded" message="researcher-with-user-added" />
