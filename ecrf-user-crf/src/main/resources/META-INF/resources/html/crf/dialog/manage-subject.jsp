@@ -164,7 +164,7 @@ function initTable(type) {
 				}
 			},
 			function(obj) {
-				//console.log(obj);
+				//console.log(obj.slice());
 				// remove item matched current crf subject info arr
 				
 				for(let i=0; i<initCurrentSubjectArr.length; i++) {

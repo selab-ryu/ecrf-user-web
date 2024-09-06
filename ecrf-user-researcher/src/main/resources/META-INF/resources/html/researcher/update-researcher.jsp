@@ -1,8 +1,3 @@
-<%@ page import="ecrf.user.constants.ECRFUserActionKeys" %>
-<%@ page import="ecrf.user.constants.type.ResearcherPosition" %>
-<%@ page import="com.liferay.portal.kernel.exception.UserEmailAddressException" %>
-<%@ page import="com.liferay.portal.kernel.exception.UserScreenNameException"%>
-<%@ page import="com.liferay.portal.kernel.exception.GroupFriendlyURLException"%>
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html.researcher.update_researcher_jsp"); %>
@@ -578,10 +573,12 @@ function(A) {
 	        },
 	        customRuleForDate : function (val, fieldNode, ruleValue) {
 	        	var result = false;
-	       		const pattern = /^(19|20)\d{2}\/(0[1-9]|1[1,2])\/(0[1-9]|[12][0-9]|3[01])$/;
-	        	const reg_result = pattern.test(val); 
+	       		const pattern = /^(19|20)\d{2}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
+	        	const reg_result = pattern.test(val);
 	        	if(reg_result) {
 	        		return true;
+	        	} else {
+	        		console.log("date valid rule failed");
 	        	}
 	            return result;
 	        }
@@ -612,7 +609,7 @@ function(A) {
 	);
 });
 
-AUI().ready(function() {
+$(document).ready(function() {
 	const notChangeCheckbox = document.getElementById('<portlet:namespace/>notChange');
 	notChangeCheckbox.addEventListener("click", (event) => {
 		let password1 = $('#<portlet:namespace/>password1');

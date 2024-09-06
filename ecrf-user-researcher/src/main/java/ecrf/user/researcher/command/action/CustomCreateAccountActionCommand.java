@@ -4,7 +4,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.model.MembershipRequest;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -23,7 +22,10 @@ import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -101,9 +103,14 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 		long prefixId = ParamUtil.getInteger(actionRequest, "prefixId");
 		long suffixId = ParamUtil.getInteger(actionRequest, "suffixId");
 		
-		int birthYear = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.BIRTH_YEAR, 1970);
-		int birthMonth = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.BIRTH_MONTH, Calendar.JANUARY);
-		int birthDay = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.BIRTH_DAY, 1);
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Calendar cal = Calendar.getInstance();
+		Date birth = ParamUtil.getDate(actionRequest, ECRFUserResearcherAttributes.BIRTH, df);
+				
+		cal.setTime(birth);
+		int birthYear = cal.get(Calendar.YEAR);
+		int birthMonth = cal.get(Calendar.MONTH);
+		int birthDay = cal.get(Calendar.DATE);
 		
 		int gender = ParamUtil.getInteger(actionRequest, ECRFUserResearcherAttributes.GENDER, 0);
 		
