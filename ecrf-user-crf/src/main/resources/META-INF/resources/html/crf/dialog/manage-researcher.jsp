@@ -165,16 +165,17 @@ function initTable(type) {
 			{
 				"/ec.crf-researcher/get-all-crf-researcher-info" : {
 					"groupId" : <%=groupId%>,
-					"crfId" : "<%=crfId%>" 
+					"crfId" : <%=crfId%> 
 				}
 			},
 			function(obj) {
-				console.log(obj);
+				//console.log(obj.slice());
 				// remove item matched current crf researcher info arr
 				
+				console.log(initCurrentArr);
 				for(let i=0; i<initCurrentArr.length; i++) {
 					let item = initCurrentArr[i];
-					const itemToFind = obj.find(function(item) {return item.researcherId == item.researcherId});
+					const itemToFind = obj.find(function(row) {return row.researcherId == item.researcherId});	// function parameter name issue => fixed: 2024-08-20
 					const idx = obj.indexOf(itemToFind);
 					if(idx>-1) obj.splice(idx, 1);
 				}
@@ -341,7 +342,10 @@ function setSaveButtonEvent() {
 		// TODO: if current researcher arr is shrinked, alert about crf data remove
 		// send current crf-researcher arr to parent page (using parent function)
 			// send with popup id
-			
+		
+		console.log(currentArr);
+		console.log(notIncludedArr);
+		
 		Liferay.Util.getOpener().closePopup("manageResearcherPopup", "save", currentArr);
 				
 	});

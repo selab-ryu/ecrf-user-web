@@ -35,5 +35,4 @@ dependencies {
 	
 	compileOnly group: "com.liferay", name: "com.liferay.application.list.api", version: "4.2.5"
 	compileOnly group: "com.liferay", name: "com.liferay.application.list.taglib"
-	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl"
 }
