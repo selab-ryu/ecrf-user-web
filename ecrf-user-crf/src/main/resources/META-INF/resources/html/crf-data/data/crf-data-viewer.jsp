@@ -131,6 +131,7 @@ console.log(profile);
 
 let ev = ECRFViewer();
 let dataStructure = SX.newDataStructure(<%=crfForm%>, profile, SX.Constants.FOR_EDITOR, $('#<portlet:namespace/>canvasPanel'));
+
 let align = "crf-align-table";
 if(<%=CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout()%> == 0){
 	align = "crf-align-table";

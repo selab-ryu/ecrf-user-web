@@ -27,7 +27,7 @@ Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portlet
 	
 	// set render command
 	renderURL.setParameter("mvcRenderCommandName", "/render/crf-data/crf-data-selector");
-			
+	
 	Liferay.Util.openWindow({
 		dialog: {
 			cache: false,

@@ -144,6 +144,8 @@
 <%@ page import="ecrf.user.crf.util.data.CRFDataSearchUtil" %>
 <%@ page import="ecrf.user.crf.util.data.HistorySearch"%>
 <%@ page import="ecrf.user.crf.util.data.CRFGroupCaculation"%>
+<%@ page import="ecrf.user.crf.util.data.CRFProgressUtil"%>
+
 
 <liferay-theme:defineObjects />
 
