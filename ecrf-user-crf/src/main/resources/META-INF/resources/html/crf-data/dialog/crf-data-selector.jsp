@@ -73,63 +73,28 @@ _log.info("base url : " + baseURL);
 							String progressSrc = renderRequest.getContextPath() + "/img/empty_progress.png";
 
 							if(Validator.isNotNull(answerForm)){
-								int notAnswerCount = 0;
-								Iterator<String> keys = answerForm.keys();
-								while(keys.hasNext()){
-									String key = keys.next();
-									if(answerForm.getString(key).equals("-1") || answerForm.getString(key).equals("") || answerForm.getString(key).equals("[]")){
-										notAnswerCount++;
-									}
-								}
+
 								CRFGroupCaculation groupApi = new CRFGroupCaculation();
 								int totalLength = groupApi.getTotalLength(dataTypeId);
 								JSONObject termPackage = groupApi.getEachGroupProgress(dataTypeId, answerForm);
-								if(termPackage.length() > 0){
-									eachPercentage = "";
-									Iterator<String> groups = termPackage.keys();
-									while(groups.hasNext()){
-										String group = groups.next();
-										eachPercentage = eachPercentage + groupApi.getDisplayName(dataTypeId, group) + ": " + termPackage.getJSONObject(group).getString("percent") + " (" + termPackage.getJSONObject(group).getString("total") +") "; 
+								
+								CRFProgressUtil progressApi = new CRFProgressUtil(renderRequest, dataTypeId, answerForm);
+								progressPercentage = String.valueOf(progressApi.getProgressPercentage()) + "%";
+								
+								boolean hasQuery = false;
+								if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
+									List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(subjectId);
+									for(int queryIdx = 0; queryIdx < queryList.size(); queryIdx++){
+										CRFAutoquery query = queryList.get(queryIdx);
+										if(query.getQueryComfirm() != 2){
+											hasQuery = true;
+											break;
+										}
 									}
 								}
-								if(totalLength > 0){
-									int answers = answerForm.length() - notAnswerCount;
-									int percent = Math.round(answers * 100 / totalLength);
-									progressPercentage = String.valueOf(percent) + "%";
-									if(!isWord){
-										progressSrc = renderRequest.getContextPath() + "/img/empty_progress.png";
-										if(percent >= 100){
-											progressSrc = renderRequest.getContextPath()+"/img/complete_progress.png";
-											if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
-												List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(subjectId);
-												for(int k = 0; k < queryList.size(); k++){
-													if(queryList.get(k).getQueryTermId() == link.getStructuredDataId() && queryList.get(k).getQueryComfirm() < 2){
-														progressSrc = renderRequest.getContextPath()+"/img/incomplete_autoqueryerror.png";
-													}
-												}
-											}
-										}
-										else {
-											progressSrc = renderRequest.getContextPath()+"/img/incomplete_progress.png";
-											if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
-												List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(subjectId);
-												for(int k = 0; k < queryList.size(); k++){
-													if(queryList.get(k).getQueryTermId() == link.getStructuredDataId() && queryList.get(k).getQueryComfirm() < 2){
-														progressSrc = renderRequest.getContextPath()+"/img/incomplete_autoqueryerror.png";
-													}
-												}
-											}
-										}
-									}else{
-										progressSrc = renderRequest.getContextPath() + "/img/empty_progress_word.png";
-										if(percent >= 100){
-											progressSrc = renderRequest.getContextPath()+"/img/complete_progress_word.png";
-										}
-										else {
-											progressSrc = renderRequest.getContextPath()+"/img/incomplete_progress_word.png";
-										}
-									}								
-								}
+								
+								progressSrc = progressApi.getProgressImg(progressApi.getProgressPercentage(), hasQuery);
+								eachPercentage = progressApi.getProgressByGroup();
 							}
 						%>		
 						<td>
@@ -252,13 +217,6 @@ _log.info("base url : " + baseURL);
 			<aui:button name="dbLockNotice" type="button" value="ecrf-user.crf-data.db-lock" cssClass="none-btn full-btn" disabled="true"></aui:button>
 		
 		</c:when>
-		<c:otherwise>
-			
-			<c:if test="<%=!isAudit && !isDelete %>">
-			<aui:button name="addCRF" type="button" value="ecrf-user.button.add-crf-data" cssClass="ci-btn full-btn"></aui:button>
-			</c:if>
-			
-		</c:otherwise>
 		</c:choose>
 	
 	</aui:container>
@@ -278,9 +236,3 @@ function deleteEachCRF(linkCrfId){
 	Liferay.Util.getOpener().deleteCRFData(linkCrfId, <%=crfId%>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
 }
 </script>
-
-<aui:script use="aui-base">
-A.one("#<portlet:namespace/>addCRF").on("click", function(event) {
-	Liferay.Util.getOpener().moveAddCRFData(<%=subjectId %>, <%=crfId %>, <%=CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout()%>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
-});
-</aui:script>
