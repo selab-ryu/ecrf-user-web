@@ -107,8 +107,14 @@
 									>
 									</aui:field-wrapper>
 								</aui:col>
+								<%
+								String subjectName = subject.getName();
+								boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+								if(!hasViewEncryptPermission)
+									subjectName = ECRFUserUtil.encryptName(subjectName);	
+								%>
 								<aui:col md="3">
-									<p><%=Validator.isNull(subject) ? StringPool.BLANK : subject.getName() + "(" + subject.getSerialId() + ")"%></p>
+									<p><%=Validator.isNull(subject.getName()) ? StringPool.BLANK : subjectName + "(" + subject.getSerialId() + ")"%></p>
 								</aui:col>
 							</aui:row>
 							
