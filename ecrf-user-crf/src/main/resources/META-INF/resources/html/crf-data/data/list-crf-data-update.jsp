@@ -229,87 +229,36 @@ _log.info("url : " + baseURL.toString());
 			%>
 			
 			<%
-				String progressBarCss = "progressBar";
-				boolean isWord = false;
-				
+				String progressBarCss = "progressBar";				
 				String progressSrc = renderRequest.getContextPath() + "/img/empty_progress.png";
-				
 				if(hasCRF){
 					List<LinkCRF> linkList = LinkCRFLocalServiceUtil.getLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
 					if(linkList.size() > 0){
 						LinkCRF link = linkList.get(linkList.size() - 1);
 						String answer = DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId());
 						JSONObject answerObj = JSONFactoryUtil.createJSONObject(answer);
+						long rowDataTypeId = CRFLocalServiceUtil.getDataTypeId(link.getCrfId());
 						
-						if(Validator.isNotNull(answerObj)){
-							int notAnswerCount = 0;
-							Iterator<String> keys = answerObj.keys();
-							while(keys.hasNext()){
-								String key = keys.next();
-								if(answerObj.getString(key).equals("-1") || answerObj.getString(key).equals("") || answerObj.getString(key).equals("[]")){
-									notAnswerCount++;
+						CRFProgressUtil progressApi = new CRFProgressUtil(renderRequest, rowDataTypeId, answerObj);
+						progressPercentage = String.valueOf(progressApi.getProgressPercentage()) + "%";
+						
+						boolean hasQuery = false;
+						if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
+							List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(rowSubjectId);
+							for(int queryIdx = 0; queryIdx < queryList.size(); queryIdx++){
+								CRFAutoquery query = queryList.get(queryIdx);
+								if(query.getQueryComfirm() != 2){
+									hasQuery = true;
+									break;
 								}
 							}
-							CRFGroupCaculation groupApi = new CRFGroupCaculation();
-							long rowDataTypeId = CRFLocalServiceUtil.getDataTypeId(link.getCrfId());
-							int totalLength = groupApi.getTotalLength(rowDataTypeId);
-							if(totalLength > 0){
-								int answers = answerObj.length() - notAnswerCount;
-								int percent = Math.round(answers * 100 / totalLength);
-								progressPercentage = String.valueOf(percent) + "%";
-								if(!isWord){
-									progressSrc = renderRequest.getContextPath() + "/img/empty_progress.png";
-									if(percent >= 100){
-										progressSrc = renderRequest.getContextPath()+"/img/complete_progress.png";
-										if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
-											int hasQuery = 0;
-											List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(rowSubjectId);
-											for(int i = 0; i < queryList.size(); i++){
-												CRFAutoquery query = queryList.get(i);
-												if(query.getQueryComfirm() != 2){
-													hasQuery = 1;
-													break;
-												}
-											}
-											if(hasQuery == 1){
-												progressSrc = renderRequest.getContextPath()+"/img/complete_autoqueryerror.png";
-											}
-										}
-									}
-									else {
-										progressSrc = renderRequest.getContextPath()+"/img/incomplete_progress.png";
-										if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
-											int hasQuery = 0;
-											List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(rowSubjectId);
-											for(int i = 0; i < queryList.size(); i++){
-												CRFAutoquery query = queryList.get(i);
-												if(query.getQueryComfirm() != 2){
-													hasQuery = 1;
-													break;
-												}
-											}
-											if(hasQuery == 1){
-												progressSrc = renderRequest.getContextPath()+"/img/incomplete_autoqueryerror.png";
-											}
-										}
-									}
-								}else{
-									progressSrc = renderRequest.getContextPath() + "/img/empty_progress_word.png";
-									if(percent >= 100){
-										progressSrc = renderRequest.getContextPath()+"/img/complete_progress_word.png";
-									}
-									else {
-										progressSrc = renderRequest.getContextPath()+"/img/incomplete_progress_word.png";
-									}
-								}								
-							}
 						}
+						
+						progressSrc = progressApi.getProgressImg(progressApi.getProgressPercentage(), hasQuery);
 					}
 				}
 				
 			%>
-			
-			
 
 			<liferay-ui:search-container-column-text
 				name="ecrf-user.list.serial-id"
@@ -397,10 +346,11 @@ _log.info("url : " + baseURL.toString());
 			</liferay-ui:search-container-column-text>
 			
 			<!-- DB Lock -->
-						
+			
 			<!-- Data Update -->
 			<%
 				String CRFUpdateBtnClass = "";
+				String CRFAddBtnClass = "ci-btn small-btn";
 				if(hasCRF){
 					CRFUpdateBtnClass = "ci-btn small-btn";
 				}else{
@@ -409,8 +359,29 @@ _log.info("url : " + baseURL.toString());
 				
 				if(updateLock) {
 					CRFUpdateBtnClass = "none-btn small-btn";
+					CRFAddBtnClass = "none-btn small-btn";
+				}
+				
+				int displayId = CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout();
+				String commandName = ECRFUserMVCCommand.RENDER_VIEW_CRF_DATA;
+				if(displayId < 2){
+					commandName = ECRFUserMVCCommand.RENDER_CRF_VIEWER;
 				}
 			%>
+			<liferay-ui:search-container-column-text 
+				name="ecrf-user.list.crf-data"
+				cssClass="min-width-80"
+			>
+			<portlet:renderURL var="renderAddCRFURL">
+				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=commandName%>" />
+				<portlet:param name="fromFlag" value="selector-add" />
+				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+				<portlet:param name="menu" value="crf-data-list-update" />
+				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+			</portlet:renderURL>
+				<aui:button name="addCRF" type="button" value="ecrf-user.button.add" cssClass="<%=CRFAddBtnClass %>" onClick="<%=renderAddCRFURL%>" disabled="<%=updateLock ? true : false %>"></aui:button>
+			</liferay-ui:search-container-column-text>
 			
 			<liferay-ui:search-container-column-text 
 				name="ecrf-user.list.crf-data"
@@ -421,7 +392,7 @@ _log.info("url : " + baseURL.toString());
 				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 0, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 			%>
 			
-				<aui:button name="updateCRF" type="button" value="<%=hasCRF ? "ecrf-user.button.update" : "ecrf-user.button.add" %>" cssClass="<%=CRFUpdateBtnClass %>" onClick="<%=updateFunctionCallStr%>" disabled="<%=updateLock ? true : false %>"></aui:button>
+				<aui:button name="updateCRF" type="button" value="ecrf-user.button.update" cssClass="<%=CRFUpdateBtnClass %>" onClick="<%=updateFunctionCallStr%>" disabled="<%=updateLock ? true : false %>"></aui:button>
 				
 			</liferay-ui:search-container-column-text>
 			
