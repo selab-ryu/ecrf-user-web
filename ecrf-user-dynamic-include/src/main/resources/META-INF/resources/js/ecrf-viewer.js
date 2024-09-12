@@ -35,7 +35,7 @@ let ECRFViewer = function(){
                 this.$canvas.html(renderUtil.renderCanvas(this.terms));
                 
                 this.terms.forEach(term=>{
-					if( term.termType === 'List' || term.termType === 'boolean' ){
+					if( term.termType === 'List' || term.termType === 'Boolean' ){
 						if( term.hasSlaves() ){
 							renderUtil.activateTerms(term);
 						}

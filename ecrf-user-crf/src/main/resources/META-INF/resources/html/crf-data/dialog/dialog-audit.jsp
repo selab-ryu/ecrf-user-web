@@ -21,6 +21,8 @@
 						<th>Current Value</th>
 						<th>Action Type</th>
 						<th>Modified Date</th>
+						<th>User Name</th>
+						<th>User Email</th>
 					<tr>
 				</thead>
 				<tbody>
@@ -33,6 +35,8 @@
 						<td><%=table.getJSONObject(i).getString("curValue")%></td>
 						<td><%=table.getJSONObject(i).getString("actionType")%></td>
 						<td><%=table.getJSONObject(i).getString("modifiedDate")%></td>
+						<td><%=table.getJSONObject(i).getString("userName")%></td>
+						<td><%=table.getJSONObject(i).getString("userId")%></td>
 					</tr>
 				<%
 				} 
