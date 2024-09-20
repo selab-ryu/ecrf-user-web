@@ -246,6 +246,43 @@ if(isSearch) {
 					<aui:button disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateCRFURL %>"></aui:button>
  				</liferay-ui:search-container-column-text>
 				
+				
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.button.manage-crf-form"
+				>
+					<portlet:renderURL var="updateCRFFormURL">
+						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_MANAGE_FORM %>" />
+						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crf.getCrfId()) %>" />
+						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+					</portlet:renderURL>
+					
+					<aui:button disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.crf.form" cssClass="small-btn ai-btn" onClick="<%=updateCRFFormURL %>"></aui:button>
+ 				</liferay-ui:search-container-column-text>
+				
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.button.crf-data"
+				>
+					<portlet:renderURL var="updateCRFDataURL">
+						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
+						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crf.getCrfId()) %>" />
+						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+					</portlet:renderURL>
+					
+					<aui:button disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.crf.data" cssClass="small-btn history-btn" onClick="<%=updateCRFDataURL %>"></aui:button>
+ 				</liferay-ui:search-container-column-text>
+ 				
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.button.crf-query"
+				>
+					<portlet:renderURL var="updateCRFQueryURL">
+						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_QUERY %>" />
+						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crf.getCrfId()) %>" />
+						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+					</portlet:renderURL>
+					
+					<aui:button disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.crf.query" cssClass="small-btn vcf-btn" onClick="<%=updateCRFQueryURL %>"></aui:button>
+ 				</liferay-ui:search-container-column-text>
+				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.delete"
 				>

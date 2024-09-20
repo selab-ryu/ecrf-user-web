@@ -15,6 +15,10 @@
 	queryString += "&" + StationXWebKeys.DATATYPE_ID + "=" + dataTypeId;
 	
 	_log.info("query string : " + queryString);
+	
+	// randomized instance id
+	String instanceId = ECRFUserUtil.randomizedString(10, "aA1");
+	_log.info(instanceId);
 %>
 
 <div class="ecrf-user ecrf-user-crf">
@@ -30,8 +34,11 @@
 			</aui:row>
 			<aui:row>
 				<aui:col>
-					<liferay-portlet:runtime portletName="<%=IcecapWebPortletKeys.DATATYPE_MANAGEMENT %>" queryString="<%=queryString %>" >
-						</liferay-portlet:runtime>
+					<!-- Event related issue occured -->
+					<!-- instance id -->
+					<!-- Event called by previous dataStructure object -->
+					<liferay-portlet:runtime portletName="<%=IcecapWebPortletKeys.DATATYPE_MANAGEMENT %>" instanceId="<%=instanceId %>" queryString="<%=queryString %>" >
+					</liferay-portlet:runtime>
 				</aui:col>
 			</aui:row>			
 		</aui:container>
