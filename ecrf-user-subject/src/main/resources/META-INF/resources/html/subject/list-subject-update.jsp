@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@ include file="../init.jsp" %>
 
 <%!
@@ -229,10 +230,17 @@ if(isSearch) {
 					name="ecrf-user.list.serial-id"
 					value="<%=subject.getSerialId() %>"
 				/>
-			
+				
+				<%
+				String subjectName = subject.getName();
+				boolean hasViewEncryptPermission = SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+				if(!hasViewEncryptPermission)
+					subjectName = ECRFUserUtil.encryptName(subjectName);
+				%>
+				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.name"
-					value="<%=subject.getName() %>"
+					value="<%=subjectName %>"
 				/>
 				
 				<liferay-ui:search-container-column-text

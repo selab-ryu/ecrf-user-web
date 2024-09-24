@@ -6,6 +6,11 @@ function dateMilToFormat(miliSecond) {
 	return dateStr;
 }
 
+function encryptName(name) {
+	var encryptChar = '*';
+	return encryptChar.repeat(name.length); 
+}
+
 function dateCheck(startDateId, endDateId, namespace) {
 	console.group("dateCheck Function");
 	var fromDate;

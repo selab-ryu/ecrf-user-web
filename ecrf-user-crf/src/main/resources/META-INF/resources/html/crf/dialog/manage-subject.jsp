@@ -30,6 +30,9 @@
 			dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
 		}
 	}
+	
+	boolean hasViewEncryptSubjectPermission = CRFPermission.contains(permissionChecker, groupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+	//_log.info("view enc subject : " + hasViewEncryptSubjectPermission);
 %>
 
 <div class="ecrf-user">
@@ -225,6 +228,8 @@ function chkAllCtrl(table) {
 }
 
 function tableLoading() {
+	var hasViewEncryptSubjectPermission = <%=hasViewEncryptSubjectPermission%>;
+	
 	currentSubjectTable = $('#currentSubjectList').DataTable({
 		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 		"<'row'<'col-sm-12'tr>>" +
@@ -232,7 +237,16 @@ function tableLoading() {
 		data : currentSubjectArr,
 		columns: [
 			{data:""}, 
-			{data:"subjectName"}, 
+			{
+				data:"subjectName",
+				render: function(data, type, row) {
+					if(!hasViewEncryptSubjectPermission)
+						return encryptName(data);
+					else {
+						return data;
+					}
+				}
+			},  
 			{data:"serialId"}, 
 			{
 				data:"subjectBirth",
@@ -280,7 +294,16 @@ function tableLoading() {
 		data : notIncludedSubjectArr,
 		columns: [
 			{data:""}, 
-			{data:"subjectName"}, 
+			{
+				data:"subjectName",
+				render: function(data, type, row) {
+					if(!hasViewEncryptSubjectPermission)
+						return encryptName(data);
+					else {
+						return data;
+					}
+				}
+			},  
 			{data:"serialId"}, 
 			{
 				data:"subjectBirth",

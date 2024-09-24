@@ -273,8 +273,12 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="menu" value="crf-data-list-update" />
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
-			<% 
-				String name = ECRFUserUtil.anonymousName(rowSubject.getName());
+			<%
+				String name = rowSubject.getName();
+				boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+				if(!hasViewEncryptPermission)
+					name = ECRFUserUtil.encryptName(name);
+						
 				if(crfDataCount > 1){
 					name = name + " [" + crfDataCount  + "]";
 				}

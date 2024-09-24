@@ -150,17 +150,17 @@ if(membershipRequestCount <= 0) {
 					</h6>
 				</liferay-ui:search-container-column-text>
 				
-				<!-- 
+				
 				<liferay-ui:search-container-column-text>
 					<portlet:renderURL var="updateSiteRoleURL">
 						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_UPDATE_SITE_ROLE %>" />
 						<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
+						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 				
 					<aui:button name="siteRole" type="button" value="ecrf-user.button.site-role" cssClass="small-btn none-btn" onClick="<%=updateSiteRoleURL %>" ></aui:button>
 				</liferay-ui:search-container-column-text>
-				-->
-				 
+								 
 			</liferay-ui:search-container-row>
 		
 			<liferay-ui:search-iterator

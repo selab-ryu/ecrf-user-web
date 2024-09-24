@@ -93,7 +93,7 @@
 	%>
 	<div>
 		<div class="main-menu-bar active-version-bar">
-			<strong><%=curDataType.getDisplayName()%></strong>
+			<strong><%="[Current CRF]<br>"+curDataType.getDisplayName()%></strong>
 		</div>
 	</div>
 	</c:if>

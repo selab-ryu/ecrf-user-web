@@ -48,9 +48,9 @@ public class CRFPortlet extends MVCPortlet {
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
 		
-		renderRequest.setAttribute(ECRFUserConstants.CRF_LOCAL_SERVICE, _crfLocalService);
-		
 		_log.info("portlet render method");
+		
+		renderRequest.setAttribute(ECRFUserConstants.CRF_LOCAL_SERVICE, _crfLocalService);
 		
 		// check portletURL parameters -> require portlet version 3.0
 		PortletURL portletURL = renderResponse.createRenderURL(Copy.ALL);

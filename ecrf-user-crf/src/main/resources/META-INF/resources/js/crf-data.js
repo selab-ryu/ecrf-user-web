@@ -128,7 +128,7 @@ Liferay.provide(window, 'openManageSubjectDialog', function(groupId, portletId, 
 	});
 }, ['liferay-util-window', 'liferay-portlet-url', 'frontend-js-web']);
 
-Liferay.provide(window, 'openManageUpdateLockDialog', function(portletId, crfId, crfSubjectInfoArr, baseURL) {	
+Liferay.provide(window, 'openManageUpdateLockDialog', function(groupId, portletId, crfId, crfSubjectInfoArr, baseURL) {	
 	var sessionValue = encodeURIComponent(JSON.stringify(crfSubjectInfoArr));
 	
 	if(window.sessionStorage) {
@@ -146,6 +146,7 @@ Liferay.provide(window, 'openManageUpdateLockDialog', function(portletId, crfId,
 				'p_p_mode' : 'edit',
 				'p_p_state' : 'pop_up',
 				'mvcPath' : '/html/crf/dialog/manage-subject-update-lock.jsp',
+				'groupId' : groupId,
 				'crfId' : crfId
 			}
 	);
