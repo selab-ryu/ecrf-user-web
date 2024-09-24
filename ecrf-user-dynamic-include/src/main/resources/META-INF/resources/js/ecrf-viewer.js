@@ -1546,6 +1546,96 @@ let ECRFViewer = function(){
 					});
 				}
 				break;
+			case "Boolean":
+				if(term.displayStyle === "select"){
+					$inputTag = $( '<select class="form-control">' );
+					if(term.placeHolder){
+						console.log("has placeHolder", term.placeHolder.localizedMap.en_US);
+						let $nonExecutionTag = $('<option>');
+						$nonExecutionTag.prop({
+							disabled: true,
+							selected: true,
+							hidden: true
+						});
+						$nonExecutionTag.text(term.placeHolder.localizedMap.en_US);
+						$inputTag.append($nonExecutionTag);
+					}
+					term.options.forEach((option)=>{
+						let $optionTag = $('<option>').text(option.label.localizedMap.en_US);
+						$optionTag.val(option.value);
+						$inputTag.append($optionTag);
+					});
+					$inputTag.prop({
+						id: term.termName,
+						name: term.termName,
+						disabled: term.disabled,
+						value: term.value
+					});
+					
+					let booleanEventFuncs = {
+						change: function( event ){
+							event.stopPropagation();
+	
+							term.value = $('#'+term.termName).val();
+							console.log( 'get value: ', term.value);
+							let dataPacket = new EventDataPacket();
+							dataPacket.term = term;
+							const eventData = {
+								dataPacket: dataPacket
+							};
+							
+							Liferay.fire( 'value_changed', eventData );					
+						}
+					};
+				Object.keys( booleanEventFuncs ).forEach( event => {
+					$inputTag.on( event, booleanEventFuncs[event] );
+				});
+				}else if(term.displayStyle === "radio"){
+					$inputTag = $('<label>');
+					let index = 1;
+					term.options.forEach((option)=>{
+						let $radioTag = $( '<input type="radio">' );
+						let check = false;
+						if(term.value != null){
+							if(term.value === option.value && term.value !== "-1"){	
+								check = true;
+							}
+						}
+						$radioTag.prop({
+							class :"field marLr",
+							id: term.termName + "_" + index,
+							name: term.termName,
+							disabled: term.disabled,
+							value: option.value,
+							checked: check
+						});
+						let $nameTag = $('<span>').text(option.label.localizedMap.en_US);
+						$inputTag.append($radioTag);
+						$inputTag.append($nameTag);
+						index++;
+					});
+					$inputTag.prop({
+						for: term.termName
+					});
+					$inputTag.change(function(event){
+						event.stopPropagation();
+
+						let $checkedRadio = $(this).find('input[type="radio"]:checked').first();
+						let changedVal = $checkedRadio.val();
+
+						term.value = changedVal;
+
+						console.log( 'get value: ', term.value);
+						let dataPacket = new EventDataPacket();
+						dataPacket.term = term;
+						const eventData = {
+							dataPacket: dataPacket
+						};
+						
+						Liferay.fire( 'value_changed', eventData );		
+					});
+				}
+				break;
 			case "File":
 				$inputTag = $('<div>');
 				
