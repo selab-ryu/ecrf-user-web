@@ -22,11 +22,17 @@ if(researcherId > 0) {
 int roleType = RoleConstants.TYPE_SITE;
 String roleSubtype = StringPool.BLANK;
 
-List<Role> siteRoles = RoleLocalServiceUtil.getRoles(roleType, roleSubtype);
+List<Role> allSiteRoles = RoleLocalServiceUtil.getRoles(roleType, roleSubtype);
 
-for(int i=0; i<siteRoles.size(); i++) {
-	Role tempRole = siteRoles.get(i);
+ArrayList<Role> siteRoles = new ArrayList<Role>();
+
+for(int i=0; i<allSiteRoles.size(); i++) {
+	Role tempRole = allSiteRoles.get(i);
 	_log.info(tempRole.getTitle() + " / " + tempRole.isSystem());
+	
+	if(!tempRole.isSystem()) {
+		siteRoles.add(tempRole);
+	}
 }
 
 %>
@@ -50,64 +56,63 @@ for(int i=0; i<siteRoles.size(); i++) {
 					<hr align="center" class="marV5"></hr>
 				</aui:col>
 			</aui:row>
-		</aui:container>
-		
-		<aui:container cssClass="radius-shadow-container">
-		
-			<liferay-ui:search-container
-				delta="10"
-				total="<%=siteRoles.size() %>"
-				emptyResultsMessage="No Researchers were found"
-				emptyResultsMessageCssClass="taglib-empty-result-message-header"
-				var="searchContainer"
-			>
-				<liferay-ui:search-container-results
-					results="<%=ListUtil.subList(siteRoles, searchContainer.getStart(), searchContainer.getEnd()) %>"
-				/>
-				
-				<liferay-ui:search-container-row
-					className="com.liferay.portal.kernel.model.Role"
-					escapedModel="<%= true %>"
-					keyProperty="roleId"
-					modelVar="role"
-				
-				>
-					<%
-					Map<String, Object> data = HashMapBuilder.<String, Object>put(
-						"id", role.getRoleId()
-					).build();
-					%>
-					
-					<liferay-ui:search-container-column-text
-						colspan="<%= 2 %>"
+			
+			<aui:row>
+				<aui:col md="12">
+					<liferay-ui:search-container
+						delta="10"
+						total="<%=siteRoles.size() %>"
+						emptyResultsMessage="No Researchers were found"
+						emptyResultsMessageCssClass="taglib-empty-result-message-header"
+						var="searchContainer"
 					>
-						<h5>
-							<aui:a cssClass="selector-button" data="<%= data %>" href="javascript:;">
-								<%= HtmlUtil.escape(role.getTitle(locale)) %>
-							</aui:a>
-						</h5>
-
-						<h6 class="text-default">
-							<span><%= HtmlUtil.escape(role.getDescription(locale)) %></span>
-						</h6>
-
-						<h6 class="text-default">
-							<%= LanguageUtil.get(request, role.getTypeLabel()) %>
-						</h6>
-					</liferay-ui:search-container-column-text>
-			
-				</liferay-ui:search-container-row>
-				
-						<liferay-ui:search-iterator
-							displayStyle="descriptive"
-							markupView="lexicon"
+						<liferay-ui:search-container-results
+							results="<%=ListUtil.subList(siteRoles, searchContainer.getStart(), searchContainer.getEnd()) %>"
 						/>
-				
-			</liferay-ui:search-container>
-			
+						
+						<liferay-ui:search-container-row
+							className="com.liferay.portal.kernel.model.Role"
+							escapedModel="<%= true %>"
+							keyProperty="roleId"
+							modelVar="role"
+						
+						>
+							<%
+							Map<String, Object> data = HashMapBuilder.<String, Object>put(
+								"id", role.getRoleId()
+							).build();
+							%>
+							
+							<liferay-ui:search-container-column-text
+								colspan="<%= 2 %>"
+							>
+								<h5>
+									<aui:a cssClass="selector-button" data="<%= data %>" href="javascript:;">
+										<%= HtmlUtil.escape(role.getTitle(locale)) %>
+									</aui:a>
+								</h5>
+		
+								<h6 class="text-default">
+									<span><%= HtmlUtil.escape(role.getDescription(locale)) %></span>
+								</h6>
+		
+								<h6 class="text-default">
+									<%= LanguageUtil.get(request, role.getTypeLabel()) %>
+								</h6>
+							</liferay-ui:search-container-column-text>
+					
+						</liferay-ui:search-container-row>
+						
+								<liferay-ui:search-iterator
+									displayStyle="descriptive"
+									markupView="lexicon"
+								/>
+						
+					</liferay-ui:search-container>
+				</aui:col>
+			</aui:row>				
 		</aui:container>
-		
-		
+				
 		<aui:container>
 			<aui:row>
 				<aui:col>

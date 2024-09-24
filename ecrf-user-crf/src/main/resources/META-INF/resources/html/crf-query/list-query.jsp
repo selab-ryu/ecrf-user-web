@@ -137,8 +137,13 @@
 				
 				<%
 					Subject rowSubject = SubjectLocalServiceUtil.getSubject(crfAutoquery.getSubjectId());
-				
-					String idRowStr = rowSubject.getName() + "(" + rowSubject.getSerialId() + ")";
+
+					String subjectName = rowSubject.getName();
+					boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+					if(!hasViewEncryptPermission)
+						subjectName = ECRFUserUtil.encryptName(subjectName);	
+
+					String idRowStr = subjectName + "(" + rowSubject.getSerialId() + ")";
 				%>
 				
 				<liferay-ui:search-container-column-text

@@ -1,6 +1,6 @@
 <%@ include file="../../init.jsp" %>
 
-<%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/dialog/manage-subject_jsp"); %>
+<%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/dialog/manage-subject_update_lock_jsp"); %>
 
 <!-- get subject list from parent jsp -->
 <!-- divide two arr by update lock -->
@@ -30,6 +30,9 @@
 			dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
 		}
 	}
+	
+	boolean hasViewEncryptSubjectPermission = CRFPermission.contains(permissionChecker, groupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+	_log.info("view enc subject : " + hasViewEncryptSubjectPermission);
 %>
 
 <div class="ecrf-user">
@@ -199,6 +202,8 @@ function chkAllCtrl(table) {
 }
 
 function tableLoading() {
+	var hasViewEncryptSubjectPermission = <%=hasViewEncryptSubjectPermission%>;
+	
 	lockSubjectTable = $('#lockSubjectList').DataTable({
 		dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 		"<'row'<'col-sm-12'tr>>" +
@@ -206,7 +211,16 @@ function tableLoading() {
 		data : lockSubjectArr,
 		columns: [
 			{data:""}, 
-			{data:"subjectName"}, 
+			{
+				data:"subjectName",
+				render: function(data, type, row) {
+					if(!hasViewEncryptSubjectPermission)
+						return encryptName(data);
+					else {
+						return data;
+					}
+				}
+			},   
 			{data:"serialId"}, 
 			{
 				data:"subjectBirth",
@@ -254,7 +268,16 @@ function tableLoading() {
 		data : unlockSubjectArr,
 		columns: [
 			{data:""}, 
-			{data:"subjectName"}, 
+			{
+				data:"subjectName",
+				render: function(data, type, row) {
+					if(!hasViewEncryptSubjectPermission)
+						return encryptName(data);
+					else {
+						return data;
+					}
+				}
+			},   
 			{data:"serialId"}, 
 			{
 				data:"subjectBirth",

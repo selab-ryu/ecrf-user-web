@@ -100,6 +100,7 @@ String chartDataStr = chartDataArr.toJSONString();
 									}
 								%>
 								
+								<c:if test="false">
 								<aui:row>
 									<aui:col md="3">
 										<aui:field-wrapper
@@ -111,7 +112,7 @@ String chartDataStr = chartDataArr.toJSONString();
 										<p><%=String.valueOf(formCount) %></p>
 									</aui:col>
 								</aui:row>
-								
+								</c:if>
 								<%
 									int crfSubjectCount = CRFSubjectLocalServiceUtil.countCRFSubjectByCRFId(scopeGroupId, crf.getCrfId());
 									int linkCount = LinkCRFLocalServiceUtil.countLinkCRFByG_C(scopeGroupId, crf.getCrfId());

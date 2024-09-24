@@ -257,10 +257,15 @@ if(isSearch) {
 					name="ecrf-user.list.serial-id"
 					value="<%=history.getSerialId()%>"
 				/>
-				
+				<%
+				String subjectName = history.getSubjectName();
+				boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+				if(!hasViewEncryptPermission)
+					subjectName = ECRFUserUtil.encryptName(subjectName);	
+				%>
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.subject-name"
-					value="<%=history.getSubjectName()%>"
+					value="<%=subjectName%>"
 				/>
 				
 				<liferay-ui:search-container-column-text

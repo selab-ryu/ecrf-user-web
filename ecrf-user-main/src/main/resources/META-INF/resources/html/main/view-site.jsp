@@ -102,11 +102,15 @@
 						if(Validator.isNull(termsArr)) isEmpty = true;	// crf form dosent have term
 					}
 					
+					dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName();
+					
+					/*
 					if(isEmpty) {
 						dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName() + StringPool.SPACE + "(0)";
 					} else {
 						dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName() + StringPool.SPACE + "(" + termsArr.length() + ")";	
-					}					
+					}
+					*/
 			%>
 
 			<div class="text-default">

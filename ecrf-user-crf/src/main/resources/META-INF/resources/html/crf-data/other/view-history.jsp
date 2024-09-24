@@ -41,11 +41,17 @@
 											<p><%=Validator.isNull(subject) ? "-" : String.valueOf(subject.getSerialId()) %></p>
 										</aui:field-wrapper>
 									</aui:col>
+									<%
+									String subjectName = subject.getName();
+									boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+									if(!hasViewEncryptPermission)
+										subjectName = ECRFUserUtil.encryptName(subjectName);	
+									%>
 									<aui:col md="3" cssClass="marTr">
 										<aui:field-wrapper
 											name="name"
 											label="ecrf-user.subject.name">
-											<p><%=Validator.isNull(subject) ? "-" : subject.getName() %></p>
+											<p><%=Validator.isNull(subject.getName()) ? "-" : subjectName %></p>
 										</aui:field-wrapper>
 									</aui:col>
 									<aui:col md="3" cssClass="marTr">

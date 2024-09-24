@@ -489,6 +489,7 @@ function tableLoading() {
 	});
 	
 	var hasUpdateCRFSubjectPermission = <%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_SUBJECT) %>;
+	var hasViewEncryptSubjectPermission = <%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT) %>;
 	var subjectDomFirstLine = "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>";
 	if(hasUpdateCRFSubjectPermission) subjectDomFirstLine = "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>";
 	
@@ -508,13 +509,22 @@ function tableLoading() {
             	text : 'Manage Update Lock',
             	className : 'small-btn marRr marBrh',
             	action : function( e, dt, node, config) {
-            		openManageUpdateLockDialog("<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr, "<%=baseURL.toString()%>");
+            		openManageUpdateLockDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr, "<%=baseURL.toString()%>");
             	}
             },
 		],
 		data : crfSubjectInfoArr,
 		columns: [
-			{data:"subjectName"}, 
+			{
+				data:"subjectName",
+				render: function(data, type, row) {
+					if(!hasViewEncryptSubjectPermission)
+						return encryptName(data);
+					else {
+						return data;
+					}
+				}
+			}, 
 			{data:"serialId"}, 
 			{
 				data:"subjectBirth",
