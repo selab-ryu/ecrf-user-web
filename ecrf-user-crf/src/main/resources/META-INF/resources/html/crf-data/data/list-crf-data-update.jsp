@@ -346,7 +346,9 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
 			</portlet:actionURL>
 			
-			<aui:button name="dbLock" type="button" value="<%=lockBtnKey%>" cssClass="<%=lockClass %>" onClick="<%=changeUpdateLock %>" ></aui:button>
+			<a href="<%=changeUpdateLock%>">		
+				<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/db_unlock_btn.png" : renderRequest.getContextPath() + "/btn_img/db_lock_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>
 			</liferay-ui:search-container-column-text>
 			
 			<!-- DB Lock -->
