@@ -6,7 +6,6 @@ let ECRFViewer = function(){
 		#isAudit;
 		constructor(DataStructure, align, structuredData, subjectInfo, isAudit){
 			var result = new Object();
-
 		}
 	}
 }

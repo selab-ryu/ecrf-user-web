@@ -21,15 +21,21 @@
 				
 		<!-- Researcher Management -->
 		<div>
-			<aui:button cssClass="main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.researcher" />
+			<a href="<%=researcherListURL%>">		
+				<img src="<%=renderRequest.getContextPath() + "/img/researcher_main_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>	
 		</div>
 		<div>
-			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("researcher-list") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.researcher.list" onClick="<%=researcherListURL %>" />
+			<a href="<%=researcherListURL%>">		
+				<img src="<%=menu.equals("researcher-list") ? renderRequest.getContextPath() + "/img/researcher_list_btn.png" : renderRequest.getContextPath() + "/img/researcher_list_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>	
 		</div>
 		
 		<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
 		<div>
-			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("researcher-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.researcher.add" onClick="<%=moveAddResearcherURL %>" />
+			<a href="<%=moveAddResearcherURL%>">		
+				<img src="<%=menu.equals("researcher-add") ? renderRequest.getContextPath() + "/img/add_researcher_btn.png" : renderRequest.getContextPath() + "/img/add_researcher_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>	
 		</div>
 		</c:if>
 		

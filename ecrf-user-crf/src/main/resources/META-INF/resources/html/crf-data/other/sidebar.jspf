@@ -48,56 +48,78 @@
 <div class="side-menu radius-shadow-container" style="text-align:center;">	
 	<!-- CRF Management -->
 	<div>
-		<aui:button cssClass="main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.crf" onClick="<%=moveCRFListURL %>" />	
+		<a href="<%=moveCRFListURL%>">		
+			<img src="<%=renderRequest.getContextPath() + "/btn_img/crf_main_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+		</a>		
 	</div>
 		<div>
-			<aui:button cssClass="sub-menu-bar deactive-sub-menu-bar" type="button" value="ecrf-user.menu.crf.list" onClick="<%=moveCRFListURL %>" />
+			<a href="<%=moveCRFListURL%>">		
+				<img src="<%=menu.equals("crf-list") ?  renderRequest.getContextPath() + "/btn_img/crf_list_btn.png" : renderRequest.getContextPath() + "/btn_img/crf_list_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>	
 		</div>
 		
 		<div>
-			<aui:button cssClass="sub-menu-bar active-sub-menu-bar" type="button" value="ecrf-user.menu.crf.update" onClick="<%=moveUpdateCRFURL %>" />
+			<a href="<%=moveUpdateCRFURL%>">		
+				<img src="<%=renderRequest.getContextPath() + "/btn_img/update_crf_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>	
 		</div>
 		
 			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_FORM) %>">
 			<div>
-				<aui:button cssClass="sub-main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.crf-form" onClick="<%=moveManageFormURL %>" />	
+				<a href="<%=moveManageFormURL%>">		
+					<img src="<%=renderRequest.getContextPath() + "/btn_img/crf_form_main_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+				</a>		
 			</div>
 			</c:if>
 			
 			<div>
-				<aui:button cssClass="sub-main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.crf-data" onClick="<%=moveCRFDataListURL %>" />	
+				<a href="<%=moveCRFDataListURL%>">		
+					<img src="<%=renderRequest.getContextPath() + "/btn_img/crf_data_main_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+				</a>	
 			</div>
 				<div>
-					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-list") || menu.equals("add-crf-data") || menu.equals("update-crf-data") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.list" onClick="<%=moveCRFDataListURL %>"/>
+					<a href="<%=moveCRFDataListURL%>">		
+						<img src="<%= (menu.equals("crf-data-list") || menu.equals("add-crf-data") || menu.equals("update-crf-data")) ?  renderRequest.getContextPath() + "/btn_img/crf_data_list_btn.png" : renderRequest.getContextPath() + "/btn_img/crf_data_list_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+					</a>
 				</div>
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY_LIST) %>">
 				<div>
-					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-history") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.history" onClick="<%=moveCRFDataHistoryListURL %>" />
+					<a href="<%=moveCRFDataHistoryListURL%>">		
+						<img src="<%= menu.equals("crf-data-history") ?  renderRequest.getContextPath() + "/btn_img/crf_data_history_btn.png" : renderRequest.getContextPath() + "/btn_img/crf_data_history_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+					</a>
 				</div>
 				</c:if>
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_EXCEL_DOWNLOAD) %>">
 				<div>
-					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("crf-data-excel") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.excel" onClick="<%=moveExcelDownloadURL %>" />
+					<a href="<%=moveExcelDownloadURL%>">		
+						<img src="<%= menu.equals("crf-data-excel") ?  renderRequest.getContextPath() + "/btn_img/crf_data_excel_btn.png" : renderRequest.getContextPath() + "/btn_img/crf_data_excel_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+					</a>
 				</div>
 				</c:if>
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ADVANCED_SEARCH) %>">
 				<div>
-					<aui:button cssClass="<%="sub-main-sub-menu-bar " + ( menu.equals("search-crf-data") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf-data.search-data" onClick="<%=moveSearchCRFDataURL %>" />
+					<a href="<%=moveSearchCRFDataURL%>">		
+						<img src="<%= menu.equals("search-crf-data") ?  renderRequest.getContextPath() + "/btn_img/crf_data_search_btn.png" : renderRequest.getContextPath() + "/btn_img/crf_data_search_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+					</a>
 				</div>
 				</c:if>
 			
 			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY) %>">
 			<div>
-				<aui:button cssClass="sub-main-menu-bar deactive-menu-bar" type="button" value="ecrf-user.menu.crf-query" onClick="<%=moveCRFQueryListURL %>" />	
+				<a href="<%=moveCRFQueryListURL%>">		
+					<img src="<%=renderRequest.getContextPath() + "/btn_img/crf_query_main_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+				</a>	
 			</div>
 			</c:if>
 		
 		<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 		<div>
-			<aui:button cssClass="<%="sub-menu-bar last-menu " + ( menu.equals("crf-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.crf.add" onClick="<%=moveAddCRFURL %>" />
+			<a href="<%=moveAddCRFURL%>">		
+				<img src="<%= menu.equals("crf-add") ?  renderRequest.getContextPath() + "/btn_img/add_crf_btn.png" : renderRequest.getContextPath() + "/btn_img/add_crf_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>
 		</div>
 		</c:if>
 	
