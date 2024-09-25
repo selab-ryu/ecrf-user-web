@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
+<%@page import="javax.portlet.RenderRequest"%>
 <%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@page import="ecrf.user.project.security.permission.resource.ProjectPermission"%>
 <portlet:renderURL var="moveViewProjectURL">
@@ -16,24 +18,34 @@
 		
 	<!-- Project Management -->
 	<div>
-		<aui:button cssClass="main-menu-bar active-menu-bar" type="button" value="ecrf-user.menu.project" onClick="<%=moveViewProjectURL %>" />
+		<a href="<%=moveViewProjectURL%>">	
+			<img src="<%= renderRequest.getContextPath() + "/img/project_main_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+		</a>		
 	</div>
 		<div>
-			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("project-info") || menu.equals("add-project") || menu.equals("update-project") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.info" onClick="<%=moveViewProjectURL %>" />
+			<a href="<%=moveViewProjectURL%>">		
+				<img src="<%=menu.equals("project-info") || menu.equals("add-project") || menu.equals("update-project") ? renderRequest.getContextPath() + "/img/project_info_btn.png" : renderRequest.getContextPath() + "/img/project_info_btn_deactivated.png" %>" width="100%" height="auto" style="min-width:60px; cursor:pointer;" onClick="<%=moveViewProjectURL%>"/>
+			</a>		
 		</div>		
 		
 		<div>
-			<aui:button cssClass="<%="sub-menu-bar " + ( menu.equals("exp-group") || menu.equals("add-exp-group") || menu.equals("update-exp-group") ? "active-sub-menu-bar" : "deactive-sub-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group" onClick="<%=moveExpGroupURL %>" />
+			<a href="<%=moveExpGroupURL%>">
+				<img src="<%=menu.equals("exp-group") || menu.equals("add-exp-group") || menu.equals("update-exp-group") ? renderRequest.getContextPath() + "/img/exp_group_btn.png" : renderRequest.getContextPath() + "/img/exp_group_btn_deactivated.png" %>" width="100%" height="auto" style="min-width:60px; cursor:pointer;" />
+			</a>
 		</div>
 			<c:if test="<%=( menu.equals("exp-group") || menu.equals("add-exp-group") || menu.equals("update-exp-group" )) %>">
 			
 			<div>
-				<aui:button cssClass="<%="sub-main-menu-bar " + ( menu.equals("exp-group") || menu.equals("update-exp-group") ? "active-menu-bar" : "deactive-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group.list" onClick="<%=moveExpGroupURL %>" />
+				<a href="<%=moveExpGroupURL%>">
+					<img src="<%=menu.equals("exp-group") || menu.equals("update-exp-group") ? renderRequest.getContextPath() + "/img/exp_group_list_btn.png" : renderRequest.getContextPath() + "/img/exp_group_list_btn_deactivated.png" %>" width="100%" height="auto" style="min-width:60px; cursor:pointer;" />
+				</a>
 			</div>
 			
 			<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_EXP_GROUP) %>">
 			<div>
-				<aui:button cssClass="<%="sub-main-menu-bar " + ( menu.equals("add-exp-group") ? "active-menu-bar" : "deactive-menu-bar" ) %>" type="button" value="ecrf-user.menu.project.experimental-group.add" onClick="<%=moveAddExpGroupURL %>" />
+				<a href="<%=moveAddExpGroupURL%>">
+					<img src="<%= menu.equals("add-exp-group") ? renderRequest.getContextPath() + "/img/add_exp_group_btn.png" : renderRequest.getContextPath() + "/img/add_exp_group_btn_deactivated.png" %>" width="100%" height="auto" style="min-width:60px; cursor:pointer;" />
+				</a>
 			</div>
 			</c:if>
 			
