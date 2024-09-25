@@ -17,16 +17,22 @@
 	<div class="side-menu radius-shadow-container" style="text-align:center;">
 		<!-- Subject Management -->
 		<div>
-			<aui:button cssClass="<%="main-menu-bar active-menu-bar"%>" type="button" value="ecrf-user.menu.subject"/>
+			<a href="<%=updateListURL%>">		
+				<img src="<%=renderRequest.getContextPath() + "/img/subject_main_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>	
 		</div>
 		
 		<div>
-			<aui:button cssClass="<%="sub-menu-bar " + ((menu.equals("subject-list-update") || menu.equals("subject-update")) ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.list" onClick="<%=updateListURL%>" />
+			<a href="<%=updateListURL%>">		
+				<img src="<%=(menu.equals("subject-list-update") || menu.equals("subject-update")) ?  renderRequest.getContextPath() + "/img/subject_list_btn.png" : renderRequest.getContextPath() + "/img/subject_list_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>	
 		</div>
 		
 		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
 		<div>
-			<aui:button cssClass="<%="sub-menu-bar " + (menu.equals("subject-add") ? "active-sub-menu-bar" : "deactive-sub-menu-bar") %>" type="button" value="ecrf-user.menu.subject.add" onClick="<%=addSubjectRenderURL%>"/>
+			<a href="<%=addSubjectRenderURL%>">		
+				<img src="<%=menu.equals("subject-add") ?  renderRequest.getContextPath() + "/img/add_subject_btn.png" : renderRequest.getContextPath() + "/img/add_subject_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			</a>
 		</div>
 		</c:if>
 		<!-- Subject Management -->		
