@@ -17,6 +17,7 @@
 	String json = (String)renderRequest.getAttribute("json");
 	String options = (String)renderRequest.getAttribute("options");
 	
+	
 	boolean isSearch = false;
 	String[] arr_options = null;
 	
@@ -281,25 +282,44 @@
 		var termName = termLabel.attr("name");			
 		var type = "";
 		var displayName = "";
-					
 		for(var i = 0; i < inspectionData.length; i++){
 			if(inspectionData[i].termName === termName){
 				if(inspectionData[i].termType === "List"){
 					type = "List";
 					displayName = inspectionData[i].displayName.en_US;
+					break;
 				}
 				else if(inspectionData[i].termType === "Numeric"){
 					type = "Numeric";
 					displayName = inspectionData[i].displayName.en_US;
+					break;
 				}
 			}
 		}
 		// TODO : if there is not exist data, then dont call popup function
-		if(type === "List" || type === "Numeric")
+		var answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
+		var answerCount = 0;
+		
+		if(type != ""){
+			for(var i = 0; i < answerData.length; i++){
+				if(!(termName in answerData[i])){
+					answerCount++;
+				}
+			}
+			if(answerCount == answerData.length){
+				type = "empty";
+			}
+		}
+		
+		if(type === "List" || type === "Numeric"){
 			createGraphPopupRenderURL("<%=themeDisplay.getPortletDisplay().getId() %>"
-									, termName, displayName, type, <%=crfId%>
-									, "<%=ECRFUserMVCCommand.RENDER_DIALOG_CRF_DATA_GRAPH %>"
-									, "<%=baseURL.toString()%>");
+					, termName, displayName, type, <%=crfId%>
+					, "<%=ECRFUserMVCCommand.RENDER_DIALOG_CRF_DATA_GRAPH %>"
+					, "<%=baseURL.toString()%>");
+		}
+		else if(type === "empty"){
+			alert("No data available for generating the graph.");	
+		}
 	}
 	
 	// Function that puts the Html value to output the Terms for each Depth
