@@ -233,6 +233,26 @@ function toEachCRF(sdId, isAudit){
 }
 
 function deleteEachCRF(linkCrfId){
-	Liferay.Util.getOpener().deleteCRFData(linkCrfId, <%=crfId%>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');	
+	// cant use general confirm dialog code, need to change ok action function
+	$.confirm({
+		title: '<liferay-ui:message key="ecrf-user.message.confirm-delete-crf-data.title"/>',
+		content: '<p><liferay-ui:message key="ecrf-user.message.confirm-delete-crf-data.content"/></p>',
+		type: 'red',
+		typeAnimated: true,
+		columnClass: 'large',
+		buttons:{
+			ok: {
+				btnClass: 'btn-blue',
+				action: function(){
+					Liferay.Util.getOpener().deleteCRFData(linkCrfId, <%=crfId%>, '<portlet:namespace/>multiCRFDialog', '<%=themeDisplay.getPortletDisplay().getId() %>', <%=themeDisplay.getPlid() %>, '<%=baseURL%>');				
+				}
+			},
+			close: {
+	            action: function () {
+	            }
+	        }
+		},
+		draggable: true
+	});
 }
 </script>

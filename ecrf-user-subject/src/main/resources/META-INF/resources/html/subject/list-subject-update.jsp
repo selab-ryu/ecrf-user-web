@@ -283,9 +283,9 @@ if(isSearch) {
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.update"
 				>	
-					<div class="ecrf-user">
+
 					<aui:button name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateURL %>" disabled="<%=hasUpdatePermission ? false : true %>"></aui:button>
-					</div>
+
 				</liferay-ui:search-container-column-text>
 				
 				<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_SUBJECT %>" var="deleteSubjectURL">
@@ -297,9 +297,18 @@ if(isSearch) {
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.delete"
 				>
-					<div class="ecrf-user">
-					<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="small-btn delete-btn" onClick="<%=deleteSubjectURL %>" disabled="<%=hasDeletePermission ? false : true %>"></aui:button>
-					</div>
+
+				<%
+				String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-subject.title");
+				String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-subject.content");
+				String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s', 'large')", title, content, deleteSubjectURL.toString());
+				%>
+					<aui:button 
+						value="ecrf-user.button.delete" 
+						cssClass="delete-btn small-btn" 
+						onClick="<%=deleteFunctionCall %>" 
+						disabled="<%=hasDeletePermission ? false : true  %>" 
+					/>
 				</liferay-ui:search-container-column-text>
 				
 			</liferay-ui:search-container-row>
@@ -314,9 +323,9 @@ if(isSearch) {
 		</liferay-ui:search-container>
 		
 		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
-		<div class="ecrf-user">		
+		
 			<aui:button type="button" name="add" value="Add Subject" cssClass="add-btn medium-btn radius-btn marTr" onClick="<%=addSubjectRenderURL %>"></aui:button>
-		</div>
+
 		</c:if>
 		
 		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_ALL_SUBJECT) %>">
