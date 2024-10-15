@@ -312,7 +312,7 @@
 				</c:if>
 		
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_CRF) %>">
-					<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete" onClick="<%=deleteCRFURL %>"></aui:button>
+					<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete"></aui:button>
 				</c:if>
 								
 				</c:when>
@@ -342,6 +342,7 @@ var crfSubjectInfoArr = [];
 var crfId = "<%=String.valueOf(crfId) %>";
 var dataTypeId = "<%=String.valueOf(dataTypeId) %>";
 
+
 $('#<portlet:namespace/>saveBtn').on("click", function(e) {
 	let form = $('#<portlet:namespace/>updateCRFFm');
 	let researcherListInput = $('#<portlet:namespace/>researcherListInput');
@@ -353,10 +354,16 @@ $('#<portlet:namespace/>saveBtn').on("click", function(e) {
 	form.submit();
 });
 
+$('#<portlet:namespace/>delete').click( function(event){
+	var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-crf.title"/>';
+	var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-crf.content"/>';
+	deleteConfirm(title, content, '<%= deleteCRFURL.toString() %>', 'large');
+});
+
 AUI().ready(function() {
 	var isUpdate = <%=isUpdate%>;
 	if(isUpdate)
-		tableLoading();	
+		tableLoading();
 });
 
 Liferay.Portlet.ready(

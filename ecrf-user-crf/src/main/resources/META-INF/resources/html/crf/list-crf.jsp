@@ -289,8 +289,21 @@ if(isSearch) {
 					<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_CRF %>" var="deleteCRFURL">
 						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crf.getCrfId()) %>" />
 					</portlet:actionURL>
-													
-					<aui:button disabled="<%=(hasCRFPermission && hasDeletePermission) ? false : true %>" name="delete" type="button" value="ecrf-user.button.delete" cssClass="small-btn delete-btn" onClick="<%=deleteCRFURL %>"></aui:button>
+					
+					<%
+						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-crf.title");
+						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-crf.content");
+						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s', 'large')", title, content, deleteCRFURL.toString());
+					%>
+					
+					<aui:button 
+						disabled="<%=(hasCRFPermission && hasDeletePermission) ? false : true %>" 
+						name="delete" 
+						type="button" 
+						value="ecrf-user.button.delete" 
+						cssClass="small-btn delete-btn" 
+						onClick="<%=deleteFunctionCall %>">
+					</aui:button>
 					
  				</liferay-ui:search-container-column-text>
 								

@@ -44,7 +44,7 @@ public class ListSubjectRenderCommand implements MVCRenderCommand {
 		
 		String listPath = StringPool.BLANK;
 		
-		_log.info(listPath);
+		//_log.info(listPath);
 		
 		if(cmd.equals(Constants.UPDATE)) {
 			listPath = ECRFUserJspPaths.JSP_LIST_SUBJECT_UPDATE;
