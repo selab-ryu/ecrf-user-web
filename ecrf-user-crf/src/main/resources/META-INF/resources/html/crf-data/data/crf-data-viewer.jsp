@@ -22,12 +22,11 @@ if(dataTypeId > 0){
 	dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
 }
 
-CRFGroupCaculation groupApi = new CRFGroupCaculation();
-JSONObject eachGroups = null;
 
 Date visitDate = null;
 boolean isUpdate = false;
 
+JSONObject answerObj = JSONFactoryUtil.createJSONObject();
 
 String none = ParamUtil.getString(renderRequest, "none");
 String menu = "add-crf-data";
@@ -37,7 +36,12 @@ if(sdId > 0) {
 	menu = "update-crf-data";
 	isUpdate = true;	
 	answerForm = (String)renderRequest.getAttribute(ECRFUserCRFDataAttributes.ANSWER_FORM);
+	answerObj = JSONFactoryUtil.createJSONObject(answerForm);
 }
+
+CRFProgressUtil progressApi = new CRFProgressUtil(renderRequest, dataTypeId, answerObj);
+JSONArray groupTermList = progressApi.getGroupTermList();
+
 
 _log.info("is update : " + isUpdate);
 _log.info("is audit : " + isAudit);
@@ -54,6 +58,16 @@ _log.info("is audit : " + isAudit);
 	<div class="page-content">
 		<liferay-ui:header backURL="<%=redirect %>" title='<%=isUpdate ? "Update CRF" : "ADD CRF" %>' />
 		
+		<div id="floating-map-button">
+		<%for(int count = 0; count < groupTermList.length(); count++){
+			String termNameToId = "#" + groupTermList.getJSONObject(count).getString("termName") + "_outerDiv";
+		%>
+			<a href="<%=termNameToId%>" >
+	        	<span><%= groupTermList.getJSONObject(count).getString("displayName")%></span>
+	    	</a>
+	    <%} %>
+    	</div>
+    	
 		<aui:fieldset-group markupView="lexicon">
 			<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.subject.title.subject-info">
 				<aui:container>
@@ -103,13 +117,16 @@ _log.info("is audit : " + isAudit);
 				<aui:button type="button" id="btnVert" value="Vertical"></aui:button>
 			</aui:button-row>
 		</div>
-		
-		<div class="col-md-12"  id="<portlet:namespace/>canvasPanel"></div>		
+
+    	
+		<div class="col-md-10"  id="<portlet:namespace/>canvasPanel"></div>		
 		
 		<form action="<%=saveActionURL.toString() %>" name="crfViewerForm" id="crfViewerForm" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="<portlet:namespace/>crfId" name="<portlet:namespace/>crfId" value="<%=crfId %>" >
 			<input type="hidden" id="<portlet:namespace/>dataTypeId" name="<portlet:namespace/>dataTypeId" value="<%=dataTypeId %>" >			
 			<input type="hidden" id="<portlet:namespace/>structuredDataId" name="<portlet:namespace/>structuredDataId" value="<%=sdId%>" >
+			<input type="hidden" id="<portlet:namespace/>hashCode" name="<portlet:namespace/>hashCode" >			
+			<input type="hidden" id="<portlet:namespace/>hasHashChanged" name="<portlet:namespace/>hasHashChanged" >					
 			<input type="hidden" id="<portlet:namespace/>dataContent" name="<portlet:namespace/>dataContent" >
 			<aui:button-row>
 				<aui:button type="button" id="btnSave" value="save"></aui:button>
@@ -117,7 +134,32 @@ _log.info("is audit : " + isAudit);
 		</form>
 	</div>
 </div>
+<style>
+#floating-map-button {
+	z-index: 1;
+    position: fixed;
+    display: grid;
+    padding: 14px 19px;
+    align-items:center;
+    justify-items:center;
+    right: 0%;
+    top: 40%;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 24px;
+    transform: translateX(-50%);
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 8px;
+    cursor: pointer;
+}
 
+#floating-map-button:hover {
+    box-shadow: 0 0 0 1px transparent, 0 0 0 4px transparent, 0 6px 16px rgba(0,0,0,0.12) !important;
+    transform: translateX(-50%) scale(1.04);
+}
+</style>
 <script>
 $(document).ready(function(){
 let SX = StationX(  '<portlet:namespace/>', 
@@ -152,7 +194,6 @@ let subjectBirth = new Date(<%=subject.getBirth().getTime()%>);
 
 subjectInfo["subjectGender"] = subjectGender;
 subjectInfo["subjectBirth"] = subjectBirth;
-
 let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectInfo, <%=isAudit%>);
 console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
@@ -194,6 +235,7 @@ $('#<portlet:namespace/>btnVert').on( 'click', function(event){
 });
 
 });
+
 
 Liferay.provide(window, 'openHistoryDialog', function(termName, displayName) {
 	console.log("function activate");

@@ -79,6 +79,18 @@ public class CRFProgressUtil {
 		return eachGroupProcess;
 	}
 	
+	public JSONArray getGroupTermList(){
+		JSONArray groupTermList = JSONFactoryUtil.createJSONArray();
+		JSONArray groupTermPackage = getGroupTerms(getCRFForm());
+		for(int i = 0; i < groupTermPackage.length(); i++) {
+			JSONObject groupTerm = JSONFactoryUtil.createJSONObject();
+			groupTerm.put("termName", groupTermPackage.getJSONObject(i).getString("termName"));
+			groupTerm.put("displayName", getDisplayName(groupTermPackage.getJSONObject(i).getString("termName"), getCRFForm()));
+			groupTermList.put(groupTerm);
+		}
+		return groupTermList;
+	}
+	
 	/*
 	 * private methods
 	 */
