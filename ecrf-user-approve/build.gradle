@@ -35,4 +35,6 @@ dependencies {
 	
 	compileOnly group: "com.liferay", name: "com.liferay.application.list.api", version: "4.2.5"
 	compileOnly group: "com.liferay", name: "com.liferay.application.list.taglib"
+	
+	implementation group: 'com.liferay', name: 'com.liferay.petra.portlet.url.builder', version: '6.0.0'
 }
