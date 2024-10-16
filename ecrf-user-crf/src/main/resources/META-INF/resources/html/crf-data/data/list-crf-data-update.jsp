@@ -335,6 +335,7 @@ _log.info("url : " + baseURL.toString());
 			%>
 			
 			<!-- DB Lock -->
+			
 			<liferay-ui:search-container-column-text
 				name="ecrf-user.list.db-lock"
 				cssClass="min-width-80"

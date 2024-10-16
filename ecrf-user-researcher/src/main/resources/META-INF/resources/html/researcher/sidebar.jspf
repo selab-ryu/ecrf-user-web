@@ -34,7 +34,7 @@
 		<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
 		<div>
 			<a href="<%=moveAddResearcherURL%>">		
-				<img src="<%=menu.equals("researcher-add") || menu.equals("researcher-update") ? renderRequest.getContextPath() + "/img/add_researcher_btn.png" : renderRequest.getContextPath() + "/img/add_researcher_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+        <img src="<%=menu.equals("researcher-add") || menu.equals("researcher-update") ? renderRequest.getContextPath() + "/img/add_researcher_btn.png" : renderRequest.getContextPath() + "/img/add_researcher_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
 			</a>	
 		</div>
 		</c:if>
