@@ -149,14 +149,14 @@ if(isUpdate) {
 						>
 					</aui:input>
 				</aui:col>
-				<aui:col md="1">
+				<aui:col md="3">
 					<aui:field-wrapper
 						name="<%=ECRFUserSubjectAttributes.BIRTH_YEAR %>"
 						label="ecrf-user.subject.birth-age"
 					>
 					</aui:field-wrapper>
 				</aui:col>
-				<aui:col md="1">
+				<aui:col md="3">
 					<p id="birthAge"><%=birthAge%></p>
 				</aui:col>
 			</aui:row>
@@ -178,14 +178,14 @@ if(isUpdate) {
 						>
 						</aui:input>
 				</aui:col>
-				<aui:col md="1">
+				<aui:col md="3">
 					<aui:field-wrapper
 						name="<%=ECRFUserSubjectAttributes.LUNARBIRTH_YEAR %>"
 						label="ecrf-user.subject.lunarbirth-age"
 					>
 					</aui:field-wrapper>
 				</aui:col>
-				<aui:col md="1">
+				<aui:col md="3">
 					<p id="lunarBirthAge"><%=Validator.isNotNull(subject) ? lunarBirthAge : "" %></p>
 				</aui:col>
 			</aui:row>
@@ -338,7 +338,7 @@ if(isUpdate) {
 						</c:if>
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_SUBJECT) %>">
-							<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete" onClick="<%=deleteSubjectURL %>"></aui:button>
+							<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete" ></aui:button>
 						</c:if>
 						
 						</c:when>
@@ -506,6 +506,14 @@ $(document).ready(function() {
 				$("#lunarBirthAge")[0].innerText = age;	
 			}		
 		}
+	});
+	
+	$(document).ready(function() {
+		$('#<portlet:namespace/>delete').click( function(event){
+			var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-subject.title"/>';
+			var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-subject.content"/>';
+			deleteConfirm(title, content, '<%= deleteSubjectURL.toString() %>', 'large');
+		});
 	});
 });
 

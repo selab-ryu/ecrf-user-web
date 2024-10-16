@@ -126,8 +126,8 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 						>
 							<%
 								ExperimentalGroupType[] expGroups = ExperimentalGroupType.values();
-													for(int i=0; i<expGroups.length; i++) {
-														ExperimentalGroupType rowExpGroup = expGroups[i];
+								for(int i=0; i<expGroups.length; i++) {
+									ExperimentalGroupType rowExpGroup = expGroups[i];
 							%>
 							<aui:option selected="true" value="<%=rowExpGroup.getNum() %>"><%=rowExpGroup.getFullString() %></aui:option>
 							<%
@@ -151,7 +151,7 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 					</c:if>
 					
 					<c:if test="<%=hasDeletePermission %>">
-					<aui:button name="delete" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteExpGroupURL %>" />
+					<aui:button name="btnDelete" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" />
 					</c:if>
 					</c:if>
 					
@@ -163,3 +163,13 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 		
 	</div>
 </div>
+
+<script>
+$(document).ready(function() {
+	$('#<portlet:namespace/>btnDelete').click( function(event){
+		var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-exp-group.title"/>';
+		var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-exp-group.content"/>';
+		deleteConfirm(title, content, '<%= deleteExpGroupURL.toString() %>');
+	});
+});
+</script>

@@ -33,7 +33,6 @@ String pageClass = "page-content";
 if(!isPrivate) pageClass = "mar16px";
 
 %>
-
 <portlet:renderURL var="addProjectURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_ADD_PROJECT %>" />
 	<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.ADD %>" />
@@ -123,7 +122,7 @@ if(!isPrivate) pageClass = "mar16px";
 						<aui:button type="button" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn" onClick="<%=updateProjectURL.toString() %>" />			
 					</c:if>
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_PROJECT) %>">
-						<aui:button type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteProjectURL.toString() %>" />
+						<aui:button name="btnDelete" type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" />
 					</c:if>
 			 	</c:when>
 			 	<c:otherwise>
@@ -138,3 +137,14 @@ if(!isPrivate) pageClass = "mar16px";
 
 	</div>
 </div>
+
+
+<script>
+$(document).ready(function() {	
+	$('#<portlet:namespace/>btnDelete').click( function(event){
+		var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.title"/>';
+		var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.content"/>';
+		deleteConfirm(title, content, '<%= deleteProjectURL.toString() %>');
+	});
+});
+</script>

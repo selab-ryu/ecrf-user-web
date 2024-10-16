@@ -57,3 +57,26 @@ function genderToStr(gender) {
 	}
 	return str;
 }
+
+function deleteConfirm(title, content, actionURL, widthType='medium') {
+	$.confirm({
+		title: title,
+		content: '<p>'+content+'</p>',
+		type: 'red',
+		typeAnimated: true,
+		columnClass: widthType,
+		buttons:{
+			ok: {
+				btnClass: 'btn-blue',
+				action: function(){
+					window.location.href=actionURL;
+				}
+			},
+			close: {
+	            action: function () {
+	            }
+	        }
+		},
+		draggable: true
+	});
+}

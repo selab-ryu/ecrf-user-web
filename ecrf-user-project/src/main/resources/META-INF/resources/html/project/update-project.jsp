@@ -138,7 +138,7 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 									<aui:button type="submit" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn"/>			
 								</c:if>
 								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.DELETE) %>">
-									<aui:button type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteProjectURL.toString() %>" />
+									<aui:button name="btnDelete" type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" />
 								</c:if>
 						 	</c:when>
 						 	<c:otherwise>
@@ -185,5 +185,11 @@ $(document).ready(function() {
 		scrollMonth: false
 	});
 	$("#<portlet:namespace/>endDate").mask("0000/00/00", {placehodler:"yyyy/mm/dd"});
+	
+	$('#<portlet:namespace/>btnDelete').click( function(event){
+		var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.title"/>';
+		var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.content"/>';
+		deleteConfirm(title, content, '<%= deleteProjectURL.toString() %>');
+	});
 });
 </script>

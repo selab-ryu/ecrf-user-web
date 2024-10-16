@@ -1,10 +1,8 @@
 <%@ include file="../init.jsp" %>
 
 <div class="ecrf-user-crf-data ecrf-user">
-
-	<%@ include file="sidebar.jspf" %>
 	
-	<div class="page-content">
+	<div class="pad16">
 	
 		<liferay-ui:header backURL="<%=redirect %>" title='ecrf-user.my-info.title.update-info' />
 		

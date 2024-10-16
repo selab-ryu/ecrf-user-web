@@ -441,7 +441,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					</c:if>
 					
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_RESEARCHER) || hasOwnPermission )%>">
-					<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete"  onClick="<%=deleteResearcherURL %>"></aui:button>
+					<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete"></aui:button>
 					</c:if>
 					
 					</c:when>
@@ -681,5 +681,14 @@ $(document).ready(function() {
 		scrollMonth: false
 	});
 	$("#<portlet:namespace/>birth").mask("0000/00/00", {placehodler:"yyyy/mm/dd"});
+	
+	$(document).ready(function() {
+		
+		$('#<portlet:namespace/>delete').click( function(event){
+			var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-researcher.title"/>';
+			var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-researcher.content"/>';
+			deleteConfirm(title, content, '<%= deleteResearcherURL.toString() %>');
+		});
+	});
 });
 </script>

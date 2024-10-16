@@ -1,3 +1,6 @@
+<%@page import="ecrf.user.approve.servlet.taglib.util.MembershipUserActionDropdownItemsProvider"%>
+<%@page import="java.util.StringJoiner"%>
+<%@page import="com.liferay.petra.string.StringUtil"%>
 <%@page import="ecrf.user.constants.attribute.ECRFUserResearcherAttributes"%>
 <%@page import="com.liferay.portal.kernel.model.UserGroupRole"%>
 <%@page import="com.liferay.portal.kernel.service.UserGroupRoleLocalServiceUtil"%>
@@ -108,21 +111,7 @@ if(membershipRequestCount <= 0) {
 				<%
 				Researcher researcher = ResearcherLocalServiceUtil.getResearcherByUserId(siteUser.getUserId());
 				
-				%>
-				
-				<liferay-ui:search-container-column-text>
-					<h5>
-						<%=HtmlUtil.escape(researcher.getName()) %>
-					</h5>
-					
-					<h6>
-						<span><%=siteUser.getEmailAddress() %></span>
-					</h6>
-				</liferay-ui:search-container-column-text>
-				
-				<%
-					// get researhcer role
-								
+				// get researhcer role
 				List<UserGroupRole> userGroupRoleList = UserGroupRoleLocalServiceUtil.getUserGroupRoles(siteUser.getUserId(), scopeGroupId);
 				
 				String roleStr = "";
@@ -135,12 +124,16 @@ if(membershipRequestCount <= 0) {
 						roleStr += role.getName();	
 						if(i<userGroupRoleList.size()-1) roleStr += StringPool.COMMA_AND_SPACE; 						
 					}
-					
-				}
- 				
+				} 				
 				%>
 				
-				<liferay-ui:search-container-column-text>
+				<liferay-ui:search-container-column-text
+					colspan="<%= 2 %>"
+				>
+					<h5>
+						<%=HtmlUtil.escape(researcher.getName() + "(" + siteUser.getEmailAddress() + ")") %>
+					</h5>
+					
 					<h6>
 						<span><%=Validator.isNull(roleStr) ? StringPool.DASH : roleStr %></span>
 					</h6>
@@ -150,15 +143,38 @@ if(membershipRequestCount <= 0) {
 					</h6>
 				</liferay-ui:search-container-column-text>
 				
+				<%
+				MembershipUserActionDropdownItemsProvider membershipUserActionDropdownItemProvider = new MembershipUserActionDropdownItemsProvider(siteUser, renderRequest, renderResponse);
+				%>
 				
 				<liferay-ui:search-container-column-text>
+					
 					<portlet:renderURL var="updateSiteRoleURL">
 						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_UPDATE_SITE_ROLE %>" />
 						<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 				
-					<aui:button name="siteRole" type="button" value="ecrf-user.button.site-role" cssClass="small-btn none-btn" onClick="<%=updateSiteRoleURL %>" ></aui:button>
+					<aui:button name="siteRole" type="button" value="ecrf-user.button.update-site-role" cssClass="small-btn none-btn" onClick="<%=updateSiteRoleURL %>" ></aui:button>
+					
+					<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_MEMBERSHIP %>" var="deleteMembershipURL">
+						<portlet:param name="<%=ECRFUserAttributes.USER_ID %>" value="<%=String.valueOf(researcher.getResearcherUserId()) %>" />
+						<portlet:param name="<%=ECRFUserAttributes.GROUP_ID %>" value="<%=String.valueOf(scopeGroupId) %>" />
+					</portlet:actionURL>
+					
+					<%
+						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-membership.title");
+						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-membership.content");
+						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s')", title, content, deleteMembershipURL.toString());
+					%>
+					
+					<aui:button  
+						name="deleteMembership" 
+						type="button" 
+						value="ecrf-user.button.delete-membership" 
+						cssClass="small-btn delete-btn" 
+						onClick="<%=deleteFunctionCall %>">
+					</aui:button>
 				</liferay-ui:search-container-column-text>
 								 
 			</liferay-ui:search-container-row>
@@ -251,3 +267,7 @@ if(membershipRequestCount <= 0) {
 		//window.location.replace("https://apps.apple.com/us/app/instagram/id389801252");
 	});
 </aui:script>
+
+<script>
+
+</script>

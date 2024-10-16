@@ -216,9 +216,18 @@ if(isSearch) {
 			<liferay-ui:search-container-column-text
 				name="ecrf-user.list.delete"
 				cssClass="min-width-80"
-			>			
-				
-				<aui:button name="deleteExpGroup" value="ecrf-user.button.delete" cssClass="delete-btn small-btn" onClick="<%=deleteExpGroupURL %>" disabled="<%=hasDeletePermission ? false : true  %>" />	
+			>
+			<%
+				String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+				String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+				String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
+			%>
+				<aui:button 
+					value="ecrf-user.button.delete" 
+					cssClass="delete-btn small-btn" 
+					onClick="<%=deleteFunctionCall %>" 
+					disabled="<%=hasDeletePermission ? false : true  %>" 
+				/>	
 				
 			</liferay-ui:search-container-column-text>
 			
