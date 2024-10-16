@@ -1,3 +1,6 @@
+<%@page import="ecrf.user.approve.servlet.taglib.clay.RoleVerticalCard"%>
+<%@page import="ecrf.user.approve.display.context.UserRolesManagementToolbarDisplayContext"%>
+<%@page import="ecrf.user.approve.display.context.UserRolesDisplayContext"%>
 <%@page import="com.liferay.portal.kernel.util.HashMapBuilder"%>
 <%@page import="com.liferay.portal.kernel.model.role.RoleConstants"%>
 <%@page import="com.liferay.portal.kernel.service.RoleLocalServiceUtil"%>
@@ -16,7 +19,8 @@ User researcherUser = null;
 if(researcherId > 0) {
 	_log.info("researcher id : " + researcherId);
 	researcher = ResearcherLocalServiceUtil.fetchResearcher(researcherId);
-	researcherUser = UserLocalServiceUtil.fetchUser(researcher.getUserId());
+	researcherUser = UserLocalServiceUtil.fetchUser(researcher.getResearcherUserId());
+	_log.info(researcher.getResearcherUserId() + " / " + researcherUser.getFullName());
 }
 
 int roleType = RoleConstants.TYPE_SITE;
@@ -41,11 +45,27 @@ for(int i=0; i<allSiteRoles.size(); i++) {
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_MEMBERSHIP %>" />
 </portlet:renderURL>
 
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_UPDATE_USER_SITE_ROLE %>" var="updateUserSiteRoleURL">
+	<portlet:param name="<%=ECRFUserAttributes.USER_ID %>" value="<%=String.valueOf(researcher.getResearcherUserId()) %>" />
+	<portlet:param name="<%=ECRFUserAttributes.GROUP_ID %>" value="<%=String.valueOf(scopeGroupId) %>" />
+</portlet:actionURL>
+
 <div class="ecrf-user-approve ecrf-user">
 	
 	<div class="pad16">
 	
 		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.approve.title.site-role" />
+		
+		<%
+		UserRolesDisplayContext userRolesDisplayContext = new UserRolesDisplayContext(request, renderRequest, renderResponse);
+		userRolesDisplayContext.setCurUser(researcherUser);
+		%>
+		
+		<clay:management-toolbar
+			displayContext="<%=new UserRolesManagementToolbarDisplayContext(liferayPortletRequest, liferayPortletResponse, request, userRolesDisplayContext) %>"
+		/>
+		
+		<aui:form name="fm" action="<%=updateUserSiteRoleURL %>">
 		
 		<aui:container cssClass="radius-shadow-container">
 			<aui:row>
@@ -60,53 +80,81 @@ for(int i=0; i<allSiteRoles.size(); i++) {
 			<aui:row>
 				<aui:col md="12">
 					<liferay-ui:search-container
-						delta="10"
-						total="<%=siteRoles.size() %>"
-						emptyResultsMessage="No Researchers were found"
-						emptyResultsMessageCssClass="taglib-empty-result-message-header"
-						var="searchContainer"
+						id="userGroupRoleRole"
+						searchContainer="<%= userRolesDisplayContext.getRoleSearchSearchContainer() %>"
 					>
-						<liferay-ui:search-container-results
-							results="<%=ListUtil.subList(siteRoles, searchContainer.getStart(), searchContainer.getEnd()) %>"
-						/>
-						
 						<liferay-ui:search-container-row
 							className="com.liferay.portal.kernel.model.Role"
-							escapedModel="<%= true %>"
 							keyProperty="roleId"
 							modelVar="role"
-						
 						>
-							<%
-							Map<String, Object> data = HashMapBuilder.<String, Object>put(
-								"id", role.getRoleId()
-							).build();
-							%>
-							
-							<liferay-ui:search-container-column-text
-								colspan="<%= 2 %>"
-							>
-								<h5>
-									<aui:a cssClass="selector-button" data="<%= data %>" href="javascript:;">
-										<%= HtmlUtil.escape(role.getTitle(locale)) %>
-									</aui:a>
-								</h5>
-		
-								<h6 class="text-default">
-									<span><%= HtmlUtil.escape(role.getDescription(locale)) %></span>
-								</h6>
-		
-								<h6 class="text-default">
-									<%= LanguageUtil.get(request, role.getTypeLabel()) %>
-								</h6>
-							</liferay-ui:search-container-column-text>
+				
+						<%
+						String displayStyle = userRolesDisplayContext.getDisplayStyle();
+						
+						_log.info(role.getName());
+						%>
+						
+						<c:choose>
+							<c:when test='<%= displayStyle.equals("icon") %>'>
+						
+								<%
+								row.setCssClass("entry-card lfr-asset-item");
+								%>
+						
+								<liferay-ui:search-container-column-text>
+									<clay:vertical-card
+										verticalCard="<%= new RoleVerticalCard(role, renderRequest, searchContainer.getRowChecker()) %>"
+									/>
+								</liferay-ui:search-container-column-text>
+							</c:when>
+							<c:when test='<%= displayStyle.equals("descriptive") %>'>
+								<liferay-ui:search-container-column-icon
+									icon="users"
+									toggleRowChecker="<%= true %>"
+								/>
+						
+								<liferay-ui:search-container-column-text
+									colspan="<%= 2 %>"
+								>
+									<h5><%= HtmlUtil.escape(role.getTitle(locale)) %></h5>
+						
+									<h6 class="text-default">
+										<span><%= HtmlUtil.escape(role.getDescription(locale)) %></span>
+									</h6>
+						
+									<h6 class="text-default">
+										<%= LanguageUtil.get(request, role.getTypeLabel()) %>
+									</h6>
+								</liferay-ui:search-container-column-text>
+							</c:when>
+							<c:when test='<%= displayStyle.equals("list") %>'>
+								<liferay-ui:search-container-column-text
+									cssClass="table-cell-expand-small table-cell-minw-200 table-title"
+									name="title"
+									value="<%= HtmlUtil.escape(role.getTitle(locale)) %>"
+								/>
+						
+								<liferay-ui:search-container-column-text
+									cssClass="table-cell-expand table-cell-minw-300"
+									name="description"
+									value="<%= HtmlUtil.escape(role.getDescription(locale)) %>"
+								/>
+						
+								<liferay-ui:search-container-column-text
+									cssClass="table-cell-expand-smallest"
+									name="type"
+									value="<%= LanguageUtil.get(request, role.getTypeLabel()) %>"
+								/>
+							</c:when>
+						</c:choose>
 					
 						</liferay-ui:search-container-row>
 						
-								<liferay-ui:search-iterator
-									displayStyle="descriptive"
-									markupView="lexicon"
-								/>
+					<liferay-ui:search-iterator
+						displayStyle="<%= userRolesDisplayContext.getDisplayStyle() %>"
+						markupView="lexicon"
+					/>
 						
 					</liferay-ui:search-container>
 				</aui:col>
@@ -117,13 +165,26 @@ for(int i=0; i<allSiteRoles.size(); i++) {
 			<aui:row>
 				<aui:col>
 					<aui:button-row> 
+						<aui:button type="submit" value="Update" />
 						<aui:button value="Back" onClick="<%=redirect.toString() %>" /> 
 					</aui:button-row>
 				</aui:col>
 			</aui:row>
 		</aui:container>
+		
+		</aui:form>
 	</div>
 </div>
 
-<aui:script>
+<aui:script use="liferay-search-container">
+	var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />userGroupRoleRole');
+
+	searchContainer.on('rowToggled', function(event) {
+		Liferay.Util.getOpener().Liferay.fire(
+			'<%= HtmlUtil.escapeJS(userRolesDisplayContext.getEventName()) %>',
+			{
+				data: event.elements.allSelectedElements.getDOMNodes()
+			}
+		);
+	});
 </aui:script>
