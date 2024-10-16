@@ -203,6 +203,11 @@
 			<hr style="border: solid 1px #787878">
 			<!-- Display Term -->
 		    <span id="searchText"></span>
+		    <input type="radio" id="group" name="divideOption" value="group">
+		    <label for="group">Divide Group</label>
+		    <input type="radio" id="whole" name="divideOption" value="whole" checked = "checked">
+		    <label for="whole">No Divide Group</label>
+		    <br>
 		    <input id="xlsx_name" placeholder="FileName">.xlsx &nbsp</input>
 		    <button id="btn_1" <%=hasDownloadExcelPermission ? "" : "disabled"%> >Export xlsx</button>
 		</div>
@@ -344,14 +349,24 @@
 		contentText += '<div id = "' + termDepth + '" class = "'
 					+ className
 					+ '">';
-					
-		contentText += '<input type = "checkbox" id = "' 
-					+ termLabel
-        			+ '" value = "' 
-        			+ termName 
-        			+ '"name = "Section" onClick = "'
-        			+ termFunc
-        			+ '"/>'
+		if(termDepth == 'Sub_Category'){
+			contentText += '<input type = "checkbox" id = "' 
+				+ termLabel
+    			+ '" value = "' 
+    			+ termName 
+    			+ '"name = "Section" onClick = "'
+    			+ termFunc
+    			+ '"/>';
+		}
+		else{
+			contentText += '<input type = "checkbox" id = "' 
+				+ termLabel
+    			+ '" value = "' 
+    			+ termName 
+    			+ '"name = "" onClick = "'
+    			+ termFunc
+    			+ '"/>';
+		}
         			
         contentText += '<label class="'
         			+ classLabel
@@ -571,6 +586,20 @@
 		  var result = object[property]
 		  return result
 	}
+	
+	function getDateData(Data_answer){
+		var Data_date = new Date(Data_answer);
+		
+		Data_date.setHours(Data_date.getHours() - 9)
+		
+		if(Data_date.toLocaleString() == 'Invalid Date'){
+			Data_answer = "";
+		}
+		else{
+			Data_answer = Data_date.toLocaleString();
+		}
+		return Data_answer;
+	}
 
 </script>
 
@@ -587,473 +616,585 @@
     	// If there is Grid among the checked Terms
     	var isGrid = false;
     	
-    	console.log("3. Put crf information");
-    	// CRF information Row
-    	//-------------------------------------------------------------------------------------------
-    	
-    	arrRow.push("<%=fin_dName[0]%>");
-    	arrFinal.push(arrRow);
-    	//-------------------------------------------------------------------------------------------
-    	console.log("3. End");
-    	// Total Search Option Row
-    	//-------------------------------------------------------------------------------------------
-    	var Array_TotalSearch = new Array();
-    	arrRow = [];
-    	console.log("4. Processes and puts the selected options in the integrated search");
-    	// In the case of total search, only the id that meets the search conditions is added
-    	if(<%=isSearch%>){
-			var arrOptions = new Array();
-    		
-    		<% for (int i=0; i < arr_options.length; i++) { %>
-    			arrOptions[<%= i %>] = "<%= arr_options[i] %>";
-    		<% } %>
-    		
-    		var optionFinal = "Choose Term: ";
-    		for(var i = 0; i < arrOptions.length; i++){
-    			//console.log("options: " + arr_options[i]);
-    			var extract_termName = null;
-    			
-    			if(arrOptions[i].includes("EXACT")){
-    				extractTermName = arrOptions[i].split(" EXACT ");
-    				optionFinal += inspectionData.find(v => v.termName === extractTermName[0]).displayName.en_US;
-    				
-    				var optionJson = inspectionData.find(v => v.termName === extractTermName[0]).options;
-    				optionFinal += " => (";
-    				optionFinal += optionJson.find(v => v.value == extractTermName[1]).label.en_US;
-    				optionFinal += ")";
-    			}
-    			else if(arrOptions[i].includes("RANGE")){
-    				extractTermName = arrOptions[i].split(" RANGE ");
-    				optionFinal += inspectionData.find(v => v.termName === extractTermName[0]).displayName.en_US;
-    				optionFinal += " => (";
-    				optionFinal += extractTermName[1];
-    				optionFinal += ")";
-    			}
-    			
-    			if((i + 1) != arrOptions.length){
-    				optionFinal += " / ";
-    			}
-    		}
-        	
-    		arrRow.push(optionFinal);
-    		arrFinal.push(arrRow);
-    	}
-    	//-------------------------------------------------------------------------------------------
-		console.log("4. End");
-		console.log("5. Put in the highest Term Name");
-    	// Top Category Row
-    	//-------------------------------------------------------------------------------------------
-    	
-    	// list containing the basic information column of the subject
-    	var arrInfo = ["ID", "Sex", "Age", "Name"];
-    	arrRow = [];
-    	
     	// Gets the information of the term(Have Value) selected on the page
     	var checkedList = $('input:checkbox[name="Section"]:checked');
-
-    	// Input the basic information column of the subject
-    	for(var i = 0; i < arrInfo.length; i++){
-    		arrRow.push(arrInfo[i]);
+    	
+    	if(checkedList.length <= 0){
+    		alert("Please check if there are any Term items checked.");
+    		return;
     	}
     	
-    	for(var i = 0; i < checkedList.length; i++){
-    		// Variables to add the value of displayName that you want to add in the end
-    		var nameFinal = "";
-    		
-    		var termFirst = inspectionData.find(v => v.termName === checkedList[i].value);
-    		
-    		// If groupTermId is not present (Terms that are not in the group)
-    		if(inspectionData.find(v => v.termName === termFirst.termName).groupTermId == undefined){
-    			nameFinal = "";
-    		}
-    		else{ // If groupTermId is present and depth is 2
-    			var termSecond = inspectionData.find(v => v.termName === termFirst.groupTermId.name);
-    			
-    			if(inspectionData.find(v => v.termName === termSecond.termName).groupTermId == undefined){
-    				nameFinal = termSecond.displayName.en_US;
-        		}
-    			else{ // If groupTermId is present and depth is 3
-    				var termThird = inspectionData.find(v => v.termName === termSecond.groupTermId.name);
-    				nameFinal = termThird.displayName.en_US;
-    			}
-    		}
-    		
-    		// If there is Grid among the checked Terms
-    		var lenGrid = 1;
-    		
-			if(termFirst.termType == 'Grid'){
-				lenGrid = Object.keys(termFirst.columnDefs).length;
-				isGrid = true;
-    		}
-			
-			for(var j = 0; j < lenGrid; j++){
-				arrRow.push(nameFinal);
-			}
-    	}
-    	arrFinal.push(arrRow);	
-    	//-------------------------------------------------------------------------------------------
-    	console.log("5. End");
-    	console.log("6. Put in the middle Term Name");
-    	// Middle Category Row
-    	//-------------------------------------------------------------------------------------------
-    	arrRow = [];
-
-    	// Input the basic information column of the subject (only space not value)
-    	for(var j = 0; j < arrInfo.length; j++){
-    		arrRow.push("");
-    	}
+    	var splitValue = $('input[name=divideOption]:checked').val();
     	
-    	for(var i = 0; i < checkedList.length; i++){
-    		// Variables to add the value of displayName that you want to add in the end
-    		var nameFinal = "";
-    		
-    		var termFirst = inspectionData.find(v => v.termName === checkedList[i].value);
-    		
-    		// If groupTermId is not present (Terms that are not in the group)
-    		if(inspectionData.find(v => v.termName === termFirst.termName).groupTermId == undefined){
-    			nameFinal = "";
-    		}
-    		else{ 
-    			var termSecond = inspectionData.find(v => v.termName === termFirst.groupTermId.name);
-    			// If groupTermId is present and depth is 2
-    			if(inspectionData.find(v => v.termName === termSecond.termName).groupTermId == undefined){
-    				nameFinal = "";
-        		}
-    			else{ // If groupTermId is present and depth is 3
-    				var termThird = inspectionData.find(v => v.termName === termSecond.groupTermId.name);
-    				nameFinal = termSecond.displayName.en_US;
-    			}
-    		}
-    		
-    		// If there is Grid among the checked Terms
-    		var lenGrid = 1;
-    		
-			if(termFirst.termType == 'Grid'){
-				lenGrid = Object.keys(termFirst.columnDefs).length;
-    		}
-			
-			for(var j = 0; j < lenGrid; j++){
-				arrRow.push(nameFinal);
+		var isVisit = false;
+		
+		for(var i = 0; i < checkedList.length; i++){
+			if(checkedList[i].value == 'visit_date'){
+				isVisit = true;
+				break;
 			}
-    	}
-    	arrFinal.push(arrRow);
-    	//-------------------------------------------------------------------------------------------
-    	console.log("6. End");
-    	console.log("7. Put in the low Term Name");
-    	// Low Category Row
-    	//-------------------------------------------------------------------------------------------
-    	arrRow = [];
+		}
+		
+		var noGroupSheet = [];
+		var noGroupDeleteIndex = [];
+		if(splitValue == 'group'){
+			for(var i = 0; i < checkedList.length; i++){
+				var termDest = inspectionData.find(v => v.termName === checkedList[i].value);
+	    		
+	    		// If groupTermId is not present (Terms that are not in the group)
+	    		if(inspectionData.find(v => v.termName === termDest.termName).groupTermId == undefined){
+	    			noGroupSheet.push(checkedList[i]);
+	    			noGroupDeleteIndex.push(i);
+	    		}
+			}
+		}
+		
+		for(var i = 0; i < noGroupDeleteIndex.length; i++){
+			checkedList.splice(noGroupDeleteIndex[i] - i, 1);
+		}
+		
+		// Create xlsx workbook 
+        var wb = XLSX.utils.book_new();
 
-    	for(var j = 0; j < arrInfo.length; j++){
-    		arrRow.push("");
-    	}
-    	
-    	for(var i = 0; i < checkedList.length; i++){
-    		// Variables to add the value of displayName that you want to add in the end
-    		var nameFinal = "";
-    		
-    		var termFirst = inspectionData.find(v => v.termName === checkedList[i].value);
-    		
-    		nameFinal = termFirst.displayName.en_US;
-    		
-    		// If there is Grid among the checked Terms
-    		var lenGrid = 1;
-    		
-			if(termFirst.termType == 'Grid'){
-				lenGrid = Object.keys(termFirst.columnDefs).length;
+		
+		console.log("heree");
+		console.log(noGroupSheet);
+		console.log(checkedList);
+    	while(checkedList.length > 0 || noGroupSheet.length > 0){
+
+    		console.log("engew");
+    		console.log(checkedList.length);
+    		if(splitValue == 'group' && checkedList.length <= 0){
+    			checkedList = noGroupSheet;
+    			noGroupSheet = [];
     		}
-			
-			for(var j = 0; j < lenGrid; j++){
-				arrRow.push(nameFinal);
-			}
-    	}
-    	arrFinal.push(arrRow);
-    	//-------------------------------------------------------------------------------------------
-    	console.log("7. End");
-    	console.log("8. If Grid Term is included, add the name to the term that belongs to that term");
-    	//Gird Row
-    	//-------------------------------------------------------------------------------------------
-    	if(isGrid){
+    		
     		arrRow = [];
+        	arrFinal = [];
+    		isGrid = false;
+    		var sheetName = '';
+    		console.log("3. Put crf information");
+        	// CRF information Row
+        	//-------------------------------------------------------------------------------------------
         	
+        	arrRow.push("<%=fin_dName[0]%>");
+        	arrFinal.push(arrRow);
+        	//-------------------------------------------------------------------------------------------
+        	console.log("3. End");
+        	// Total Search Option Row
+        	//-------------------------------------------------------------------------------------------
+        	var Array_TotalSearch = new Array();
+        	arrRow = [];
+        	console.log("4. Processes and puts the selected options in the integrated search");
+        	// In the case of total search, only the id that meets the search conditions is added
+        	if(<%=isSearch%>){
+    			var arrOptions = new Array();
+        		
+        		<% for (int i=0; i < arr_options.length; i++) { %>
+        			arrOptions[<%= i %>] = "<%= arr_options[i] %>";
+        		<% } %>
+        		
+        		var optionFinal = "Choose Term: ";
+        		for(var i = 0; i < arrOptions.length; i++){
+        			//console.log("options: " + arr_options[i]);
+        			var extract_termName = null;
+        			
+        			if(arrOptions[i].includes("EXACT")){
+        				extractTermName = arrOptions[i].split(" EXACT ");
+        				optionFinal += inspectionData.find(v => v.termName === extractTermName[0]).displayName.en_US;
+        				
+        				var optionJson = inspectionData.find(v => v.termName === extractTermName[0]).options;
+        				optionFinal += " => (";
+        				optionFinal += optionJson.find(v => v.value == extractTermName[1]).label.en_US;
+        				optionFinal += ")";
+        			}
+        			else if(arrOptions[i].includes("RANGE")){
+        				extractTermName = arrOptions[i].split(" RANGE ");
+        				optionFinal += inspectionData.find(v => v.termName === extractTermName[0]).displayName.en_US;
+        				optionFinal += " => (";
+        				optionFinal += extractTermName[1];
+        				optionFinal += ")";
+        			}
+        			
+        			if((i + 1) != arrOptions.length){
+        				optionFinal += " / ";
+        			}
+        		}
+            	
+        		arrRow.push(optionFinal);
+        		arrFinal.push(arrRow);
+        	}
+        	//-------------------------------------------------------------------------------------------
+    		console.log("4. End");
+    		console.log("5. Put in the highest Term Name");
+        	// Top Category Row
+        	//-------------------------------------------------------------------------------------------
+
+        	
+        	
+        	
+        	// list containing the basic information column of the subject
+        	//var arrInfo = ["ID", "Sex", "Age", "Name"];
+        	if(isVisit){
+        		arrInfo = ["ID", "Sex", "Age", "Name", "Visit_Date"];
+        	}
+        	else{
+        		arrInfo = ["ID", "Sex", "Age", "Name"];
+        	}
+        	arrRow = [];
+        	
+        	// Input the basic information column of the subject
         	for(var i = 0; i < arrInfo.length; i++){
+        		arrRow.push(arrInfo[i]);
+        	}
+        	
+        	var deleteIndex = checkedList.length + 1;
+        	
+        	for(var i = 0; i < checkedList.length; i++){
+        		if(isVisit && checkedList[i].value == 'visit_date'){
+        			continue;
+        		}
+        		// Variables to add the value of displayName that you want to add in the end
+        		var nameFinal = "";
+        		
+        		var termFirst = inspectionData.find(v => v.termName === checkedList[i].value);
+        		
+        		// If groupTermId is not present (Terms that are not in the group)
+        		if(inspectionData.find(v => v.termName === termFirst.termName).groupTermId == undefined){
+        			nameFinal = "";
+        		}
+        		else{ // If groupTermId is present and depth is 2
+        			var termSecond = inspectionData.find(v => v.termName === termFirst.groupTermId.name);
+        			
+        			if(inspectionData.find(v => v.termName === termSecond.termName).groupTermId == undefined){
+        				nameFinal = termSecond.displayName.en_US;
+            		}
+        			else{ // If groupTermId is present and depth is 3
+        				var termThird = inspectionData.find(v => v.termName === termSecond.groupTermId.name);
+        				nameFinal = termThird.displayName.en_US;
+        			}
+        		}
+        		if(splitValue == 'group'){
+        			if(!sheetName){
+            			sheetName = nameFinal;
+            		}
+            		else if(sheetName != nameFinal){
+            			deleteIndex = i + 1;
+            			break;
+            		}
+        			
+        		}
+        		
+        		// If there is Grid among the checked Terms
+        		var lenGrid = 1;
+        		
+    			if(termFirst.termType == 'Grid'){
+    				lenGrid = Object.keys(termFirst.columnDefs).length;
+    				isGrid = true;
+        		}
+    			
+    			for(var j = 0; j < lenGrid; j++){
+    				arrRow.push(nameFinal);
+    			}
+        	}
+        	
+        	arrFinal.push(arrRow);	
+        	//-------------------------------------------------------------------------------------------
+        	console.log("5. End");
+        	console.log("6. Put in the middle Term Name");
+        	// Middle Category Row
+        	//-------------------------------------------------------------------------------------------
+        	arrRow = [];
+
+        	// Input the basic information column of the subject (only space not value)
+        	for(var j = 0; j < arrInfo.length; j++){
         		arrRow.push("");
         	}
         	
-        	for(var i = 0; i < checkedList.length; i++){
-				var term_first = inspectionData.find(v => v.termName === checkedList[i].value);
-
-        		if(term_first.termType == 'Grid'){
-        			var length_grid = Object.keys(term_first.columnDefs).length;
-        			var array_grid_order = [];
-        			
-        			for(var j = 0; j < length_grid; j++){
-        				var data_key_grid = Object.keys(term_first.columnDefs)[j];
-						var data_order_grid = JSON.stringify(term_first.columnDefs[data_key_grid].order);
-						array_grid_order[data_order_grid - 1] = term_first.columnDefs[data_key_grid];
-        			}
-        			
-        			for(var j = 0; j < length_grid; j++){
-						arrRow.push(array_grid_order[j].displayName.en_US);
-					}
-        		}else{
-        			arrRow.push("");
+        	for(var i = 0; i < (deleteIndex - 1); i++){
+        		if(isVisit && checkedList[i].value == 'visit_date'){
+        			continue;
         		}
+        		// Variables to add the value of displayName that you want to add in the end
+        		var nameFinal = "";
+        		
+        		var termFirst = inspectionData.find(v => v.termName === checkedList[i].value);
+        		
+        		// If groupTermId is not present (Terms that are not in the group)
+        		if(inspectionData.find(v => v.termName === termFirst.termName).groupTermId == undefined){
+        			nameFinal = "";
+        		}
+        		else{ 
+        			var termSecond = inspectionData.find(v => v.termName === termFirst.groupTermId.name);
+        			// If groupTermId is present and depth is 2
+        			if(inspectionData.find(v => v.termName === termSecond.termName).groupTermId == undefined){
+        				nameFinal = "";
+            		}
+        			else{ // If groupTermId is present and depth is 3
+        				var termThird = inspectionData.find(v => v.termName === termSecond.groupTermId.name);
+        				nameFinal = termSecond.displayName.en_US;
+        			}
+        		}
+        		
+        		// If there is Grid among the checked Terms
+        		var lenGrid = 1;
+        		
+    			if(termFirst.termType == 'Grid'){
+    				lenGrid = Object.keys(termFirst.columnDefs).length;
+        		}
+    			
+    			for(var j = 0; j < lenGrid; j++){
+    				arrRow.push(nameFinal);
+    			}
         	}
         	arrFinal.push(arrRow);
-    	}
-    	console.log("8. End");
-    	
-    	console.log("9. Putting actual data in");
-    	// Real Data
-		//-------------------------------------------------------------------------------------------
-		// Get answer data and patient information data.
-		var answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
-		var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));
-		console.log(answerData);
-		console.log(isGrid);
-    	if(isGrid){
-    		console.log("9.1 If Grid Term is available, insert data");
-			for(var i = 0; i < answerData.length; i++){
-				// find grid's max length
-				var length_grid_max = 0;
-				
-				for(var j = 0; j < checkedList.length; j++){
-					if(inspectionData.find(v => v.termName === checkedList[j].value).termType == 'Grid'){
-						if(checkedList[j].value in answerData[i]){
-							
-							if(length_grid_max < Object.keys(answerData[i][checkedList[j].value]).length){
-    							length_grid_max = Object.keys(answerData[i][checkedList[j].value]).length;
-    						}
-						}
-						else{
-							if(length_grid_max <= 1){
-								length_grid_max = 1;
-							}
-							
-						}
-					}
-				}
-				// insert real data per grid max length
-				for(var j = 0; j < length_grid_max; j++){
-					arrRow = [];
-					//insert info
-					arrRow.push(patientData[i].ID);
-					arrRow.push(patientData[i].Sex);
-					arrRow.push(patientData[i].Age);
-            		arrRow.push(patientData[i].Name);
-            		
-            		for(var k = 0; k < checkedList.length; k++){
-            			var Data_answer = "";
-            			if(checkedList[k].value in answerData[i]){
-            				Data_answer = answerData[i][checkedList[k].value];
+        	//-------------------------------------------------------------------------------------------
+        	console.log("6. End");
+        	console.log("7. Put in the low Term Name");
+        	// Low Category Row
+        	//-------------------------------------------------------------------------------------------
+        	arrRow = [];
+
+        	for(var j = 0; j < arrInfo.length; j++){
+        		arrRow.push("");
+        	}
+        	
+        	for(var i = 0; i < (deleteIndex - 1); i++){
+        		if(isVisit && checkedList[i].value == 'visit_date'){
+        			continue;
+        		}
+        		
+        		// Variables to add the value of displayName that you want to add in the end
+        		var nameFinal = "";
+        		
+        		var termFirst = inspectionData.find(v => v.termName === checkedList[i].value);
+        		
+        		nameFinal = termFirst.displayName.en_US;
+        		
+        		// If there is Grid among the checked Terms
+        		var lenGrid = 1;
+        		
+    			if(termFirst.termType == 'Grid'){
+    				lenGrid = Object.keys(termFirst.columnDefs).length;
+        		}
+    			
+    			for(var j = 0; j < lenGrid; j++){
+    				arrRow.push(nameFinal);
+    			}
+        	}
+        	arrFinal.push(arrRow);
+        	//-------------------------------------------------------------------------------------------
+        	console.log("7. End");
+        	console.log("8. If Grid Term is included, add the name to the term that belongs to that term");
+        	//Gird Row
+        	//-------------------------------------------------------------------------------------------
+        	if(isGrid){
+        		arrRow = [];
+            	
+            	for(var i = 0; i < arrInfo.length; i++){
+            		arrRow.push("");
+            	}
+            	
+            	for(var i = 0; i < (deleteIndex - 1); i++){
+    				var term_first = inspectionData.find(v => v.termName === checkedList[i].value);
+
+            		if(term_first.termType == 'Grid'){
+            			var length_grid = Object.keys(term_first.columnDefs).length;
+            			var array_grid_order = [];
+            			
+            			for(var j = 0; j < length_grid; j++){
+            				var data_key_grid = Object.keys(term_first.columnDefs)[j];
+    						var data_order_grid = JSON.stringify(term_first.columnDefs[data_key_grid].order);
+    						array_grid_order[data_order_grid - 1] = term_first.columnDefs[data_key_grid];
             			}
-            			else{
-            				if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
-            					var no_answer = Object.keys(inspectionData.find(v => v.termName === checkedList[k].value).columnDefs).length;
-                				for(var l = 0; l < no_answer; l++){
-                					arrRow.push("");
-                				}
-            				}
-            				else{
-            					arrRow.push("");
-            				}
-            				continue;
-            			}
-    					/* console.log("Data_answer:" + JSON.stringify(Data_answer)); */
-    					if(j == 0){
-    						if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Date'){
-    							var Data_date = new Date(Data_answer);
-                				Data_date.setHours(Data_date.getHours() - 9)
-                				
-                				if(Data_date.toLocaleString() == 'Invalid Date'){
-                					Data_answer = "";
-                				}
-                				else{
-                					Data_answer = Data_date.toLocaleString();
-                				}
+            			
+            			for(var j = 0; j < length_grid; j++){
+    						arrRow.push(array_grid_order[j].displayName.en_US);
+    					}
+            		}else{
+            			arrRow.push("");
+            		}
+            	}
+            	arrFinal.push(arrRow);
+        	}
+        	console.log("8. End");
+        	
+        	console.log("9. Putting actual data in");
+        	// Real Data
+    		//-------------------------------------------------------------------------------------------
+    		// Get answer data and patient information data.
+    		var answerData = JSON.parse(JSON.stringify(<%=answerJson%>));
+    		var patientData = JSON.parse(JSON.stringify(<%=subjectJson%>));
+    		
+        	if(isGrid){
+        		console.log("9.1 If Grid Term is available, insert data");
+    			for(var i = 0; i < answerData.length; i++){
+    				// find grid's max length
+    				var length_grid_max = 0;
+    				
+    				for(var j = 0; j < (deleteIndex - 1); j++){
+    					if(inspectionData.find(v => v.termName === checkedList[j].value).termType == 'Grid'){
+    						if(checkedList[j].value in answerData[i]){
+    							
+    							if(length_grid_max < Object.keys(answerData[i][checkedList[j].value]).length){
+        							length_grid_max = Object.keys(answerData[i][checkedList[j].value]).length;
+        						}
     						}
-    						else if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
-    							var gridInfo = inspectionData.find(v => v.termName === checkedList[k].value).columnDefs;
-    							var list_key = Object.keys(gridInfo);
-    							var list_order = [];
-    							for(var l = 0; l < list_key.length; l++){
-    								list_order[gridInfo[list_key[l]].order - 1] = gridInfo[list_key[l]].termName;
+    						else{
+    							if(length_grid_max <= 1){
+    								length_grid_max = 1;
     							}
-    							for(var l = 0; l < list_order.length; l++){
-    								var strIndex = (j + 1).toString();
-    								arrRow.push(Data_answer[strIndex][list_order[l]]);
-    								//console.log("list_order: " + JSON.stringify(Data_answer[(j + 1).toString()]));
-    							}
-    							continue;
     							
     						}
-    						
-    						arrRow.push(Data_answer);
     					}
-    					else{
-    						if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
-    							var gridInfo = inspectionData.find(v => v.termName === checkedList[k].value).columnDefs;
-    							var list_key = Object.keys(gridInfo);
-    							if(j < Object.keys(Data_answer).length){
-    								var list_order = [];
+    				}
+    				// insert real data per grid max length
+    				for(var j = 0; j < length_grid_max; j++){
+    					arrRow = [];
+    					//insert info
+    					arrRow.push(patientData[i].ID);
+    					arrRow.push(patientData[i].Sex);
+    					arrRow.push(patientData[i].Age);
+                		arrRow.push(patientData[i].Name);
+                		//arrRow.push(answerData[i]["visit_date"]);
+                		for(var k = 0; k < (deleteIndex - 1); k++){
+                			var Data_answer = "";
+                			if(checkedList[k].value in answerData[i]){
+                				Data_answer = answerData[i][checkedList[k].value];
+                			}
+                			else{
+                				if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
+                					var no_answer = Object.keys(inspectionData.find(v => v.termName === checkedList[k].value).columnDefs).length;
+                    				for(var l = 0; l < no_answer; l++){
+                    					arrRow.push("");
+                    				}
+                				}
+                				else{
+                					arrRow.push("");
+                				}
+                				continue;
+                			}
+        					/* console.log("Data_answer:" + JSON.stringify(Data_answer)); */
+        					if(j == 0){
+        						if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Date'){
+        							Data_answer = getDateData(Data_answer);
+        							/*var Data_date = new Date(Data_answer);
+                    				Data_date.setHours(Data_date.getHours() - 9)
+                    				
+                    				if(Data_date.toLocaleString() == 'Invalid Date'){
+                    					Data_answer = "";
+                    				}
+                    				else{
+                    					Data_answer = Data_date.toLocaleString();
+                    				}*/
+        						}
+        						else if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
+        							var gridInfo = inspectionData.find(v => v.termName === checkedList[k].value).columnDefs;
+        							var list_key = Object.keys(gridInfo);
+        							var list_order = [];
         							for(var l = 0; l < list_key.length; l++){
         								list_order[gridInfo[list_key[l]].order - 1] = gridInfo[list_key[l]].termName;
         							}
         							for(var l = 0; l < list_order.length; l++){
         								var strIndex = (j + 1).toString();
         								arrRow.push(Data_answer[strIndex][list_order[l]]);
-        								//console.log("list_order: " + list_order[l]);
+        								//console.log("list_order: " + JSON.stringify(Data_answer[(j + 1).toString()]));
         							}
-    							}
-    							else{
-    								for(var l = 0; l < list_key.length; l++){
-    									arrRow.push("");
+        							continue;
+        							
+        						}
+        						
+        						arrRow.push(Data_answer);
+        					}
+        					else{
+        						if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
+        							var gridInfo = inspectionData.find(v => v.termName === checkedList[k].value).columnDefs;
+        							var list_key = Object.keys(gridInfo);
+        							if(j < Object.keys(Data_answer).length){
+        								var list_order = [];
+            							for(var l = 0; l < list_key.length; l++){
+            								list_order[gridInfo[list_key[l]].order - 1] = gridInfo[list_key[l]].termName;
+            							}
+            							for(var l = 0; l < list_order.length; l++){
+            								var strIndex = (j + 1).toString();
+            								arrRow.push(Data_answer[strIndex][list_order[l]]);
+            								//console.log("list_order: " + list_order[l]);
+            							}
         							}
-    							}
-    						}
-    						else{
-    							arrRow.push("");
-    						}
-    					}
+        							else{
+        								for(var l = 0; l < list_key.length; l++){
+        									arrRow.push("");
+            							}
+        							}
+        						}
+        						else{
+        							arrRow.push("");
+        						}
+        					}
+                		}
+                		arrFinal.push(arrRow);
+                		console.log("Array_row: " + arrRow);
+    				}
+    			}
+    		}
+    		else{
+    			console.log("9.2 If Grid Term is not available, insert data");
+    			console.log("data: " + answerData.length);
+    			
+    			for(var i = 0; i < answerData.length; i++){
+    				arrRow = [];
+    				arrRow.push(patientData[i].ID);
+    				arrRow.push(patientData[i].Sex);
+    				arrRow.push(patientData[i].Age);
+            		arrRow.push(patientData[i].Name);
+            		if(isVisit){
+            			arrRow.push(getDateData(answerData[i]["visit_date"]));
             		}
+            		for(var j = 0; j < (deleteIndex - 1); j++){
+            			var Obj_PatientAnswer = answerData[i];
+            			var Data_answer ="";
+            			if(checkedList[j].value == 'visit_date' && isVisit){
+            				continue;
+            			}
+            			Data_answer = getProperty(Obj_PatientAnswer, checkedList[j].value);
+
+            			// termType == 'Date' -> milliseconds to date
+            			if(inspectionData.find(v => v.termName === checkedList[j].value).termType == 'Date'){
+            				Data_answer = getDateData(Data_answer);
+    						/*var Data_date = new Date(Data_answer);
+            				Data_date.setHours(Data_date.getHours() - 9)
+            				
+            				if(Data_date.toLocaleString() == 'Invalid Date'){
+            					Data_answer = "";
+            				}
+            				else{
+            					Data_answer = Data_date.toLocaleString();
+            				}*/
+            			}
+            			
+            			if(typeof(Data_answer) == 'object'){
+            				//console.log("ob: " + JSON.stringify(Data_answer));
+            				Data_answer = Data_answer.toString();
+            			}
+            			arrRow.push(Data_answer);
+            			
+            		}
+            		var jTime = new Date();
             		arrFinal.push(arrRow);
-            		console.log("Array_row: " + arrRow);
-				}
-			}
-		}
-		else{
-			console.log("9.2 If Grid Term is not available, insert data");
-			console.log("data: " + answerData.length);
-			for(var i = 0; i < answerData.length; i++){
-				arrRow = [];
-				arrRow.push(patientData[i].ID);
-				arrRow.push(patientData[i].Sex);
-				arrRow.push(patientData[i].Age);
-        		arrRow.push(patientData[i].Name);
-        		for(var j = 0; j < checkedList.length; j++){
-        			
-        			var Obj_PatientAnswer = answerData[i];
-        			var Data_answer ="";
-        			
-        			Data_answer = getProperty(Obj_PatientAnswer, checkedList[j].value);
-        			// termType == 'Date' -> milliseconds to date
-        			if(inspectionData.find(v => v.termName === checkedList[j].value).termType == 'Date'){
-        				var Data_date = new Date(Data_answer);
-        				Data_date.setHours(Data_date.getHours() - 9)
-        				
-        				if(Data_date.toLocaleString() == 'Invalid Date'){
-        					Data_answer = "";
-        				}
-        				else{
-        					Data_answer = Data_date.toLocaleString();
-        				}
-        			}
-        			
-        			if(typeof(Data_answer) == 'object'){
-        				//console.log("ob: " + JSON.stringify(Data_answer));
-        				Data_answer = Data_answer.toString();
-        			}
-        			arrRow.push(Data_answer);
-        			
-        		}
-        		var jTime = new Date();
-        		arrFinal.push(arrRow);
-			}
-			console.log("9.2 End");
-			
-		}
-    	
-    	// Name each sheet, put the aoa variable in Excel, and put the aoa variable in the sheet
-    	var excelHandler = {
-                getSheetName : function(){
-                    return 'Sheet1';
-                },
-                getExcelData : function(){
-                    return arrFinal;
-                },
-                getWorksheet : function(){
-                    return XLSX.utils.aoa_to_sheet(this.getExcelData());
-                }
-        }
-    	
-    	// Create xlsx workbook 
-        var wb = XLSX.utils.book_new();
-        // Create xlsx sheet 
-        var newWorksheet = excelHandler.getWorksheet();
-        //var newWorksheet1 = excelHandler.getWorksheet();
-     	// It puts coordinates for merging the cell of the initial patient information data.
-        <%-- let merge = [];
-     	
-        if(<%=isSearch%>){
-        	for(var i = 0; i < 3; i++){
-                let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
-                merge.push(test);
+            		
+            		//checkedList[j].checked = false;
+            		//console.log("ew: " + arrRow);
+    			}
+    			console.log("9.2 End");
+    			
+    		}
+        	
+        	// Name each sheet, put the aoa variable in Excel, and put the aoa variable in the sheet
+        	var excelHandler = {
+                    getSheetName : function(){
+                        return 'qwe';
+                    },
+                    getExcelData : function(){
+                        return arrFinal;
+                    },
+                    getWorksheet : function(){
+                        return XLSX.utils.aoa_to_sheet(this.getExcelData());
+                    }
             }
         	
-        	for(var i = 1; i < 3; i++){
-            	var same_range = search_range(arrFinal[i]);
+        	
+            // Create xlsx sheet 
+            var newWorksheet = excelHandler.getWorksheet();
+            //var newWorksheet1 = excelHandler.getWorksheet();
+         	// It puts coordinates for merging the cell of the initial patient information data.
+            <%-- let merge = [];
+         	
+            if(<%=isSearch%>){
+            	for(var i = 0; i < 3; i++){
+                    let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
+                    merge.push(test);
+                }
+            	
+            	for(var i = 1; i < 3; i++){
+                	var same_range = search_range(arrFinal[i]);
 
-            	for(var j = 0; j < same_range.length; j++){
-            		if(i == 2 && j == 0){
-            			j = 1;
-            		}
-            			
-            		try{
-            			var merge_range = { s: {c: same_range[j][0], r: i}, e: {c: same_range[j][1], r: i}};
-                		merge.push(merge_range);
-            		}catch{
-            			
-            		}
-            		
+                	for(var j = 0; j < same_range.length; j++){
+                		if(i == 2 && j == 0){
+                			j = 1;
+                		}
+                			
+                		try{
+                			var merge_range = { s: {c: same_range[j][0], r: i}, e: {c: same_range[j][1], r: i}};
+                    		merge.push(merge_range);
+                		}catch{
+                			
+                		}
+                		
+                	}
+                }
+            }
+            else{
+            	var length_info = 0;
+            	if(bool_is_grid){
+            		length_info = 4;
+            	}else{
+            		length_info = 3;
+            	}
+
+            	for(var i = 0; i < 4; i++){
+                    let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
+                    merge.push(range_info);
+                }
+
+                for(var i = 0; i < 2; i++){
+                	var same_range = search_range(arrFinal[i]);
+
+                	for(var j = 0; j < same_range.length; j++){
+                		if(i == 1 && j == 0){
+                			j = 1;
+                		}
+                			
+                		try{
+                			var merge_range = { s: {c: same_range[j][0], r: i}, e: {c: same_range[j][1], r: i}};
+                    		merge.push(merge_range);
+                		}catch{
+                			
+                		}
+                		
+                	}
+                }
+            }
+            
+         	// If you put all the coordinate information, cell merge.
+            newWorksheet["!merges"] = merge; --%>
+         	
+            newWorksheet.s = {
+            	aligment: {
+            		wrapText: true
             	}
             }
-        }
-        else{
-        	var length_info = 0;
-        	if(bool_is_grid){
-        		length_info = 4;
-        	}else{
-        		length_info = 3;
-        	}
-
-        	for(var i = 0; i < 4; i++){
-                let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
-                merge.push(range_info);
-            }
-
-            for(var i = 0; i < 2; i++){
-            	var same_range = search_range(arrFinal[i]);
-
-            	for(var j = 0; j < same_range.length; j++){
-            		if(i == 1 && j == 0){
-            			j = 1;
-            		}
-            			
-            		try{
-            			var merge_range = { s: {c: same_range[j][0], r: i}, e: {c: same_range[j][1], r: i}};
-                		merge.push(merge_range);
-            		}catch{
-            			
-            		}
+            
+            checkedList = checkedList.splice(deleteIndex - 1);
+         	// Give a name to the newly created worksheet in the workbook.
+            if(splitValue == 'group'){
+            	if(checkedList.length > 0 || noGroupSheet.length > 0){
+            		XLSX.utils.book_append_sheet(wb, newWorksheet, sheetName);
             		
             	}
+            	else{
+            		XLSX.utils.book_append_sheet(wb, newWorksheet, 'noGroupSheet');
+            	}
+            	
             }
-        }
-        
-     	// If you put all the coordinate information, cell merge.
-        newWorksheet["!merges"] = merge; --%>
-     	
-        newWorksheet.s = {
-        	aligment: {
-        		wrapText: true
-        	}
-        }
-     	// Give a name to the newly created worksheet in the workbook.
-        XLSX.utils.book_append_sheet(wb, newWorksheet);
-        //XLSX.utils.book_append_sheet(wb, newWorksheet1);
-        
-        // Create xlsx File
+            else{
+            	XLSX.utils.book_append_sheet(wb, newWorksheet, 'Whole Data');
+            }
+            
+            
+            console.log(checkedList);
+    	}
+    	
+    	// Create xlsx File
         var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
 
         // Export xlsx File
@@ -1069,7 +1210,6 @@
 
 	var hw = document.getElementById('btn_1');
 	hw.addEventListener('click', makeExcel);
-
 </script>
 
     <script>
@@ -1592,7 +1732,7 @@
         	// Name each sheet, put the aoa variable in Excel, and put the aoa variable in the sheet
         	var excelHandler = {
                     getSheetName : function(){
-                        return 'Sheet1';
+                        return 'qwe';
                     },
                     getExcelData : function(){
                         return Array_Final;
@@ -1606,6 +1746,7 @@
             var wb = XLSX.utils.book_new();
             // Create xlsx sheet 
             var newWorksheet = excelHandler.getWorksheet();
+            
             //var newWorksheet1 = excelHandler.getWorksheet();
          	// It puts coordinates for merging the cell of the initial patient information data.
             <%-- let merge = [];
@@ -1675,7 +1816,7 @@
             	}
             }
          	// Give a name to the newly created worksheet in the workbook.
-            XLSX.utils.book_append_sheet(wb, newWorksheet);
+            XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
             //XLSX.utils.book_append_sheet(wb, newWorksheet1);
             
             // Create xlsx File
