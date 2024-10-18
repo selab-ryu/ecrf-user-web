@@ -336,12 +336,15 @@
 var resarcherTable;
 var subjectTable;
 
+var initSubjectInfoArr = [];
+
 var crfResearcherInfoArr = [];
 var crfSubjectInfoArr = [];
 
 var crfId = "<%=String.valueOf(crfId) %>";
 var dataTypeId = "<%=String.valueOf(dataTypeId) %>";
 
+var isSubjectChanged = false;
 
 $('#<portlet:namespace/>saveBtn').on("click", function(e) {
 	let form = $('#<portlet:namespace/>updateCRFFm');
@@ -351,13 +354,35 @@ $('#<portlet:namespace/>saveBtn').on("click", function(e) {
 	subjectListInput.val(JSON.stringify(crfSubjectInfoArr));
 	researcherListInput.val(JSON.stringify(crfResearcherInfoArr));
 	
-	form.submit();
+	if(isSubjectChanged) {
+		$.confirm({
+			title: '<liferay-ui:message key="ecrf-user.message.confirm-delete-crf-subject.title"/>',
+			content: '<p><liferay-ui:message key="ecrf-user.message.confirm-delete-crf-subject.content"/></p>',
+			type: 'red',
+			typeAnimated: true,
+			columnClass: 'large',
+			buttons:{
+				ok: {
+					btnClass: 'btn-blue',
+					action: function(){
+						form.submit();
+					}
+				},
+				close: {
+		            action: function () {}
+		        }
+			},
+			draggable: true
+		});	
+	} else {
+		form.submit();
+	}	
 });
 
 $('#<portlet:namespace/>delete').click( function(event){
 	var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-crf.title"/>';
 	var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-crf.content"/>';
-	deleteConfirm(title, content, '<%= deleteCRFURL.toString() %>', 'large');
+	deleteConfirm(title, content, '<%=deleteCRFURL.toString() %>', 'large');
 });
 
 AUI().ready(function() {
@@ -399,6 +424,7 @@ function fetchSubjectArr() {
 		},
 		function(obj) {
 			//console.log(obj);
+			initSubjectInfoArr = obj;
 			crfSubjectInfoArr = obj;
 			refreshSubjectTable();
 		}
@@ -424,31 +450,80 @@ function refreshSubjectTable() {
 }
 
 Liferay.provide(window, "closePopup", function(dialogId, type, data) {
-	var A = AUI();
+	//var A = AUI();
 	var dialog = Liferay.Util.Window.getById(dialogId);
 	dialog.destroy();
-	console.groupEnd();
+	//console.groupEnd();
 	
 	//console.group("closePopup Function");
-	//console.log("closePopup called");
 	//console.log(dialogId);
-	//console.log(type);
+	console.log(type);
 	console.log(data);
 	
 	if(type == "save") {
-		//console.log("is it called?");	// check equals
+		//console.log("is it called?", dialogId);	// check equals
 		
 		if(dialogId == "manageSubjectPopup" || dialogId == "manageUpdateLockPopup" ) {
 			crfSubjectInfoArr = data;
 			refreshSubjectTable();
 		} else if (dialogId == "manageResearcherPopup") {
 			crfResearcherInfoArr = data;
-			refreshResearcherTable();	
+			refreshResearcherTable();
 		}
+		
+		if(dialogId == "manageSubjectPopup") {
+			isSubjectChanged = compareCRFSubjectList();
+			console.log(isSubjectChanged);
+		} else {
+			console.log("check");
+		}
+		
 	}
 	
 	//console.groupEnd();
 }, ['liferay-util-window'] );
+
+function compareCRFSubjectList() {
+	// init crf subject list is contained current crf subject list => true
+	// dont matter add other subject, only check existing subjects are removed
+		
+	console.log(initSubjectInfoArr, crfSubjectInfoArr)
+	
+	if(crfSubjectInfoArr.length < initSubjectInfoArr.length) return true;
+	else {
+		for(var i=0; i<initSubjectInfoArr.length; i++) {
+			var check = crfSubjectInfoArr.some((item) => crfSubjectEqualityCheck(item, initSubjectInfoArr[i]));
+			if(!check) return true;
+		}
+	}
+	
+	return false;
+}
+
+function crfSubjectEqualityCheck(obj1, obj2) {
+	// if remove and add subject => crfSubjectId is changed
+	// only check subject id
+	
+	if(obj1['subjectId'] !== obj2['subjectId']) {
+		return false;
+	}
+	return true;
+}
+
+function shallowEqualityCheck(obj1, obj2) {
+	const keys1 = Object.keys(obj1);
+	const keys2 = Object.keys(obj2);
+	if (keys1.length !== keys2.length) {
+		return false;
+	}
+	for (const key of keys1) {
+		if (obj1[key] !== obj2[key]) {
+			return false;
+		}
+	}
+	return true;
+}
+
 
 function tableLoading() {
 	console.group("table load start");

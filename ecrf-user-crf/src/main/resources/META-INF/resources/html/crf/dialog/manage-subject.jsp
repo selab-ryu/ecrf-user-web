@@ -131,12 +131,12 @@ var notIncludedSubjectArr = [];
 var crfSubjectInfoArr = [];
 
 $(document).ready( function() {
-	console.group();
+	//console.group();
 	
 	// set init arr by Session Data	
 	var getValue = sessionStorage.getItem('subjectArr');
 	var parseVal = JSON.parse(decodeURIComponent(getValue)); 
-    console.log(parseVal);
+    //console.log(parseVal);
     crfSubjectInfoArr = parseVal;
     tableLoading();
     
@@ -363,6 +363,10 @@ function setSaveButtonEvent() {
 	
 		//console.log("save button clicked");
 		
+		// check subject list changed
+		// check subject is removed from upper list
+		
+		
 		Liferay.Util.getOpener().closePopup('manageSubjectPopup', "save", currentSubjectArr);
 				
 	});
@@ -377,7 +381,7 @@ function setMiddleButtonEvent() {
 			// add to current arr, remove from not included arr
 		// initialize row selected arr of not inlcuded
 		// refresh table (current, not included)
-		console.group();	
+		//console.group();	
 		
 		for(var i=0; i<rowsSelectedNotIncluded.length; i++) {
 			var serialId = rowsSelectedNotIncluded[i];
@@ -396,7 +400,7 @@ function setMiddleButtonEvent() {
 			notIncludedSubjectArr.splice(removeIdx, 1);
 		}
 		
-		console.groupEnd();
+		//console.groupEnd();
 		
 		rowsSelectedNotIncluded = [];
 		
@@ -413,7 +417,7 @@ function setMiddleButtonEvent() {
 			// add to not included arr, remove from current arr
 		// initialize row selected arr of current
 		// refresh table (current, not included)
-		console.group();
+		//console.group();
 		
 		for(var i=0; i<rowsSelectedCurrent.length; i++) {
 			var serialId = rowsSelectedCurrent[i];
@@ -432,7 +436,7 @@ function setMiddleButtonEvent() {
 			currentSubjectArr.splice(removeIdx, 1);
 		}
 		
-		console.groupEnd();
+		//console.groupEnd();
 		
 		rowsSelectedCurrent = [];
 		
