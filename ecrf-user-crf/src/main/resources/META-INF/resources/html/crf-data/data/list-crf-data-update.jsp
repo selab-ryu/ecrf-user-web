@@ -1,3 +1,4 @@
+<%@page import="java.util.Arrays"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayPortletURL"%>
 <%@ include file="../../init.jsp" %>
 
@@ -10,9 +11,10 @@ ArrayList<CRFSubject> crfSubjectList = new ArrayList<>();
 crfSubjectList.addAll(CRFSubjectLocalServiceUtil.getCRFSubjectByCRFId(scopeGroupId, crfId));
 
 long[] subjectIds = ECRFUserUtil.getSubjectIdFromCRFSubject(crfSubjectList);
+
 ArrayList<Subject> subjectList = new ArrayList<Subject>();
 subjectList.addAll(SubjectLocalServiceUtil.getSubjectByIds(scopeGroupId, subjectIds));
-
+Collections.reverse(subjectList);
 String menu="crf-data-list";
 
 boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false);
