@@ -107,3 +107,14 @@
 		</aui:fieldset-group>
 	</div>
 </div>
+
+<script>
+$(document).ready(function(){
+	$("#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_btnDelete").hide();
+});
+Liferay.on( 'SX_VISUALIZER_DATA_CHANGED', function(evt){
+	var btn = $("#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_btnSave");
+	btn.css("background-color", "#0B5FFF");
+	btn.css("color", "white");
+});
+</script>
