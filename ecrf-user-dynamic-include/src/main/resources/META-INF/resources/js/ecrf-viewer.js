@@ -208,6 +208,26 @@ let ECRFViewer = function(){
 					return true;
 				}
 				break;
+			case "bdi_depress_grade":
+				if(this.age < 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "kgds_depress_grade":
+				if(this.age >= 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "menopause":
+				if(this.gender == 0){
+					return true;
+				}
+				return false;
+				break;
 			default:
 				return false;
 				break;
@@ -1067,7 +1087,41 @@ let ECRFViewer = function(){
 									}
 								}
 								break;
-								
+							case "bone_density_num":
+								console.log(term.value, typeof term.value);
+								if(term.value >= -1){
+									$("#is_osteoporosis").val("0").trigger('change');
+								}else if(term.value <= -2.5){
+									$("#is_osteoporosis").val("2").trigger('change');
+								}else{
+									$("#is_osteoporosis").val("1").trigger('change');
+								}
+								break;
+							case "depression_grade":
+								var isElderly = false;
+								if(this.age >= 65) isElderly = true;
+								if(isElderly){
+									if(term.value <= 14){
+										$("#bdi_depress_grade").val("0").trigger('change');
+									}else if(term.value <= 18){
+										$("#bdi_depress_grade").val("1").trigger('change');
+									}else if(term.value <= 21){
+										$("#bdi_depress_grade").val("2").trigger('change');
+									}else{
+										$("#bdi_depress_grade").val("3").trigger('change');
+									}
+								}else{
+									if(term.value <= 9){
+										$("#bdi_depress_grade").val("0").trigger('change');
+									}else if(term.value <= 15){
+										$("#bdi_depress_grade").val("1").trigger('change');
+									}else if(term.value <= 23){
+										$("#bdi_depress_grade").val("2").trigger('change');
+									}else{
+										$("#bdi_depress_grade").val("3").trigger('change');
+									}
+								}
+								break;
 						}
 					console.log("metabolic : " , this.metabolicCount, "risk : ", this.riskCount);		
 					if(this.metabolicCount >= 3){

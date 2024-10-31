@@ -1,3 +1,4 @@
+<%@page import="java.util.Arrays"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayPortletURL"%>
 <%@ include file="../../init.jsp" %>
 
@@ -10,9 +11,10 @@ ArrayList<CRFSubject> crfSubjectList = new ArrayList<>();
 crfSubjectList.addAll(CRFSubjectLocalServiceUtil.getCRFSubjectByCRFId(scopeGroupId, crfId));
 
 long[] subjectIds = ECRFUserUtil.getSubjectIdFromCRFSubject(crfSubjectList);
+
 ArrayList<Subject> subjectList = new ArrayList<Subject>();
 subjectList.addAll(SubjectLocalServiceUtil.getSubjectByIds(scopeGroupId, subjectIds));
-
+Collections.reverse(subjectList);
 String menu="crf-data-list";
 
 boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false);
@@ -397,9 +399,32 @@ _log.info("url : " + baseURL.toString());
 			
 			<%
 				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 0, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+				List<LinkCRF> links = LinkCRFLocalServiceUtil.getLinkCRFByC_S(crfId, rowSubjectId);
+				long singleSdId = 0;
+				if(links.size() < 2 && links.size() > 0){
+					LinkCRF getLink = links.get(0);
+					singleSdId = getLink.getStructuredDataId();
+				}
 			%>
+			<portlet:renderURL var="renderUpdateCRFURL">
+				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=commandName%>" />
+				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+				<portlet:param name="sdId" value="<%=String.valueOf(singleSdId) %>" />				
+				<portlet:param name="structuredDataId" value="<%=String.valueOf(singleSdId) %>" />				
+				<portlet:param name="menu" value="crf-data-list-update" />
+				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+			</portlet:renderURL>
+			<c:choose>
+				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
+					<aui:button name="updateCRF" type="button" value="ecrf-user.button.update" cssClass="<%=CRFUpdateBtnClass %>" onClick="<%=renderUpdateCRFURL%>" disabled="<%=updateLock ? true : false %>"></aui:button>
+				</c:when>
+				<c:otherwise>
+					<aui:button name="updateCRF" type="button" value="ecrf-user.button.update" cssClass="<%=CRFUpdateBtnClass %>" onClick="<%=updateFunctionCallStr%>" disabled="<%=updateLock ? true : false %>"></aui:button>				
+				</c:otherwise>	
+			</c:choose>
+		
 			
-				<aui:button name="updateCRF" type="button" value="ecrf-user.button.update" cssClass="<%=CRFUpdateBtnClass %>" onClick="<%=updateFunctionCallStr%>" disabled="<%=updateLock ? true : false %>"></aui:button>
 				
 			</liferay-ui:search-container-column-text>
 			
@@ -412,7 +437,12 @@ _log.info("url : " + baseURL.toString());
 				}
 			
 				String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 1, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
-				
+				List<LinkCRF> links = LinkCRFLocalServiceUtil.getLinkCRFByC_S(crfId, rowSubjectId);
+				long singleSdId = 0;
+				if(links.size() < 2 && links.size() > 0){
+					LinkCRF getLink = links.get(0);
+					singleSdId = getLink.getStructuredDataId();
+				}
 				boolean hasViewAuditPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_AUDIT);
 				boolean auditDisable = true;
 				if(hasViewAuditPermission && hasCRF) auditDisable = false;  
@@ -423,7 +453,24 @@ _log.info("url : " + baseURL.toString());
 				name="ecrf-user.list.audit-trail"
 				cssClass="min-width-80"
 			>
-				<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view" : "ecrf-user.button.audit-trail" %>" cssClass="<%=auditBtnClass %>" onClick="<%=auditFunctionCallStr%>" disabled="<%=auditDisable ? true : false %>"></aui:button>
+			<portlet:renderURL var="renderAuditCRFURL">
+				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_CRF_VIEWER%>" />
+				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+				<portlet:param name="sdId" value="<%=String.valueOf(singleSdId) %>" />				
+				<portlet:param name="structuredDataId" value="<%=String.valueOf(singleSdId) %>" />
+				<portlet:param name="isAudit" value="1" />			
+				<portlet:param name="menu" value="crf-data-list-update" />
+				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+			</portlet:renderURL>
+			<c:choose>
+				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
+					<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view" : "ecrf-user.button.audit-trail" %>" cssClass="<%=auditBtnClass %>" onClick="<%=renderAuditCRFURL%>" disabled="<%=auditDisable ? true : false %>"></aui:button>
+				</c:when>
+				<c:otherwise>
+					<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view" : "ecrf-user.button.audit-trail" %>" cssClass="<%=auditBtnClass %>" onClick="<%=auditFunctionCallStr%>" disabled="<%=auditDisable ? true : false %>"></aui:button>
+				</c:otherwise>	
+			</c:choose>
 			</liferay-ui:search-container-column-text>
 			
 						
@@ -439,9 +486,17 @@ _log.info("url : " + baseURL.toString());
 				if(updateLock) {
 					CRFDeleteBtnClass = "none-btn small-btn";
 				}
+
+				long singleLinkId = 0;
+				if(links.size() < 2 && links.size() > 0){
+					LinkCRF getLink = links.get(0);
+					singleLinkId = getLink.getLinkId();
+				}
 				
 				String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 2, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 				
+				String deleteSingleFunctionCallStr = String.format("deleteSingleCRF(%d, %d, '%s', '%s')", singleLinkId, crfId, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+
 				boolean deleteDisable = true;
 				if(!updateLock && hasCRF) deleteDisable = false;
 			%>
@@ -450,7 +505,14 @@ _log.info("url : " + baseURL.toString());
 				name="ecrf-user.list.delete"
 				cssClass="min-width-80"
 			>
-				<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="<%=CRFDeleteBtnClass %>" onClick="<%=deleteFunctionCallStr%>" disabled="<%=deleteDisable ? true : false %>"></aui:button>
+			<c:choose>
+				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
+					<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="<%=CRFDeleteBtnClass %>" onClick="<%=deleteSingleFunctionCallStr%>" disabled="<%=deleteDisable ? true : false %>"></aui:button>
+				</c:when>
+				<c:otherwise>
+					<aui:button name="delete" type="button" value="ecrf-user.button.delete" cssClass="<%=CRFDeleteBtnClass %>" onClick="<%=deleteFunctionCallStr%>" disabled="<%=deleteDisable ? true : false %>"></aui:button>
+				</c:otherwise>	
+			</c:choose>
 			</liferay-ui:search-container-column-text>
 			
 			</liferay-ui:search-container-row>
@@ -516,7 +578,38 @@ Liferay.provide(window, "openValidPopup", function() {
 	
 }, ['aui-modal']
 );
+function deleteSingleCRF(linkCrfId, crfId, portletId, baseURL){
+	$.confirm({
+		title: '<liferay-ui:message key="ecrf-user.message.confirm-delete-crf-data.title"/>',
+		content: '<p><liferay-ui:message key="ecrf-user.message.confirm-delete-crf-data.content"/></p>',
+		type: 'red',
+		typeAnimated: true,
+		columnClass: 'large',
+		buttons:{
+			ok: {
+				btnClass: 'btn-blue',
+				action: function(){
 
+					var actionURL = Liferay.Util.PortletURL.createActionURL(baseURL,
+							{
+								'p_p_id' : portletId,
+								'p_auth': Liferay.authToken,
+								'javax.portlet.action' : '/action/crf-data/delete-crf-data',
+								'linkCrfId' : linkCrfId,
+								'crfId' : crfId
+							});
+					
+					window.location.href = actionURL.toString();
+				}
+			},
+			close: {
+	            action: function () {
+	            }
+	        }
+		},
+		draggable: true
+	});
+}
 </script>
 
 <aui:script use="aui-base aui-modal">

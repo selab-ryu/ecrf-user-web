@@ -53,6 +53,12 @@ _log.info("is audit : " + isAudit);
 	<portlet:param name="isUpdate" value="<%=String.valueOf(isUpdate)%>"/>
 </portlet:actionURL>
 
+<portlet:renderURL var="listCRFURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
+	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+</portlet:renderURL>
+
 <div class="ecrf-user ecrf-user-crf-data">
 	<%@ include file="../other/sidebar.jspf" %>	
 	<div class="page-content">
@@ -162,6 +168,8 @@ _log.info("is audit : " + isAudit);
 </style>
 <script>
 $(document).ready(function(){
+var isEdited = false;
+var isLoaded = false;
 let SX = StationX(  '<portlet:namespace/>', 
 		'<%= defaultLocale.toString() %>',
 		'<%= locale.toString() %>',
@@ -199,20 +207,29 @@ console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
 
 Liferay.on( 'value_changed', function(evt){
+	if(isLoaded){
+		isEdited = true;
+		$('#<portlet:namespace/>btnSave').css("background-color", "#0B5FFF");
+		$('#<portlet:namespace/>btnSave').css("color", "white");
+	}
 	console.log("value_changed", JSON.stringify(evt.dataPacket.result));
 	let resultStr = JSON.stringify(evt.dataPacket.result);
 	$('#<portlet:namespace/>dataTypeId').val(<%=dataType.getDataTypeId()%>);
 	$('#<portlet:namespace/>structuredDataId').val(<%=sdId%>);
 	$('#<portlet:namespace/>dataContent').val(resultStr);
 	console.log( 'dataContent: ', $('#<portlet:namespace/>dataContent').val());
+	isLoaded = true;
 });
 
 $('#<portlet:namespace/>btnSave').on( 'click', function(event){
+	var renderURL = "<%=listCRFURL%>";
+	
 	if(!$('#visit_date').val()){
 		alert("visit date required");
 		document.getElementById('visit_date').focus();
 	}else{
-		$('#crfViewerForm').submit();
+		if(isEdited) $('#crfViewerForm').submit();
+		else window.location.href = renderURL;
 	}
 	
 });
