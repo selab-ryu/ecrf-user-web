@@ -222,8 +222,30 @@ let ECRFViewer = function(){
 					return true;
 				}
 				break;
+			case "KGDS_GROUP":
+				if(this.age >= 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "SF6D_GROUP":
+				if(this.age < 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "BDI_GROUP":
+				if(this.age < 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
 			case "menopause":
 				if(this.gender == 0){
+					
 					return true;
 				}
 				return false;
@@ -1391,7 +1413,9 @@ let ECRFViewer = function(){
 					}
 				});
 			}else if(term.termType === "Date"){
-				
+				var temp = new Date(term.value);
+				console.log("Date", temp);
+				if(term.value) termValue = temp.getFullYear() + "/" + temp.getMonth() + "/" + temp.getDay();
 			}else if(term.termType === "File"){
 				
 			}

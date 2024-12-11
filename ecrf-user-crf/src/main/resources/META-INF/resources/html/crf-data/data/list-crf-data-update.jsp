@@ -386,6 +386,7 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="fromFlag" value="selector-add" />
 				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+				<portlet:param name="structuredDataId" value="0" />			
 				<portlet:param name="menu" value="crf-data-list-update" />
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
