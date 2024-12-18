@@ -243,7 +243,15 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<aui:button disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateCRFURL %>"></aui:button>
+					<a class="<%= !(hasCRFPermission && hasUpdatePermission) ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=updateCRFURL %>" name="updateCRF" disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>">
+						<img src="<%= !(hasCRFPermission && hasUpdatePermission) ?  renderRequest.getContextPath() + "/btn_img/update_icon.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
+							<span>Locked</span>
+						</c:if>
+						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
+							<span>Update CRF</span>
+						</c:if>			
+					</a>
  				</liferay-ui:search-container-column-text>
 				
 				
@@ -256,7 +264,15 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<aui:button disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.crf.form" cssClass="small-btn ai-btn" onClick="<%=updateCRFFormURL %>"></aui:button>
+					<a class="<%= !(hasCRFPermission && hasUpdatePermission) ? "icon-button icon-button-deactivate" : "icon-button icon-button-form"%>" href="<%=updateCRFFormURL %>" name="crfForm" disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>">
+						<img src="<%= !(hasCRFPermission && hasUpdatePermission) ?  renderRequest.getContextPath() + "/btn_img/crf_form_icon.png" : renderRequest.getContextPath() + "/btn_img/crf_form_icon.png"%>"/>
+						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
+							<span>Locked</span>
+						</c:if>
+						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
+							<span>CRF Form</span>
+						</c:if>			
+					</a>
  				</liferay-ui:search-container-column-text>
 				
 				<liferay-ui:search-container-column-text
@@ -268,7 +284,15 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<aui:button disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.crf.data" cssClass="small-btn history-btn" onClick="<%=updateCRFDataURL %>"></aui:button>
+					<a class="<%= !(hasCRFPermission && hasUpdatePermission) ? "icon-button icon-button-deactivate" : "icon-button icon-button-audit"%>" href="<%=updateCRFDataURL %>" name="crfData" disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>">
+						<img src="<%= !(hasCRFPermission && hasUpdatePermission) ?  renderRequest.getContextPath() + "/btn_img/crf_data_icon.png" : renderRequest.getContextPath() + "/btn_img/crf_data_icon.png"%>"/>
+						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
+							<span>Locked</span>
+						</c:if>
+						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
+							<span>CRF Data</span>
+						</c:if>			
+					</a>
  				</liferay-ui:search-container-column-text>
  				
 				<liferay-ui:search-container-column-text
@@ -280,7 +304,15 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<aui:button disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>" name="update" type="button" value="ecrf-user.button.crf.query" cssClass="small-btn vcf-btn" onClick="<%=updateCRFQueryURL %>"></aui:button>
+					<a class="<%= !(hasCRFPermission && hasUpdatePermission) ? "icon-button icon-button-deactivate" : "icon-button icon-button-query"%>" href="<%=updateCRFQueryURL %>" name="crfQuery" disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>">
+						<img src="<%= !(hasCRFPermission && hasUpdatePermission) ?  renderRequest.getContextPath() + "/btn_img/crf_query_icon.png" : renderRequest.getContextPath() + "/btn_img/crf_query_icon.png"%>"/>
+						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
+							<span>Locked</span>
+						</c:if>
+						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
+							<span>CRF Query</span>
+						</c:if>			
+					</a>
  				</liferay-ui:search-container-column-text>
 				
 				<liferay-ui:search-container-column-text
@@ -296,15 +328,16 @@ if(isSearch) {
 						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s', 'large')", title, content, deleteCRFURL.toString());
 					%>
 					
-					<aui:button 
-						disabled="<%=(hasCRFPermission && hasDeletePermission) ? false : true %>" 
-						name="delete" 
-						type="button" 
-						value="ecrf-user.button.delete" 
-						cssClass="small-btn delete-btn" 
-						onClick="<%=deleteFunctionCall %>">
-					</aui:button>
 					
+					<a class="<%= !(hasCRFPermission && hasUpdatePermission) ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onClick="<%=deleteFunctionCall %>" name="delete" disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>">
+						<img src="<%= !(hasCRFPermission && hasUpdatePermission) ?  renderRequest.getContextPath() + "/btn_img/delete_icon.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
+							<span>Locked</span>
+						</c:if>
+						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
+							<span>Delete</span>
+						</c:if>			
+					</a>
  				</liferay-ui:search-container-column-text>
 								
 			</liferay-ui:search-container-row>

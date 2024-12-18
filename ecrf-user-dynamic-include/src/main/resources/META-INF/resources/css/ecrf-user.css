@@ -148,12 +148,12 @@ table.crf-grid-table {
 /* The side navigation menu */
 /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
 div.page-content {
-    padding:16px 16px 16px 170px; 
+    padding:16px 16px 16px 195px; 
     max-width:2000px;
 }
 
 div.page-content-sub {
-    padding:16px 16px 16px 162px; 
+    padding:16px 16px 16px 187px; 
     max-width:2000px;
 }
         
@@ -161,10 +161,10 @@ div.page-content-sub {
    	margin-top: 16px;
     margin-left: 12px;
     padding: 4px;
-    width: 145px;
+    width: 170px;
     position: absolute;
     overflow: auto;
-	min-width: 145px;
+	min-width: 170px;
 	line-height: 12px;
 		
 	background-color:white;

@@ -1,6 +1,9 @@
 let ECRFViewer = function(){
 	class Viewer{
-
+		/*
+		 * Here for launch viewer 
+		 * 
+		 */
 		constructor(DataStructure, align, structuredData, subjectInfo, isAudit){
 			var result = new Object();
 			renderUtil.align = align;
@@ -45,7 +48,9 @@ let ECRFViewer = function(){
 					}
 				});
             };
-            
+            /*
+             * value_changed event work on js first, jsp after
+             */
             Liferay.on('value_changed', function(event){
 
             	if(event.dataPacket.term){
@@ -65,6 +70,9 @@ let ECRFViewer = function(){
         }
 	};
 	
+	/*
+	 * autoCalUtil for exercise crf, er crf
+	 */
 	let autoCalUtil = {
 		initCalculatevalue: function(DataStructure, subjectInfo){
 			this.crf = DataStructure;
@@ -72,15 +80,18 @@ let ECRFViewer = function(){
 			this.gender = subjectInfo["subjectGender"];
 			this.age = autoCalUtil.calculateAge(subjectInfo["subjectBirth"]);
 			
+			//for er crf cogas score
 			this.cogasScore = 0;
 			if(this.age >= 50){
 				this.cogasScore++;
 			}
 			
+			//for exercise crf risk, metabolic measurement
 			this.riskCount = 0;
 			this.metabolicCount = 0;
 			
 		},
+		
 		calculateAge: function (birthDate) {
 			var birthYear = birthDate.getFullYear();
 			var birthMonth = birthDate.getMonth();
@@ -104,6 +115,9 @@ let ECRFViewer = function(){
 			return age;
 		},
 		
+		/*
+		 * check age & gender for hide term or change value of exercise crf
+		 */ 
 		checkExcerciseFlag : function(termName){
 			switch(termName){
 			case "diabetes":
@@ -222,8 +236,30 @@ let ECRFViewer = function(){
 					return true;
 				}
 				break;
+			case "KGDS_GROUP":
+				if(this.age >= 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "SF6D_GROUP":
+				if(this.age < 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
+			case "BDI_GROUP":
+				if(this.age < 65){
+					return false;
+				}else{
+					return true;
+				}
+				break;
 			case "menopause":
 				if(this.gender == 0){
+					
 					return true;
 				}
 				return false;
@@ -234,6 +270,9 @@ let ECRFViewer = function(){
 			}
 			
 		},
+		/*
+		 * Auto calculation part .. for find case each crf id
+		 */
 		checkAutoCal : function(term){
 			if(this.crf){				
 				switch(this.crf.dataTypeName){
@@ -1150,6 +1189,12 @@ let ECRFViewer = function(){
 		}
 	}
 	
+	/*
+	 * 
+	 * for render Smart CRF UI on canvas
+	 * 
+	 */
+
     let renderUtil = {
         renderCanvas : function(terms){
         	let $loader = $('<div>');
@@ -1391,7 +1436,9 @@ let ECRFViewer = function(){
 					}
 				});
 			}else if(term.termType === "Date"){
-				
+				var temp = new Date(term.value);
+				console.log("Date", temp);
+				if(term.value) termValue = temp.getFullYear() + "/" + temp.getMonth() + "/" + temp.getDay();
 			}else if(term.termType === "File"){
 				
 			}
