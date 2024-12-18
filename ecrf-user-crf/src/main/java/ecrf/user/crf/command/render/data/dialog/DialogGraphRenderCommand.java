@@ -11,6 +11,12 @@ import com.liferay.portal.kernel.util.Validator;
 import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,12 +50,21 @@ import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
 	    service = MVCRenderCommand.class
 	)
 public class DialogGraphRenderCommand implements MVCRenderCommand{
+	
+	//private Predictor<NDList, NDList> predictor;
+	
+	/*public float[] predict(String input, Predictor<NDList, NDList> predictor) throws Exception {
+        try (NDManager manager = NDManager.newBaseManager()) {
+            NDArray inputArray = manager.create(input);
+            NDList result = predictor.predict(new NDList(inputArray));
+            return result.get(0).toFloatArray();
+        }
+    }*/
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException{
 		_log.info("Render Graph popup");
 		
 		String termName = ParamUtil.getString(renderRequest, "termName");
-		_log.info(termName);
 		
 		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.CRF_ID);
 		long dataTypeId = _crfLocalService.getDataTypeId(crfId);
@@ -58,6 +73,7 @@ public class DialogGraphRenderCommand implements MVCRenderCommand{
 		String crfForm = "";
 		JSONArray crfFormArr = null;
 		
+		// Received for selected Term information and data
 		try {
 			crfForm = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
 			crfFormArr = JSONFactoryUtil.createJSONArray(JSONFactoryUtil.createJSONObject(crfForm).getString("terms"));
@@ -72,10 +88,9 @@ public class DialogGraphRenderCommand implements MVCRenderCommand{
 			}
 		}
 		
-		
-		
+		// Should be handled differently depending on the type
+		// In the case of List items, take the label and value of each option and count the number of options and put them in one by one
 		if(compObj.getString("termType").equals("List")) {
-			_log.info(termName);
 			JSONArray options = compObj.getJSONArray("options");
 			String[] datas = new String[options.length()];
 			String[] values = new String[options.length()];
@@ -141,11 +156,6 @@ public class DialogGraphRenderCommand implements MVCRenderCommand{
 			}
 			
 			renderRequest.setAttribute("datas", datas.toArray(new String[datas.size()]));
-			/*
-			 * _log.info("gg: " + datas.size()); if(datas.size() == 0) {
-			 * renderRequest.setAttribute("type", "empty"); return
-			 * ECRFUserJspPaths.JSP_DIALOG_CRF_DATA_GRAPH; }
-			 */
 
 			// List where you want to insert the default statistics entry
 			List<String> statistics_name = new ArrayList<>();
@@ -201,6 +211,8 @@ public class DialogGraphRenderCommand implements MVCRenderCommand{
 			quartiles_value.add(String.format("%.2f", graph_iqr_3));
 			
 			// List to insert normality test values
+			// For normality analysis, the results are partially different when compared to the current Python result and do not deliver the value
+			// The reason is that the reference library is too old, but if you want to add additional statistical methods, it would be best to upload a Java version or build an API server
 			List<String> normality_name = new ArrayList<>();
 			List<String> normality_value = new ArrayList<>();
 			
@@ -222,7 +234,7 @@ public class DialogGraphRenderCommand implements MVCRenderCommand{
 	        double mean = stats.getMean();
 	        double std = stats.getStandardDeviation();
 	        
-	        _log.info("Kolmogorov-Smirnov Statistic: " + mean);
+	        _log.info("ShapiroWilk Statistic: " + mean);
 	        _log.info("P-Value: " + std);
 	        
 	        RealDistribution distribution = new NormalDistribution(mean, std);
@@ -231,8 +243,8 @@ public class DialogGraphRenderCommand implements MVCRenderCommand{
 	        double pValue = ksTest.kolmogorovSmirnovTest(distribution, data);
 	        double statistic = ksTest.kolmogorovSmirnovStatistic(distribution, data);
 
-	        System.out.println("Kolmogorov-Smirnov Statistic: " + statistic);
-	        System.out.println("P-Value: " + pValue);
+	        _log.info("Kolmogorov-Smirnov Statistic: " + statistic);
+	        _log.info("P-Value: " + pValue);
 			
 	        /*RealDistribution distribution = new NormalDistribution(graph_avg, graph_sd);
 
