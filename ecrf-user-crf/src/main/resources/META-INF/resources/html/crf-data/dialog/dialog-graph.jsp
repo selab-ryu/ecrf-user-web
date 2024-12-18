@@ -12,18 +12,16 @@ List<Double> listDouble = new ArrayList<>();
 List<String> listString = new ArrayList<String>();
 List<Integer> listInt = new ArrayList<>();
 listDouble.add(1.1);
+// Receive the data processed by Java and put it differently for each type
 if(type != "empty"){
 	datas = (String[])renderRequest.getAttribute("datas");
 	values = (int[])renderRequest.getAttribute("values");
 
-	
-	_log.info("hi:" + datas);
 	if(type.equals("Numeric")){
 		listDouble = new ArrayList<>();
 		for(String i : datas) {
 			listDouble.add(Double.parseDouble(i));
 		}
-		_log.info("hi:" + listDouble);
 	}
 	else if(type.equals("List")){
 		for(String i : datas) {
@@ -167,6 +165,8 @@ DonutChartConfig _donutChartConfig = new DonutChartConfig();
 	</aui:container>
 </div>
 
+
+<!--From here on, we put data in the Graph, but it's faster to refer to the library document  -->
 <aui:script require="frontend-taglib-chart$billboard.js@1.5.1/dist/billboard as myChart">
 
 	function makeBarChart(freqData, labelData){
@@ -254,32 +254,31 @@ DonutChartConfig _donutChartConfig = new DonutChartConfig();
 		});
 	}
 
+	<%-- This function changes the graph by dividing the existing data into the corresponding ranges based on the entered ranges --%>
 	function adjustmentRange(rangeValue){
 		if("<%=type%>" == "List"){
 			
 			var freqs = <%=listInt %>;
 			var labels = [];
 			<%for(int i = 0; i < listString.size(); i++){ %>
-				<%-- console.log(<%=i%>); --%>
 				labels[<%=i %>] = "<%=listString.get(i)%>"; 
 				<%} %>;
-			console.log(labels);
+				
 			makeBarChart(freqs, labels);
 			makeLineChart(freqs, labels);
 			makeDonutChart(freqs, labels);
 		}
 		else if("<%=type%>" == "Numeric"){
-			console.log("<%=type %>");
 			var rangeSize = rangeValue;
 			var max = <%=Collections.max(listDouble) %>;
 			var min = <%=Collections.min(listDouble) %>;
 			var rangeCount = 0;
-			console.log("rs: " + rangeSize);
+			<%-- Proceed with exception handling for the range you entered --%>
 			if(rangeSize == "default"){
+				<%-- Initial category progresses so that col can be printed in 10 pieces --%>
 				rangeCount = 10;
 				rangeSize = Math.ceil((max - min) / (rangeCount - 1));
 				document.getElementById('value_range').value = rangeSize;
-				console.log("hu: " + rangeSize);
 			}
 			else if(rangeSize > max || Object.is(rangeSize, NaN)){
 				alert("Input the right value...");
@@ -301,9 +300,7 @@ DonutChartConfig _donutChartConfig = new DonutChartConfig();
 			}
 			for(var i = 0 ; i < rangeCount; i++){
 				var rangeStart = Number(min + i * rangeSize).toFixed(2);
-				console.log("st: " + rangeStart);
 				var rangeEnd = Number(parseFloat(rangeStart) + rangeSize).toFixed(2);
-				console.log("en: " + rangeEnd);
 				labels[i] = rangeStart + "~" + rangeEnd;
 			}
 			makeBarChart(freqs, labels);
@@ -372,8 +369,6 @@ DonutChartConfig _donutChartConfig = new DonutChartConfig();
         document.getElementById("donut").style.display = "block";
         
 	});
-	
-	//document.getElementById('xlsx_name').value
 	
 
 </script>
