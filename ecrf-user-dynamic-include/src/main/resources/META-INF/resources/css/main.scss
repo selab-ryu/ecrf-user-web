@@ -64,34 +64,36 @@
 
     /* icon button style */
     .icon-button{
-        display: inline-block;
+        display: inline-flex;
         align-items: center;
-        width: 130px;
+        justify-content: center;
+        width: 140px;
         gap: 8px;
-        padding: 4px 8px;
+        padding: 6px 8px;
         border: none;
         border-radius: 4px;
-        font-size: 13px;
+        font-size: 0.95rem;
         cursor: pointer;		      
         text-decoration: none!important;
     }
+    .icon-button img{
+		height: 26px;
+		object-fit: contain;
+	}
     .icon-button span{
         color: white;
         white-space: nowrap;
+        font-weight: bold;
     }
-    .icon-button img {
-        width: 24px;
-        height: 24px;
-        margin-right: 8px;
-    }
-                
+
+     
     .icon-button-deactivate{
         background-color: #CCCCCC;
         cursor: not-allowed;		      
     }
     
      .icon-button-deactivate span{
-        color:#666!important;		      
+        color:#444!important;		      
     }
     
     .icon-button-db-lock {
@@ -124,10 +126,10 @@
     }
     
     .icon-button-delete {
-    background-color: #3cbe5a;
+    background-color: #ea5353;
     }		  
     .icon-button-delete:hover {
-    background-color: #1a9c38;
+    background-color: #c83131;
     }
     
     .icon-button-form {
@@ -147,6 +149,7 @@
     .icon-button-sidebar{
         display: inline-flex;
         align-items: center;
+        justify-content: left;
         gap: 10px;
         width: 96%;
         padding: 10px 10px;
@@ -159,10 +162,11 @@
         margin-bottom: 2px;
         border-bottom: 1px solid #888;
     }
-    .icon-button-sidebar img {
-        width: 24px;
-    }
-
+	.icon-button-sidebar img{
+		width: 30px;
+		height: 30px;
+		object-fit: contain;
+	}
     .icon-button-sidebar-deactivate{
         background-color: #CCCCCC;
     }
@@ -172,7 +176,7 @@
     }
     
      .icon-button-sidebar-deactivate span{
-        color:#666!important;		      
+        color:#444!important;		      
     }
 
     .icon-button-sidebar span{
@@ -201,10 +205,149 @@
     .icon-button-3rd:hover{
         background-color: #6a56dd;
     }
+    
+    .icon-button-submit{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        flex-wrap: wrap;      
+        gap: 8px;
+        padding: 4px 8px;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;		      
+        text-decoration: none!important;
+        width: 120px;
+        height: 40px;
+    }
+    
+    .icon-button-submit img{
+		width: 30px;
+		height: 30px;
+		object-fit: contain;
+	}
+        
+    .icon-button-submit span{
+        color:white;
+        font-weight:bold;
+    }
+    
+   	.icon-button-submit-search {
+   		width:108px;
+        background-color: #5f73ff;
+    }
+    .icon-button-submit-search:hover{
+        background-color: #3d51dd;
+    }
+    
+    .icon-button-submit-clear {
+    	width:108px;    
+        background-color: #ef6d6d;
+    }
+    .icon-button-submit-clear:hover{
+        background-color: #cd4b4b;
+    }
+    
+    .icon-button-submit-add {
+        background-color: #5f73ff;
+    }
+    .icon-button-submit-add:hover{
+        background-color: #3d51dd;
+    }
+    
+    .icon-button-submit-update {
+   		background-color: #5f73ff;
+    }		  
+    .icon-button-submit-update:hover {
+    	background-color: #3d51dd;
+    }
+    
+    .icon-button-submit-delete {
+    background-color: #ea5353;
+    }		  
+    .icon-button-submit-delete:hover {
+    background-color: #c83131;
+    }
+    
+    .icon-button-submit-cancel {
+    	border: 1px solid #aaa;
+    	background-color: #FFF;
+    }
+    
+      
+    .icon-button-submit-cancel:hover {
+    background-color: #DDD;
+    }
+    
+    .icon-button-submit-import {
+    	border: 1px solid #aaa;
+    	background-color: #FFF;
+    	width: 175px;
+    }
+    .icon-button-submit-import:hover {
+    	background-color: #DDD;
+    }
+    
+    .icon-button-submit-save {
+    	border: 1px solid #999;
+    	background-color: #DDD;
+    }
+    .icon-button-submit-import:hover {
+    	background-color: #aaa;
+    }
+    
+    .icon-button-submit-manage {
+    	margin-top: 3px;
+    	margin-bottom: 8px;
+    	margin-left: 5px;
+    	border: 1px solid #aaa;
+    	background-color: #EEE;
+    	width: 240px;
+    }
+    .icon-button-submit-manage span{
+    	color: black;
+    }
+     .icon-button-submit-manage:hover {
+    	background-color: #CCC;
+    }
+    
+    .icon-button-submit-review {
+   		background-color: #5f73ff;
+    }		  
+    .icon-button-submit-review:hover {
+    	background-color: #3d51dd;
+    }
+
+    .icon-button-submit-data {
+    	width: 140px;
+    	background-color: #8c78ff;
+    }		  
+    .icon-button-submit-data:hover {
+    background-color: #6a56dd;
+    }
+    .icon-button-submit-form {
+    	width: 140px;
+        background-color: #F4A460;
+    }
+    .icon-button-submit-form:hover {
+        background-color: #D28240;
+    }
+
+    .icon-button-submit-query {
+        background-color: #2F5597;
+        width: 140px;
+    }
+    .icon-button-submit-query:hover {
+        background-color: #0d3375;
+    }
+    
+    
     /* icon button style */
 	
-	table { border-collapse : collapse;}	
-	
+	table { border-collapse : collapse; font-size : 1rem!important;}	
+		
 	.breadcrumb {
 	    padding: 0;
 	    margin-bottom: 0.5rem;

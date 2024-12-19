@@ -397,8 +397,14 @@ for(int i = 0; i < crfForm.length(); i++){
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="marL10">
-						<aui:button type="button" name="saveCRF" value='<%=isUpdate ? "ecrf-user.button.update" : "ecrf-user.button.add" %>' cssClass="add-btn medium-btn radius-btn"></aui:button>
-						<aui:button type="button" name="cancel" value="ecrf-user.button.cancel" cssClass="cancel-btn medium-btn radius-btn" onClick="<%=listCRFURL %>"></aui:button>
+						<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>saveCRF">
+							<img src="<%= isUpdate ?  renderRequest.getContextPath() + "/btn_img/update_icon.png" : renderRequest.getContextPath() + "/btn_img/Add_icon.png"%>"/>
+							<span><%=isUpdate ? "Update" : "Add" %>'</span>
+						</button>
+						<a class="icon-button-submit icon-button-submit-cancel" href="<%=listCRFURL %>" name="<portlet:namespace/>cancel">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
+							<span style="color:black;">Cancel</span>
+						</a>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>	
@@ -417,8 +423,8 @@ $("#<portlet:namespace/>visitDate").datetimepicker({
 	scrollMonth: false,
 	format: 'Y/m/d'
 });
-A.one("#<portlet:namespace/>saveCRF").on("click", function(event) {
-	var form = A.one('#<portlet:namespace/>updateCRFDataForm');
+$("#<portlet:namespace/>saveCRF").on("click", function(event) {
+	var form = $('#<portlet:namespace/>updateCRFDataForm');
 	
 	var rules = {
 		<portlet:namespace />visitDate: {

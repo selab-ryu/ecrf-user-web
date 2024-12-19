@@ -34,6 +34,8 @@
 	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </liferay-portlet:actionURL>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
 <div class="ecrf-user ecrf-user-query">
 
 	<%@ include file="sidebar.jspf" %>
@@ -93,8 +95,14 @@
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+							<button class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+								<i class="bi bi-search" style="color:white;"></i>
+								<span>Search</span>
+							</button>
+							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
+								<span>Clear</span>
+							</a>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -270,18 +278,17 @@
 					name="ecrf-user.list.update"
 					cssClass="min-width-80"
 				>
-					<c:choose>
-					<c:when test="<%=updateLock %>">
-					
-					<aui:button name="lockCRF" type="button" value="ecrf-user.button.lock" cssClass="none-btn small-btn" disabled="true"></aui:button>
-					
-					</c:when>
-					<c:otherwise>
-					
-					<aui:button name="updateQuery" type="button" value="ecrf-user.button.update" cssClass="edit-btn small-btn" onClick="<%=updateQueryURL%>" disabled="<%=hasUpdateQueryPermission ? false : true %>"></aui:button>
-					
-					</c:otherwise>
-					</c:choose>
+
+				<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=updateQueryURL %>" name="updateCRF" disabled="<%=updateLock ? true : false %>">
+					<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+					<c:if test="<%=updateLock %>">
+						<span>Locked</span>
+					</c:if>
+					<c:if test="<%=!updateLock %>">
+						<span>Update</span>
+					</c:if>			
+				</a>
+
 				
 				</liferay-ui:search-container-column-text>
 			

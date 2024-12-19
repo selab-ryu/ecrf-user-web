@@ -18,33 +18,38 @@
 		
 	<!-- Project Management -->
 	<div>
-		<a href="<%=moveViewProjectURL%>">	
-			<img src="<%= renderRequest.getContextPath() + "/img/project_main_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
-		</a>		
+		<a class="icon-button-sidebar icon-button-main" href="<%=moveViewProjectURL %>" name="ProjectMain">
+			<img src="<%= renderRequest.getContextPath() + "/btn_img/project_icon.png"%>"/>
+			<span>Project</span>
+		</a>				
 	</div>
 		<div>
-			<a href="<%=moveViewProjectURL%>">		
-				<img src="<%=menu.equals("project-info") || menu.equals("add-project") || menu.equals("update-project") ? renderRequest.getContextPath() + "/img/project_info_btn.png" : renderRequest.getContextPath() + "/img/project_info_btn_deactivated.png" %>" width="100%" height="auto" style="min-width:60px; cursor:pointer;" onClick="<%=moveViewProjectURL%>"/>
+			<a class="<%= menu.equals("project-info") || menu.equals("add-project") || menu.equals("update-project") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveViewProjectURL %>" name="ProjectInfo">
+				<img src="<%= menu.equals("project-info") || menu.equals("add-project") || menu.equals("update-project") ? renderRequest.getContextPath() + "/btn_img/project_info_icon.png" : renderRequest.getContextPath() + "/btn_img/project_info_icon_deactivate.png"%>"/>
+				<span>Project Info</span>
 			</a>		
 		</div>		
 		
 		<div>
-			<a href="<%=moveExpGroupURL%>">
-				<img src="<%=menu.equals("exp-group") || menu.equals("add-exp-group") || menu.equals("update-exp-group") ? renderRequest.getContextPath() + "/img/exp_group_btn.png" : renderRequest.getContextPath() + "/img/exp_group_btn_deactivated.png" %>" width="100%" height="auto" style="min-width:60px; cursor:pointer;" />
-			</a>
+			<a class="<%= menu.equals("exp-group") || menu.equals("add-exp-group") || menu.equals("update-exp-group") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveExpGroupURL %>" name="ExpGroup">
+				<img src="<%= menu.equals("exp-group") || menu.equals("add-exp-group") || menu.equals("update-exp-group") ? renderRequest.getContextPath() + "/btn_img/exp_group_icon.png" : renderRequest.getContextPath() + "/btn_img/exp_group_icon_deactivate.png"%>"/>
+				<span style="text-align:left; white-space:normal; overflow:visible; text-overflow: clip;">Exp. Group</span>
+			</a>	
 		</div>
 			<c:if test="<%=( menu.equals("exp-group") || menu.equals("add-exp-group") || menu.equals("update-exp-group" )) %>">
 			
 			<div>
-				<a href="<%=moveExpGroupURL%>">
-					<img src="<%=menu.equals("exp-group") || menu.equals("update-exp-group") ? renderRequest.getContextPath() + "/img/exp_group_list_btn.png" : renderRequest.getContextPath() + "/img/exp_group_list_btn_deactivated.png" %>" width="100%" height="auto" style="min-width:60px; cursor:pointer;" />
-				</a>
+				<a class="<%= menu.equals("exp-group") ? "icon-button-sidebar icon-button-3rd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveExpGroupURL %>" name="ExpGroupList">
+					<img src="<%= menu.equals("exp-group") ? renderRequest.getContextPath() + "/btn_img/exp_group_list_icon.png" : renderRequest.getContextPath() + "/btn_img/exp_group_list_icon_deactivate.png"%>"/>
+					<span style="text-align:left; white-space:normal; overflow:visible; text-overflow: clip;">Exp. Group List</span>
+				</a>	
 			</div>
 			
 			<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_EXP_GROUP) %>">
 			<div>
-				<a href="<%=moveAddExpGroupURL%>">
-					<img src="<%= menu.equals("add-exp-group") ? renderRequest.getContextPath() + "/img/add_exp_group_btn.png" : renderRequest.getContextPath() + "/img/add_exp_group_btn_deactivated.png" %>" width="100%" height="auto" style="min-width:60px; cursor:pointer;" />
+				<a class="<%= menu.equals("add-exp-group") ? "icon-button-sidebar icon-button-3rd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveAddExpGroupURL %>" name="AddExpGroup">
+					<img src="<%= menu.equals("add-exp-group") ? renderRequest.getContextPath() + "/btn_img/add_exp_group_icon.png" : renderRequest.getContextPath() + "/btn_img/add_exp_group_icon_deactivate.png"%>"/>
+					<span style="text-align:left; white-space:normal; overflow:visible; text-overflow: clip;">Add Exp. Group</span>
 				</a>
 			</div>
 			</c:if>

@@ -55,14 +55,14 @@
 	</div>
 		<div>
 			<a class="<%= menu.equals("crf-list") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveCRFListURL %>" name="CRFList">
-				<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_list_icon.png"%>"/>
+				<img src="<%= menu.equals("crf-list") ? renderRequest.getContextPath() + "/btn_img/crf_list_icon.png" : renderRequest.getContextPath() + "/btn_img/crf_list_icon_deactivate.png"%>"/>
 				<span>CRF List</span>
 			</a>		
 		</div>
 		
 		<div>
 			<a class="<%= menu.equals("crf-update") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveUpdateCRFURL %>" name="CRFUpdate">
-				<img src="<%= renderRequest.getContextPath() + "/btn_img/update_crf_icon.png"%>"/>
+				<img src="<%= menu.equals("crf-update") ?  renderRequest.getContextPath() + "/btn_img/update_crf_icon.png" : renderRequest.getContextPath() + "/btn_img/update_crf_icon_deactivate.png"%>"/>
 				<span>Update CRF</span>
 			</a>	
 		</div>
@@ -70,7 +70,7 @@
 			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_FORM) %>">
 			<div>
 				<a class="<%= menu.equals("crf-form") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveManageFormURL %>" name="CRFForm">
-					<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_form_icon.png"%>"/>
+					<img src="<%=  menu.equals("crf-form") ? renderRequest.getContextPath() + "/btn_img/crf_form_icon.png" : renderRequest.getContextPath() + "/btn_img/crf_form_icon_deactivate.png"%>"/>
 					<span>CRF Form</span>
 				</a>		
 			</div>
@@ -84,7 +84,7 @@
 			</div>
 				<div>
 					<a class="<%= (menu.equals("crf-data-list") || menu.equals("add-crf-data") || menu.equals("update-crf-data")) ? "icon-button-sidebar icon-button-3rd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveCRFDataListURL %>" name="CRFData">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/data_list_icon.png"%>"/>
+						<img src="<%= (menu.equals("crf-data-list") || menu.equals("add-crf-data") || menu.equals("update-crf-data")) ? renderRequest.getContextPath() + "/btn_img/data_list_icon.png" : renderRequest.getContextPath() + "/btn_img/data_list_icon_deactivate.png"%>"/>
 						<span>Data List</span>
 					</a>	
 				</div>
@@ -92,7 +92,7 @@
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY_LIST) %>">
 				<div>
 					<a class="<%= menu.equals("crf-data-history") ? "icon-button-sidebar icon-button-3rd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveCRFDataHistoryListURL %>" name="CRFData">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/data_history_icon.png"%>"/>
+						<img src="<%= menu.equals("crf-data-history") ? renderRequest.getContextPath() + "/btn_img/data_history_icon.png" : renderRequest.getContextPath() + "/btn_img/data_history_icon_deactivate.png"%>"/>
 						<span>CRF History</span>
 					</a>
 				</div>
@@ -101,7 +101,7 @@
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_EXCEL_DOWNLOAD) %>">
 				<div>
 					<a class="<%= menu.equals("crf-data-excel") ? "icon-button-sidebar icon-button-3rd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" style="line-height:14px;" href="<%=moveExcelDownloadURL %>" name="CRFData">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/excel_download_icon.png"%>"/>
+						<img src="<%= menu.equals("crf-data-excel") ? renderRequest.getContextPath() + "/btn_img/excel_download_icon.png" : renderRequest.getContextPath() + "/btn_img/excel_download_icon_deactivate.png"%>"/>
 						<span style="text-align:left; white-space:normal; overflow:visible; text-overflow: clip;">Excel Download</span>
 					</a>
 				</div>
@@ -110,7 +110,7 @@
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ADVANCED_SEARCH) %>">
 				<div>
 					<a class="<%= menu.equals("search-crf-data") ? "icon-button-sidebar icon-button-3rd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveSearchCRFDataURL %>" name="CRFData">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/search_crf_icon.png"%>"/>
+						<img src="<%=  menu.equals("search-crf-data") ? renderRequest.getContextPath() + "/btn_img/search_crf_icon.png" : renderRequest.getContextPath() + "/btn_img/search_crf_icon_deactivate.png"%>"/>
 						<span>Search CRF</span>
 					</a>
 				</div>
@@ -119,7 +119,7 @@
 			<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY) %>">
 			<div>
 				<a class="<%= menu.equals("crf-query") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveCRFQueryListURL %>" name="CRFQuery">
-					<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_query_icon.png"%>"/>
+					<img src="<%= menu.equals("crf-query") ? renderRequest.getContextPath() + "/btn_img/crf_query_icon.png" :  renderRequest.getContextPath() + "/btn_img/crf_query_icon_deactivate.png"%>"/>
 					<span>CRF Query</span>
 				</a>	
 			</div>
@@ -128,7 +128,7 @@
 		<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 		<div>
 			<a class="<%= menu.equals("crf-add") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveAddCRFURL %>" name="CRFList">
-				<img src="<%= renderRequest.getContextPath() + "/btn_img/add_crf_icon.png"%>"/>
+				<img src="<%= menu.equals("crf-add") ? renderRequest.getContextPath() + "/btn_img/add_crf_icon.png" : renderRequest.getContextPath() + "/btn_img/add_crf_icon_deactivate.png"%>"/>
 				<span>Add CRF</span>
 			</a>
 		</div>

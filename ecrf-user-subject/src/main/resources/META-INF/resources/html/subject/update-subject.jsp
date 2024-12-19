@@ -334,24 +334,41 @@ if(isUpdate) {
 						<c:when test="<%=isUpdate %>">
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_SUBJECT) %>">
-							<aui:button type="button" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.update"></aui:button>
+							<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>save">
+								<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
+								<span>Save</span>
+							</button>
 						</c:if>
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_SUBJECT) %>">
-							<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete" ></aui:button>
+							<%
+								String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+								String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+								String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteSubjectURL.toString());
+							%>
+							<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="delete">
+								<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+								<span>Delete</span>
+							</a>
 						</c:if>
 						
 						</c:when>
 						<c:otherwise>
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
-							<aui:button type="button" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.add"></aui:button>
+							<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>save">
+								<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+								<span>Add</span>
+							</button>
 						</c:if>
 						
 						</c:otherwise>
 						</c:choose>
 								
-						<aui:button type="button" name="cancel" cssClass="cancel-btn medium-btn radius-btn" value="ecrf-user.button.cancel" onClick="<%=updateListURL %>"></aui:button>
+						<a class="icon-button-submit icon-button-submit-cancel" href="<%=updateListURL %>" name="<portlet:namespace/>cancel">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
+							<span style="color:black;">Cancel</span>
+						</a>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>
@@ -506,14 +523,6 @@ $(document).ready(function() {
 				$("#lunarBirthAge")[0].innerText = age;	
 			}		
 		}
-	});
-	
-	$(document).ready(function() {
-		$('#<portlet:namespace/>delete').click( function(event){
-			var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-subject.title"/>';
-			var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-subject.content"/>';
-			deleteConfirm(title, content, '<%= deleteSubjectURL.toString() %>', 'large');
-		});
 	});
 });
 

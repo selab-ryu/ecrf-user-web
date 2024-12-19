@@ -93,9 +93,18 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			<aui:row>
 				<aui:col>
 					<aui:button-row>
-						<aui:button name="approve" value="Approve" onClick="<%= liferayPortletResponse.getNamespace() + "approveRequest();" %>" />
-						<aui:button name="reject" value="Reject" onClick="<%= liferayPortletResponse.getNamespace() + "rejectRequest();" %>" /> 
-						<aui:button value="Back" onClick="<%=redirect.toString() %>" /> 
+						<a class="icon-button-submit icon-button-submit-add" onClick="<%= liferayPortletResponse.getNamespace() + "approveRequest();" %>" name="<portlet:namespace/>approve">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/approve_icon.png"%>"/>					
+							<span>Approve</span>
+						</a>
+						<a class="icon-button-submit icon-button-submit-delete" onClick="<%= liferayPortletResponse.getNamespace() + "rejectRequest();" %>" name="<portlet:namespace/>reject">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/reject_icon.png"%>"/>					
+							<span>Reject</span>
+						</a>
+						<a class="icon-button-submit icon-button-submit-cancel" href="<%=redirect %>" name="<portlet:namespace/>cancel">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/back_icon.png"%>"/>					
+							<span style="color:black;">Back</span>
+						</a>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>

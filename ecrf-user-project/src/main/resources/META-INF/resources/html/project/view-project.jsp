@@ -119,15 +119,29 @@ if(!isPrivate) pageClass = "mar16px";
 				<c:choose>
 				<c:when test="<%=(projectId > 0) %>">
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">			
-						<aui:button type="button" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn" onClick="<%=updateProjectURL.toString() %>" />			
+						<a href="<%=updateProjectURL %>" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>update">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+							<span>Update</span>
+						</a>					
 					</c:if>
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_PROJECT) %>">
-						<aui:button name="btnDelete" type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" />
+						<%
+							String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
+						%>
+						<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+							<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+							<span>Delete</span>
+						</a>
 					</c:if>
 			 	</c:when>
 			 	<c:otherwise>
 			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-			 			<aui:button type="button" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" onClick="<%=addProjectURL.toString() %>" />
+						<a href="<%=addProjectURL %>" type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>add">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+							<span>Add</span>
+						</a>	
 			 		</c:if>
 			 	</c:otherwise>
 			 	</c:choose>		
@@ -137,14 +151,3 @@ if(!isPrivate) pageClass = "mar16px";
 
 	</div>
 </div>
-
-
-<script>
-$(document).ready(function() {	
-	$('#<portlet:namespace/>btnDelete').click( function(event){
-		var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.title"/>';
-		var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.content"/>';
-		deleteConfirm(title, content, '<%= deleteProjectURL.toString() %>');
-	});
-});
-</script>
