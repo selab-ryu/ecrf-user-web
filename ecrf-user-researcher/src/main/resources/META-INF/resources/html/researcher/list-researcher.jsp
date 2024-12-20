@@ -65,6 +65,8 @@ if(isSearch) {
 	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
 <div class="ecrf-user ecrf-user-researcher">
 
 	<%@ include file="sidebar.jspf" %>
@@ -176,8 +178,14 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+							<button type="submit" class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+								<i class="bi bi-search" style="color:white;"></i>
+								<span>Search</span>
+							</button>
+							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
+								<span>Clear</span>
+							</a>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -271,8 +279,15 @@ if(isSearch) {
 						<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />						
 					</portlet:renderURL>
-					
-					<aui:button disabled="<%=hasUpdatePermission ? false : true %>" name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateResearcherURL %>" />
+					<a class="<%= !hasUpdatePermission ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=updateResearcherURL %>" name="updateCRF" disabled="<%=!hasUpdatePermission ? true : false %>">
+						<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+						<c:if test="<%=!hasUpdatePermission %>">
+							<span>Locked</span>
+						</c:if>
+						<c:if test="<%=hasUpdatePermission %>">
+							<span>Update Data</span>
+						</c:if>			
+					</a>
 				</liferay-ui:search-container-column-text>
 			</liferay-ui:search-container-row>
 			

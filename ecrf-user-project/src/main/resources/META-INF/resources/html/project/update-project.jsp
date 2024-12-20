@@ -135,20 +135,38 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 						<c:choose>
 							<c:when test="<%=(projectId > 0) %>">
 								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE) %>">			
-									<aui:button type="submit" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn"/>			
+									<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>update">
+										<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+										<span>Update</span>
+									</button>
+												
 								</c:if>
 								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.DELETE) %>">
-									<aui:button name="btnDelete" type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" />
+									<%
+										String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+										String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+										String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
+									%>
+									<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+										<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+										<span>Delete</span>
+									</a>
 								</c:if>
 						 	</c:when>
 						 	<c:otherwise>
 						 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-						 			<aui:button type="submit" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" />
+	 								<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>add">
+										<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+										<span>Add</span>
+									</button>	
 						 		</c:if>
 						 	</c:otherwise>
 					 	</c:choose>		
 					 	
-						<aui:button type="button" value="ecrf-user.button.cancel" cssClass="cancel-btn medium-btn radius-btn" onClick="<%=viewProjectURL.toString() %>" />
+						<a class="icon-button-submit icon-button-submit-cancel" href="<%=viewProjectURL %>" name="<portlet:namespace/>cancel">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
+							<span style="color:black;">Cancel</span>
+						</a>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>
@@ -185,11 +203,6 @@ $(document).ready(function() {
 		scrollMonth: false
 	});
 	$("#<portlet:namespace/>endDate").mask("0000/00/00", {placehodler:"yyyy/mm/dd"});
-	
-	$('#<portlet:namespace/>btnDelete').click( function(event){
-		var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.title"/>';
-		var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.content"/>';
-		deleteConfirm(title, content, '<%= deleteProjectURL.toString() %>');
-	});
+
 });
 </script>

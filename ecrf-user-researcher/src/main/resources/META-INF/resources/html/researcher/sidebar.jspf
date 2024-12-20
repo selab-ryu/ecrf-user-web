@@ -21,21 +21,24 @@
 				
 		<!-- Researcher Management -->
 		<div>
-			<a href="<%=researcherListURL%>">		
-				<img src="<%=renderRequest.getContextPath() + "/img/researcher_main_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
-			</a>	
+			<a class="icon-button-sidebar icon-button-main" href="<%=researcherListURL %>" name="ResearcherMain">
+				<img src="<%= renderRequest.getContextPath() + "/btn_img/researcher_icon.png"%>"/>
+				<span>Researcher</span>
+			</a>
 		</div>
 		<div>
-			<a href="<%=researcherListURL%>">		
-				<img src="<%=menu.equals("researcher-list") ? renderRequest.getContextPath() + "/img/researcher_list_btn.png" : renderRequest.getContextPath() + "/img/researcher_list_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
-			</a>	
+			<a class="<%= menu.equals("researcher-list") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=researcherListURL %>" name="ResearcherList">
+				<img src="<%= menu.equals("researcher-list") ? renderRequest.getContextPath() + "/btn_img/researcher_list_icon.png" : renderRequest.getContextPath() + "/btn_img/researcher_list_icon_deactivate.png"%>"/>
+				<span style="text-align:left; white-space:normal; overflow:visible; text-overflow: clip;">Researcher List</span>
+			</a>
 		</div>
 		
 		<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
 		<div>
-			<a href="<%=moveAddResearcherURL%>">		
-        <img src="<%=menu.equals("researcher-add") || menu.equals("researcher-update") ? renderRequest.getContextPath() + "/img/add_researcher_btn.png" : renderRequest.getContextPath() + "/img/add_researcher_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
-			</a>	
+			<a class="<%= menu.equals("researcher-add") || menu.equals("researcher-update") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveAddResearcherURL %>" name="AddResearcher">
+				<img src="<%= menu.equals("researcher-add") || menu.equals("researcher-update") ? renderRequest.getContextPath() + "/btn_img/add_researcher_icon.png" : renderRequest.getContextPath() + "/btn_img/add_researcher_icon_deactivate.png"%>"/>
+				<span style="text-align:left; white-space:normal; overflow:visible; text-overflow: clip;">Add Researcher</span>
+			</a>
 		</div>
 		</c:if>
 		

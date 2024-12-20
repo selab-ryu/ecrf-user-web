@@ -187,7 +187,12 @@ backURL = redirect;
 			<aui:col md="12">
 				<aui:button-row>
 					<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=backURL %>"></aui:button>
+					<a class="icon-button-submit icon-button-submit-cancel" href="<%=backURL %>" name="<portlet:namespace/>cancel">
+						<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
+						<span style="color:black;">Cancel</span>
+					</a>
 				</aui:button-row>
+				
 			</aui:col>
 		</aui:row>
 

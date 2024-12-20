@@ -135,7 +135,10 @@ _log.info("is audit : " + isAudit);
 			<input type="hidden" id="<portlet:namespace/>hasHashChanged" name="<portlet:namespace/>hasHashChanged" >					
 			<input type="hidden" id="<portlet:namespace/>dataContent" name="<portlet:namespace/>dataContent" >
 			<aui:button-row>
-				<aui:button type="button" id="btnSave" value="save"></aui:button>
+				<a id="<portlet:namespace/>btnSave" class="icon-button-submit icon-button-submit-save">		
+					<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
+					<span>Save</span>
+				</a>
 			</aui:button-row>
 		</form>
 	</div>

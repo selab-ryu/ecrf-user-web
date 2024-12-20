@@ -141,21 +141,37 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 				
 					<c:if test="<%=!isUpdate %>">
 					<c:if test="<%=hasAddPermission %>">
-					<aui:button type="submit" name="add" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn"/>
+					<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>add">
+						<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+						<span>Add</span>
+					</button>
 					</c:if>
 					</c:if>
 					
 					<c:if test="<%=isUpdate %>">
 					<c:if test="<%=hasUpdatePermission %>">
-					<aui:button type="submit" name="update" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn"/>
+					<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>update">
+						<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+						<span>Update</span>
+					</button>
 					</c:if>
 					
 					<c:if test="<%=hasDeletePermission %>">
-					<aui:button name="btnDelete" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" />
+					<%
+						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
+					%>
+					<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+						<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+						<span>Delete</span>
+					</a>
 					</c:if>
 					</c:if>
-					
-					<aui:button name="cancel" value="ecrf-user.button.cancel" cssClass="cancel-btn medium-btn radius-btn" onClick="<%=listExpGroupURL %>" />
+					<a class="icon-button-submit icon-button-submit-cancel" href="<%=listExpGroupURL %>" name="<portlet:namespace/>cancel">
+						<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
+						<span style="color:black;">Cancel</span>
+					</a>
 				</aui:button-row>
 			
 			</aui:container>
@@ -163,13 +179,3 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 		
 	</div>
 </div>
-
-<script>
-$(document).ready(function() {
-	$('#<portlet:namespace/>btnDelete').click( function(event){
-		var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-exp-group.title"/>';
-		var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-exp-group.content"/>';
-		deleteConfirm(title, content, '<%= deleteExpGroupURL.toString() %>');
-	});
-});
-</script>

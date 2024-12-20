@@ -56,6 +56,7 @@ if(isSearch) {
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF%>"/>	
 </portlet:renderURL>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 <div class="ecrf-user">
 	
 	<%@include file="sidebar.jspf" %>
@@ -150,8 +151,16 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="button" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+
+							<button class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+								<i class="bi bi-search" style="color:white;"></i>
+								<span>Search</span>
+							</button>
+							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+								<i class="bi bi-arrow-clockwise" style="color:white;"></i>
+								<span>Clear</span>
+							</a>
+
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -381,7 +390,7 @@ $(document).ready(function() {
 </script>
 
 <aui:script use="aui-base">
-A.one('#<portlet:namespace/>search').on('click', function() {
+$('#<portlet:namespace/>search').on('click',function() {
 	var isDateValid = dateCheck("applyDateStart", "applyDateEnd", '<portlet:namespace/>');
 	
 	//console.log("date valid : " + isDateValid);

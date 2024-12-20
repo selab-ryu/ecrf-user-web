@@ -82,6 +82,8 @@ _log.info("url : " + baseURL.toString());
 	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
 <div class="ecrf-user-crf-data ecrf-user">
 	<%@ include file="../other/sidebar.jspf" %>
 	
@@ -123,6 +125,7 @@ _log.info("url : " + baseURL.toString());
 					</aui:col>
 					<aui:col md="4">
 						<aui:field-wrapper
+							name="<%=ECRFUserSubjectAttributes.GENDER %>"
 							label="ecrf-user.crf-data.subject-gender"
 							helpMessage="ecrf-user.crf-data.subject-gender.help"
 							cssClass="marBrh"
@@ -177,8 +180,15 @@ _log.info("url : " + baseURL.toString());
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="button" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+							<button class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+								<i class="bi bi-search" style="color:white;"></i>
+								<span>Search</span>
+							</button>
+							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
+								<span>Clear</span>
+							</a>
+							
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -398,7 +408,7 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
 				<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-add"%>" href="<%=renderAddCRFURL %>" name="addCRF" disabled="<%=updateLock ? true : false %>">
-					<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/add_icon.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+          <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/add_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 					<c:if test="<%=updateLock %>">
 						<span>Locked</span>
 					</c:if>
@@ -434,7 +444,7 @@ _log.info("url : " + baseURL.toString());
 			<c:choose>
 				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
 					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=renderUpdateCRFURL %>" name="updateCRF" disabled="<%=updateLock ? true : false %>">
-						<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>
@@ -445,7 +455,7 @@ _log.info("url : " + baseURL.toString());
 				</c:when>
 				<c:otherwise>
 					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" onclick="<%=updateFunctionCallStr %>" name="updateCRF" disabled="<%=updateLock ? true : false %>">
-						<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>
@@ -558,7 +568,7 @@ _log.info("url : " + baseURL.toString());
 			<c:choose>
 				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
 					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onclick="<%=deleteSingleFunctionCallStr %>" name="deleteCRF" disabled="<%=updateLock ? true : false %>">
-						<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>
@@ -569,7 +579,7 @@ _log.info("url : " + baseURL.toString());
 				</c:when>
 				<c:otherwise>
 					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onclick="<%=deleteFunctionCallStr %>" name="deleteCRF" disabled="<%=updateLock ? true : false %>">
-						<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>
@@ -679,7 +689,7 @@ function deleteSingleCRF(linkCrfId, crfId, portletId, baseURL){
 </script>
 
 <aui:script use="aui-base aui-modal">
-A.one('#<portlet:namespace/>search').on('click', function() {
+$('#<portlet:namespace/>search').on('click', function() {
 	var isBirthDateValid = dateCheck("birthStart", "birthEnd", '<portlet:namespace/>');
 	
 	if(isBirthDateValid) {

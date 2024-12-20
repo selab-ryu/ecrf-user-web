@@ -51,6 +51,8 @@ if(isSearch) {
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_ADD_EXP_GROUP%>"/>
 </portlet:renderURL>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
 <div class="ecrf-user">
 	<%@ include file="../sidebar.jspf" %>
 	
@@ -126,8 +128,14 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+							<button type="submit" class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+								<i class="bi bi-search" style="color:white;"></i>
+								<span>Search</span>
+							</button>
+							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
+								<span>Clear</span>
+							</a>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -205,8 +213,10 @@ if(isSearch) {
 				cssClass="min-width-80"
 			>			
 				
-				<aui:button name="updateExpGroup" value="ecrf-user.button.update" cssClass="ci-btn small-btn" onClick="<%=updateExpGroupURL %>" disabled="<%=hasUpdatePermission ? false : true  %>" />	
-				
+				<a class="<%= !hasUpdatePermission ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=updateExpGroupURL %>" name="updateExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
+					<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+					<span>Update</span>
+				</a>
 			</liferay-ui:search-container-column-text>
 			
 			<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_EXP_GROUP%>" var="deleteExpGroupURL" >
@@ -222,13 +232,10 @@ if(isSearch) {
 				String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 				String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
 			%>
-				<aui:button 
-					value="ecrf-user.button.delete" 
-					cssClass="delete-btn small-btn" 
-					onClick="<%=deleteFunctionCall %>" 
-					disabled="<%=hasDeletePermission ? false : true  %>" 
-				/>	
-				
+				<a class="<%= !hasUpdatePermission ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onClick="<%=deleteFunctionCall %>" name="deleteExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
+					<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+					<span>Delete</span>
+				</a>
 			</liferay-ui:search-container-column-text>
 			
 			</liferay-ui:search-container-row>
@@ -244,7 +251,10 @@ if(isSearch) {
 		
 		<c:if test="<%=hasAddPermission %>">
 		<aui:button-row>
-			<aui:button name="addExp" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" onClick="<%=addExpGroupURL%>" />
+			<a class="icon-button-submit icon-button-submit-add" href="<%=addExpGroupURL %>" name="<portlet:namespace/>addExp">
+				<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/add_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+				<span>Add</span>
+			</a>
 		</aui:button-row>
 		</c:if>
 		

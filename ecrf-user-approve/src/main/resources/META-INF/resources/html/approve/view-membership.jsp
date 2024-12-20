@@ -245,7 +245,10 @@ if(membershipRequestCount <= 0) {
 				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.review">
-					<aui:button type="button" value="Review" onClick="<%=approveURL.toString() %>" />
+					<a class="icon-button-submit icon-button-submit-review" href="<%=approveURL %>" name="<portlet:namespace/>review">
+						<img src="<%= renderRequest.getContextPath() + "/btn_img/review_icon.png"%>"/>					
+						<span>Review</span>
+					</a>
 				</liferay-ui:search-container-column-text>
 				
 			</liferay-ui:search-container-row>

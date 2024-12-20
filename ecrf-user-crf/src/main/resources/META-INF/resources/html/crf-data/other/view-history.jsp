@@ -113,7 +113,10 @@
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="marL10">
-						<aui:button type="button" name="cancel" value="ecrf-user.button.list" cssClass="cancel-btn medium-btn radius-btn" onClick="<%=listHistoryURL%>"></aui:button>
+						<a class="icon-button-submit icon-button-submit-cancel" href="<%=listHistoryURL %>" name="<portlet:namespace/>cancel">
+							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
+							<span style="color:black;">Cancel</span>
+						</a>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>				
