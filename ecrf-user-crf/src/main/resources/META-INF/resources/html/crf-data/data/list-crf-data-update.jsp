@@ -408,7 +408,7 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
 				<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-add"%>" href="<%=renderAddCRFURL %>" name="addCRF" disabled="<%=updateLock ? true : false %>">
-					<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/add_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+          <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/add_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 					<c:if test="<%=updateLock %>">
 						<span>Locked</span>
 					</c:if>
@@ -444,7 +444,7 @@ _log.info("url : " + baseURL.toString());
 			<c:choose>
 				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
 					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=renderUpdateCRFURL %>" name="updateCRF" disabled="<%=updateLock ? true : false %>">
-						<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>
@@ -455,7 +455,7 @@ _log.info("url : " + baseURL.toString());
 				</c:when>
 				<c:otherwise>
 					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" onclick="<%=updateFunctionCallStr %>" name="updateCRF" disabled="<%=updateLock ? true : false %>">
-						<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>
@@ -568,7 +568,7 @@ _log.info("url : " + baseURL.toString());
 			<c:choose>
 				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
 					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onclick="<%=deleteSingleFunctionCallStr %>" name="deleteCRF" disabled="<%=updateLock ? true : false %>">
-						<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>
@@ -579,7 +579,7 @@ _log.info("url : " + baseURL.toString());
 				</c:when>
 				<c:otherwise>
 					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onclick="<%=deleteFunctionCallStr %>" name="deleteCRF" disabled="<%=updateLock ? true : false %>">
-						<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>

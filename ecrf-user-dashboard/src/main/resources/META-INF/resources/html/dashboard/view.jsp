@@ -1,3 +1,4 @@
+<%@page import="com.liferay.frontend.taglib.servlet.taglib.util.EmptyResultMessageKeys"%>
 <%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.json.JSON"%>
 <%@ include file="../init.jsp" %>
@@ -41,7 +42,16 @@ String chartDataStr = chartDataArr.toJSONString();
 			<chart:bar config="<%=_barChartConfig %>" />
 		</div>
 		
-		<!-- CRF 단위 visit date 기준 연도별 / 월별 데이터 현황 -->
+		<!-- Display Info DIV if there is no CRF -->
+		<c:if test="<%=(chartDataArr.length()<=0)%>">
+			<liferay-frontend:empty-result-message
+				animationType="<%=EmptyResultMessageKeys.AnimationType.EMPTY %>"
+				description='<%= LanguageUtil.get(request, "ecrf-user.empty-no-crf-were-found") %>'
+				elementType='<%= LanguageUtil.get(request, "CRF") %>'
+			/>
+		</c:if>
+		
+		<!-- For each CRF, Display Graph by visit date (Annualy / Monthly) -->
 		<%
 		
 		for(int i=0; i<chartDataArr.length(); i++) {

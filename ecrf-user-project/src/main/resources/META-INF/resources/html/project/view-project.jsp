@@ -1,3 +1,4 @@
+<%@page import="com.liferay.frontend.taglib.servlet.taglib.util.EmptyResultMessageKeys"%>
 <%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ include file="../init.jsp" %>
 
@@ -72,10 +73,12 @@ if(!isPrivate) pageClass = "mar16px";
 	<c:choose>
 	<c:when test="<%=Validator.isNull(project) %>">
 		<aui:row>
-			<aui:col>
-				<span>
-					<liferay-ui:message key="ecrf.user.project.info.no-project" />
-				</span>
+			<aui:col cssClass="padTr">
+				<liferay-frontend:empty-result-message
+				animationType="<%=EmptyResultMessageKeys.AnimationType.EMPTY %>"
+				description='<%= LanguageUtil.get(request, "ecrf-user.empty-no-project-info-were-found") %>'
+				elementType='<%= LanguageUtil.get(request, "Project Info") %>'
+			/>
 			</aui:col>
 		</aui:row>
 	</c:when>

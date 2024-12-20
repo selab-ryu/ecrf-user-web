@@ -85,15 +85,13 @@
         white-space: nowrap;
         font-weight: bold;
     }
-
-     
     .icon-button-deactivate{
         background-color: #CCCCCC;
         cursor: not-allowed;		      
     }
     
      .icon-button-deactivate span{
-        color:#444!important;		      
+        color:#444!important;
     }
     
     .icon-button-db-lock {
@@ -162,6 +160,7 @@
         margin-bottom: 2px;
         border-bottom: 1px solid #888;
     }
+  
 	.icon-button-sidebar img{
 		width: 30px;
 		height: 30px;
@@ -176,7 +175,7 @@
     }
     
      .icon-button-sidebar-deactivate span{
-        color:#444!important;		      
+        color:#444!important;	
     }
 
     .icon-button-sidebar span{
@@ -205,8 +204,7 @@
     .icon-button-3rd:hover{
         background-color: #6a56dd;
     }
-    
-    .icon-button-submit{
+.icon-button-submit{
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -342,8 +340,6 @@
     .icon-button-submit-query:hover {
         background-color: #0d3375;
     }
-    
-    
     /* icon button style */
 	
 	table { border-collapse : collapse; font-size : 1rem!important;}	
