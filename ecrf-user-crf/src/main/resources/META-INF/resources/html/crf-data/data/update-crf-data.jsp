@@ -397,7 +397,7 @@ for(int i = 0; i < crfForm.length(); i++){
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="marL10">
-						<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>saveCRF">
+						<button class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>saveCRF">
 							<img src="<%= isUpdate ?  renderRequest.getContextPath() + "/btn_img/update_icon.png" : renderRequest.getContextPath() + "/btn_img/Add_icon.png"%>"/>
 							<span><%=isUpdate ? "Update" : "Add" %>'</span>
 						</button>

@@ -345,7 +345,7 @@
 				<c:otherwise>
 								
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
-					<button type="submit" class="icon-button-submit icon-button-submit-add" id="saveBtn">
+					<button class="icon-button-submit icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 						<span>Add</span>
 					</button>
