@@ -323,7 +323,7 @@
 				<c:when test="<%=isUpdate %>">
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF) %>">
-					<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>saveBtn">
+					<button class="icon-button-submit icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<span>Update</span>
 					</button>
@@ -345,7 +345,7 @@
 				<c:otherwise>
 								
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
-					<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>saveBtn">
+					<button type="submit" class="icon-button-submit icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/Add_icon.png"%>"/>
 						<span>Add</span>
 					</button>
@@ -378,7 +378,8 @@ var dataTypeId = "<%=String.valueOf(dataTypeId) %>";
 
 var isSubjectChanged = false;
 
-$('#<portlet:namespace/>saveBtn').on("click", function(e) {
+$('#saveBtn').on("click", function(e) {
+	console.log("is clicked");
 	let form = $('#<portlet:namespace/>updateCRFFm');
 	let researcherListInput = $('#<portlet:namespace/>researcherListInput');
 	let subjectListInput = $('#<portlet:namespace/>subjectListInput');
@@ -567,7 +568,7 @@ function tableLoading() {
 		"<'row marBr'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 		buttons: [
             {
-            	text : '<img style="margin-right: 8px;" src="<%= renderRequest.getContextPath() + "/btn_img/researcher_list_icon_deactivate.png"%>"/>Manage Researhcer',
+            	text : 'Manage Researhcer',
             	className : 'icon-button-submit icon-button-submit-manage',
             	action : function( e, dt, node, config) {
             		openManageResearcherDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfResearcherInfoArr, "<%=baseURL.toString()%>");
