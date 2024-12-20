@@ -323,7 +323,7 @@
 				<c:when test="<%=isUpdate %>">
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF) %>">
-					<button class="icon-button-submit icon-button-submit-add" id="saveBtn">
+					<button type="button" class="icon-button-submit icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<span>Update</span>
 					</button>
@@ -345,7 +345,7 @@
 				<c:otherwise>
 								
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
-					<button class="icon-button-submit icon-button-submit-add" id="saveBtn">
+					<button type="button" class="icon-button-submit icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 						<span>Add</span>
 					</button>
@@ -408,6 +408,7 @@ $('#saveBtn').on("click", function(e) {
 			draggable: true
 		});	
 	} else {
+		console.log("submit")
 		form.submit();
 	}	
 });

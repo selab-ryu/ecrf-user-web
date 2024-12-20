@@ -49,7 +49,7 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 							<aui:input type="hidden" name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=crfId %>" />
 							<aui:input type="hidden" name="excelParam"></aui:input>
 							<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL) %>">
-							<button class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>download" style="width: 200px;">
+							<button type="button" class="icon-button-submit icon-button-submit-update" id="excelDownload" style="width: 200px;">
 								<img src="<%= renderRequest.getContextPath() + "/btn_img/excel_download_icon.png"%>"/>
 								<span>Download Excel</span>
 							</button>
@@ -63,7 +63,7 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 </div>
 
 <aui:script use="liferay-portlet-url">
-$("#<portlet:namespace/>download").on("click", function(event) {
+$("#excelDownload").on("click", function(event) {
 		var form = $("#<portlet:namespace/>fm");
 		var excelPackage = $('#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_searchResults').val();
 		
