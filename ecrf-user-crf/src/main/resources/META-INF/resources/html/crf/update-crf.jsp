@@ -346,7 +346,7 @@
 								
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 					<button type="submit" class="icon-button-submit icon-button-submit-add" id="saveBtn">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/Add_icon.png"%>"/>
+						<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 						<span>Add</span>
 					</button>
 				</c:if>	
@@ -568,7 +568,7 @@ function tableLoading() {
 		"<'row marBr'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 		buttons: [
             {
-            	text : 'Manage Researhcer',
+            	text : '<img style="margin-right: 8px;" src="<%= renderRequest.getContextPath() + "/btn_img/researcher_list_icon_deactivate.png"%>"/>Manage Researhcer',
             	className : 'icon-button-submit icon-button-submit-manage',
             	action : function( e, dt, node, config) {
             		openManageResearcherDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfResearcherInfoArr, "<%=baseURL.toString()%>");
