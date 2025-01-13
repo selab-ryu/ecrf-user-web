@@ -178,11 +178,11 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button type="submit" class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+							<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-search" name="<portlet:namespace/>search">
 								<i class="bi bi-search" style="color:white;"></i>
 								<span>Search</span>
 							</button>
-							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
 								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
 								<span>Clear</span>
 							</a>
@@ -279,7 +279,7 @@ if(isSearch) {
 						<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />						
 					</portlet:renderURL>
-					<a class="<%= !hasUpdatePermission ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=updateResearcherURL %>" name="updateCRF" disabled="<%=!hasUpdatePermission ? true : false %>">
+					<a class="<%= !hasUpdatePermission ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=updateResearcherURL %>" name="updateCRF" disabled="<%=!hasUpdatePermission ? true : false %>">
 						<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<c:if test="<%=!hasUpdatePermission %>">
 							<span>Locked</span>

@@ -334,7 +334,7 @@ if(isUpdate) {
 						<c:when test="<%=isUpdate %>">
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_SUBJECT) %>">
-							<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>save">
+							<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>save">
 								<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
 								<span>Save</span>
 							</button>
@@ -346,7 +346,7 @@ if(isUpdate) {
 								String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 								String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteSubjectURL.toString());
 							%>
-							<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="delete">
+							<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="delete">
 								<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 								<span>Delete</span>
 							</a>
@@ -356,7 +356,7 @@ if(isUpdate) {
 						<c:otherwise>
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
-							<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>save">
+							<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>save">
 								<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 								<span>Add</span>
 							</button>
@@ -365,7 +365,7 @@ if(isUpdate) {
 						</c:otherwise>
 						</c:choose>
 								
-						<a class="icon-button-submit icon-button-submit-cancel" href="<%=updateListURL %>" name="<portlet:namespace/>cancel">
+						<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=updateListURL %>" name="<portlet:namespace/>cancel">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
 							<span style="color:black;">Cancel</span>
 						</a>

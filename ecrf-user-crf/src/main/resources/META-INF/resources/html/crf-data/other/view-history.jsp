@@ -113,7 +113,7 @@
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="marL10">
-						<a class="icon-button-submit icon-button-submit-cancel" href="<%=listHistoryURL %>" name="<portlet:namespace/>cancel">
+						<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listHistoryURL %>" name="<portlet:namespace/>cancel">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
 							<span style="color:black;">Cancel</span>
 						</a>

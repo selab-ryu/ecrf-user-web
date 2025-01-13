@@ -369,7 +369,7 @@
 										<c:when test="<%=isUpdate %>">
 										
 										<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VALIDATE_CRF_QUERY)%>">
-											<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>update">
+											<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
 												<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 												<span>Update</span>
 											</button>
@@ -379,7 +379,7 @@
 										<c:otherwise>
 										
 										<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF_QUERY)%>">
-											<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>update">
+											<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
 												<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 												<span>Update</span>
 											</button>					
@@ -387,7 +387,7 @@
 										</c:otherwise>
 										</c:choose>
 										
-										<a class="icon-button-submit icon-button-submit-cancel" href="<%=listCRFQueryURL %>" name="<portlet:namespace/>cancel">
+										<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listCRFQueryURL %>" name="<portlet:namespace/>cancel">
 											<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
 											<span style="color:black;">Cancel</span>
 										</a>

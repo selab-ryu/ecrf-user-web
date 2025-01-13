@@ -10,7 +10,7 @@
 	
 	String menu = "crf-add";
 	
-	boolean isUpdate = false;
+	boolean isUpdate = false;  
 
 	CRF crf = null;
 	
@@ -85,7 +85,7 @@
 				</aui:col>
 			</aui:row>
 			</c:if>
-			 
+			
 			<aui:row>
 				<aui:col>
 					<aui:field-wrapper
@@ -249,7 +249,7 @@
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 									
-				<a class="icon-button-submit icon-button-submit-form" href="<%=moveCRFFormURL %>" name="<portlet:namespace/>moveForm">
+				<a class="dh-icon-button-submit dh-icon-button-submit-form" href="<%=moveCRFFormURL %>" name="<portlet:namespace/>moveForm">
 					<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_form_icon.png"%>"/>					
 					<span>CRF Form</span>
 				</a>
@@ -264,7 +264,7 @@
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 				
-				<a class="icon-button-submit icon-button-submit-data" href="<%=moveCRFDataURL%>" name="<portlet:namespace/>moveData">
+				<a class="dh-icon-button-submit dh-icon-button-submit-data" href="<%=moveCRFDataURL%>" name="<portlet:namespace/>moveData">
 					<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_data_icon.png"%>"/>					
 					<span>CRF Data</span>
 				</a>
@@ -278,7 +278,7 @@
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 				
-				<a class="icon-button-submit icon-button-submit-query" href="<%=moveCRFQueryURL %>" name="<portlet:namespace/>moveQuery">
+				<a class="dh-icon-button-submit dh-icon-button-submit-query" href="<%=moveCRFQueryURL %>" name="<portlet:namespace/>moveQuery">
 					<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_query_icon.png"%>"/>					
 					<span>CRF Query</span>
 				</a>
@@ -296,7 +296,7 @@
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a class="icon-button-submit icon-button-submit-import" href="<%=moveImportSubjectsURL %>" name="<portlet:namespace/>ImportSubject">
+					<a class="dh-icon-button-submit dh-icon-button-submit-import" href="<%=moveImportSubjectsURL %>" name="<portlet:namespace/>ImportSubject">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/import_subject_icon.png"%>"/>					
 						<span style="color:black;">Import Subject</span>
 					</a>
@@ -310,7 +310,7 @@
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a class="icon-button-submit icon-button-submit-import" href="<%=moveImportDatasURL %>" name="<portlet:namespace/>ImportData">
+					<a class="dh-icon-button-submit dh-icon-button-submit-import" href="<%=moveImportDatasURL %>" name="<portlet:namespace/>ImportData">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/import_subject_icon.png"%>"/>					
 						<span style="color:black;">Import Data</span>
 					</a>
@@ -323,7 +323,7 @@
 				<c:when test="<%=isUpdate %>">
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF) %>">
-					<button type="button" class="icon-button-submit icon-button-submit-add" id="saveBtn">
+					<button type="button" class="dh-icon-button-submit dh-icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<span>Update</span>
 					</button>
@@ -335,7 +335,7 @@
 						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteCRFURL.toString());
 					%>
-					<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+					<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
 						<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 						<span>Delete</span>
 					</a>
@@ -345,7 +345,7 @@
 				<c:otherwise>
 								
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
-					<button type="button" class="icon-button-submit icon-button-submit-add" id="saveBtn">
+					<button type="button" class="dh-icon-button-submit dh-icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 						<span>Add</span>
 					</button>
@@ -353,7 +353,7 @@
 				
 				</c:otherwise>
 				</c:choose>
-				<a class="icon-button-submit icon-button-submit-cancel" href="<%=listCRFURL %>" name="<portlet:namespace/>cancel">
+				<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listCRFURL %>" name="<portlet:namespace/>cancel">
 					<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
 					<span style="color:black;">Cancel</span>
 				</a>
@@ -570,7 +570,7 @@ function tableLoading() {
 		buttons: [
             {
             	text : '<img style="margin-right: 8px;" src="<%= renderRequest.getContextPath() + "/btn_img/researcher_list_icon_deactivate.png"%>"/>Manage Researhcer',
-            	className : 'icon-button-submit icon-button-submit-manage',
+            	className : 'dh-icon-button-submit dh-icon-button-submit-manage',
             	action : function( e, dt, node, config) {
             		openManageResearcherDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfResearcherInfoArr, "<%=baseURL.toString()%>");
             	}
@@ -611,14 +611,14 @@ function tableLoading() {
         buttons: [
             {
             	text : '<img style="margin-right: 8px;" src="<%= renderRequest.getContextPath() + "/btn_img/manage_subject_icon_deactivate.png"%>"/>Manage Subject',
-            	className : 'icon-button-submit icon-button-submit-manage',
+            	className : 'dh-icon-button-submit dh-icon-button-submit-manage',
             	action : function( e, dt, node, config) {
             		openManageSubjectDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr, "<%=baseURL.toString()%>");            		
             	}
             },
             {
             	text : '<img style="margin-right: 8px;" src="<%= renderRequest.getContextPath() + "/btn_img/manage_update_lock_icon_deactivate.png"%>"/>Manage Update Lock',
-            	className : 'icon-button-submit icon-button-submit-manage',
+            	className : 'dh-icon-button-submit dh-icon-button-submit-manage',
             	action : function( e, dt, node, config) {
             		openManageUpdateLockDialog(<%=scopeGroupId%>, "<%=themeDisplay.getPortletDisplay().getId()%>", <%=crfId%>, crfSubjectInfoArr, "<%=baseURL.toString()%>");
             	}

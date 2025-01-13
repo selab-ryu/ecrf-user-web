@@ -122,7 +122,7 @@ if(!isPrivate) pageClass = "mar16px";
 				<c:choose>
 				<c:when test="<%=(projectId > 0) %>">
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">			
-						<a href="<%=updateProjectURL %>" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>update">
+						<a href="<%=updateProjectURL %>" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 							<span>Update</span>
 						</a>					
@@ -133,7 +133,7 @@ if(!isPrivate) pageClass = "mar16px";
 							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
 						%>
-						<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+						<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
 							<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 							<span>Delete</span>
 						</a>
@@ -141,7 +141,7 @@ if(!isPrivate) pageClass = "mar16px";
 			 	</c:when>
 			 	<c:otherwise>
 			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-						<a href="<%=addProjectURL %>" type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>add">
+						<a href="<%=addProjectURL %>" type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>add">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 							<span>Add</span>
 						</a>	

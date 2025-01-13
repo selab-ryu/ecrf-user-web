@@ -17,14 +17,14 @@
 	<div class="side-menu radius-shadow-container" style="text-align:center;">
 		<!-- Subject Management -->
 		<div>
-			<a class="icon-button-sidebar icon-button-main" href="<%=updateListURL %>" name="SubjectMain">
+			<a class="dh-icon-button-sidebar dh-icon-button-main" href="<%=updateListURL %>" name="SubjectMain">
 				<img src="<%= renderRequest.getContextPath() + "/btn_img/subject_icon.png"%>"/>
 				<span>CRF</span>
 			</a>	
 		</div>
 		
 		<div>
-			<a class="<%=(menu.equals("subject-list-update") || menu.equals("subject-update")) ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=updateListURL %>" name="SubjectList">
+			<a class="<%=(menu.equals("subject-list-update") || menu.equals("subject-update")) ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=updateListURL %>" name="SubjectList">
 				<img src="<%= (menu.equals("subject-list-update") || menu.equals("subject-update")) ? renderRequest.getContextPath() + "/btn_img/subject_list_icon.png" : renderRequest.getContextPath() + "/btn_img/subject_list_icon_deactivate.png"%>"/>
 				<span>Subject List</span>
 			</a>
@@ -32,7 +32,7 @@
 		
 		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
 		<div>
-			<a class="<%=menu.equals("subject-add") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=addSubjectRenderURL %>" name="SubjectList">
+			<a class="<%=menu.equals("subject-add") ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=addSubjectRenderURL %>" name="SubjectList">
 				<img src="<%= menu.equals("subject-add") ? renderRequest.getContextPath() + "/btn_img/add_subject_icon.png" : renderRequest.getContextPath() + "/btn_img/add_subject_icon_deactivate.png"%>"/>
 				<span>Add Subject</span>
 			</a>

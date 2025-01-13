@@ -22,7 +22,7 @@ if(expGroupId > 0) {
 	expGroup = ExperimentalGroupLocalServiceUtil.getExperimentalGroup(expGroupId);
 }
 
-boolean hasAddPermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_EXP_GROUP);
+boolean hasAddPermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_EXP_GROUP);
 boolean hasUpdatePermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_EXP_GROUP);
 boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_EXP_GROUP);
 
@@ -141,7 +141,7 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 				
 					<c:if test="<%=!isUpdate %>">
 					<c:if test="<%=hasAddPermission %>">
-					<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>add">
+					<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>add">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 						<span>Add</span>
 					</button>
@@ -150,7 +150,7 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 					
 					<c:if test="<%=isUpdate %>">
 					<c:if test="<%=hasUpdatePermission %>">
-					<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>update">
+					<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<span>Update</span>
 					</button>
@@ -162,13 +162,13 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
 					%>
-					<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+					<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
 						<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 						<span>Delete</span>
 					</a>
 					</c:if>
 					</c:if>
-					<a class="icon-button-submit icon-button-submit-cancel" href="<%=listExpGroupURL %>" name="<portlet:namespace/>cancel">
+					<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listExpGroupURL %>" name="<portlet:namespace/>cancel">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
 						<span style="color:black;">Cancel</span>
 					</a>

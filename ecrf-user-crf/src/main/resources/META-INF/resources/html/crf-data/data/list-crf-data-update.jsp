@@ -180,11 +180,11 @@ _log.info("url : " + baseURL.toString());
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+							<button class="dh-icon-button-submit dh-icon-button-submit-search" name="<portlet:namespace/>search">
 								<i class="bi bi-search" style="color:white;"></i>
 								<span>Search</span>
 							</button>
-							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
 								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
 								<span>Clear</span>
 							</a>
@@ -359,14 +359,9 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
 			</portlet:actionURL>
 			
-			<a class="icon-button icon-button-db-lock" href="<%=changeUpdateLock %>" name="dblock" disabled="<%=updateLock ? true : false %>">
+			<a class="dh-icon-button dh-icon-button-db-lock" href="<%=changeUpdateLock %>" name="dblock">
 				<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/DB_Lock_icon_only.png" : renderRequest.getContextPath() + "/btn_img/DB_Unlock_icon_only.png"%>"/>
-				<c:if test="<%=updateLock %>">
-					<span>DB Locked</span>
-				</c:if>
-				<c:if test="<%=!updateLock %>">
-					<span>DB Lock</span>
-				</c:if>			
+				<span><liferay-ui:message key="<%=lockBtnKey %>"/></span>			
 			</a>
 			
 			</liferay-ui:search-container-column-text>
@@ -375,8 +370,12 @@ _log.info("url : " + baseURL.toString());
 			
 			<!-- Data Update -->
 			<%
-				String CRFUpdateBtnClass = "";
 				String CRFAddBtnClass = "ci-btn small-btn";
+				String CRFUpdateBtnClass = "";
+				
+				String addDataBtnKey = "ecrf-user.button.insert-crf-data";
+				String updateDataBtnKey = "ecrf-user.button.update-crf-data";
+				
 				if(hasCRF){
 					CRFUpdateBtnClass = "ci-btn small-btn";
 				}else{
@@ -386,6 +385,8 @@ _log.info("url : " + baseURL.toString());
 				if(updateLock) {
 					CRFUpdateBtnClass = "none-btn small-btn";
 					CRFAddBtnClass = "none-btn small-btn";
+					addDataBtnKey = "ecrf-user.button.locked";
+					updateDataBtnKey = "ecrf-user.button.locked";
 				}
 				
 				int displayId = CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout();
@@ -407,14 +408,9 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="menu" value="crf-data-list-update" />
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
-				<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-add"%>" href="<%=renderAddCRFURL %>" name="addCRF" disabled="<%=updateLock ? true : false %>">
-          <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/add_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
-					<c:if test="<%=updateLock %>">
-						<span>Locked</span>
-					</c:if>
-					<c:if test="<%=!updateLock %>">
-						<span>Add Data</span>
-					</c:if>			
+				<a class="<%= updateLock ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-add"%>" href="<%=updateLock ? "javascript:void(0);" : renderAddCRFURL %>" name="addCRF">
+          			<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/add_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+					<span><liferay-ui:message key="<%=addDataBtnKey %>"/></span>	
 				</a>
 			</liferay-ui:search-container-column-text>
 			
@@ -443,25 +439,15 @@ _log.info("url : " + baseURL.toString());
 			</portlet:renderURL>
 			<c:choose>
 				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
-					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=renderUpdateCRFURL %>" name="updateCRF" disabled="<%=updateLock ? true : false %>">
-            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-						<c:if test="<%=updateLock %>">
-							<span>Locked</span>
-						</c:if>
-						<c:if test="<%=!updateLock %>">
-							<span>Update Data</span>
-						</c:if>			
+					<a class="<%= updateLock ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=updateLock ? "javascript:void(0);" : renderUpdateCRFURL %>" name="updateCRF">
+           				<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+						<span><liferay-ui:message key="<%=updateDataBtnKey %>"/></span>			
 					</a>
 				</c:when>
 				<c:otherwise>
-					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" onclick="<%=updateFunctionCallStr %>" name="updateCRF" disabled="<%=updateLock ? true : false %>">
-            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-						<c:if test="<%=updateLock %>">
-							<span>Locked</span>
-						</c:if>
-						<c:if test="<%=!updateLock %>">
-							<span>Update Data</span>
-						</c:if>			
+					<a class="<%= updateLock ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" onclick="<%=updateLock ? "javascript:void(0);" : updateFunctionCallStr %>" name="updateCRF">
+            			<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+						<span><liferay-ui:message key="<%=updateDataBtnKey %>"/></span>		
 					</a>				
 				</c:otherwise>	
 			</c:choose>
@@ -477,7 +463,7 @@ _log.info("url : " + baseURL.toString());
 				}else{
 					auditBtnClass = "none-btn small-btn";
 				}
-			
+				
 				String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 1, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 				List<LinkCRF> links = LinkCRFLocalServiceUtil.getLinkCRFByC_S(crfId, rowSubjectId);
 				long singleSdId = 0;
@@ -485,9 +471,13 @@ _log.info("url : " + baseURL.toString());
 					LinkCRF getLink = links.get(0);
 					singleSdId = getLink.getStructuredDataId();
 				}
+				
 				boolean hasViewAuditPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_AUDIT);
+				
 				boolean auditDisable = true;
-				if(hasViewAuditPermission && hasCRF) auditDisable = false;  
+				if(hasViewAuditPermission && hasCRF) {
+					auditDisable = false;  
+				}
 			%>
 			
 			<!-- Audit trail button -->
@@ -505,9 +495,10 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="menu" value="crf-data-list-update" />
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
+			
 			<c:choose>
 				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
-					<a class="icon-button icon-button-audit" href="<%=renderAuditCRFURL %>" name="auditCRF" disabled="<%=updateLock ? true : false %>">
+					<a class="dh-icon-button dh-icon-button-audit" href="<%=updateLock ? "javascript:void(0);" : renderAuditCRFURL %>" name="auditCRF">
 						<c:if test="<%=updateLock %>">
 							<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/view_icon.png" : renderRequest.getContextPath() + "/btn_img/view_icon.png"%>"/>						
 							<span>View Data</span>
@@ -519,7 +510,7 @@ _log.info("url : " + baseURL.toString());
 					</a>	
 				</c:when>
 				<c:otherwise>
-					<a class="icon-button icon-button-audit" onclick="<%=auditFunctionCallStr %>" name="auditCRF" disabled="<%=updateLock ? true : false %>">
+					<a class="dh-icon-button dh-icon-button-audit" onclick="<%=updateLock ? "javascript:void(0);" : auditFunctionCallStr %>" name="auditCRF">
 						<c:if test="<%=updateLock %>">
 							<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/view_icon.png" : renderRequest.getContextPath() + "/btn_img/view_icon.png"%>"/>						
 							<span>View Data</span>
@@ -543,10 +534,6 @@ _log.info("url : " + baseURL.toString());
 					CRFDeleteBtnClass = "none-btn small-btn";
 				}
 				
-				if(updateLock) {
-					CRFDeleteBtnClass = "none-btn small-btn";
-				}
-
 				long singleLinkId = 0;
 				if(links.size() < 2 && links.size() > 0){
 					LinkCRF getLink = links.get(0);
@@ -556,6 +543,10 @@ _log.info("url : " + baseURL.toString());
 				String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 2, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 				
 				String deleteSingleFunctionCallStr = String.format("deleteSingleCRF(%d, %d, '%s', '%s')", singleLinkId, crfId, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+				
+				if(updateLock) {
+					CRFDeleteBtnClass = "none-btn small-btn";
+				}
 
 				boolean deleteDisable = true;
 				if(!updateLock && hasCRF) deleteDisable = false;
@@ -567,8 +558,8 @@ _log.info("url : " + baseURL.toString());
 			>
 			<c:choose>
 				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
-					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onclick="<%=deleteSingleFunctionCallStr %>" name="deleteCRF" disabled="<%=updateLock ? true : false %>">
-            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+					<a class="<%= updateLock ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-delete"%>" onclick="<%=updateLock ? "javascript:void(0);" : deleteSingleFunctionCallStr %>" name="deleteCRF">
+            			<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>
@@ -578,8 +569,8 @@ _log.info("url : " + baseURL.toString());
 					</a>	
 				</c:when>
 				<c:otherwise>
-					<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onclick="<%=deleteFunctionCallStr %>" name="deleteCRF" disabled="<%=updateLock ? true : false %>">
-            <img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+					<a class="<%= updateLock ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-delete"%>" onclick="<%=updateLock ? "javascript:void(0);" : deleteFunctionCallStr %>" name="deleteCRF">
+           				<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 						<c:if test="<%=updateLock %>">
 							<span>Locked</span>
 						</c:if>

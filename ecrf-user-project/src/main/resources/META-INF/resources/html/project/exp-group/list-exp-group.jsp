@@ -128,11 +128,11 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button type="submit" class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+							<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-search" name="<portlet:namespace/>search">
 								<i class="bi bi-search" style="color:white;"></i>
 								<span>Search</span>
 							</button>
-							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
 								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
 								<span>Clear</span>
 							</a>
@@ -213,7 +213,7 @@ if(isSearch) {
 				cssClass="min-width-80"
 			>			
 				
-				<a class="<%= !hasUpdatePermission ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=updateExpGroupURL %>" name="updateExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
+				<a class="<%= !hasUpdatePermission ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=updateExpGroupURL %>" name="updateExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
 					<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 					<span>Update</span>
 				</a>
@@ -232,8 +232,8 @@ if(isSearch) {
 				String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 				String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
 			%>
-				<a class="<%= !hasUpdatePermission ? "icon-button icon-button-deactivate" : "icon-button icon-button-delete"%>" onClick="<%=deleteFunctionCall %>" name="deleteExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
-					<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
+				<a class="<%= !hasDeletePermission ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-delete"%>" onClick="<%=deleteFunctionCall %>" name="deleteExpGroup" disabled="<%=hasDeletePermission ? false : true %>">
+					<img src="<%= !hasDeletePermission ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 					<span>Delete</span>
 				</a>
 			</liferay-ui:search-container-column-text>
@@ -251,7 +251,7 @@ if(isSearch) {
 		
 		<c:if test="<%=hasAddPermission %>">
 		<aui:button-row>
-			<a class="icon-button-submit icon-button-submit-add" href="<%=addExpGroupURL %>" name="<portlet:namespace/>addExp">
+			<a class="dh-icon-button-submit dh-icon-button-submit-add" href="<%=addExpGroupURL %>" name="<portlet:namespace/>addExp">
 				<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/add_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 				<span>Add</span>
 			</a>

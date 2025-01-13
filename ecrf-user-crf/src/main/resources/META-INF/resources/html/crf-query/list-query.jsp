@@ -95,11 +95,11 @@
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+							<button class="dh-icon-button-submit dh-icon-button-submit-search" name="<portlet:namespace/>search">
 								<i class="bi bi-search" style="color:white;"></i>
 								<span>Search</span>
 							</button>
-							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
 								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
 								<span>Clear</span>
 							</a>
@@ -272,6 +272,10 @@
 				<%
 					boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, crfAutoquery.getSubjectId());
 					boolean hasUpdateQueryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_QUERY);
+					
+					boolean isDisabled = updateLock || hasUpdateQueryPermission;
+					String updateBtnKey = "ecrf-user.button.update";
+					if(isDisabled) updateBtnKey = "ecrf-user.button.lock";
 				%>
 				
 				<liferay-ui:search-container-column-text
@@ -279,14 +283,9 @@
 					cssClass="min-width-80"
 				>
 
-				<a class="<%= updateLock ? "icon-button icon-button-deactivate" : "icon-button icon-button-update"%>" href="<%=updateQueryURL %>" name="updateCRF" disabled="<%=updateLock ? true : false %>">
-					<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-					<c:if test="<%=updateLock %>">
-						<span>Locked</span>
-					</c:if>
-					<c:if test="<%=!updateLock %>">
-						<span>Update</span>
-					</c:if>			
+				<a class="<%= isDisabled ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=isDisabled ? "javascript:void(0);" : updateQueryURL %>" name="updateCRF">
+					<img src="<%= isDisabled ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+					<span><liferay-ui:message key="<%=updateBtnKey %>"/></span>	
 				</a>
 
 				
@@ -300,6 +299,8 @@
 				searchContainer="<%=searchContainer%>"
 			/>
 		</liferay-ui:search-container>
+		
+		<c:if test="<%=isAdmin %>">
 		<aui:row>
 			<aui:col>
 				<aui:button-row cssClass="marL10">
@@ -308,6 +309,7 @@
 				</aui:button-row>
 				
 			</aui:col>
-		</aui:row>	
+		</aui:row>
+		</c:if>
 	</div>
 </div>

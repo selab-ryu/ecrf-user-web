@@ -135,7 +135,7 @@ _log.info("is audit : " + isAudit);
 			<input type="hidden" id="<portlet:namespace/>hasHashChanged" name="<portlet:namespace/>hasHashChanged" >					
 			<input type="hidden" id="<portlet:namespace/>dataContent" name="<portlet:namespace/>dataContent" >
 			<aui:button-row>
-				<a id="<portlet:namespace/>btnSave" class="icon-button-submit icon-button-submit-save">		
+				<a id="<portlet:namespace/>btnSave" class="dh-icon-button-submit dh-icon-button-submit-save">		
 					<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
 					<span>Save</span>
 				</a>
@@ -188,7 +188,7 @@ let profile = {
 };
 console.log(profile);
 
-let ev = ECRFViewer();
+let ev = ECRFViewer(SX);
 let dataStructure = SX.newDataStructure(<%=crfForm%>, profile, SX.Constants.FOR_EDITOR, $('#<portlet:namespace/>canvasPanel'));
 
 let align = "crf-align-table";

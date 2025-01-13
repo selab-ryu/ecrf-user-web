@@ -1,14 +1,28 @@
-let ECRFViewer = function(){
+let ECRFViewer = function(StationX){
+
+	console.log(StationX);
+
+	let SX = {
+		StationX: StationX
+	};
+
 	class Viewer{
 		/*
 		 * Here for launch viewer 
 		 * 
 		 */
+
 		constructor(DataStructure, align, structuredData, subjectInfo, isAudit){
 			var result = new Object();
 			renderUtil.align = align;
 			renderUtil.isAudit = isAudit;
 			
+			if(SX.stationX) {
+				console.log("log SX", SX);
+			} else {
+				console.log("SX is Empty or Null");
+			}
+
 			if(isAudit){
 				renderUtil.align = "crf-align-table";
 			}
@@ -52,9 +66,11 @@ let ECRFViewer = function(){
              * value_changed event work on js first, jsp after
              */
             Liferay.on('value_changed', function(event){
+				let packet = event.dataPacket;
 
-            	if(event.dataPacket.term){
-            		let eventTerm = event.dataPacket.term;
+            	if(packet.term){
+            		let eventTerm = packet.term;
+					console.log(eventTerm);
             		console.log(eventTerm.value);
             		if(eventTerm.termType === "List"){
             			renderUtil.activateTerms(eventTerm);
@@ -1598,9 +1614,9 @@ let ECRFViewer = function(){
 							Liferay.fire( 'value_changed', eventData );					
 						}
 					};
-				Object.keys( listEventFuncs ).forEach( event => {
-					$inputTag.on( event, listEventFuncs[event] );
-				});
+					Object.keys( listEventFuncs ).forEach( event => {
+						$inputTag.on( event, listEventFuncs[event] );
+					});
 				}else if(term.displayStyle === "radio"){
 					$inputTag = $('<label>');
 					let index = 1;
@@ -1644,6 +1660,69 @@ let ECRFViewer = function(){
 						};
 						
 						Liferay.fire( 'value_changed', eventData );		
+					});
+				}else {	// for Checkbox
+					console.log(term);
+					let controlName = term.termName;
+					
+					$inputTag = $('<fieldset style="width:fit-content;max-width:100%;border: 1px solid #aaa; box-shadow: 2px 2px #ccc;">').prop({
+						'id': controlName,
+						'name': controlName
+					});
+
+					// create checkbox for each option
+					term.options.forEach((option, index)=> {
+						let controlId = controlName+'_'+(index+1);
+						let value = option.value;
+						let labelText = option.label.localizedMap.en_US;	// TODO: need to change depend on language
+						let selected = term.hasValue() ? term.value.includes(option.value) : false;
+
+						let $checkbox = $( '<div class="checkbox" style="display:inline-block;margin-left:10px;margin-right:20px;">' );
+						let $label = $( '<label style="font-size:0.8rem;font-weight:400;">' ).prop( 'for', controlId ).appendTo( $checkbox );
+						let $input = $( '<input type="checkbox" style="display:inline-block;margin-right:10px;background-color:white;">').appendTo( $label );
+						$input.prop({
+							class: "field",
+							id: controlId,
+							name: controlName,
+							value: value,
+							checked: selected,
+							disabled: term.disabled
+						});
+
+						$label.append( labelText );
+
+						$inputTag.append($checkbox);
+					});
+					
+					let stationX = SX.StationX;
+					console.log(stationX);
+
+					// event handling when checkbox changed
+					$inputTag.change(function(event) {
+						event.stopPropagation();
+
+						let checkedValues = new Array();
+
+						$.each( $(this).find('input[type="checkbox"]:checked'), function() {
+							checkedValues.push($(this).val() );
+						});
+
+						console.log("list checkbox changed ", checkedValues);
+						
+						term.value = checkedValues;
+
+						let dataPacket = new EventDataPacket();
+						dataPacket.term = term;
+						dataPacket.attribute = 'value';
+						dataPacket.value = checkedValues;
+						dataPacket.$source = $(this);
+						const eventData = {
+							dataPacket: dataPacket
+						};
+						
+						console.log(eventData);
+
+						Liferay.fire( 'value_changed', eventData );
 					});
 				}
 				break;
@@ -2128,6 +2207,15 @@ let ECRFViewer = function(){
     };
     
     class EventDataPacket{
+		constructor( sourcePortlet, targetPortlet ){
+			this.sourcePortlet = sourcePortlet;
+			this.targetPortlet = targetPortlet;
+		}
+
+		isTargetPortlet(ns){
+			return this.targetPortlet === ns;
+		}
+
 		parse( jsonObj ){
 			Object.keys(jsonObj).forEach( key => {
 				this[key] = jsonObj[key];
@@ -2137,9 +2225,9 @@ let ECRFViewer = function(){
 		toJSON(){
 			let json = new Object();
 
-			Object.keys(this).forEach(key=>{
+			for(let key in this){
 				json[key] = this[key];
-			});
+			};
 
 			return json;
 		}

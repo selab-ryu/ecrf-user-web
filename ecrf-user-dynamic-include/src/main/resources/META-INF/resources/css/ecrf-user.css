@@ -165,9 +165,9 @@ div.page-content-sub {
     position: absolute;
     overflow: auto;
 	min-width: 170px;
-	line-height: 12px;
-		
+	line-height: 1rem;
 	background-color:white;
+	overflow:visible
 }
         
 .main-menu-bar {

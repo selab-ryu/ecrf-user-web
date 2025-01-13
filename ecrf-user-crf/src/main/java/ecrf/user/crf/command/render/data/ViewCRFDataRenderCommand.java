@@ -74,7 +74,7 @@ public class ViewCRFDataRenderCommand implements MVCRenderCommand {
 				
 				// check sd id
 				// if sd id is 0 then add new data
-				if(crfDataCount > 0) {
+				if(crfDataCount > 0 && sdId > 0) {	// 250110 : add sdId check statement
 					try {
 						_log.info("group / subject / crf / sd : " + themeDisplay.getScopeGroupId() + " / " + subjectId + " / " + crfId + " / " + sdId);
 						linkCRF = _linkCRFLocalService.getLinkCRFByG_S_C_SD(themeDisplay.getScopeGroupId(), subjectId, crfId, sdId);

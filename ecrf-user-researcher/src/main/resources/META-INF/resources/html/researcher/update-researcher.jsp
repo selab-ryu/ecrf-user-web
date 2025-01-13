@@ -437,7 +437,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					%>
 										
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) || hasOwnPermission ) %>">
-						<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>save">
+						<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>save">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
 							<span>Save</span>
 						</button>
@@ -449,7 +449,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteResearcherURL.toString());
 						%>
-						<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="delete">
+						<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="delete">
 							<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 							<span>Delete</span>
 						</a>
@@ -459,15 +459,19 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					<c:otherwise>
 					
 					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
-						<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>add">
+						<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>add">
+							<c:if test="<%=!fromLiferay %>">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
+							</c:if>
 							<span>Add</span>
 						</button>
 					</c:if>
 					
 					<c:if test="<%=fromLiferay %>">
-						<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>save">
+						<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>save">
+							<c:if test="<%=!fromLiferay %>">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
+							</c:if>
 							<span>Save</span>
 						</button>
 					</c:if>
@@ -475,8 +479,10 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					</c:otherwise>
 					</c:choose>			
 							
-					<a class="icon-button-submit icon-button-submit-cancel" href="<%=listResearcherURL %>" name="<portlet:namespace/>cancel">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
+					<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listResearcherURL %>" name="<portlet:namespace/>cancel">
+						<c:if test="<%=!fromLiferay %>">
+						<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>
+						</c:if>					
 						<span style="color:black;">Cancel</span>
 					</a>
 				</aui:button-row>

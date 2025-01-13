@@ -21,13 +21,13 @@
 				
 		<!-- Researcher Management -->
 		<div>
-			<a class="icon-button-sidebar icon-button-main" href="<%=researcherListURL %>" name="ResearcherMain">
+			<a class="dh-icon-button-sidebar dh-icon-button-main" href="<%=researcherListURL %>" name="ResearcherMain">
 				<img src="<%= renderRequest.getContextPath() + "/btn_img/researcher_icon.png"%>"/>
 				<span>Researcher</span>
 			</a>
 		</div>
 		<div>
-			<a class="<%= menu.equals("researcher-list") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=researcherListURL %>" name="ResearcherList">
+			<a class="<%= menu.equals("researcher-list") ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=researcherListURL %>" name="ResearcherList">
 				<img src="<%= menu.equals("researcher-list") ? renderRequest.getContextPath() + "/btn_img/researcher_list_icon.png" : renderRequest.getContextPath() + "/btn_img/researcher_list_icon_deactivate.png"%>"/>
 				<span style="text-align:left; white-space:normal; overflow:visible; text-overflow: clip;">Researcher List</span>
 			</a>
@@ -35,7 +35,7 @@
 		
 		<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
 		<div>
-			<a class="<%= menu.equals("researcher-add") || menu.equals("researcher-update") ? "icon-button-sidebar icon-button-2nd" : "icon-button-sidebar icon-button-sidebar-deactivate"%>" href="<%=moveAddResearcherURL %>" name="AddResearcher">
+			<a class="<%= menu.equals("researcher-add") || menu.equals("researcher-update") ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=moveAddResearcherURL %>" name="AddResearcher">
 				<img src="<%= menu.equals("researcher-add") || menu.equals("researcher-update") ? renderRequest.getContextPath() + "/btn_img/add_researcher_icon.png" : renderRequest.getContextPath() + "/btn_img/add_researcher_icon_deactivate.png"%>"/>
 				<span style="text-align:left; white-space:normal; overflow:visible; text-overflow: clip;">Add Researcher</span>
 			</a>

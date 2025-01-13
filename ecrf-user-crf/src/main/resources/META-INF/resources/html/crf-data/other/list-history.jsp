@@ -213,11 +213,11 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button class="icon-button-submit icon-button-submit-search" name="<portlet:namespace/>search">
+							<button class="dh-icon-button-submit dh-icon-button-submit-search" name="<portlet:namespace/>search">
 								<i class="bi bi-search" style="color:white;"></i>
 								<span>Search</span>
 							</button>
-							<a class="icon-button-submit icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
 								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
 								<span>Clear</span>
 							</a>
@@ -336,7 +336,7 @@ if(isSearch) {
 					name="ecrf-user.list.view"
 					cssClass="min-width-80"
 				>
-					<a class="icon-button icon-button-audit" href="<%=viewHistoryURL %>" name="viewHistory" disabled="<%=!hasViewHistoryPermission ? true : false %>">
+					<a class="dh-icon-button dh-icon-button-audit" href="<%=hasViewHistoryPermission ? viewHistoryURL : "javascript:void(0);" %>" name="viewHistory" disabled="<%=!hasViewHistoryPermission ? true : false %>">
 						<img src="<%= !hasViewHistoryPermission ?  renderRequest.getContextPath() + "/btn_img/view_icon.png" : renderRequest.getContextPath() + "/btn_img/view_icon.png"%>"/>						
 						<span>View</span>		
 					</a>	

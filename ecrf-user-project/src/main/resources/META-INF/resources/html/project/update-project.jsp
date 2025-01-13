@@ -134,20 +134,20 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 					<aui:button-row>
 						<c:choose>
 							<c:when test="<%=(projectId > 0) %>">
-								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.UPDATE) %>">			
-									<button type="submit" class="icon-button-submit icon-button-submit-update" name="<portlet:namespace/>update">
+								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ECRFUserActionKeys.UPDATE_PROJECT) %>">			
+									<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
 										<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 										<span>Update</span>
 									</button>
 												
 								</c:if>
-								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ActionKeys.DELETE) %>">
+								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ECRFUserActionKeys.DELETE_PROJECT) %>">
 									<%
 										String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
 										String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 										String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
 									%>
-									<a class="icon-button-submit icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+									<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
 										<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
 										<span>Delete</span>
 									</a>
@@ -155,7 +155,7 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 						 	</c:when>
 						 	<c:otherwise>
 						 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-	 								<button type="submit" class="icon-button-submit icon-button-submit-add" name="<portlet:namespace/>add">
+	 								<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>add">
 										<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
 										<span>Add</span>
 									</button>	
@@ -163,7 +163,7 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 						 	</c:otherwise>
 					 	</c:choose>		
 					 	
-						<a class="icon-button-submit icon-button-submit-cancel" href="<%=viewProjectURL %>" name="<portlet:namespace/>cancel">
+						<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=viewProjectURL %>" name="<portlet:namespace/>cancel">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
 							<span style="color:black;">Cancel</span>
 						</a>

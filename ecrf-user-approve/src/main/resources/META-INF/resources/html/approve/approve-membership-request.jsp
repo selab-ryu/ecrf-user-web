@@ -93,15 +93,15 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			<aui:row>
 				<aui:col>
 					<aui:button-row>
-						<a class="icon-button-submit icon-button-submit-add" onClick="<%= liferayPortletResponse.getNamespace() + "approveRequest();" %>" name="<portlet:namespace/>approve">
+						<a class="dh-icon-button-submit dh-icon-button-submit-add" onClick="<%= liferayPortletResponse.getNamespace() + "approveRequest();" %>" name="<portlet:namespace/>approve">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/approve_icon.png"%>"/>					
 							<span>Approve</span>
 						</a>
-						<a class="icon-button-submit icon-button-submit-delete" onClick="<%= liferayPortletResponse.getNamespace() + "rejectRequest();" %>" name="<portlet:namespace/>reject">
+						<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%= liferayPortletResponse.getNamespace() + "rejectRequest();" %>" name="<portlet:namespace/>reject">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/reject_icon.png"%>"/>					
 							<span>Reject</span>
 						</a>
-						<a class="icon-button-submit icon-button-submit-cancel" href="<%=redirect %>" name="<portlet:namespace/>cancel">
+						<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=redirect %>" name="<portlet:namespace/>cancel">
 							<img src="<%= renderRequest.getContextPath() + "/btn_img/back_icon.png"%>"/>					
 							<span style="color:black;">Back</span>
 						</a>

@@ -1,4 +1,12 @@
-.ecrf-user, .ecrf-user-crf-data, .ecrf-user-crf-query, .ecrf-user-crf {
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.ecrf-user, .ecrf-user-crf-data, .ecrf-user-crf-query, .ecrf-user-crf {	
+	font-family: Roboto, "Nanum Gothic", sans-serif, "Noto Sans KR";
+		
+	a[disable=true] {
+    	pointer-events: none;
+	}
 	
     /*
     .ci-btn-color { background-color:#C55A11; border-color:#C55A11; }
@@ -62,95 +70,68 @@
 	.small-btn { font-size:0.8rem; border-radius: 0; padding: 0.2rem 0.8rem; height:30px; }
 	/* button style */
 
+
     /* icon button style */
-    .icon-button{
+    .dh-icon-button{
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 140px;
+        width: 130px;
         gap: 8px;
         padding: 6px 8px;
         border: none;
         border-radius: 4px;
-        font-size: 0.95rem;
+        font-size: 0.875rem;
         cursor: pointer;		      
         text-decoration: none!important;
     }
-    .icon-button img{
-		height: 26px;
+    .dh-icon-button img{
+		height: 24px;
 		object-fit: contain;
 	}
-    .icon-button span{
+    .dh-icon-button span{
         color: white;
         white-space: nowrap;
         font-weight: bold;
+        padding-top:2px;
     }
-    .icon-button-deactivate{
+    .dh-icon-button-deactivate{
         background-color: #CCCCCC;
         cursor: not-allowed;		      
     }
     
-     .icon-button-deactivate span{
+     .dh-icon-button-deactivate span{
         color:#444!important;
     }
     
-    .icon-button-db-lock {
+    .dh-icon-button-db-lock { background-color: #00C896;}
+    .dh-icon-button-db-lock:hover { background-color: #00A563;}
+    
+    .dh-icon-button-add { background-color: #007BFF; }		  
+    .dh-icon-button-add:hover { background-color: #0056b3; }
+    
+    .dh-icon-button-update { background-color: #5f73ff; }		  
+    .dh-icon-button-update:hover { background-color: #3d51dd; }
+    
+    .dh-icon-button-audit { background-color: #8c78ff; }		  
+    .dh-icon-button-audit:hover { background-color: #6a56dd; }
+    
+    .dh-icon-button-delete { background-color: #ea5353; }		  
+    .dh-icon-button-delete:hover { background-color: #c83131; }
+    
+    .dh-icon-button-form { background-color: #F4A460; }
+    .dh-icon-button-form:hover { background-color: #D28240; }
 
-    background-color: #00C896;
-    }
-    .icon-button-db-lock:hover {
-    background-color: #00A563;
-    }
-    
-    .icon-button-add {
-    background-color: #007BFF;
-    }		  
-    .icon-button-add:hover {
-    background-color: #0056b3;
-    }
-    
-    .icon-button-update {
-    background-color: #5f73ff;
-    }		  
-    .icon-button-update:hover {
-    background-color: #3d51dd;
-    }
-    
-    .icon-button-audit {
-    background-color: #8c78ff;
-    }		  
-    .icon-button-audit:hover {
-    background-color: #6a56dd;
-    }
-    
-    .icon-button-delete {
-    background-color: #ea5353;
-    }		  
-    .icon-button-delete:hover {
-    background-color: #c83131;
-    }
-    
-    .icon-button-form {
-        background-color: #F4A460;
-    }
-    .icon-button-form:hover {
-        background-color: #D28240;
-    }
-
-    .icon-button-query {
-        background-color: #2F5597;
-    }
-    .icon-button-query:hover {
-        background-color: #0d3375;
-    }
-
-    .icon-button-sidebar{
+    .dh-icon-button-query { background-color: #2F5597; }
+    .dh-icon-button-query:hover { background-color: #0d3375; }
+            
+    .dh-icon-button-sidebar{
         display: inline-flex;
         align-items: center;
         justify-content: left;
         gap: 10px;
         width: 96%;
-        padding: 10px 10px;
+        padding: 0px 10px;
         border: none;
         border-radius: 0px;
         font-size: 15px;
@@ -159,52 +140,217 @@
         text-decoration: none!important;
         margin-bottom: 2px;
         border-bottom: 1px solid #888;
+        height: 3rem;
     }
   
-	.icon-button-sidebar img{
+    .sidebar-not-move {
+    	cursor: not-allowed;
+    	position: relative;
+    }   
+  
+    /* START TOOLTIP STYLES */
+	[tooltip] {
+	  position: relative; /* opinion 1 */
+	}
+	
+	/* Applies to all tooltips */
+	[tooltip]::before,
+	[tooltip]::after {
+	  text-transform: none; /* opinion 2 */
+	  font-size: .9em; /* opinion 3 */
+	  line-height: 1;
+	  user-select: none;
+	  pointer-events: none;
+	  position: absolute;
+	  display: none;
+	  opacity: 0;
+	}
+	[tooltip]::before {
+	  content: '';
+	  border: 5px solid transparent; /* opinion 4 */
+	  z-index: 1001; /* absurdity 1 */
+	}
+	[tooltip]::after {
+	  content: attr(tooltip); /* magic! */
+	  
+	  /* most of the rest of this is opinion */
+	  font-family: Helvetica, sans-serif;
+	  text-align: center;
+	  
+	  /* 
+	    Let the content set the size of the tooltips 
+	    but this will also keep them from being obnoxious
+	    */
+	  min-width: 3em;
+	  max-width: 30em;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+	  padding: 1ch 1.5ch;
+	  border-radius: .3ch;
+	  box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35);
+	  background: #333;
+	  color: #fff;
+	  z-index: 1000; /* absurdity 2 */
+	}
+	
+	/* Make the tooltips respond to hover */
+	[tooltip]:hover::before,
+	[tooltip]:hover::after {
+	  display: block;
+	}
+	
+	/* don't show empty tooltips */
+	[tooltip='']::before,
+	[tooltip='']::after {
+	  display: none !important;
+	}
+	
+	/* FLOW: UP */
+	[tooltip]:not([flow])::before,
+	[tooltip][flow^="up"]::before {
+	  bottom: 100%;
+	  border-bottom-width: 0;
+	  border-top-color: #333;
+	}
+	[tooltip]:not([flow])::after,
+	[tooltip][flow^="up"]::after {
+	  bottom: calc(100% + 5px);
+	}
+	[tooltip]:not([flow])::before,
+	[tooltip]:not([flow])::after,
+	[tooltip][flow^="up"]::before,
+	[tooltip][flow^="up"]::after {
+	  left: 50%;
+	  transform: translate(-50%, -.5em);
+	}
+	
+	/* FLOW: DOWN */
+	[tooltip][flow^="down"]::before {
+	  top: 100%;
+	  border-top-width: 0;
+	  border-bottom-color: #333;
+	}
+	[tooltip][flow^="down"]::after {
+	  top: calc(100% + 5px);
+	}
+	[tooltip][flow^="down"]::before,
+	[tooltip][flow^="down"]::after {
+	  left: 50%;
+	  transform: translate(-50%, .5em);
+	}
+	
+	/* FLOW: LEFT */
+	[tooltip][flow^="left"]::before {
+	  top: 50%;
+	  border-right-width: 0;
+	  border-left-color: #333;
+	  left: calc(0em - 5px);
+	  transform: translate(-.5em, -50%);
+	}
+	[tooltip][flow^="left"]::after {
+	  top: 50%;
+	  right: calc(100% + 5px);
+	  transform: translate(-.5em, -50%);
+	}
+	
+	/* FLOW: RIGHT */
+	[tooltip][flow^="right"]::before {
+	  top: 50%;
+	  border-left-width: 0;
+	  border-right-color: #333;
+	  right: calc(0em - 5px);
+	  transform: translate(.5em, -50%);
+	}
+	[tooltip][flow^="right"]::after {
+	  top: 50%;
+	  left: calc(100% + 5px);
+	  transform: translate(.5em, -50%);
+	}
+	
+	/* KEYFRAMES */
+	@keyframes tooltips-vert {
+	  to {
+	    opacity: .9;
+	    transform: translate(-50%, 0);
+	  }
+	}
+	
+	@keyframes tooltips-horz {
+	  to {
+	    opacity: .9;
+	    transform: translate(0, -50%);
+	  }
+	}
+	
+	/* FX All The Things */ 
+	[tooltip]:not([flow]):hover::before,
+	[tooltip]:not([flow]):hover::after,
+	[tooltip][flow^="up"]:hover::before,
+	[tooltip][flow^="up"]:hover::after,
+	[tooltip][flow^="down"]:hover::before,
+	[tooltip][flow^="down"]:hover::after {
+	  animation: tooltips-vert 300ms ease-out forwards;
+	}
+	
+	[tooltip][flow^="left"]:hover::before,
+	[tooltip][flow^="left"]:hover::after,
+	[tooltip][flow^="right"]:hover::before,
+	[tooltip][flow^="right"]:hover::after {
+	  animation: tooltips-horz 300ms ease-out forwards;
+	}
+    
+    /* TOOLTIP */
+  
+	.dh-icon-button-sidebar img{
 		width: 30px;
 		height: 30px;
 		object-fit: contain;
 	}
-    .icon-button-sidebar-deactivate{
+		
+    .dh-icon-button-sidebar-deactivate{
         background-color: #CCCCCC;
     }
     
-    .icon-button-sidebar-deactivate:hover{
+    .dh-icon-button-sidebar-deactivate:hover{
         background-color: #aaa;
     }
     
-     .icon-button-sidebar-deactivate span{
+     .dh-icon-button-sidebar-deactivate span{
         color:#444!important;	
     }
 
-    .icon-button-sidebar span{
+    .dh-icon-button-sidebar span{
         color:white;
         white-space: nowrap; 
         overflow: hidden;
         text-overflow: ellipsis;
+        text-align:left;
     }
-    .icon-button-main {
+    
+    .dh-icon-button-main {
         background-color: #5f73ff;
     }
-    .icon-button-main:hover{
+    .dh-icon-button-main:hover{
         background-color: #3d51dd;
     }
 
-    .icon-button-2nd {
+    .dh-icon-button-2nd {
         background-color: #00C896;
     }
-    .icon-button-2nd:hover{
+    .dh-icon-button-2nd:hover{
         background-color: #00A563;
     }
 
-    .icon-button-3rd {
+    .dh-icon-button-3rd {
         background-color: #8c78ff;
     }
-    .icon-button-3rd:hover{
+    .dh-icon-button-3rd:hover{
         background-color: #6a56dd;
     }
-.icon-button-submit{
+    
+    
+	.dh-icon-button-submit{
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -214,89 +360,87 @@
         padding: 4px 8px;
         border: none;
         border-radius: 4px;
-        font-size: 1rem;
+        font-size: 0.95rem;
         cursor: pointer;		      
         text-decoration: none!important;
-        width: 120px;
-        height: 40px;
+        width: 110px;
+        height: 36px;
     }
     
-    .icon-button-submit img{
-		width: 30px;
-		height: 30px;
+    .dh-icon-button-submit img{
+		height: 24px;
 		object-fit: contain;
 	}
-        
-    .icon-button-submit span{
+     
+    .dh-icon-button-submit span{
         color:white;
         font-weight:bold;
     }
     
-   	.icon-button-submit-search {
-   		width:108px;
+   	.dh-icon-button-submit-search {
+   		width:100px;
         background-color: #5f73ff;
     }
-    .icon-button-submit-search:hover{
+    .dh-icon-button-submit-search:hover{
         background-color: #3d51dd;
     }
     
-    .icon-button-submit-clear {
-    	width:108px;    
+    .dh-icon-button-submit-clear {
+    	width:100px;    
         background-color: #ef6d6d;
     }
-    .icon-button-submit-clear:hover{
+    .dh-icon-button-submit-clear:hover{
         background-color: #cd4b4b;
     }
     
-    .icon-button-submit-add {
+    .dh-icon-button-submit-add {
         background-color: #5f73ff;
     }
-    .icon-button-submit-add:hover{
+    .dh-icon-button-submit-add:hover{
         background-color: #3d51dd;
     }
     
-    .icon-button-submit-update {
+    .dh-icon-button-submit-update {
    		background-color: #5f73ff;
-    }		  
-    .icon-button-submit-update:hover {
+    }
+    .dh-icon-button-submit-update:hover {
     	background-color: #3d51dd;
     }
     
-    .icon-button-submit-delete {
+    .dh-icon-button-submit-delete {
     background-color: #ea5353;
     }		  
-    .icon-button-submit-delete:hover {
+    .dh-icon-button-submit-delete:hover {
     background-color: #c83131;
     }
     
-    .icon-button-submit-cancel {
+    .dh-icon-button-submit-cancel {
     	border: 1px solid #aaa;
     	background-color: #FFF;
     }
-    
-      
-    .icon-button-submit-cancel:hover {
+    .dh-icon-button-submit-cancel:hover {
     background-color: #DDD;
     }
     
-    .icon-button-submit-import {
+    .dh-icon-button-submit-import {
     	border: 1px solid #aaa;
     	background-color: #FFF;
     	width: 175px;
     }
-    .icon-button-submit-import:hover {
+    .dh-icon-button-submit-import:hover {
     	background-color: #DDD;
     }
     
-    .icon-button-submit-save {
+    .dh-icon-button-submit-save {
     	border: 1px solid #999;
     	background-color: #DDD;
     }
-    .icon-button-submit-import:hover {
+    .dh-icon-button-submit-import:hover {
     	background-color: #aaa;
     }
     
-    .icon-button-submit-manage {
+    
+    .dh-icon-button-submit-manage {
     	margin-top: 3px;
     	margin-bottom: 8px;
     	margin-left: 5px;
@@ -304,45 +448,46 @@
     	background-color: #EEE;
     	width: 240px;
     }
-    .icon-button-submit-manage span{
+    .dh-icon-button-submit-manage span{
     	color: black;
     }
-     .icon-button-submit-manage:hover {
+     .dh-icon-button-submit-manage:hover {
     	background-color: #CCC;
     }
     
-    .icon-button-submit-review {
+    .dh-icon-button-submit-review {
    		background-color: #5f73ff;
     }		  
-    .icon-button-submit-review:hover {
+    .dh-icon-button-submit-review:hover {
     	background-color: #3d51dd;
     }
 
-    .icon-button-submit-data {
+    .dh-icon-button-submit-data {
     	width: 140px;
     	background-color: #8c78ff;
     }		  
-    .icon-button-submit-data:hover {
+    .dh-icon-button-submit-data:hover {
     background-color: #6a56dd;
     }
-    .icon-button-submit-form {
+    
+    .dh-icon-button-submit-form {
     	width: 140px;
         background-color: #F4A460;
     }
-    .icon-button-submit-form:hover {
+    .dh-icon-button-submit-form:hover {
         background-color: #D28240;
     }
 
-    .icon-button-submit-query {
+    .dh-icon-button-submit-query {
         background-color: #2F5597;
         width: 140px;
     }
-    .icon-button-submit-query:hover {
+    .dh-icon-button-submit-query:hover {
         background-color: #0d3375;
     }
     /* icon button style */
 	
-	table { border-collapse : collapse; font-size : 1rem!important;}	
+	table { border-collapse : collapse; font-size : 0.9rem!important;}	
 		
 	.breadcrumb {
 	    padding: 0;
@@ -539,7 +684,6 @@
 		cursor:pointer;
 	}    
     /* DataTable pagination hover */
-    
     
     /* override css */
    	.searchcontainer-content .table thead th,
