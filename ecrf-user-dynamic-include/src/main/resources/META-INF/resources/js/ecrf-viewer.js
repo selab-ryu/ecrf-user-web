@@ -53,6 +53,7 @@ let ECRFViewer = function(StationX){
                 
                 this.terms.forEach(term=>{
 					if( term.termType === 'List' || term.termType === 'boolean' ){
+						console.log("List/Boolean Term slave term check : ", term, term.termName, term.hasSlaves());
 						if( term.hasSlaves() ){
 							renderUtil.activateTerms(term);
 						}
@@ -1662,7 +1663,7 @@ let ECRFViewer = function(StationX){
 						Liferay.fire( 'value_changed', eventData );		
 					});
 				}else {	// for Checkbox
-					console.log(term);
+					//console.log(term);
 					let controlName = term.termName;
 					
 					$inputTag = $('<fieldset style="width:fit-content;max-width:100%;border: 1px solid #aaa; box-shadow: 2px 2px #ccc;">').prop({
@@ -1695,7 +1696,7 @@ let ECRFViewer = function(StationX){
 					});
 					
 					let stationX = SX.StationX;
-					console.log(stationX);
+					//console.log(stationX);
 
 					// event handling when checkbox changed
 					$inputTag.change(function(event) {
@@ -1707,7 +1708,7 @@ let ECRFViewer = function(StationX){
 							checkedValues.push($(this).val() );
 						});
 
-						console.log("list checkbox changed ", checkedValues);
+						//console.log("list checkbox changed ", checkedValues);
 						
 						term.value = checkedValues;
 
@@ -1720,7 +1721,7 @@ let ECRFViewer = function(StationX){
 							dataPacket: dataPacket
 						};
 						
-						console.log(eventData);
+						//console.log(eventData);
 
 						Liferay.fire( 'value_changed', eventData );
 					});
@@ -2155,6 +2156,7 @@ let ECRFViewer = function(StationX){
 			}
 			
 			options.forEach( option => {
+				console.log(option)
 				if( values.includes( option.value ) ){
 					if( option.slaveTerms ){
 						let slaveTermNames = option.slaveTerms;

@@ -65,7 +65,7 @@ public class CRFGroupCaculation {
 			
 			_log.info(termPackage.toJSONString());
 			
-			// TODO: need to analyze
+			// TODO: need to analyze => need to change code to caculate all depth 
 			Iterator<String> groupKeys = termPackage.keys();	// group name iterator
 			while(groupKeys.hasNext()) {	// each by group 'G'
 				String groupName = groupKeys.next();
@@ -108,15 +108,18 @@ public class CRFGroupCaculation {
 					}
 				}
 				
-				tempPackage = termPackage.getJSONObject(groupName);
-				tempPackage.put("total", answers + "/" + terms);
-				tempPackage.put("percent", answers * 100 / terms + "%");
+				// 2-depth issue temp solve
+				int percentage = 0;
 				if(terms > 0) {
-					
+					percentage = answers * 100 / terms;
 				} else {
-					
+					//_log.info("2depth issue");
+					percentage = 0;
 				}
 				
+				tempPackage = termPackage.getJSONObject(groupName);
+				tempPackage.put("total", answers + "/" + terms);
+				tempPackage.put("percent", percentage + "%");
 			}
 		}
 		

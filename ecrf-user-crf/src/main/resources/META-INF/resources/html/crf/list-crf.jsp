@@ -152,11 +152,11 @@ if(isSearch) {
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
 
-							<button class="dh-icon-button-submit dh-icon-button-submit-search" name="<portlet:namespace/>search">
+							<button class="dh-icon-button-submit dh-icon-button-submit-search" id="<portlet:namespace/>search">
 								<i class="bi bi-search" style="color:white;"></i>
 								<span>Search</span>
 							</button>
-							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
 								<i class="bi bi-arrow-clockwise" style="color:white;"></i>
 								<span>Clear</span>
 							</a>
@@ -390,10 +390,10 @@ $(document).ready(function() {
 </script>
 
 <aui:script use="aui-base">
-$('#<portlet:namespace/>search').on('click',function() {
+A.one('#<portlet:namespace/>search').on('click',function() {
 	var isDateValid = dateCheck("applyDateStart", "applyDateEnd", '<portlet:namespace/>');
 	
-	//console.log("date valid : " + isDateValid);
+	console.log("date valid : " + isDateValid);
 	
 	if(isDateValid) {
 		var form = $('#<portlet:namespace/>searchOptionFm');

@@ -204,11 +204,14 @@
 			<!-- Display Term -->
 		    <span id="searchText"></span>
 		    <!-- Option to choose whether to divide the selected Term by Sheet -->
-		    <input type="radio" id="group" name="divideOption" value="group">
-		    <label for="group">Divide Group</label>
-		    <input type="radio" id="whole" name="divideOption" value="whole" checked = "checked">
-		    <label for="whole">No Divide Group</label>
-		    <br>
+		    <div>
+		    	<span>Sheet Divide : </span>
+			    <input type="radio" id="group" name="divideOption" value="group">
+			    <label for="group">Divide Group</label>
+			    <input type="radio" id="whole" name="divideOption" value="whole" checked = "checked">
+			    <label for="whole">No Divide Group</label>
+		    </div>
+		    
 		    <input id="xlsx_name" placeholder="FileName">.xlsx &nbsp</input>
 		    <button id="btn_1" <%=hasDownloadExcelPermission ? "" : "disabled"%> >Export xlsx</button>
 		</div>
@@ -615,6 +618,13 @@
 
 	// Make the Excel File And Download
 	function makeExcel(){
+		const xlsxName = document.getElementById('xlsx_name').value;
+		console.log(xlsxName);
+		if(!xlsxName) {
+			alert("excel name is empty");
+			return;
+		}
+		
 		console.log("2. Change the received data to json format");
 		var inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
 		// Total list variable to enter Excel and list variable to enter each line
