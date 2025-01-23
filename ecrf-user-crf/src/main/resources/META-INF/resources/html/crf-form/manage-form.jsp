@@ -40,7 +40,7 @@
 					<liferay-portlet:runtime portletName="<%=IcecapWebPortletKeys.DATATYPE_MANAGEMENT %>" instanceId="<%=instanceId %>" queryString="<%=queryString %>" >
 					</liferay-portlet:runtime>
 				</aui:col>
-			</aui:row>			
+			</aui:row>
 		</aui:container>
 	</div>
 </div>

@@ -373,8 +373,8 @@ _log.info("url : " + baseURL.toString());
 				String CRFAddBtnClass = "ci-btn small-btn";
 				String CRFUpdateBtnClass = "";
 				
-				String addDataBtnKey = "ecrf-user.button.insert-crf-data";
-				String updateDataBtnKey = "ecrf-user.button.update-crf-data";
+				String addDataBtnKey = "ecrf-user.button.insert-data";
+				String updateDataBtnKey = "ecrf-user.button.update-data";
 				
 				if(hasCRF){
 					CRFUpdateBtnClass = "ci-btn small-btn";
@@ -680,7 +680,7 @@ function deleteSingleCRF(linkCrfId, crfId, portletId, baseURL){
 </script>
 
 <aui:script use="aui-base aui-modal">
-$('#<portlet:namespace/>search').on('click', function() {
+A.one('#<portlet:namespace/>search').on('click', function() {
 	var isBirthDateValid = dateCheck("birthStart", "birthEnd", '<portlet:namespace/>');
 	
 	if(isBirthDateValid) {

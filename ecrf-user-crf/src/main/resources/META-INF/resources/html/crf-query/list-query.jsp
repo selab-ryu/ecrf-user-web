@@ -273,7 +273,10 @@
 					boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, crfAutoquery.getSubjectId());
 					boolean hasUpdateQueryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_QUERY);
 					
-					boolean isDisabled = updateLock || hasUpdateQueryPermission;
+					boolean isDisabled = updateLock || !hasUpdateQueryPermission;
+					
+					_log.info("update lock / permission / disabled : " + updateLock + " / " + hasUpdateQueryPermission + " / " + isDisabled);
+					
 					String updateBtnKey = "ecrf-user.button.update";
 					if(isDisabled) updateBtnKey = "ecrf-user.button.lock";
 				%>

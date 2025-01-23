@@ -42,16 +42,16 @@
 	</div>
 	
 	<div>
-		<a class="<%= menu.equals("crf-list") ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=moveCRFListURL %>" name="CRFList">
-       		<img src="<%= menu.equals("crf-list") ? renderRequest.getContextPath() + "/btn_img/crf_list_icon.png" : renderRequest.getContextPath() + "/btn_img/crf_list_icon_deactivate.png"%>"/>
+		<a class="dh-icon-button-sidebar dh-icon-button-sidebar-deactivate" href="<%=moveCRFListURL %>" name="CRFList">
+       		<img src="<%=renderRequest.getContextPath() + "/btn_img/crf_list_icon_deactivate.png"%>"/>
 			<span><liferay-ui:message key="ecrf-user.menu.crf.list" /></span>
 		</a>	
 	</div>
 	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 	<div>
-		<a class="<%= menu.equals("crf-add") ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=moveAddCRFURL %>" name="CRFList">
-       		<img src="<%= menu.equals("crf-add") ? renderRequest.getContextPath() + "/btn_img/add_crf_icon.png" :  renderRequest.getContextPath() + "/btn_img/add_crf_icon_deactivate.png"%>"/>
+		<a class="dh-icon-button-sidebar dh-icon-button-sidebar-deactivate" href="<%=moveAddCRFURL %>" name="CRFList">
+       		<img src="<%=renderRequest.getContextPath() + "/btn_img/add_crf_icon_deactivate.png"%>"/>
 			<span><liferay-ui:message key="ecrf-user.menu.crf.create" /></span>
 		</a>
 	</div>
@@ -69,7 +69,7 @@
 		<a class="dh-icon-button-sidebar dh-icon-button-sidebar-deactivate" href="<%=moveManageFormURL %>" name="CRFForm">
         	<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_form_icon_deactivate.png"%>"/>
 			<span><liferay-ui:message key="ecrf-user.menu.crf-builder" /></span>
-		</a>		
+		</a>
 	</div>
 	</c:if>
 	
@@ -88,20 +88,30 @@
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query" /></span>
 		</a>	
 	</div>
+	
+	<%
+	boolean isListQuery = menu.equals("crf-query-list"); 
+	boolean isUpdateQuery = menu.equals("add-crf-query") || menu.equals("update-crf-query");
+	
+	String listQueryMenuIconSrc = renderRequest.getContextPath() + "/btn_img/query_list_icon_"+(isListQuery ? "" : "deactivate")+".png";
+	String updateQueryMenuIconSrc = renderRequest.getContextPath() + "/btn_img/update_query_icon_"+(isUpdateQuery ? "" : "deactivate")+".png";
+	
+	String listQueryMenuClass = "dh-icon-button-sidebar" + (isListQuery ? "dh-icon-button-3rd" : "dh-icon-button-sidebar-deactivate");
+	String updateQueryMenuClass = "dh-icon-button-sidebar" + (isUpdateQuery ? "dh-icon-button-3rd" : "dh-icon-button-sidebar-deactivate sidebar-not-move");
+	
+	String updateQueryMenuTooltip = isUpdateQuery ? "" : LanguageUtil.get(request.getLocale(), "ecrf-user.menu.tooltip.update-query");
+	%>
+
 	<div>
-		<a class="<%= menu.equals("crf-query-list") ? "dh-icon-button-sidebar dh-icon-button-3rd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=moveCRFQueryListURL %>" name="CRFQuery">
-         	<img src="<%= menu.equals("crf-query-list") ? renderRequest.getContextPath() + "/btn_img/query_list_icon.png" : renderRequest.getContextPath() + "/btn_img/query_list_icon_deactivate.png"%>"/>
+		<a class="<%=listQueryMenuClass%>" href="<%=moveCRFQueryListURL %>" name="CRFQuery">
+         	<img src="<%=listQueryMenuIconSrc%>"/>
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query.list" /></span>
 		</a>
 	</div>
 	
-	<%
-	boolean isUpdateQuery = menu.equals("add-crf-query") || menu.equals("update-crf-query");
-	%>
-	
 	<div>
-		<a class="<%= isUpdateQuery ? "dh-icon-button-sidebar dh-icon-button-3rd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate sidebar-not-move"%>" href="<%=isUpdateQuery ? moveCRFQueryListURL : "javascript:void(0);" %>" tooltip="<%=isUpdateQuery ? "" : LanguageUtil.get(request.getLocale(), "ecrf-user.menu.tooltip.update-query")%>" flow="right" name="CRFQuery">
-      		<img src="<%= isUpdateQuery ? renderRequest.getContextPath() + "/btn_img/update_query_icon.png" : renderRequest.getContextPath() + "/btn_img/update_query_icon_deactivate.png"%>"/>
+		<a class="<%=updateQueryMenuClass%>" href="<%=isUpdateQuery ? "" : "javascript:void(0);" %>" tooltip="<%=updateQueryMenuTooltip%>" flow="right" name="CRFQuery">
+      		<img src="<%=updateQueryMenuIconSrc%>"/>
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query.update" /></span>
 		</a>
 	</div>

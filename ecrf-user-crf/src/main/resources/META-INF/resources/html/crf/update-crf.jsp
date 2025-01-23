@@ -251,7 +251,7 @@
 									
 				<a class="dh-icon-button-submit dh-icon-button-submit-form" href="<%=moveCRFFormURL %>" name="<portlet:namespace/>moveForm">
 					<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_form_icon.png"%>"/>					
-					<span>CRF Form</span>
+					<span><liferay-ui:message key="ecrf-user.menu.crf-builder" /></span>
 				</a>
 				</c:if>
 				
@@ -266,7 +266,7 @@
 				
 				<a class="dh-icon-button-submit dh-icon-button-submit-data" href="<%=moveCRFDataURL%>" name="<portlet:namespace/>moveData">
 					<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_data_icon.png"%>"/>					
-					<span>CRF Data</span>
+					<span><liferay-ui:message key="ecrf-user.menu.crf-data" /></span>
 				</a>
 				</c:if>
 				
@@ -280,12 +280,12 @@
 				
 				<a class="dh-icon-button-submit dh-icon-button-submit-query" href="<%=moveCRFQueryURL %>" name="<portlet:namespace/>moveQuery">
 					<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_query_icon.png"%>"/>					
-					<span>CRF Query</span>
+					<span><liferay-ui:message key="ecrf-user.menu.crf-query" /></span>
 				</a>
 				</c:if>
 			</aui:button-row>
 			</c:if>
-			
+			 
 			<c:if test="<%=isUpdate %>">
 				<aui:button-row>
 					<c:if test="<%=isAdmin %>">
@@ -298,7 +298,7 @@
 					
 					<a class="dh-icon-button-submit dh-icon-button-submit-import" href="<%=moveImportSubjectsURL %>" name="<portlet:namespace/>ImportSubject">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/import_subject_icon.png"%>"/>					
-						<span style="color:black;">Import Subject</span>
+						<span style="color:black;"><liferay-ui:message key="ecrf-user.button.crf-import-subject" /></span>
 					</a>
 					</c:if>
 					
@@ -312,7 +312,7 @@
 					
 					<a class="dh-icon-button-submit dh-icon-button-submit-import" href="<%=moveImportDatasURL %>" name="<portlet:namespace/>ImportData">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/import_subject_icon.png"%>"/>					
-						<span style="color:black;">Import Data</span>
+						<span style="color:black;"><liferay-ui:message key="ecrf-user.button.crf-import-sddata" /></span>
 					</a>
 					</c:if>
 				</aui:button-row>
@@ -325,7 +325,7 @@
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF) %>">
 					<button type="button" class="dh-icon-button-submit dh-icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-						<span>Update</span>
+						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 					</button>
 				</c:if>
 		
@@ -337,7 +337,7 @@
 					%>
 					<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
 						<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
-						<span>Delete</span>
+						<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 					</a>
 				</c:if>
 								
@@ -347,15 +347,15 @@
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 					<button type="button" class="dh-icon-button-submit dh-icon-button-submit-add" id="saveBtn">
 						<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
-						<span>Add</span>
+						<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 					</button>
 				</c:if>	
 				
 				</c:otherwise>
 				</c:choose>
 				<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listCRFURL %>" name="<portlet:namespace/>cancel">
-					<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
-					<span style="color:black;">Cancel</span>
+					<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>			
+					<span style="color:black;"><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 				</a>
 			</aui:button-row>
 			

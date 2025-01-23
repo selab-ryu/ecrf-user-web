@@ -19,14 +19,14 @@
 		<div>
 			<a class="dh-icon-button-sidebar dh-icon-button-main" href="<%=updateListURL %>" name="SubjectMain">
 				<img src="<%= renderRequest.getContextPath() + "/btn_img/subject_icon.png"%>"/>
-				<span>CRF</span>
+				<span><liferay-ui:message key="ecrf-user.menu.subject" /></span>
 			</a>	
 		</div>
 		
 		<div>
 			<a class="<%=(menu.equals("subject-list-update") || menu.equals("subject-update")) ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=updateListURL %>" name="SubjectList">
 				<img src="<%= (menu.equals("subject-list-update") || menu.equals("subject-update")) ? renderRequest.getContextPath() + "/btn_img/subject_list_icon.png" : renderRequest.getContextPath() + "/btn_img/subject_list_icon_deactivate.png"%>"/>
-				<span>Subject List</span>
+				<span><liferay-ui:message key="ecrf-user.menu.subject.list" /></span>
 			</a>
 		</div>
 		
@@ -34,7 +34,7 @@
 		<div>
 			<a class="<%=menu.equals("subject-add") ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=addSubjectRenderURL %>" name="SubjectList">
 				<img src="<%= menu.equals("subject-add") ? renderRequest.getContextPath() + "/btn_img/add_subject_icon.png" : renderRequest.getContextPath() + "/btn_img/add_subject_icon_deactivate.png"%>"/>
-				<span>Add Subject</span>
+				<span><liferay-ui:message key="ecrf-user.menu.subject.add" /></span>
 			</a>
 		</div>
 		</c:if>
