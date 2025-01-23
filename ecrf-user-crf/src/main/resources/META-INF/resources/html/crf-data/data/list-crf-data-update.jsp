@@ -180,11 +180,11 @@ _log.info("url : " + baseURL.toString());
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button class="dh-icon-button-submit dh-icon-button-submit-search" name="<portlet:namespace/>search">
+							<button class="dh-icon-button-submit dh-icon-button-submit-search" id="<portlet:namespace/>search">
 								<i class="bi bi-search" style="color:white;"></i>
 								<span>Search</span>
 							</button>
-							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
+							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
 								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
 								<span>Clear</span>
 							</a>
@@ -438,7 +438,7 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 			</portlet:renderURL>
 			<c:choose>
-				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
+				<c:when test="<%=(singleSdId > 0) %>">
 					<a class="<%= updateLock ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=updateLock ? "javascript:void(0);" : renderUpdateCRFURL %>" name="updateCRF">
            				<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 						<span><liferay-ui:message key="<%=updateDataBtnKey %>"/></span>			
