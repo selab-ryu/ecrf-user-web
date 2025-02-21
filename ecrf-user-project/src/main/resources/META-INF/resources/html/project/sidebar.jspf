@@ -18,14 +18,18 @@
 		
 	<!-- Project Management -->
 	<div>
-		<a class="dh-icon-button-sidebar dh-icon-button-main" href="<%=moveViewProjectURL %>" name="ProjectMain">
-			<img src="<%= renderRequest.getContextPath() + "/btn_img/project_icon.png"%>"/>
+		<a class="dh-sidebar dh-icon-button-main" href="<%=moveViewProjectURL %>" name="ProjectMain">
+			<img class="project-icon"/>
 			<span><liferay-ui:message key="ecrf-user.menu.project" /></span>
 		</a>				
 	</div>
 	
+	<%
+	boolean isProjectActive = false;
+	if(menu.equals("project-info") || menu.equals("add-project") || menu.equals("update-project")) isProjectActive = true;
+	%>
 	<div>
-		<a class="<%= menu.equals("project-info") || menu.equals("add-project") || menu.equals("update-project") ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=moveViewProjectURL %>" name="ProjectInfo">
+		<a class="<%=isProjectActive ? "dh-sidebar dh-icon-button-main" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=moveViewProjectURL %>" name="ProjectInfo">
 			<img src="<%= menu.equals("project-info") || menu.equals("add-project") || menu.equals("update-project") ? renderRequest.getContextPath() + "/btn_img/project_info_icon.png" : renderRequest.getContextPath() + "/btn_img/project_info_icon_deactivate.png"%>"/>
 			<span><liferay-ui:message key="ecrf-user.menu.project.info"/></span>
 		</a>		

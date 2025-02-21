@@ -93,11 +93,11 @@
 	boolean isListQuery = menu.equals("crf-query-list"); 
 	boolean isUpdateQuery = menu.equals("add-crf-query") || menu.equals("update-crf-query");
 	
-	String listQueryMenuIconSrc = renderRequest.getContextPath() + "/btn_img/query_list_icon_"+(isListQuery ? "" : "deactivate")+".png";
-	String updateQueryMenuIconSrc = renderRequest.getContextPath() + "/btn_img/update_query_icon_"+(isUpdateQuery ? "" : "deactivate")+".png";
+	String listQueryMenuIconSrc = renderRequest.getContextPath() + "/btn_img/query_list_icon"+(isListQuery ? "" : "_deactivate")+".png";
+	String updateQueryMenuIconSrc = renderRequest.getContextPath() + "/btn_img/update_query_icon"+(isUpdateQuery ? "" : "_deactivate")+".png";
 	
-	String listQueryMenuClass = "dh-icon-button-sidebar" + (isListQuery ? "dh-icon-button-3rd" : "dh-icon-button-sidebar-deactivate");
-	String updateQueryMenuClass = "dh-icon-button-sidebar" + (isUpdateQuery ? "dh-icon-button-3rd" : "dh-icon-button-sidebar-deactivate sidebar-not-move");
+	String listQueryMenuClass = "dh-icon-button-sidebar " + (isListQuery ? "dh-icon-button-3rd" : "dh-icon-button-sidebar-deactivate");
+	String updateQueryMenuClass = "dh-icon-button-sidebar " + (isUpdateQuery ? "dh-icon-button-3rd" : "dh-icon-button-sidebar-deactivate sidebar-not-move");
 	
 	String updateQueryMenuTooltip = isUpdateQuery ? "" : LanguageUtil.get(request.getLocale(), "ecrf-user.menu.tooltip.update-query");
 	%>
