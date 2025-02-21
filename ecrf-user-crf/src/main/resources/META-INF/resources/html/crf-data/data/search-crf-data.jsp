@@ -51,7 +51,7 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 							<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL) %>">
 							<button type="button" class="dh-icon-button-submit dh-icon-button-submit-update" id="excelDownload" style="width: 200px;">
 								<img src="<%= renderRequest.getContextPath() + "/btn_img/excel_download_icon.png"%>"/>
-								<span>Download Excel</span>
+								<span>Download Search Result</span>
 							</button>
 							</c:if>
 						</aui:form>

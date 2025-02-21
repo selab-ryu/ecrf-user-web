@@ -178,7 +178,7 @@ let SX = StationX(  '<portlet:namespace/>',
 		'<%= locale.toString() %>',
 		<%= jsonLocales.toJSONString() %> );
 		
-console.log(SX);
+//console.log(SX);
 let profile = {
 		dataTypeId: '<%= dataType.getDataTypeId() %>',
 		dataTypeName:  '<%= dataType.getDataTypeName() %>',
@@ -186,7 +186,7 @@ let profile = {
 		dataTypeDisplayName:  '<%= dataType.getDisplayName(locale) %>',
 		structuredDataId: '<%= sdId %>'
 };
-console.log(profile);
+//console.log(profile);
 
 let ev = ECRFViewer(SX);
 let dataStructure = SX.newDataStructure(<%=crfForm%>, profile, SX.Constants.FOR_EDITOR, $('#<portlet:namespace/>canvasPanel'));
@@ -206,7 +206,7 @@ let subjectBirth = new Date(<%=subject.getBirth().getTime()%>);
 subjectInfo["subjectGender"] = subjectGender;
 subjectInfo["subjectBirth"] = subjectBirth;
 let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectInfo, <%=isAudit%>);
-console.log($('#<portlet:namespace/>dataContent').val());
+//console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
 
 Liferay.on( 'value_changed', function(evt){
@@ -215,12 +215,12 @@ Liferay.on( 'value_changed', function(evt){
 		$('#<portlet:namespace/>btnSave').css("background-color", "#0B5FFF");
 		$('#<portlet:namespace/>btnSave').css("color", "white");
 	}
-	console.log("value_changed", JSON.stringify(evt.dataPacket.result));
+	//console.log("value_changed", JSON.stringify(evt.dataPacket.result));
 	let resultStr = JSON.stringify(evt.dataPacket.result);
 	$('#<portlet:namespace/>dataTypeId').val(<%=dataType.getDataTypeId()%>);
 	$('#<portlet:namespace/>structuredDataId').val(<%=sdId%>);
 	$('#<portlet:namespace/>dataContent').val(resultStr);
-	console.log( 'dataContent: ', $('#<portlet:namespace/>dataContent').val());
+	//console.log( 'dataContent: ', $('#<portlet:namespace/>dataContent').val());
 	isLoaded = true;
 });
 
