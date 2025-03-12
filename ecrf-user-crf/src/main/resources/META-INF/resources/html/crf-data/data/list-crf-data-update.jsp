@@ -498,7 +498,7 @@ _log.info("url : " + baseURL.toString());
 			
 			<c:choose>
 				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
-					<a class="dh-icon-button dh-icon-button-audit" href="<%=updateLock ? "javascript:void(0);" : renderAuditCRFURL %>" name="auditCRF">
+					<a class="dh-icon-button dh-icon-button-audit" href="<%=renderAuditCRFURL %>" name="auditCRF">
 						<c:if test="<%=updateLock %>">
 							<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/view_icon.png" : renderRequest.getContextPath() + "/btn_img/view_icon.png"%>"/>						
 							<span>View Data</span>
@@ -510,7 +510,7 @@ _log.info("url : " + baseURL.toString());
 					</a>	
 				</c:when>
 				<c:otherwise>
-					<a class="dh-icon-button dh-icon-button-audit" onclick="<%=updateLock ? "javascript:void(0);" : auditFunctionCallStr %>" name="auditCRF">
+					<a class="dh-icon-button dh-icon-button-audit" onclick="<%=auditFunctionCallStr %>" name="auditCRF">
 						<c:if test="<%=updateLock %>">
 							<img src="<%= updateLock ?  renderRequest.getContextPath() + "/btn_img/view_icon.png" : renderRequest.getContextPath() + "/btn_img/view_icon.png"%>"/>						
 							<span>View Data</span>
