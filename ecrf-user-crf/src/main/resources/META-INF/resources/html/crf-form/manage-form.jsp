@@ -1,3 +1,4 @@
+<%@page import="ecrf.user.constants.ECRFUserMenuConstants"%>
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf-form/manage-form_jsp"); %>
@@ -8,7 +9,7 @@
 	_log.info("crf id : " + crfId);	
 	_log.info("dataType id : " + dataTypeId);
 		
-	String menu = "crf-form-manage";
+	String menu = ECRFUserMenuConstants.CRF_FORM;
 		
 	String queryString = "";
 	queryString += ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME + "=" + IcecapMVCCommands.RENDER_DEFINE_DATA_STRUCTURE;
@@ -48,8 +49,15 @@
 <script>
 $(document).ready(function() {
 	let dtPortletName = "<%=IcecapWebPortletKeys.DATATYPE_MANAGEMENT %>";
-	let dtPortletNamespace = "_" + dtPortletName + "_";
+	let instanceId = "<%=instanceId%>";
+	let dtPortletNamespace = "_" + dtPortletName + "_" + "INSTANCE" +"_" + instanceId + "_";
 	//console.log(dtPortletNamespace);
 	$('#' + dtPortletNamespace + 'naviCol').css('display', 'none');
+	$('#' + dtPortletNamespace + 'btnSaveAndViewDataTypeList').css('display', 'none');
+	
+	//dh-icon-button submit-btn save-btn w110 h36
+	$('#' + dtPortletNamespace + 'btnSave').addClass('dh-icon-button submit-btn save-btn w80 h36');
+	$('#' + dtPortletNamespace + 'btnRemoveDataStructure').addClass('dh-icon-button submit-btn delete-btn w200 h36');
+	
 });
 </script>

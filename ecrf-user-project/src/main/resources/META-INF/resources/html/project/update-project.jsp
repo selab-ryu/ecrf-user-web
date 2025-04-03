@@ -16,7 +16,7 @@ Project project = null;
 long principalResearchId = 0;
 long manageResearcherId = 0;
 
-String menu = "add-project";
+String menu = ECRFUserMenuConstants.ADD_PROJECT;
 
 boolean isUpdate = false;
 
@@ -26,7 +26,7 @@ String endDateStr = null;
 if(projectId > 0) {
 	project = (Project)renderRequest.getAttribute(ECRFUserProjectAttributes.PROJECT);
 	isUpdate = true;
-	menu = "update-project";
+	menu = ECRFUserMenuConstants.UPDATE_PROJECT;
 	
 	startDateStr = ECRFUserUtil.getDateStr(project.getStartDate());
 	endDateStr = ECRFUserUtil.getDateStr(project.getEndDate());
@@ -128,49 +128,43 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 		<!-- Project info -->
 		
 		<!-- buttons -->
-		<aui:container>
-			<aui:row>
-				<aui:col>
-					<aui:button-row>
-						<c:choose>
-							<c:when test="<%=(projectId > 0) %>">
-								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ECRFUserActionKeys.UPDATE_PROJECT) %>">			
-									<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
-										<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-										<span>Update</span>
-									</button>
-												
-								</c:if>
-								<c:if test="<%=ProjectModelPermission.contains(permissionChecker, projectId, ECRFUserActionKeys.DELETE_PROJECT) %>">
-									<%
-										String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
-										String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
-										String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
-									%>
-									<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
-										<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
-										<span>Delete</span>
-									</a>
-								</c:if>
-						 	</c:when>
-						 	<c:otherwise>
-						 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-	 								<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>add">
-										<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
-										<span>Add</span>
-									</button>	
-						 		</c:if>
-						 	</c:otherwise>
-					 	</c:choose>		
-					 	
-						<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=viewProjectURL %>" name="<portlet:namespace/>cancel">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
-							<span style="color:black;">Cancel</span>
+		<aui:button-row>
+			<c:choose>
+				<c:when test="<%=(projectId > 0) %>">
+					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_PROJECT) %>">			
+						<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>save">
+							<img class="save-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.save" /></span>
+						</button>
+									
+					</c:if>
+					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_PROJECT) %>">
+						<%
+							String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
+						%>
+						<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+							<img class="delete-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 						</a>
-					</aui:button-row>
-				</aui:col>
-			</aui:row>
-		</aui:container>
+					</c:if>
+			 	</c:when>
+			 	<c:otherwise>
+			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
+							<button type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8" name="<portlet:namespace/>add">
+							<img class="add-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.add" /></span>
+						</button>
+			 		</c:if>
+			 	</c:otherwise>
+		 	</c:choose>		
+		 	
+			<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=viewProjectURL %>" name="<portlet:namespace/>cancel">
+				<img class="cancel-icon" />					
+				<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
+			</a>
+		</aui:button-row>
 		<!-- buttons -->
 		
 		</aui:form>

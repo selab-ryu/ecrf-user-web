@@ -9,7 +9,7 @@
 <%
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
-String menu="subject-add";
+String menu = ECRFUserMenuConstants.ADD_SUBJECT;
 
 long subjectId = ParamUtil.getLong(renderRequest, ECRFUserSubjectAttributes.SUBJECT_ID, 0);
 
@@ -23,7 +23,7 @@ if(subjectId > 0) {
 	subject = (Subject)renderRequest.getAttribute(ECRFUserSubjectAttributes.SUBJECT);
 	if(Validator.isNotNull(subject)) {
 		isUpdate = true;
-		menu="subject-update";
+		menu = ECRFUserMenuConstants.UPDATE_SUBJECT;
 	}
 }
 
@@ -293,7 +293,6 @@ if(isUpdate) {
 					<aui:field-wrapper
 						name="<%=ECRFUserSubjectAttributes.EXPERIMENTAL_GROUP_ID %>"
 						label="ecrf-user.subject.experimental-group"
-						required="true"
 					>
 					</aui:field-wrapper>
 				</aui:col>
@@ -334,9 +333,9 @@ if(isUpdate) {
 						<c:when test="<%=isUpdate %>">
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_SUBJECT) %>">
-							<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>save">
-								<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
-								<span>Save</span>
+							<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>save">
+								<img class="save-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 							</button>
 						</c:if>
 						
@@ -346,9 +345,9 @@ if(isUpdate) {
 								String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 								String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteSubjectURL.toString());
 							%>
-							<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="delete">
-								<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
-								<span>Delete</span>
+							<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="delete">
+								<img class="delete-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 							</a>
 						</c:if>
 						
@@ -356,18 +355,18 @@ if(isUpdate) {
 						<c:otherwise>
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
-							<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>save">
-								<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
-								<span>Add</span>
+							<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>save">
+								<img class="add-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 							</button>
 						</c:if>
 						
 						</c:otherwise>
 						</c:choose>
 								
-						<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=updateListURL %>" name="<portlet:namespace/>cancel">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
-							<span style="color:black;">Cancel</span>
+						<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=updateListURL %>" name="<portlet:namespace/>cancel">
+							<img class="cancel-icon" />					
+							<span style="color:black;"><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 						</a>
 					</aui:button-row>
 				</aui:col>

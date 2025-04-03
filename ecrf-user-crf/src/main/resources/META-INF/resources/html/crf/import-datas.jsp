@@ -3,7 +3,7 @@
 <%@ include file="../init.jsp" %>
 
 <%
-	String menu = "crf-add";
+	String menu = ECRFUserMenuConstants.UPDATE_CRF;
 	
 	boolean isUpdate = false;
 
@@ -14,7 +14,6 @@
 		crf = (CRF)renderRequest.getAttribute(ECRFUserCRFAttributes.CRF);
 		if(Validator.isNotNull(crf)) {
 			isUpdate = true;
-			menu = "crf-update";	
 		}
 	}
 	
@@ -40,33 +39,42 @@
 	
 	<div class="page-content">
 		<liferay-ui:header backURL="<%=redirect %>" title="Import Datas" />
-		<div class="marL10">
+		
 		<aui:form action="<%=importDatasJsonURL %>" name="importJson" autocomplete="off" method="post" enctype="multipart/form-data">
-			<label>import json</label>		
+		<aui:container cssClass="marTr radius-shadow-container">
 			<aui:row>
-				<input type="file" id="jsonInput" name="jsonInput" size="75"></input>
-				<input type="hidden" id="crfId" value="<%=crfId %>"/>
-				<input type="hidden" id="dataTypeId" value="<%=dataTypeId %>"/>
-			</aui:row>
-			<aui:row>
-				<aui:col md="12">
-				<aui:button-row cssClass="marL10">
-						<aui:button type="submit" name="import" value="import" cssClass="add-btn medium-btn radius-btn"></aui:button>
-				</aui:button-row>
+				<aui:col>
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.crf.title.select-json-file" />
+					</span>
 				</aui:col>
-			</aui:row>		
+				<aui:col>
+					<input type="file" id="jsonInput" name="jsonInput" size="75"></input>
+					<input type="hidden" id="crfId" value="<%=crfId %>"/>
+					<input type="hidden" id="dataTypeId" value="<%=dataTypeId %>"/>
+				</aui:col>
+			</aui:row>
 			
-			<div class="marTr radius-shadow-container">
-				<aui:row>
-					<p id="totalLength"></p>
-				</aui:row>
-				<aui:row>
-					<table id="fileReader">
-					</table>
-				</aui:row>
-			</div>			
+			<aui:button-row cssClass="marTr">
+				<button type="submit" id="<portlet:namespace/>import" class="dh-icon-button submit-btn import-data-btn w200 h36" >
+					<img class="import-data-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.crf.import-data"/></span>
+				</button>
+			</aui:button-row>	
+			
+			<aui:row>
+				<aui:container cssClass="marTr radius-shadow-container">
+					<aui:row>
+						<p id="totalLength"></p>
+					</aui:row>
+					<aui:row>
+						<table id="fileReader">
+						</table>
+					</aui:row>
+				</aui:container>
+			</aui:row>
+		</aui:container>
 		</aui:form>
-		</div>
 	</div>
 </div>
 

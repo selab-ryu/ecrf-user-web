@@ -44,40 +44,40 @@
 <div class="side-menu radius-shadow-container" style="text-align:center;">
 	<!-- CRF Management -->
 	<div>
-		<a class="dh-icon-button-sidebar dh-icon-button-main" href="<%=moveCRFListURL %>" name="CRFMain">
-			<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_icon.png"%>"/>
+		<a class="dh-sidebar menu-main" href="<%=moveCRFListURL %>" name="CRFMain">
+			<img class="crf-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf" /></span>
 		</a>		
 	</div>
 	
 	<div>
-		<a class="<%= menu.equals("crf-list") ? "dh-icon-button-sidebar dh-icon-button-2nd" : "dh-icon-button-sidebar dh-icon-button-sidebar-deactivate"%>" href="<%=moveCRFListURL %>" name="CRFList">
-       		<img src="<%= menu.equals("crf-list") ? renderRequest.getContextPath() + "/btn_img/crf_list_icon.png" : renderRequest.getContextPath() + "/btn_img/crf_list_icon_deactivate.png"%>"/>
+		<a class="dh-sidebar menu-1 inactive" href="<%=moveCRFListURL %>" name="CRFList">
+       		<img class="crf-list-icon-inactive" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf.list" /></span>
-		</a>				
+		</a>		
 	</div>
 	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 	<div>
-		<a class="dh-icon-button-sidebar dh-icon-button-sidebar-deactivate" href="<%=moveAddCRFURL %>" name="CRFList">
-       		<img src="<%=renderRequest.getContextPath() + "/btn_img/add_crf_icon_deactivate.png"%>"/>
+		<a class="dh-sidebar menu-1 inactive" href="<%=moveAddCRFURL %>" name="CRFList">
+      		<img class="add-crf-icon-inactive" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf.create" /></span>
-		</a>	
+		</a>
 	</div>
 	</c:if>
 	
 	<div>
-		<a class="dh-icon-button-sidebar dh-icon-button-2nd" href="<%=moveUpdateCRFURL %>" name="CRFUpdate">
-       		<img src="<%=renderRequest.getContextPath() + "/btn_img/update_crf_icon.png"%>"/>
+		<a class="dh-sidebar menu-1" href="<%=moveUpdateCRFURL %>" name="CRFUpdate">
+       		<img class="update-crf-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf.update-info" /></span>
-		</a>	
+		</a>
 	</div>
 	
 	<div>
-		<a class="dh-icon-button-sidebar dh-icon-button-2nd" href="<%=moveManageFormURL %>" name="CRFForm">
-			<img src="<%= renderRequest.getContextPath() + "/btn_img/crf_form_icon.png"%>"/>
+		<a class="dh-sidebar menu-2" href="<%=moveManageFormURL %>" name="CRFForm">
+        	<img class="crf-form-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-builder" /></span>
-		</a>	
+		</a>
 	</div>
 	<!-- 
 	<div>
@@ -93,19 +93,19 @@
 	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA_LIST) %>">
 	<div>
-		<a class="dh-icon-button-sidebar dh-icon-button-sidebar-deactivate" href="<%=moveCRFDataListURL %>" name="CRFData">
-        	<img src="<%=renderRequest.getContextPath() + "/btn_img/crf_data_icon_deactivate.png"%>"/>
+		<a class="dh-sidebar menu-2 inactive" href="<%=moveCRFDataListURL %>" name="CRFData">
+			<img class="crf-data-icon-inactive" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-data" /></span>
-		</a>
+		</a>	
 	</div>
 	</c:if>
 	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY_LIST) %>">
 	<div>
-		<a class="dh-icon-button-sidebar dh-icon-button-sidebar-deactivate" href="<%=moveCRFQueryListURL %>" name="CRFQuery">
-        	<img src="<%=renderRequest.getContextPath() + "/btn_img/crf_query_icon_deactivate.png"%>"/>
+		<a class="dh-sidebar menu-2 inactive" href="<%=moveCRFQueryListURL %>" name="CRFQuery">
+   			<img class="crf-query-icon-inactive" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query" /></span>
-		</a>
+		</a>	
 	</div>
 	</c:if>
 		
@@ -121,7 +121,7 @@
 	}
 	%>
 	<div>
-		<div class="main-menu-bar active-version-bar">
+		<div class="current-crf">
 			<strong><liferay-ui:message key="ecrf-user.menu.current-crf-x" arguments="<%=crfName %>" /></strong>
 		</div>
 	</div>

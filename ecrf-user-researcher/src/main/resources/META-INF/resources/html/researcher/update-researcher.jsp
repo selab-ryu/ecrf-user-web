@@ -6,7 +6,7 @@
 
 <%
 
-String menu = "researcher-add";
+String menu = ECRFUserMenuConstants.ADD_RESEARCHER;
 
 boolean isUpdate = false;
 
@@ -18,7 +18,7 @@ if(researcherId > 0) {
 	researcher = ResearcherLocalServiceUtil.getResearcher(researcherId);
 	researcherUser = UserLocalServiceUtil.getUser(researcher.getResearcherUserId());
 	isUpdate = true;
-	menu =  "researcher-update";
+	menu = ECRFUserMenuConstants.UPDATE_RESEARCHER;
 }
 
 String birthStr = null;
@@ -47,20 +47,20 @@ String headerTitle = "ecrf-user.researcher.title.add-researcher";
 boolean isAdminMenu = ParamUtil.getBoolean(renderRequest, "isAdminMenu", false);
 _log.info("is admin menu : " + isAdminMenu);
 
+PortletURL viewURL = renderResponse.createRenderURL();
+
+_log.info("back url : " + backURL);
+_log.info("view url : " + viewURL);
+
+if(Validator.isNull(backURL)) {
+	backURL = viewURL.toString();
+	_log.info("view url : " + viewURL);
+}
+
 // set backURL at admin menu
-if(isAdminMenu) {
-	PortletURL viewURL = renderResponse.createRenderURL();
-	
-	_log.info("back url : " + backURL);
-	if(Validator.isNull(backURL)) {
-		backURL = viewURL.toString();
-		_log.info("view url : " + viewURL);
-	}
-	
+if(isAdminMenu) {	
 	divClass += " mar1r";
 	headerTitle = "ecrf-user.researcher.title.add-researcher.admin";
-} else {
-	backURL = redirect;
 }
 
 // Custom Update User Render added parameter (for admin menu))
@@ -437,53 +437,42 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					%>
 										
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) || hasOwnPermission ) %>">
-						<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>save">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
-							<span>Save</span>
-						</button>
+					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" name="<portlet:namespace/>save">
+						<img class="save-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
+					</button>
 					</c:if>
 					
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_RESEARCHER) || hasOwnPermission )%>">
-						<%
-							String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
-							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
-							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteResearcherURL.toString());
-						%>
-						<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="delete">
-							<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
-							<span>Delete</span>
-						</a>
+					<%
+						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteResearcherURL.toString());
+					%>
+					<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="delete">
+						<img class="delete-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
+					</a>
 					</c:if>
 					
 					</c:when>
 					<c:otherwise>
 					
 					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
-						<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>add">
-							<c:if test="<%=!fromLiferay %>">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
-							</c:if>
-							<span>Add</span>
-						</button>
-					</c:if>
+										
+					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" name="<portlet:namespace/>save">
+						<img class="save-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
+					</button>
 					
-					<c:if test="<%=fromLiferay %>">
-						<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>save">
-							<c:if test="<%=!fromLiferay %>">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
-							</c:if>
-							<span>Save</span>
-						</button>
 					</c:if>
 					
 					</c:otherwise>
-					</c:choose>			
-							
-					<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listResearcherURL %>" name="<portlet:namespace/>cancel">
-						<c:if test="<%=!fromLiferay %>">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>
-						</c:if>					
-						<span style="color:black;">Cancel</span>
+					</c:choose>
+										 
+					<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=backURL %>" name="<portlet:namespace/>cancel">
+						<img class="cancel-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 					</a>
 				</aui:button-row>
 			</aui:col>

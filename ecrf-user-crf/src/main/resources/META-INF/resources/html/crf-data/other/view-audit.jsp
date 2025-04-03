@@ -5,7 +5,7 @@
 <%
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/M/d");
 
-	String menu = "update-crf-data";
+	String menu = ECRFUserMenuConstants.VIEW_CRF_DATA;
 
 	long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID);
 	long sdId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.STRUCTURED_DATA_ID); 

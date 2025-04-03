@@ -5,7 +5,7 @@
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 		
-	String menu = "crf-query-list";
+	String menu = ECRFUserMenuConstants.LIST_QUERY;
 		
 	ArrayList<CRFAutoquery> queryList = new ArrayList<CRFAutoquery>();
 	queryList.addAll(CRFAutoqueryLocalServiceUtil.getQueryByGroupCRF(scopeGroupId, crfId));
@@ -95,13 +95,13 @@
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button class="dh-icon-button-submit dh-icon-button-submit-search" name="<portlet:namespace/>search">
-								<i class="bi bi-search" style="color:white;"></i>
-								<span>Search</span>
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+								<img class="search-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" name="<portlet:namespace/>clear">
-								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
-								<span>Clear</span>
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+								<img class="clear-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
 							</a>
 						</aui:button-row>
 					</aui:col>

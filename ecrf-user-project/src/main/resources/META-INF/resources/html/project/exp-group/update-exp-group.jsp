@@ -7,7 +7,7 @@
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
-String menu="add-exp-group";
+String menu = ECRFUserMenuConstants.ADD_EXP_GROUP;
 
 boolean isUpdate = false;
 
@@ -17,7 +17,7 @@ long expGroupId = ParamUtil.getLong(renderRequest, ECRFUserExpGroupAttributes.EX
 
 if(expGroupId > 0) {
 	isUpdate = true;
-	menu="update-exp-group";
+	menu = ECRFUserMenuConstants.UPDATE_EXP_GROUP;
 	
 	expGroup = ExperimentalGroupLocalServiceUtil.getExperimentalGroup(expGroupId);
 }
@@ -135,46 +135,44 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 							%>
 						</aui:select>
 					</aui:col>
-				</aui:row>
-			
-				<aui:button-row>
-				
-					<c:if test="<%=!isUpdate %>">
-					<c:if test="<%=hasAddPermission %>">
-					<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>add">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
-						<span>Add</span>
-					</button>
-					</c:if>
-					</c:if>
-					
-					<c:if test="<%=isUpdate %>">
-					<c:if test="<%=hasUpdatePermission %>">
-					<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-						<span>Update</span>
-					</button>
-					</c:if>
-					
-					<c:if test="<%=hasDeletePermission %>">
-					<%
-						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
-						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
-						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
-					%>
-					<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
-						<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
-						<span>Delete</span>
-					</a>
-					</c:if>
-					</c:if>
-					<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listExpGroupURL %>" name="<portlet:namespace/>cancel">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
-						<span style="color:black;">Cancel</span>
-					</a>
-				</aui:button-row>
-			
+				</aui:row>			
 			</aui:container>
+			
+			<aui:button-row>
+				<c:if test="<%=!isUpdate %>">
+				<c:if test="<%=hasAddPermission %>">
+				<button type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8" name="<portlet:namespace/>add">
+					<img class="add-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.add" /></span>
+				</button>
+				</c:if>
+				</c:if>
+				
+				<c:if test="<%=isUpdate %>">
+				<c:if test="<%=hasUpdatePermission %>">
+				<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>update">
+					<img class="update-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.update" /></span>
+				</button>
+				</c:if>
+				
+				<c:if test="<%=hasDeletePermission %>">
+				<%
+					String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+					String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+					String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
+				%>
+				<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+					<img class="delete-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
+				</a>
+				</c:if>
+				</c:if>
+				<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=listExpGroupURL %>" name="<portlet:namespace/>cancel">
+					<img class="cancel-icon" />					
+					<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
+				</a>
+			</aui:button-row>
 		</aui:form>
 		
 	</div>

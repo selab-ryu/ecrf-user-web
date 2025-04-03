@@ -9,7 +9,7 @@
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
-String menu="exp-group";
+String menu = ECRFUserMenuConstants.LIST_EXP_GROUP;
 
 ArrayList<ExperimentalGroup> expGroupList = new ArrayList<>(); 
 expGroupList.addAll(ExperimentalGroupLocalServiceUtil.getExpGroupByGroupId(scopeGroupId));
@@ -128,13 +128,13 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-search" id="<portlet:namespace/>search">
-								<i class="bi bi-search" style="color:white;"></i>
-								<span>Search</span>
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+								<img class="search-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
-								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
-								<span>Clear</span>
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+								<img class="clear-icon" />							
+								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
 							</a>
 						</aui:button-row>
 					</aui:col>
@@ -213,9 +213,9 @@ if(isSearch) {
 				cssClass="min-width-80"
 			>			
 				
-				<a class="<%= !hasUpdatePermission ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=updateExpGroupURL %>" name="updateExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
-					<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-					<span>Update</span>
+				<a class="<%= !hasUpdatePermission ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" href="<%=updateExpGroupURL %>" name="updateExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
+					<img class="update-icon<%=TagAttrUtil.inactive(hasUpdatePermission)%>" />
+					<span><liferay-ui:message key="ecrf-user.button.update" /></span>
 				</a>
 			</liferay-ui:search-container-column-text>
 			
@@ -232,9 +232,9 @@ if(isSearch) {
 				String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 				String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
 			%>
-				<a class="<%= !hasDeletePermission ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-delete"%>" onClick="<%=deleteFunctionCall %>" name="deleteExpGroup" disabled="<%=hasDeletePermission ? false : true %>">
-					<img src="<%= !hasDeletePermission ?  renderRequest.getContextPath() + "/btn_img/delete_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
-					<span>Delete</span>
+				<a class="<%= !hasDeletePermission ? "dh-icon-button inactive w130" : "dh-icon-button delete-btn w130"%>" onClick="<%=deleteFunctionCall %>" name="deleteExpGroup" disabled="<%=hasDeletePermission ? false : true %>">
+					<img class="delete-icon<%=TagAttrUtil.inactive(hasDeletePermission)%>" />
+					<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 				</a>
 			</liferay-ui:search-container-column-text>
 			
@@ -251,9 +251,9 @@ if(isSearch) {
 		
 		<c:if test="<%=hasAddPermission %>">
 		<aui:button-row>
-			<a class="dh-icon-button-submit dh-icon-button-submit-add" href="<%=addExpGroupURL %>" name="<portlet:namespace/>addExp">
-				<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/add_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
-				<span>Add</span>
+			<a class="dh-icon-button submit-btn add-btn w110 h36 marR8" href="<%=addExpGroupURL %>" name="<portlet:namespace/>addExp">
+				<img class="add-icon<%=TagAttrUtil.inactive(hasAddPermission)%>" />
+				<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 			</a>
 		</aui:button-row>
 		</c:if>

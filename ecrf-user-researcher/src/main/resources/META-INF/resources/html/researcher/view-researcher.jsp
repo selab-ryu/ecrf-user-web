@@ -3,7 +3,7 @@
 <%! private static Log _log = LogFactoryUtil.getLog("html.researcher.view_researcher_jsp"); %>
 
 <%
-String menu = ParamUtil.getString(renderRequest, "menu", "researcher-list");
+String menu = ParamUtil.getString(renderRequest, "menu", ECRFUserMenuConstants.LIST_RESEARCHER);
 
 long researcherId = ParamUtil.getLong(renderRequest, ECRFUserResearcherAttributes.RESEARCHER_ID);
 long userId = 0;
@@ -186,10 +186,9 @@ backURL = redirect;
 		<aui:row>
 			<aui:col md="12">
 				<aui:button-row>
-					<aui:button type="button" name="cancel" cssClass="" value="ecrf-user.button.cancel" onClick="<%=backURL %>"></aui:button>
-					<a class="icon-button-submit icon-button-submit-cancel" href="<%=backURL %>" name="<portlet:namespace/>cancel">
-						<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
-						<span style="color:black;">Cancel</span>
+					<a class="dh-icon-button submit-btn cancel-btn w110 h36" href="<%=backURL %>" name="<portlet:namespace/>cancel">
+						<img class="cancel-icon" />					
+						<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 					</a>
 				</aui:button-row>
 				

@@ -6,7 +6,7 @@
 <%
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
-String menu="crf-data-history";
+String menu = ECRFUserMenuConstants.LIST_HISTORY;
 
 ArrayList<CRFHistory> wholeHistoryList = new ArrayList<CRFHistory>();
 
@@ -213,13 +213,13 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button class="dh-icon-button-submit dh-icon-button-submit-search" id="<portlet:namespace/>search">
-								<i class="bi bi-search" style="color:white;"></i>
-								<span>Search</span>
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+								<img class="search-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
-								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
-								<span>Clear</span>
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+								<img class="clear-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
 							</a>
 						</aui:button-row>
 					</aui:col>
@@ -336,8 +336,8 @@ if(isSearch) {
 					name="ecrf-user.list.view"
 					cssClass="min-width-80"
 				>
-					<a class="dh-icon-button dh-icon-button-audit" href="<%=hasViewHistoryPermission ? viewHistoryURL : "javascript:void(0);" %>" name="viewHistory" disabled="<%=!hasViewHistoryPermission ? true : false %>">
-						<img src="<%= !hasViewHistoryPermission ?  renderRequest.getContextPath() + "/btn_img/view_icon.png" : renderRequest.getContextPath() + "/btn_img/view_icon.png"%>"/>						
+					<a class="dh-icon-button audit-trail-btn w130" href="<%=hasViewHistoryPermission ? viewHistoryURL : "javascript:void(0);" %>" name="viewHistory" disabled="<%=!hasViewHistoryPermission ? true : false %>">
+						<img class="view-icon" />						
 						<span>View</span>		
 					</a>	
 				</liferay-ui:search-container-column-text>

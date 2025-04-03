@@ -13,7 +13,7 @@ researcherList.addAll(ResearcherLocalServiceUtil.getResearcherBySite(scopeGroupI
 
 _log.info("all researcher size : "+totalCount);
 
-String menu = "researcher-list";
+String menu = ECRFUserMenuConstants.LIST_RESEARCHER;
 
 boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false); 
 
@@ -178,13 +178,13 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-search" id="<portlet:namespace/>search">
-								<i class="bi bi-search" style="color:white;"></i>
-								<span>Search</span>
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+								<img class="search-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<a class="dh-icon-button-submit dh-icon-button-submit-clear" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
-								<i class="bi bi-arrow-clockwise" style="color:white;"></i>							
-								<span>Clear</span>
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+								<img class="clear-icon" />							
+								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
 							</a>
 						</aui:button-row>
 					</aui:col>
@@ -279,13 +279,14 @@ if(isSearch) {
 						<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />						
 					</portlet:renderURL>
-					<a class="<%= !hasUpdatePermission ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=updateResearcherURL %>" name="updateCRF" disabled="<%=!hasUpdatePermission ? true : false %>">
-						<img src="<%= !hasUpdatePermission ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+					<a class="<%= !hasUpdatePermission ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" href="<%=updateResearcherURL %>" name="updateCRF" disabled="<%=!hasUpdatePermission ? true : false %>">
+						<img class="update-icon<%=TagAttrUtil.inactive(hasUpdatePermission) %>" />
+						
 						<c:if test="<%=!hasUpdatePermission %>">
-							<span>Locked</span>
+							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
 						</c:if>
 						<c:if test="<%=hasUpdatePermission %>">
-							<span>Update Data</span>
+							<span><liferay-ui:message key="ecrf-user.button.update-data" /></span>
 						</c:if>			
 					</a>
 				</liferay-ui:search-container-column-text>

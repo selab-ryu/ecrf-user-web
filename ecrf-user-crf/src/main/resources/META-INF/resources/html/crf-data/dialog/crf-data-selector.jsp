@@ -1,3 +1,4 @@
+<%@page import="java.text.ParseException"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayPortletURL"%>
 <%@page import="com.sx.icecap.service.StructuredDataLocalServiceUtil"%>
 <%@page import="ecrf.user.constants.attribute.ECRFUserCRFSubjectInfoAttribute"%>
@@ -59,7 +60,19 @@ _log.info("base url : " + baseURL);
 						String dateStr = "";
            				Date visitDate = null;
 						if(Validator.isNotNull(answerForm) && answerForm.has("visit_date")){
-							visitDate = new Date(Long.valueOf(answerForm.getString("visit_date")));
+							dateStr = answerForm.getString("visit_date");
+							
+							try {
+								visitDate = new Date(Long.valueOf(dateStr));
+							} catch(NumberFormatException nfe) {
+								SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								try {
+									visitDate = format.parse(dateStr);
+								} catch(ParseException pe) {
+									pe.printStackTrace();
+								}
+							}
+							
 						}
 						Date modifiedDate = link.getModifiedDate();
 				%>
@@ -208,17 +221,30 @@ _log.info("base url : " + baseURL);
 		
 		<c:choose>
 		<c:when test="<%=!hasForm %>">
-		
-			<aui:button name="crfFormNotice" type="button" value="ecrf-user.validation.no-crf-form" cssClass="none-btn full-btn" disabled="true"></aui:button>
-		
+			<aui:row>
+				<aui:col cssClass="center">
+					<span class="marTr" style="font-weight:600;">
+					<liferay-ui:message key="ecrf-user.validation.no-crf-form" />
+					</span>
+				</aui:col>
+			</aui:row>
 		</c:when>
 		<c:when test="<%=updateLock %>">
-		
-			<aui:button name="dbLockNotice" type="button" value="ecrf-user.crf-data.db-lock" cssClass="none-btn full-btn" disabled="true"></aui:button>
-		
+			<aui:row>
+				<aui:col cssClass="center">
+					<span class="marTr" style="font-weight:600;">
+					<liferay-ui:message key="ecrf-user.crf-data.db-lock" />
+					</span>
+				</aui:col>
+			</aui:row>	
 		</c:when>
 		</c:choose>
 	
+		<!--
+		<aui:button name="crfFormNotice" type="button" value="ecrf-user.validation.no-crf-form" cssClass="none-btn full-btn" disabled="true"></aui:button> 
+		<aui:button name="dbLockNotice" type="button" value="ecrf-user.crf-data.db-lock" cssClass="none-btn full-btn" disabled="true"></aui:button>
+	 	-->
+	 	
 	</aui:container>
 </div>
 

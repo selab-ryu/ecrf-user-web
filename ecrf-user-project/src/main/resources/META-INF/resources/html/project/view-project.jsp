@@ -11,7 +11,7 @@ Project project = null;
 long projectId = 0;
 int projectCount = ProjectLocalServiceUtil.getProjectCount(scopeGroupId);
 
-String menu = "project-info";
+String menu = ECRFUserMenuConstants.PROJECT_INFO;
 
 if(projectCount > 0) {
 	List<Project> projectList = ProjectLocalServiceUtil.getProjectByGroupId(scopeGroupId);
@@ -122,9 +122,9 @@ if(!isPrivate) pageClass = "mar16px";
 				<c:choose>
 				<c:when test="<%=(projectId > 0) %>">
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">			
-						<a href="<%=updateProjectURL %>" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-							<span>Update</span>
+						<a href="<%=updateProjectURL %>" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>update">
+							<img class="update-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.update" /></span>
 						</a>					
 					</c:if>
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_PROJECT) %>">
@@ -133,17 +133,17 @@ if(!isPrivate) pageClass = "mar16px";
 							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
 						%>
-						<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%=deleteFunctionCall %>" name="btnDelete">
-							<img src="<%=renderRequest.getContextPath() + "/btn_img/delete_icon.png"%>"/>
-							<span>Delete</span>
+						<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+							<img class="delete-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 						</a>
 					</c:if>
 			 	</c:when>
 			 	<c:otherwise>
 			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-						<a href="<%=addProjectURL %>" type="submit" class="dh-icon-button-submit dh-icon-button-submit-add" name="<portlet:namespace/>add">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/add_icon.png"%>"/>
-							<span>Add</span>
+						<a href="<%=addProjectURL %>" class="dh-icon-button submit-btn add-btn w110 h36 marR8" name="<portlet:namespace/>add">
+							<img class="add-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 						</a>	
 			 		</c:if>
 			 	</c:otherwise>
@@ -151,6 +151,5 @@ if(!isPrivate) pageClass = "mar16px";
 			</aui:button-row>
 		</aui:col>
 	</aui:row>
-
 	</div>
 </div>

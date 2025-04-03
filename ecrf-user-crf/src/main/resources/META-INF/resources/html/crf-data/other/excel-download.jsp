@@ -9,7 +9,7 @@
 
 <%
 	_log.info("Render Excel Download JSP");
-	String menu = "crf-data-excel";
+	String menu = ECRFUserMenuConstants.EXCEL_DOWNLOAD;
 	
 	_log.info("1. Get data from java");
 	String subjectJson = (String)renderRequest.getAttribute("subjectJson");

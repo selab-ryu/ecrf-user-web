@@ -6,7 +6,7 @@
 <%	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
-	String menu = "crf-data-history";
+	String menu = ECRFUserMenuConstants.LIST_HISTORY;
 	
 	Date createDate = (Date)renderRequest.getAttribute(ECRFUserAttributes.CREATE_DATE);	
 	String[][] termList = (String[][])renderRequest.getAttribute(ECRFUserCRFDataAttributes.TERM_LIST);
