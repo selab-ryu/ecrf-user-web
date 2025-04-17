@@ -222,412 +222,410 @@ _log.info("url : " + baseURL.toString());
 				modelVar="rowSubject"
 			>
 			
-			<liferay-ui:search-container-column-text
-				name="ecrf-user.list.no"
-				value="<%=String.valueOf(++count) %>"
-			/>
-			
-			<% 
-				long rowSubjectId = rowSubject.getSubjectId();
-				//_log.info("subject id : " + rowSubjectId); 
-			%>
-
-			<%
-				boolean hasCRF = false;
-				int crfDataCount = LinkCRFLocalServiceUtil.countLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
-				if(crfDataCount > 0) hasCRF = true;
-			%>
-			
-			<%
-				String progressBarCss = "progressBar";				
-				String progressSrc = renderRequest.getContextPath() + "/img/empty_progress.png";
-				if(hasCRF){
-					List<LinkCRF> linkList = LinkCRFLocalServiceUtil.getLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
-					if(linkList.size() > 0){
-						LinkCRF link = linkList.get(linkList.size() - 1);
-						String answer = DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId());
-						JSONObject answerObj = JSONFactoryUtil.createJSONObject(answer);
-						long rowDataTypeId = CRFLocalServiceUtil.getDataTypeId(link.getCrfId());
-						
-						CRFProgressUtil progressApi = new CRFProgressUtil(renderRequest, rowDataTypeId, answerObj);
-						progressPercentage = String.valueOf(progressApi.getProgressPercentage()) + "%";
-						
-						boolean hasQuery = false;
-						if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
-							List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(rowSubjectId);
-							for(int queryIdx = 0; queryIdx < queryList.size(); queryIdx++){
-								CRFAutoquery query = queryList.get(queryIdx);
-								if(query.getQueryComfirm() != 2){
-									hasQuery = true;
-									break;
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.no"
+					value="<%=String.valueOf(++count) %>"
+				/>
+				
+				<% 
+					long rowSubjectId = rowSubject.getSubjectId();
+					//_log.info("subject id : " + rowSubjectId); 
+				%>
+	
+				<%
+					boolean hasCRF = false;
+					int crfDataCount = LinkCRFLocalServiceUtil.countLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
+					if(crfDataCount > 0) hasCRF = true;
+				%>
+				
+				<%
+					String progressBarCss = "progressBar";				
+					String progressSrc = renderRequest.getContextPath() + "/img/empty_progress.png";
+					if(hasCRF){
+						List<LinkCRF> linkList = LinkCRFLocalServiceUtil.getLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
+						if(linkList.size() > 0){
+							LinkCRF link = linkList.get(linkList.size() - 1);
+							String answer = DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId());
+							JSONObject answerObj = JSONFactoryUtil.createJSONObject(answer);
+							long rowDataTypeId = CRFLocalServiceUtil.getDataTypeId(link.getCrfId());
+							
+							CRFProgressUtil progressApi = new CRFProgressUtil(renderRequest, rowDataTypeId, answerObj);
+							progressPercentage = String.valueOf(progressApi.getProgressPercentage()) + "%";
+							
+							boolean hasQuery = false;
+							if(CRFAutoqueryLocalServiceUtil.countQueryBySdId(link.getStructuredDataId()) > 0){
+								List<CRFAutoquery> queryList = CRFAutoqueryLocalServiceUtil.getQueryBySId(rowSubjectId);
+								for(int queryIdx = 0; queryIdx < queryList.size(); queryIdx++){
+									CRFAutoquery query = queryList.get(queryIdx);
+									if(query.getQueryComfirm() != 2){
+										hasQuery = true;
+										break;
+									}
 								}
 							}
+							
+							progressSrc = progressApi.getProgressImg(progressApi.getProgressPercentage(), hasQuery);
 						}
-						
-						progressSrc = progressApi.getProgressImg(progressApi.getProgressPercentage(), hasQuery);
 					}
-				}
-				
-			%>
-
-			<liferay-ui:search-container-column-text
-				name="ecrf-user.list.serial-id"
-			>
-				<p style="text-align: center; background-image: linear-gradient(to right, #11aaff <%=progressPercentage%>, #aaa 0%); margin-bottom: 0px; padding: 4px;"><%=String.valueOf(rowSubject.getSerialId()) %><liferay-ui:icon icon="info-sign" message="<%=progressPercentage%>" /></p>
-			</liferay-ui:search-container-column-text>
-			
-			<portlet:renderURL var="viewURL">
-				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_CRF_DATA%>" />
-				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
-				<portlet:param name="menu" value="<%=ECRFUserMenuConstants.VIEW_CRF_DATA %>" />	
-				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
-			</portlet:renderURL>
-			<%
-				String name = rowSubject.getName();
-				boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
-				if(!hasViewEncryptPermission)
-					name = ECRFUserUtil.encryptName(name);
-						
-				if(crfDataCount > 1){
-					name = name + " [" + crfDataCount  + "]";
-				}
-			%>
-			<liferay-ui:search-container-column-text
-				cssClass="min-width-80"
-				name="ecrf-user.subject.name"
-				value="<%=Validator.isNull(rowSubject.getName()) ? "-" : name%>"
-			/>
-			
-			<%
-				String genderStrKey = "";
-				if(Validator.isNull(rowSubject.getGender())) {
-					genderStrKey = "-";
-				} else {
-					if(rowSubject.getGender() == 0) {
-						genderStrKey = "ecrf-user.general.male";
-					} else {
-						genderStrKey = "ecrf-user.general.female";
-					}
-				}
-			%>
-			
-			<liferay-ui:search-container-column-text
-				name="ecrf-user.list.gender"	
-			>
-				<liferay-ui:message key="<%=genderStrKey %>"></liferay-ui:message>
-			</liferay-ui:search-container-column-text>
-			
-			<liferay-ui:search-container-column-text
-				name="ecrf-user.list.birth"
-				value="<%=Validator.isNull(rowSubject.getBirth()) ? "-" : sdf.format(rowSubject.getBirth()) %>"
-			/>
-			
-			<liferay-ui:search-container-column-text
-				name="ecrf-user.list.progress"
-			>
-				<img src="<%= progressSrc%>" width="50%" height="auto" style="min-width:60px;"/>			
-			</liferay-ui:search-container-column-text>	
-			
-			<%	// Permission and Update Lock Check
-				boolean hasAddPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF_DATA);	
-				boolean hasUpdatePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_DATA);
-				boolean hasViewAuditPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_AUDIT);
-				boolean hasViewDataPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA);
-				boolean hasDeletePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_CRF_DATA);
-				
-				boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, rowSubjectId);
-				//_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
-			%>
-			
-			<!-- DB Lock -->
-			<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_CHANGE_UPDATE_LOCK %>" var="changeUpdateLock">
-				<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA_UPDATE %>" />
-				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
-			</portlet:actionURL>
-			
-			<%
-				String lockBtnKey = "ecrf-user.button.db-lock";
-				String lockIcon = "db-lock-icon";
-				String lockClass = "dh-icon-button db-lock-btn w130";
-				String dblockOnClickStr = "location.href='"+changeUpdateLock+"'";
-				
-				// check update lock
-				if(updateLock) {
-					lockBtnKey = "ecrf-user.button.db-unlock";
-					lockIcon = "db-unlock-icon";
-				}
-				
-				// check permission
-				if(!hasUpdatePermission) {
-					lockClass = "dh-icon-button inactive w130";
-					lockBtnKey = "ecrf-user.button.locked";
-					dblockOnClickStr = "";
-				}
-			%>
-
-			<liferay-ui:search-container-column-text
-				name="ecrf-user.list.db-lock"
-				cssClass="min-width-80"
-			>			 
-				<button class="<%=lockClass %>" onclick="<%=dblockOnClickStr %>" name="dblock" <%=hasUpdatePermission ? "" : "disabled" %>>
-					<img class="<%=lockIcon %>" />
-					<span><liferay-ui:message key="<%=lockBtnKey %>"/></span>			
-				</button>
-			
-			</liferay-ui:search-container-column-text>
-			<!-- DB Lock -->
-			
-			<!-- Data Update -->
-			<%
-				// change render command name by ui layout
-				int uiLayoutId = CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout();
-				String commandName = ECRFUserMVCCommand.RENDER_VIEW_CRF_DATA;
-				
-				if(uiLayoutId == UILayout.TABLE.getNum() || uiLayoutId == UILayout.VERTICAL.getNum()){
-					commandName = ECRFUserMVCCommand.RENDER_CRF_VIEWER;
-				}
-			%>
-			
-			<portlet:renderURL var="renderAddCRFURL">
-				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=commandName%>" />
-				<portlet:param name="fromFlag" value="selector-add" />
-				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
-				<portlet:param name="structuredDataId" value="0" />			
-				<portlet:param name="menu" value="<%=ECRFUserMenuConstants.ADD_CRF_DATA %>" />
-				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
-			</portlet:renderURL>
-			
-			<%
-				String CRFAddBtnClass = "dh-icon-button w130 add-btn";			
-				String addDataBtnKey = "ecrf-user.button.insert-data";				
-				String addOnClickStr = "location.href='" + renderAddCRFURL + "'";
-				boolean isAddDisabled = false;
-				
-				// check update lock
-				if(updateLock) {
-					CRFAddBtnClass = "dh-icon-button w130 inactive";
-					addDataBtnKey = "ecrf-user.button.locked";
-					addOnClickStr = "";
-					isAddDisabled = true;
-				}
-				
-				// check permission
-				if(!hasAddPermission) {
-					CRFAddBtnClass = "dh-icon-button w130 inactive";
-					addDataBtnKey = "ecrf-user.button.locked";
-					addOnClickStr = "";
-					isAddDisabled = true;
-				}
-			%>
-			
-			<liferay-ui:search-container-column-text 
-				name="ecrf-user.list.crf-data"
-				cssClass="min-width-80"
-			>	
-			<c:if test="">
-			</c:if>
-				<button class="<%=CRFAddBtnClass%>" onclick="<%=addOnClickStr%>" name="addCRF" <%=isAddDisabled ? "disabled" : "" %>>
-          			<img class="add-icon<%=TagAttrUtil.inactive(updateLock, TagAttrUtil.TYPE_ICON) %>" />
-					<span><liferay-ui:message key="<%=addDataBtnKey %>"/></span>	
-				</button>
-			</liferay-ui:search-container-column-text>
-			
-			<%	// check data count & get link id when only one data exist
-				List<LinkCRF> links = LinkCRFLocalServiceUtil.getLinkCRFByC_S(crfId, rowSubjectId);
-				
-				long singleSdId = 0;
-				if(crfDataCount == 1){
-					LinkCRF getLink = links.get(0);
-					singleSdId = getLink.getStructuredDataId();
-				}
-			%>
-			
-			<portlet:renderURL var="renderUpdateCRFURL">
-				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=commandName%>" />
-				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
-				<portlet:param name="sdId" value="<%=String.valueOf(singleSdId) %>" />				
-				<portlet:param name="structuredDataId" value="<%=String.valueOf(singleSdId) %>" />				
-				<portlet:param name="menu" value="<%=ECRFUserMenuConstants.UPDATE_CRF_DATA %>" />
-				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
-			</portlet:renderURL>
-			
-			<%
-				String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 0, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
-				
-				String CRFUpdateBtnClass = "dh-icon-button w130 update-btn";
-				String updateDataBtnKey = "ecrf-user.button.update-data";
-				String updateOnClickStr = "";
-				
-				boolean isUpdateDisabled = false;
-				
-				// check data is exist
-				if(!hasCRF) {
-					isUpdateDisabled = true;
-				} else {
-					// check data count, change onclick code
-					if(singleSdId > 0) {	// only one data
-						updateOnClickStr = "location.href='" + renderUpdateCRFURL + "'";
-					} else if(crfDataCount > 1) {	// multiple data
-						updateOnClickStr = updateFunctionCallStr;
-					}	
-				}
-				
-				// check update lock -> change button span label key, set disabled
-				if(updateLock) {
-					updateDataBtnKey = "ecrf-user.button.locked";
-					isUpdateDisabled = true;
-				}
-				
-				// change button class and onclick code
-				if(isUpdateDisabled) {
-					CRFUpdateBtnClass = "dh-icon-button w130 inactive";
-					updateOnClickStr = "";
-				}
-			%>
-			
-			<liferay-ui:search-container-column-text 
-				name="ecrf-user.list.crf-data"
-				cssClass="min-width-80"
-			>
-				<button class="<%=CRFUpdateBtnClass%>" onclick="<%=updateOnClickStr %>" name="updateCRF" <%=isUpdateDisabled ? "disabled" : "" %> >		
-					<img class="update-icon<%=TagAttrUtil.inactive(isUpdateDisabled, TagAttrUtil.TYPE_ICON) %>" />
-					<span><liferay-ui:message key="<%=updateDataBtnKey %>"/></span>			
-				</button>
-			</liferay-ui:search-container-column-text>
-			<!-- Data Update -->
-			
-			<portlet:renderURL var="renderAuditCRFURL">
-				<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_CRF_VIEWER%>" />
-				<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-				<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
-				<portlet:param name="sdId" value="<%=String.valueOf(singleSdId) %>" />				
-				<portlet:param name="structuredDataId" value="<%=String.valueOf(singleSdId) %>" />
-				<portlet:param name="isAudit" value="1" />			
-				<portlet:param name="menu" value="<%=ECRFUserMenuConstants.VIEW_CRF_DATA%>" />
-				<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
-			</portlet:renderURL>
-			
-			<%
-				String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 1, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
-			
-				// default setting -> audit trail
-				String auditBtnClass = "dh-icon-button audit-trail-btn w130";
-				String auditBtnKey = "ecrf-user.button.audit-trail";
-				String auditBtnIconClass = "audit-icon";
-				String auditOnClickStr = "";
-				boolean auditDisabled = false;
-				
-				// check has crf data -> set disable
-				if(!hasCRF){
-					auditDisabled = true;
-				} else {
-					// check single data -> change onclick code
-					if(singleSdId>0) {
-						auditOnClickStr = "location.href='" + renderAuditCRFURL + "'";
-					} else {
-						auditOnClickStr = auditFunctionCallStr;
-					}	
-				}
-				
-				// check update lock -> change to view data / change icon, button text 
-				if(updateLock) {
-					auditBtnIconClass = "view-icon";
-					auditBtnKey = "ecrf-user.button.view-data";
 					
-					// check view data permission -> set disabled
-					if(!hasViewDataPermission) {
-						auditDisabled = true;
+				%>
+	
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.serial-id"
+				>
+					<p style="text-align: center; background-image: linear-gradient(to right, #11aaff <%=progressPercentage%>, #aaa 0%); margin-bottom: 0px; padding: 4px;"><%=String.valueOf(rowSubject.getSerialId()) %><liferay-ui:icon icon="info-sign" message="<%=progressPercentage%>" /></p>
+				</liferay-ui:search-container-column-text>
+				
+				<portlet:renderURL var="viewURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_CRF_DATA%>" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+					<portlet:param name="menu" value="<%=ECRFUserMenuConstants.VIEW_CRF_DATA %>" />	
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+				</portlet:renderURL>
+				<%
+					String name = rowSubject.getName();
+					boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+					if(!hasViewEncryptPermission)
+						name = ECRFUserUtil.encryptName(name);
+							
+					if(crfDataCount > 1){
+						name = name + " [" + crfDataCount  + "]";
 					}
-				} else {
-					// check view audit permission -> set disabled
-					if(!hasViewAuditPermission) {
-						auditDisabled = true;
-					}	
-				}
+				%>
+				<liferay-ui:search-container-column-text
+					cssClass="min-width-80"
+					name="ecrf-user.subject.name"
+					value="<%=Validator.isNull(rowSubject.getName()) ? "-" : name%>"
+				/>
 				
-				// check disable -> change btn class, onclick str
-				if(auditDisabled) {
-					auditBtnClass = "dh-icon-button w130 inactive";
-					auditOnClickStr = "";
-				}
-			%>
-			
-			<!-- Audit trail button -->
-			<liferay-ui:search-container-column-text 
-				name="ecrf-user.list.audit-trail"
-				cssClass="min-width-80"
-			>
-				<button class="<%=auditBtnClass %>" onclick="<%=auditOnClickStr %>" name="auditCRF" <%=auditDisabled ? "disabled" : "" %>>
-					<img class="<%=auditBtnIconClass%>" />
-					<span><liferay-ui:message key="<%=auditBtnKey%>"/></span>				
-				</button>	
-			</liferay-ui:search-container-column-text>
-			
-			<%
-				// check has CRF
-				// check sinlge crf data
-				// check update lock
-				// check delete permission
-			
-				String CRFDeleteBtnClass = "";
-				String deleteOnClickStr = "";
-			
-				long singleLinkId = 0;
-				if(links.size() < 2 && links.size() > 0) {
-					LinkCRF getLink = links.get(0);
-					singleLinkId = getLink.getLinkId();
-				}
+				<%
+					String genderStrKey = "";
+					if(Validator.isNull(rowSubject.getGender())) {
+						genderStrKey = "-";
+					} else {
+						if(rowSubject.getGender() == 0) {
+							genderStrKey = "ecrf-user.general.male";
+						} else {
+							genderStrKey = "ecrf-user.general.female";
+						}
+					}
+				%>
 				
-				String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 2, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
-				String deleteSingleFunctionCallStr = String.format("deleteSingleCRF(%d, %d, '%s', '%s')", singleLinkId, crfId, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.gender"	
+				>
+					<liferay-ui:message key="<%=genderStrKey %>"></liferay-ui:message>
+				</liferay-ui:search-container-column-text>
 				
-				if(hasCRF) {
-					CRFDeleteBtnClass = "delete-btn small-btn";
-				} else {
-					CRFDeleteBtnClass = "none-btn small-btn";
-				}
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.birth"
+					value="<%=Validator.isNull(rowSubject.getBirth()) ? "-" : sdf.format(rowSubject.getBirth()) %>"
+				/>
 				
-				if(updateLock) {
-					CRFDeleteBtnClass = "none-btn small-btn";
-				}
-
-				boolean deleteDisable = true;
-				if(!updateLock && hasCRF) deleteDisable = false;
-			%>
-			
-			<liferay-ui:search-container-column-text 
-				name="ecrf-user.list.delete"
-				cssClass="min-width-80"
-			>
-			<c:choose>
-				<c:when test="<%=(links.size() < 2 && links.size() > 0) %>">
-					<a class="<%= updateLock ? "dh-icon-button inactive w130" : "dh-icon-button delete-btn w130"%>" onclick="<%=updateLock ? "javascript:void(0);" : deleteSingleFunctionCallStr %>" name="deleteCRF">
-            			<img class="<%=updateLock ? "delete-icon-inactive" : "delete-icon" %>"/>
-						<c:if test="<%=updateLock %>">
-							<span>Locked</span>
-						</c:if>
-						<c:if test="<%=!updateLock %>">
-							<span>Delete</span>
-						</c:if>			
-					</a>	
-				</c:when>
-				<c:otherwise>
-					<a class="<%= updateLock ? "dh-icon-button inactive w130" : "dh-icon-button delete-btn w130"%>" onclick="<%=updateLock ? "javascript:void(0);" : deleteFunctionCallStr %>" name="deleteCRF">
-           				<img class="<%=updateLock ? "delete-icon-inactive" : "delete-icon" %>"/>
-						<c:if test="<%=updateLock %>">
-							<span>Locked</span>
-						</c:if>
-						<c:if test="<%=!updateLock %>">
-							<span>Delete</span>
-						</c:if>			
-					</a>	
-				</c:otherwise>	
-			</c:choose>
-			</liferay-ui:search-container-column-text>
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.progress"
+				>
+					<img src="<%= progressSrc%>" width="50%" height="auto" style="min-width:60px;"/>			
+				</liferay-ui:search-container-column-text>	
+				
+				<%	// Permission and Update Lock Check
+					boolean hasAddPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF_DATA);	
+					boolean hasUpdatePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_DATA);
+					boolean hasViewAuditPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_AUDIT);
+					boolean hasViewDataPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA);
+					boolean hasDeletePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_CRF_DATA);
+					
+					boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, rowSubjectId);
+					//_log.info(rowSubject.getSerialId() + " update lock : " + updateLock);
+				%>
+				
+				<!-- DB Lock -->
+				<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_CHANGE_UPDATE_LOCK %>" var="changeUpdateLock">
+					<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA_UPDATE %>" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+				</portlet:actionURL>
+				
+				<%
+					String lockBtnKey = "ecrf-user.button.db-lock";
+					String lockIcon = "db-lock-icon";
+					String lockClass = "dh-icon-button db-lock-btn w130";
+					String dblockOnClickStr = "location.href='"+changeUpdateLock+"'";
+					boolean isLockDisabled = false;
+					
+					// check update lock
+					if(updateLock) {
+						lockBtnKey = "ecrf-user.button.db-unlock";
+						lockIcon = "db-unlock-icon";
+					}
+					
+					// check permission
+					if(!hasUpdatePermission) {
+						isLockDisabled = true;
+					}
+					
+					if(isLockDisabled) {
+						lockClass = "dh-icon-button inactive w130";
+						dblockOnClickStr = "";
+					}
+					
+					
+				%>
+	
+				<liferay-ui:search-container-column-text
+					name="ecrf-user.list.db-lock"
+					cssClass="min-width-80"
+				>			 
+					<button class="<%=lockClass %>" onclick="<%=dblockOnClickStr %>" id="dblock" <%=isLockDisabled ? "disabled" : "" %>>
+						<img class="<%=lockIcon %>" />
+						<span><liferay-ui:message key="<%=lockBtnKey %>"/></span>			
+					</button>
+				
+				</liferay-ui:search-container-column-text>
+				<!-- DB Lock -->
+				
+				<!-- Data Update -->
+				<%
+					// change render command name by ui layout
+					int uiLayoutId = CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout();
+					String commandName = ECRFUserMVCCommand.RENDER_VIEW_CRF_DATA;
+					
+					if(uiLayoutId == UILayout.TABLE.getNum() || uiLayoutId == UILayout.VERTICAL.getNum()){
+						commandName = ECRFUserMVCCommand.RENDER_CRF_VIEWER;
+					}
+				%>
+				
+				<portlet:renderURL var="renderAddCRFURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=commandName%>" />
+					<portlet:param name="fromFlag" value="selector-add" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+					<portlet:param name="structuredDataId" value="0" />			
+					<portlet:param name="menu" value="<%=ECRFUserMenuConstants.ADD_CRF_DATA %>" />
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+				</portlet:renderURL>
+				
+				<%
+					String CRFAddBtnClass = "dh-icon-button w130 add-btn";			
+					String addDataBtnKey = "ecrf-user.button.insert-data";				
+					String addOnClickStr = "location.href='" + renderAddCRFURL + "'";
+					boolean isAddDisabled = false;
+					
+					// check update lock
+					if(updateLock) {
+						isAddDisabled = true;
+					}
+					
+					// check permission
+					if(!hasAddPermission) {
+						isAddDisabled = true;
+					}
+					
+					if(isAddDisabled) {
+						CRFAddBtnClass = "dh-icon-button w130 inactive";
+						addDataBtnKey = "ecrf-user.button.locked";
+						addOnClickStr = "";
+					}
+				%>
+				
+				<liferay-ui:search-container-column-text 
+					name="ecrf-user.list.crf-data"
+					cssClass="min-width-80"
+				>	
+				<c:if test="">
+				</c:if>
+					<button class="<%=CRFAddBtnClass%>" onclick="<%=addOnClickStr%>" id="addCRF" <%=isAddDisabled ? "disabled" : "" %>>
+	          			<img class="add-icon<%=TagAttrUtil.inactive(isAddDisabled, TagAttrUtil.TYPE_ICON) %>" />
+						<span><liferay-ui:message key="<%=addDataBtnKey %>"/></span>	
+					</button>
+				</liferay-ui:search-container-column-text>
+				
+				<%	// check data count & get link id when only one data exist
+					List<LinkCRF> links = LinkCRFLocalServiceUtil.getLinkCRFByC_S(crfId, rowSubjectId);
+					
+					long singleSdId = 0;
+					if(crfDataCount == 1){
+						LinkCRF getLink = links.get(0);
+						singleSdId = getLink.getStructuredDataId();
+					}
+				%>
+				
+				<portlet:renderURL var="renderUpdateCRFURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=commandName%>" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+					<portlet:param name="sdId" value="<%=String.valueOf(singleSdId) %>" />				
+					<portlet:param name="structuredDataId" value="<%=String.valueOf(singleSdId) %>" />				
+					<portlet:param name="menu" value="<%=ECRFUserMenuConstants.UPDATE_CRF_DATA %>" />
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+				</portlet:renderURL>
+				
+				<%
+					String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 0, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+					
+					String CRFUpdateBtnClass = "dh-icon-button w130 update-btn";
+					String updateDataBtnKey = "ecrf-user.button.update-data";
+					String updateOnClickStr = "";
+					
+					boolean isUpdateDisabled = false;
+					
+					// check data is exist
+					if(!hasCRF) {
+						isUpdateDisabled = true;
+					} else {
+						// check data count, change onclick code
+						if(singleSdId > 0) {	// only one data
+							updateOnClickStr = "location.href='" + renderUpdateCRFURL + "'";
+						} else if(crfDataCount > 1) {	// multiple data
+							updateOnClickStr = updateFunctionCallStr;
+						}	
+					}
+					
+					// check update lock -> change button span label key, set disabled
+					if(updateLock) {
+						updateDataBtnKey = "ecrf-user.button.locked";
+						isUpdateDisabled = true;
+					}
+					
+					if(!hasUpdatePermission) {
+						isUpdateDisabled = true;
+					}
+					
+					// change button class and onclick code
+					if(isUpdateDisabled) {
+						CRFUpdateBtnClass = "dh-icon-button w130 inactive";
+						updateOnClickStr = "";
+					}
+				%>
+				
+				<liferay-ui:search-container-column-text 
+					name="ecrf-user.list.crf-data"
+					cssClass="min-width-80"
+				>
+					<button class="<%=CRFUpdateBtnClass%>" onclick="<%=updateOnClickStr %>" id="updateCRF" <%=isUpdateDisabled ? "disabled" : "" %> >		
+						<img class="update-icon<%=TagAttrUtil.inactive(isUpdateDisabled, TagAttrUtil.TYPE_ICON) %>" />
+						<span><liferay-ui:message key="<%=updateDataBtnKey %>"/></span>			
+					</button>
+				</liferay-ui:search-container-column-text>
+				<!-- Data Update -->
+				
+				<portlet:renderURL var="renderAuditCRFURL">
+					<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_CRF_VIEWER%>" />
+					<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+					<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(rowSubjectId) %>" />
+					<portlet:param name="sdId" value="<%=String.valueOf(singleSdId) %>" />				
+					<portlet:param name="structuredDataId" value="<%=String.valueOf(singleSdId) %>" />
+					<portlet:param name="isAudit" value="1" />			
+					<portlet:param name="menu" value="<%=ECRFUserMenuConstants.VIEW_CRF_DATA%>" />
+					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+				</portlet:renderURL>
+				
+				<%
+					String auditFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 1, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+				
+					// default setting -> audit trail
+					String auditBtnClass = "dh-icon-button audit-trail-btn w130";
+					String auditBtnKey = "ecrf-user.button.audit-trail";
+					String auditBtnIconClass = "audit-icon";
+					String auditOnClickStr = "";
+					boolean isAuditDisabled = false;
+					
+					// check has crf data -> set disable
+					if(!hasCRF){	// no data
+						isAuditDisabled = true;
+					} else {
+						// check single data -> change onclick code
+						if(singleSdId>0) {	// only one data
+							auditOnClickStr = "location.href='" + renderAuditCRFURL + "'";
+						} else if(crfDataCount > 1) { // more than one data
+							auditOnClickStr = auditFunctionCallStr;
+						}	
+					}
+					
+					// check update lock -> change to view data / change icon, button text 
+					if(updateLock) {
+						auditBtnIconClass = "view-icon";
+						auditBtnKey = "ecrf-user.button.view-data";
+						
+						// check view data permission -> set disabled
+						if(!hasViewDataPermission) {
+							isAuditDisabled = true;
+						}
+					} else {
+						// check view audit permission -> set disabled
+						if(!hasViewAuditPermission) {
+							isAuditDisabled = true;
+						}	
+					}
+					
+					// check disable -> change btn class, onclick str
+					if(isAuditDisabled) {
+						auditBtnClass = "dh-icon-button w130 inactive";
+						auditOnClickStr = "";
+						auditBtnIconClass += TagAttrUtil.inactive(isAuditDisabled, TagAttrUtil.TYPE_ICON);
+					}
+				%>
+				
+				<!-- Audit trail button -->
+				<liferay-ui:search-container-column-text 
+					name="ecrf-user.list.audit-trail"
+					cssClass="min-width-80"
+				>
+					<button class="<%=auditBtnClass %>" onclick="<%=auditOnClickStr %>" id="auditCRF" <%=isAuditDisabled ? "disabled" : "" %>>
+						<img class="<%=auditBtnIconClass%>" />
+						<span><liferay-ui:message key="<%=auditBtnKey%>"/></span>				
+					</button>	
+				</liferay-ui:search-container-column-text>
+				
+				<%
+					String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 2, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
+					String deleteSingleFunctionCallStr = String.format("deleteSingleCRF(%d, %d, '%s', '%s')", singleSdId, crfId, themeDisplay.getPortletDisplay().getId(), baseURL.toString());				
+				
+					String deleteBtnClass = "dh-icon-button w130 delete-btn";
+					String deleteBtnKey = "ecrf-user.button.delete-crf-data";
+					String deleteOnClickStr = "";
+					boolean isDeleteDisabled = false;
+					
+					// check has CRF
+					if(!hasCRF) {	// no data
+						isDeleteDisabled = true;
+					} else {					
+						// check data count, change onclick code
+						if(singleSdId > 0) {	// only one data
+							deleteOnClickStr = deleteSingleFunctionCallStr;
+						} else if(crfDataCount > 1) {	// more than one data
+							deleteOnClickStr = deleteFunctionCallStr;
+						}	
+					}
+					
+					// check update lock
+					if(updateLock) {
+						deleteBtnKey = "ecrf-user.button.locked";
+						isDeleteDisabled = true;
+					}
+					
+					// check delete permission
+					if(!hasDeletePermission) {
+						isDeleteDisabled = true;
+					}
+	
+					if(isDeleteDisabled) {
+						deleteBtnClass = "dh-icon-button w130 inactive";
+						deleteOnClickStr = "";
+					}
+				%>
+				
+				<liferay-ui:search-container-column-text 
+					name="ecrf-user.list.delete"
+					cssClass="min-width-80"
+				>
+					<button class="<%=deleteBtnClass%>" onclick="<%=deleteOnClickStr%>" id="deleteCRF" <%=isDeleteDisabled ? "disabled" : "" %>>
+	           			<img class="delete-icon<%=TagAttrUtil.inactive(isDeleteDisabled, TagAttrUtil.TYPE_ICON)%>"/>
+						<span><liferay-ui:message key="<%=deleteBtnKey%>"/></span>
+					</button>				
+	
+				</liferay-ui:search-container-column-text>
 			
 			</liferay-ui:search-container-row>
 			
@@ -644,7 +642,10 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 			</liferay-portlet:actionURL>
 			
-			<aui:button type="button" name="deleteAll" value="Delete All CRF Data" cssClass="delete-btn medium-btn radius-btn marTr" onClick="<%=deleteAllCRFDataURL %>"></aui:button>
+			<button class="dh-icon-button delete-btn marTr w200" id="deleteCRF" onclick="location.href='<%=deleteAllCRFDataURL%>'">
+      			<img class="delete-icon"/>
+				<span><liferay-ui:message key="ecrf-user.button.delete-all-crf-data"/></span>
+			</button>
 		</c:if>
 	</div>
 </div>
@@ -692,6 +693,7 @@ Liferay.provide(window, "openValidPopup", function() {
 	
 }, ['aui-modal']
 );
+
 function deleteSingleCRF(linkCrfId, crfId, portletId, baseURL){
 	$.confirm({
 		title: '<liferay-ui:message key="ecrf-user.message.confirm-delete-crf-data.title"/>',
@@ -734,21 +736,7 @@ A.one('#<portlet:namespace/>search').on('click', function() {
 		var form = $('#<portlet:namespace/>searchOptionFm');
 		form.submit();
 	} else if(!isBirthDateValid) {
-	
 		openValidPopup();
-		/*
-		var dialog = new A.Modal({
-			headerContent: '<h3><liferay-ui:message key="Date validation"/></h3>',
-			bodyContent: '<span style="color:red;"><liferay-ui:message key="Start Date is greater than End Date"/></span>',
-			centered: true,
-			modal: true,
-			height: 200,
-			width: 400,
-			render: '#body-div',
-			zIndex: 1100,
-			close: true
-		}).render();
-		*/
 	}
 });
 </aui:script>

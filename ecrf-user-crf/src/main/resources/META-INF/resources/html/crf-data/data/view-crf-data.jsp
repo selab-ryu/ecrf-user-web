@@ -2,41 +2,40 @@
 <%@page import="com.sx.icecap.constant.IcecapWebPortletKeys"%>
 <%@ include file="../../init.jsp" %>
 
-<%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/update-crf-data_jsp"); %>
+<%! private static Log _log = LogFactoryUtil.getLog("ecrf-user-crf/html/crf/view-crf-data_jsp"); %>
 
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 	
+	DataType dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+
 	long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0);
+	Subject subject = (Subject)renderRequest.getAttribute(ECRFUserCRFDataAttributes.SUBJECT);
+	LinkCRF linkCRF = (LinkCRF)renderRequest.getAttribute(ECRFUserCRFDataAttributes.LINK_CRF);
+	String fromFlag = ParamUtil.getString(renderRequest, "fromFlag", "");
+	String cmd = ParamUtil.getString(renderRequest, "command", "add");
+	long sdId = ParamUtil.getLong(renderRequest, "structuredDataId", 0);
+	
+	String dataStructure = (String)renderRequest.getAttribute(ECRFUserCRFDataAttributes.DATA_STRUCTURE);
+	String structuredData = (String)renderRequest.getAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA);
 	
 	_log.info("view-crf / subject id: "+subjectId);
-	String fromFlag = ParamUtil.getString(renderRequest, "fromFlag", "");
+	_log.info("cmd ? " + cmd);
 	
-	Subject subject = null;
-	LinkCRF linkCRF = null;
+	_log.info("dataTypeId : " + dataTypeId);
+	_log.info("linkCRF : " + linkCRF);
+	//_log.info("dataStructure : " + dataStructure);
+	
+	_log.info("redirect : " + redirect);
 	
 	boolean isUpdate = false;
 	
-	if(subjectId > 0) {
-		
-		subject = (Subject)renderRequest.getAttribute(ECRFUserCRFDataAttributes.SUBJECT);
-		linkCRF = (LinkCRF)renderRequest.getAttribute(ECRFUserCRFDataAttributes.LINK_CRF);
-	}
-	_log.info("dataTypeId : " + dataTypeId);
-	_log.info("linkCRF : " + linkCRF);
-	
-	String cmd = ParamUtil.getString(renderRequest, "command", "add");
-	_log.info("cmd ? " + cmd);
-	long sdId = ParamUtil.getLong(renderRequest, "structuredDataId", 0);
-
 	if(linkCRF != null){
 		sdId = linkCRF.getStructuredDataId();
 		isUpdate = true;
 	}
-	if(fromFlag.equals("selector-add")){
-		sdId = 0;
-	}
-	String menu = "update-crf-data";
+	
+	String menu = ECRFUserMenuConstants.UPDATE_CRF_DATA;
 	
 	String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 	
@@ -108,13 +107,61 @@
 	</div>
 </div>
 
-<script>
+<aui:script use="aui-base, liferay-form, liferay-menu, liferay-portlet-url">
+
 $(document).ready(function(){
-	$("#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_btnDelete").hide();
+	let sdPortletKey = "_<%=sdPortlet %>_";
+	console.log(sdPortletKey); 
+	
+	var btn = $("#"+sdPortletKey+"btnSave");
+	btn.attr("class", "dh-icon-button save-btn w80");
+	//btn.css("background-color", "#0B5FFF");
+	//btn.css("color", "white");
+	
+	$("#"+sdPortletKey+"btnDelete").hide();
+	
+	let dataStructure = <%= dataStructure %>;
+	let structuredData = <%= Validator.isNotNull(structuredData) %> ? JSON.parse('<%= structuredData %>') : null;
+	
+	let SX_CRF =  StationX(  sdPortletKey, 
+			'<%= defaultLocale.toString() %>',
+			'<%= locale.toString() %>',
+			<%= jsonLocales.toJSONString() %> );
+
+	//console.log("SX_CRF", SX_CRF);
+
+	let profile = {
+			dataTypeId: '<%= dataType.getDataTypeId() %>',
+			dataTypeName:  '<%= dataType.getDataTypeName() %>',
+			dataTypeVersion:  '<%= dataType.getDataTypeVersion() %>',
+			dataTypeDisplayName:  '<%= dataType.getDisplayName(locale) %>',
+			structuredDataId: '<%= sdId %>'
+	};
+	//console.log(profile);
+	
+	let ev = ECRFViewer(SX_CRF);
+	
+	console.log("ECRFViewer: ", ev);
+	
+	let align = "crf-align-vertical";
+	
+	let subjectInfo = new Object();
+	let subjectGender = <%=subject.getGender()%>;
+	let subjectBirth = new Date(<%=subject.getBirth().getTime()%>);
+	subjectInfo["subjectGender"] = subjectGender;
+	subjectInfo["subjectBirth"] = subjectBirth;
+	
+	console.log("data structure : ", dataStructure);
+	
+	let viewer = new ev.Viewer(dataStructure, align, structuredData, subjectInfo, false, 'station-x');
+	
+	Liferay.on( SX_CRF.Events.AUTO_CALCULATE, function(evt){
+		console.log("crf : auto calculate", evt);
+		
+		let payload = evt.dataPacket.payload; 
+		
+		ev.autoCalUtil.checkAutoCal(payload.after, evt.dataPacket.sourcePortlet);
+	});
 });
-Liferay.on( 'SX_VISUALIZER_DATA_CHANGED', function(evt){
-	var btn = $("#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_btnSave");
-	btn.css("background-color", "#0B5FFF");
-	btn.css("color", "white");
-});
-</script>
+
+</aui:script>

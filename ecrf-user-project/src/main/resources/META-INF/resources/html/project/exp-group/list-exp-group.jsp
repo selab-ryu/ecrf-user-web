@@ -213,7 +213,7 @@ if(isSearch) {
 				cssClass="min-width-80"
 			>			
 				
-				<a class="<%= !hasUpdatePermission ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" href="<%=updateExpGroupURL %>" name="updateExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
+				<a class="<%= !hasUpdatePermission ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" href="<%=updateExpGroupURL %>" id="updateExpGroup" disabled="<%=hasUpdatePermission ? false : true %>">
 					<img class="update-icon<%=TagAttrUtil.inactive(hasUpdatePermission)%>" />
 					<span><liferay-ui:message key="ecrf-user.button.update" /></span>
 				</a>
@@ -232,7 +232,7 @@ if(isSearch) {
 				String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 				String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
 			%>
-				<a class="<%= !hasDeletePermission ? "dh-icon-button inactive w130" : "dh-icon-button delete-btn w130"%>" onClick="<%=deleteFunctionCall %>" name="deleteExpGroup" disabled="<%=hasDeletePermission ? false : true %>">
+				<a class="<%= !hasDeletePermission ? "dh-icon-button inactive w130" : "dh-icon-button delete-btn w130"%>" onClick="<%=deleteFunctionCall %>" id="deleteExpGroup" disabled="<%=hasDeletePermission ? false : true %>">
 					<img class="delete-icon<%=TagAttrUtil.inactive(hasDeletePermission)%>" />
 					<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 				</a>
@@ -251,7 +251,7 @@ if(isSearch) {
 		
 		<c:if test="<%=hasAddPermission %>">
 		<aui:button-row>
-			<a class="dh-icon-button submit-btn add-btn w110 h36 marR8" href="<%=addExpGroupURL %>" name="<portlet:namespace/>addExp">
+			<a class="dh-icon-button submit-btn add-btn w110 h36 marR8" href="<%=addExpGroupURL %>" id="<portlet:namespace/>addExp">
 				<img class="add-icon<%=TagAttrUtil.inactive(hasAddPermission)%>" />
 				<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 			</a>

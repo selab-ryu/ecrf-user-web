@@ -295,6 +295,7 @@ if(isSearch) {
 		<liferay-ui:search-iterator />
 		
 		</liferay-ui:search-container>
+		
 	</div>
 </div>
 

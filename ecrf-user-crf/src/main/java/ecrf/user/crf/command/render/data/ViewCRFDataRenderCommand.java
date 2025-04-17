@@ -60,12 +60,7 @@ public class ViewCRFDataRenderCommand implements MVCRenderCommand {
 		
 		CRF crf = null;
 		long dataTypeId = 0;
-		
-		JSONArray crfForm = null;	// crf form
-		JSONObject answerForm = null;	// crf data
-		
-		String crfFormStr = "";
-		
+			
 		try {
 			if(subjectId > 0) {
 				subject = _subjectLocalService.getSubject(subjectId);
@@ -96,44 +91,37 @@ public class ViewCRFDataRenderCommand implements MVCRenderCommand {
 			throw new PortletException("Cannot find subject : " + crfId);
 		}
 		
+		JSONObject answerForm = null;	// crf data
+		
+		String dataStructure = "";		
 		// get crf form (datatype structure)
 		try {
-			crfFormStr = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
+			dataStructure = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
+			renderRequest.setAttribute(ECRFUserCRFDataAttributes.DATA_STRUCTURE, dataStructure);
 		} catch (Exception dataTypeEx) {
 			dataTypeEx.printStackTrace();
 		}
 		
+		String strcutureData = "";
 		// get crf data (structured data)
-		if(sdId > 0) { 
-			String answerFormStr = _dataTypeLocalService.getStructuredData(sdId);
-			
+		if(sdId > 0) {
 			try {
-				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(crfFormStr);
-				crfForm = jsonObject.getJSONArray("terms");
-				answerForm = JSONFactoryUtil.createJSONObject(answerFormStr);
-				
-				renderRequest.setAttribute(ECRFUserCRFDataAttributes.ANSWER_FORM, answerForm);
+				String structuredData = _dataTypeLocalService.getStructuredData(sdId);				
+				renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA, strcutureData);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else {
-			try {
-				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(crfFormStr);
-				crfForm = jsonObject.getJSONArray("terms");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}			
-		}
+		} 
 		
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.SUBJECT, subject);
 		renderRequest.setAttribute("SubjectLocalService", _subjectLocalService);
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.LINK_CRF, linkCRF);
 		renderRequest.setAttribute("LinkCRFLocalService", _linkCRFLocalService);
-		renderRequest.setAttribute(ECRFUserCRFDataAttributes.CRF_ID, crfId);
-		renderRequest.setAttribute("fromFlag", fromFlag);
 		
-		renderRequest.setAttribute(ECRFUserCRFDataAttributes.CRF_FORM, crfForm);
-		renderRequest.setAttribute("none", "¹Ì½ÃÇà");
+		renderRequest.setAttribute(ECRFUserCRFDataAttributes.CRF_ID, crfId);
+		
+		renderRequest.setAttribute("fromFlag", fromFlag);
+		renderRequest.setAttribute("none", "ï¿½Ì½ï¿½ï¿½ï¿½");
 		
 		return ECRFUserJspPaths.JSP_VIEW_CRF_DATA;
 	}

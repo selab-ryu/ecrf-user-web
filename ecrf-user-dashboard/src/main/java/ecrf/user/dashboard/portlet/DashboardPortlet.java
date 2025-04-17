@@ -13,6 +13,7 @@ import com.sx.icecap.service.DataTypeLocalService;
 import com.sx.icecap.service.StructuredDataLocalService;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -109,7 +110,19 @@ public class DashboardPortlet extends MVCPortlet {
 				
 				Date visitDate = null;
 				if(Validator.isNotNull(answerObj) && answerObj.has("visit_date")){
-					visitDate = new Date(Long.valueOf(answerObj.getString("visit_date")));
+					String visitDateStr = answerObj.getString("visit_date");
+					
+					try {
+						visitDate = new Date(Long.valueOf(visitDateStr));
+					} catch(NumberFormatException nfe) {
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						try {
+							visitDate = format.parse(visitDateStr);
+						} catch(ParseException pe) {
+							pe.printStackTrace();
+						}
+					}
+					
 					//_log.info(sdf.format(visitDate));
 					
 					Calendar cal = Calendar.getInstance();
@@ -184,7 +197,7 @@ public class DashboardPortlet extends MVCPortlet {
 		
 		List<String> keySet = new ArrayList<>(map.keySet());
 
-        // value °ªÀ¸·Î ¿À¸§Â÷¼ø Á¤·Ä
+        // value ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         keySet.sort((o1, o2) -> map.get(o1).compareTo(map.get(o2)));
 		
 		for(String key : keySet) {

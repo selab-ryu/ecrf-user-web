@@ -238,7 +238,6 @@ if(isUpdate) {
 					<aui:field-wrapper
 						name="<%=ECRFUserSubjectAttributes.PHONE %>"
 						label="ecrf-user.subject.phone1"
-						required="true"
 					>
 					</aui:field-wrapper>
 				</aui:col>
@@ -275,7 +274,6 @@ if(isUpdate) {
 					<aui:field-wrapper
 						name="<%=ECRFUserSubjectAttributes.HOSPITAL_CODE %>"
 						label="ecrf-user.subject.hospital-code"
-						required="true"
 					>
 					</aui:field-wrapper>
 				</aui:col>
@@ -333,7 +331,7 @@ if(isUpdate) {
 						<c:when test="<%=isUpdate %>">
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_SUBJECT) %>">
-							<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>save">
+							<button type="button" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>save">
 								<img class="save-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 							</button>
@@ -345,7 +343,7 @@ if(isUpdate) {
 								String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 								String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteSubjectURL.toString());
 							%>
-							<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="delete">
+							<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="<portlet:namespace/>delete">
 								<img class="delete-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 							</a>
@@ -355,7 +353,7 @@ if(isUpdate) {
 						<c:otherwise>
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
-							<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>save">
+							<button type="button" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>save">
 								<img class="add-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 							</button>
@@ -364,9 +362,9 @@ if(isUpdate) {
 						</c:otherwise>
 						</c:choose>
 								
-						<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=updateListURL %>" name="<portlet:namespace/>cancel">
+						<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=updateListURL %>" id="<portlet:namespace/>cancel">
 							<img class="cancel-icon" />					
-							<span style="color:black;"><liferay-ui:message key="ecrf-user.button.cancel" /></span>
+							<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 						</a>
 					</aui:button-row>
 				</aui:col>
@@ -378,23 +376,108 @@ if(isUpdate) {
 
 </div>
 
-<aui:script use="aui-base">
+<aui:script use="aui-base aui-form-validator">
+
+var validator = null;
+
+var DEFAULTS_FORM_VALIDATOR = A.config.FormValidator;
+
+var ValidCheck = true;
+
+function isValidDateString(dateStr) {
+	const regex = /^\d{4}\/\d{2}\/\d{2}$/;
+	if (!regex.test(dateStr)) return false;
+	
+	const date = new Date(dateStr);
+	//console.log("str: ", dateStr, " date: ", date);
+	
+	return !isNaN(date.getTime());
+}
+
+A.mix(
+	DEFAULTS_FORM_VALIDATOR.RULES,
+	{
+		birthRange: function(val, fieldNode, ruleValue) {
+			var result = false;
+			
+			// check empty value
+			if(val.trim().length !== 0) {
+				//console.log(val, fieldNode, ruleValue);
+				
+				// check date format
+				var isDate = isValidDateString(val);
+				//console.log(val, isDate);
+				
+				if(isDate) {
+					var date = new Date(val);
+					// check birth range (1900 ~ now)
+					const minDate = new Date('1900-01-01');
+  					const maxDate = new Date(); // current date
+  											
+					result = date >= minDate && date <= maxDate;
+				}
+			}
+						
+			ValidCheck = result;
+			
+			return result;
+		},
+	},
+	true
+);
+
+A.mix(
+	DEFAULTS_FORM_VALIDATOR.RULES,
+	{
+		serialId: function(val, fieldNode, ruleValue) {
+			var result = false;
+			
+			// check duplicate
+			$.ajax({
+				url: '<portlet:resourceURL id="<%= ECRFUserMVCCommand.RESOURCE_CHECK_SERIAL_ID %>"></portlet:resourceURL>',
+				type:'post',
+				dataType: 'json',
+			 	async: false,
+				data:{
+					<portlet:namespace/>groupId: '<%=scopeGroupId %>',
+					<portlet:namespace/>serialId: val,
+				},
+				success: function(obj){
+					//console.log(obj);
+					let isDuplicated = obj.duplicate;
+					if(isDuplicated === false) {
+						result = true;
+					}
+					
+				},
+				error: function(jqXHR, a, b){
+					console.log('Fail to check serial id duplication : <%=ECRFUserPortletKeys.SUBJECT %>'  );
+				}
+			});
+			
+			if(!result) validFocus(fieldNode);
+			ValidCheck = result;
+			
+			return result;
+		},
+	},
+	true
+);
+
 var rules = {
 	<portlet:namespace/>name: {
 		required:true
 	},
 	<portlet:namespace/>serialId: {
-		required:true
+		required:true,
+		serialId:true
 	},
 	<portlet:namespace/>birth: {
 		required:true,
-		date:true
+		birthRange:true
 	},
-	<portlet:namespace/>phone: {
-		required:true
-	},
-	<portlet:namespace/>hospitalCode: {
-		required:true
+	<portlet:namespace/>lunarBirth: {
+		birthRange:true
 	}
 };
 
@@ -403,34 +486,32 @@ var fieldStrings = {
 		required: '<p style="color:red;"><liferay-ui:message key="ecrf-user.validation.require"/></p>'
 	},
 	<portlet:namespace/>serialId: {
-		required: '<p style="color:red;"><liferay-ui:message key="ecrf-user.validation.require"/></p>'
+		required: '<p style="color:red;"><liferay-ui:message key="ecrf-user.validation.require"/></p>',
+		serialId: '<p style="color:red;"><liferay-ui:message key="ecrf-user.validation.serial-id"/></p>'
 	},
 	<portlet:namespace/>birth: {
 		required: '<p style="color:red;"><liferay-ui:message key="ecrf-user.validation.require"/></p>',
-		date: '<p><liferay-ui:message key="ecrf-user.validation.date"/></p>'
+		birthRange: '<p><liferay-ui:message key="ecrf-user.validation.date"/></p>'
 	},
-	<portlet:namespace/>phone: {
-		required: '<p style="color:red;"><liferay-ui:message key="ecrf-user.validation.require"/></p>'
-	},
-	<portlet:namespace/>hospitalCode: {
-		required: '<p style="color:red;"><liferay-ui:message key="ecrf-user.validation.require"/></p>'
+	<portlet:namespace/>lunarBirth: {
+		birthRange: '<p><liferay-ui:message key="ecrf-user.validation.date"/></p>'
 	}
 };
 
-var validator = new A.FormValidator({
+validator = new A.FormValidator({
 	boundingBox: document.<portlet:namespace/>updateSubjectFm,
 	fieldStrings: fieldStrings,
 	rules: rules
 });
 
+
 A.one("#<portlet:namespace/>save").on("click", function(event) {
+	
 	var submitValid = true;
 			
 	let name = A.one('#<portlet:namespace/>name');
 	let serialId = A.one('#<portlet:namespace/>serialId');
 	let birth = A.one('#<portlet:namespace/>birth');
-	let phone = A.one('#<portlet:namespace/>phone');
-	let hospitalCode = A.one('#<portlet:namespace/>hospitalCode');
 	
 	// check value
 	if(name.val().trim().length === 0) {
@@ -442,17 +523,11 @@ A.one("#<portlet:namespace/>save").on("click", function(event) {
 	} else if(birth.val().trim().length === 0) {
 		submitValid = false;
 		validFocus(birth);
-	} else if(phone.val().trim().length === 0) {
-		submitValid = false;
-		validFocus(phone);
-	} else if(hospitalCode.val().trim().length === 0) {
-		submitValid = false;
-		validFocus(hospitalCode);
 	}
 			
 	var form = A.one('#<portlet:namespace/>updateSubjectFm');
 	
-	if(submitValid) {
+	if(ValidCheck && submitValid) {
 		form.submit(); 
 	}
 });
@@ -478,8 +553,9 @@ $(document).ready(function() {
 			format: 'Y/m/d',
 			timepicker: false,
 			onChangeDateTime: function(dateText, inst){
-				let dateValue = $("#<portlet:namespace/>birth").datetimepicker("getValue");
-				console.log();
+				let dateValue = $("#<portlet:namespace/>birth").datetimepicker("getValue");			
+				console.log(dateValue);
+				
 				let age = now.getFullYear() - dateValue.getFullYear()
 				if(now.getTime() - dateValue.getTime() < 0){
 					alert("Birth must be in the past than present");
@@ -502,8 +578,8 @@ $(document).ready(function() {
 			}
 	}
 	$("#<portlet:namespace/>birth").datetimepicker(options);
-	
 	$("#<portlet:namespace/>birth").mask("0000/00/00");
+	
 	$("#<portlet:namespace/>lunarBirth").mask("0000/00/00");
 	$("#<portlet:namespace/>lunarBirth").on("change", function(event){
 		let value = $("#<portlet:namespace/>lunarBirth").val();

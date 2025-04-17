@@ -249,7 +249,7 @@
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 									
-				<a class="dh-icon-button submit-btn crf-form-btn w130 h36 marR8" href="<%=moveCRFFormURL %>" name="<portlet:namespace/>moveForm">
+				<a class="dh-icon-button submit-btn crf-form-btn w130 h36 marR8" href="<%=moveCRFFormURL %>" id="<portlet:namespace/>moveForm">
 					<img class="crf-form-icon" />					
 					<span><liferay-ui:message key="ecrf-user.menu.crf-builder" /></span>
 				</a>
@@ -264,7 +264,7 @@
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 				
-				<a class="dh-icon-button submit-btn crf-data-btn w130 h36 marR8" href="<%=moveCRFDataURL%>" name="<portlet:namespace/>moveData">
+				<a class="dh-icon-button submit-btn crf-data-btn w130 h36 marR8" href="<%=moveCRFDataURL%>" id="<portlet:namespace/>moveData">
 					<img class="crf-data-icon" />					
 					<span><liferay-ui:message key="ecrf-user.menu.crf-data" /></span>
 				</a>
@@ -278,7 +278,7 @@
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 				
-				<a class="dh-icon-button submit-btn crf-query-btn w130 h36 marR8" href="<%=moveCRFQueryURL %>" name="<portlet:namespace/>moveQuery">
+				<a class="dh-icon-button submit-btn crf-query-btn w130 h36 marR8" href="<%=moveCRFQueryURL %>" id="<portlet:namespace/>moveQuery">
 					<img class="crf-query-icon" />					
 					<span><liferay-ui:message key="ecrf-user.menu.crf-query" /></span>
 				</a>
@@ -296,7 +296,7 @@
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a class="dh-icon-button submit-btn import-subject-btn w180 h36 marR8" href="<%=moveImportSubjectsURL %>" name="<portlet:namespace/>ImportSubject">
+					<a class="dh-icon-button submit-btn import-subject-btn w180 h36 marR8" href="<%=moveImportSubjectsURL %>" id="<portlet:namespace/>ImportSubject">
 						<img class="import-subject-icon" />		
 						<span><liferay-ui:message key="ecrf-user.button.crf.import-subject" /></span>
 					</a>
@@ -310,7 +310,7 @@
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a class="dh-icon-button submit-btn import-data-btn w180 h36 marR8" href="<%=moveImportDatasURL %>" name="<portlet:namespace/>ImportData">
+					<a class="dh-icon-button submit-btn import-data-btn w180 h36 marR8" href="<%=moveImportDatasURL %>" id="<portlet:namespace/>ImportData">
 						<img class="import-data-icon" />					
 						<span><liferay-ui:message key="ecrf-user.button.crf.import-data" /></span>
 					</a>
@@ -335,7 +335,7 @@
 						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteCRFURL.toString());
 					%>
-					<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+					<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="btnDelete">
 						<img class="delete-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 					</a>
@@ -353,7 +353,7 @@
 				
 				</c:otherwise>
 				</c:choose>
-				<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=listCRFURL %>" name="<portlet:namespace/>cancel">
+				<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=listCRFURL %>" id="<portlet:namespace/>cancel">
 					<img class="cancel-icon" />			
 					<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 				</a>

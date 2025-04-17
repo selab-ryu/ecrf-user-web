@@ -81,6 +81,7 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 		HttpSession session = httpServletRequest.getSession();
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Company company = themeDisplay.getCompany();
+		long groupId = themeDisplay.getScopeGroupId();
 		
 		ServiceContext linkServiceContext = ServiceContextFactory.getInstance(LinkCRF.class.getName(), actionRequest);
 		ServiceContext dataTypeServiceContext = ServiceContextFactory.getInstance(DataType.class.getName(), actionRequest);
@@ -93,8 +94,8 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 		
 		for(int i = 0; i < jsonArray.length(); i++) {
 			if(jsonArray.getJSONObject(i).has("visit_date")) {
-				String serialId = jsonArray.getJSONObject(i).getString("ID");
-				jsonArray.getJSONObject(i).remove("ID");
+				String serialId = jsonArray.getJSONObject(i).getString("id");
+				jsonArray.getJSONObject(i).remove("id");
 				JSONObject answerForm = jsonArray.getJSONObject(i);
 				Iterator<String> keys = answerForm.keys();
 				ArrayList<String> deleteKeys = new ArrayList<String>();
@@ -109,7 +110,10 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 				for(String deleteKey : deleteKeys) {
 					answerForm.remove(deleteKey);
 				}
-				Subject subject = _subjectLocalService.getSubjectBySerialId(serialId);
+				
+				//_log.info(answerForm.toJSONString());
+				
+				Subject subject = _subjectLocalService.getSubjectBySerialId(groupId, serialId);
 				if(Validator.isNotNull(subject)) {
 					StructuredData storedData = _dataTypeLocalService.addStructuredData(0, dataTypeId, answerForm.toJSONString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
 					_linkLocalService.addLinkCRF(subject.getSubjectId(), crfId, storedData.getStructuredDataId(), linkServiceContext);

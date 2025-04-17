@@ -77,6 +77,7 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 		HttpSession session = httpServletRequest.getSession();
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Company company = themeDisplay.getCompany();
+		long groupId = themeDisplay.getScopeGroupId();
 		
 		ServiceContext subjectServiceContext = ServiceContextFactory.getInstance(Subject.class.getName(), actionRequest);
 		ArrayList<CRFSubject> crfSubjectList = new ArrayList<CRFSubject>();
@@ -86,28 +87,51 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 		int addSubjectCount = 0;
 		
 		for(int i = 0; i < jsonArray.length(); i++) {
-			if(Validator.isNull(_subjectLocalService.getSubjectBySerialId(jsonArray.getJSONObject(i).getString("ID")))) {
-				String dateStr = jsonArray.getJSONObject(i).getString("Visit_date");
+			if(Validator.isNull(_subjectLocalService.getSubjectBySerialId(groupId, jsonArray.getJSONObject(i).getString("id")))) {
+				String dateStr = jsonArray.getJSONObject(i).getString("visit_date");
+				String birthStr = jsonArray.getJSONObject(i).getString("birth");
+				
+				boolean existBirth = false;
+				boolean existVisitDate = false;
+				if(Validator.isNotNull(birthStr) || !birthStr.equals("")) existBirth = true;
+				if(Validator.isNotNull(dateStr) || !dateStr.equals("")) existVisitDate = true;
 	
-				if(Validator.isNotNull(dateStr) || !dateStr.equals("")) {
-					String name = jsonArray.getJSONObject(i).getString("Name");
-					String serialId = jsonArray.getJSONObject(i).getString("ID");
-					int age = jsonArray.getJSONObject(i).getInt("Age");
-					int gender = 0;
+				if(existBirth || existVisitDate) {
+					String name = jsonArray.getJSONObject(i).getString("name");
+					String serialId = jsonArray.getJSONObject(i).getString("id");
+					int age = jsonArray.getJSONObject(i).getInt("age");
+					int gender = 0;	// 0:male, 1:female
+					
+					/* 250416 : comment code, for generalization, change value at data parsing step
 					if(jsonArray.getJSONObject(i).getInt("Sex") == 1) {
 						gender = 0;
 					}else {
 						gender = 1;
 					}
+					*/
 					
-					SimpleDateFormat  formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					SimpleDateFormat  formatter = new SimpleDateFormat("yyyy-MM-dd");
 					Calendar cal = Calendar.getInstance();
 			
-					Date visitDate = formatter.parse(dateStr);
-					cal.setTime(visitDate);
-					int birthYear = visitDate.getYear() + 1900 - age;
+					int birthYear = 1970; 
 					int birthMonth = 0;
 					int birthDay = 1;
+					
+					if(existBirth) {
+						Date birthDate = formatter.parse(birthStr);
+						cal.setTime(birthDate);
+						
+						birthYear = cal.get(Calendar.YEAR);
+						birthMonth = cal.get(Calendar.MONTH);
+						birthDay = cal.get(Calendar.DAY_OF_MONTH);
+						
+					} else if(existVisitDate) {
+						Date visitDate = formatter.parse(dateStr);
+						cal.setTime(visitDate);
+						
+						birthYear = cal.get(Calendar.YEAR) - age;
+					}
+					
 					String lunarBirth = null;
 					String address = null;
 					int hospitalCode = 1001;
@@ -147,10 +171,10 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 				}
 			} else {
 				// remove comment when need more specific log
-				//_log.info(jsonArray.getJSONObject(i).getString("ID") + " " + jsonArray.getJSONObject(i).getString("Name") + " is duplicated");
+				_log.info(jsonArray.getJSONObject(i).getString("ID") + " " + jsonArray.getJSONObject(i).getString("Name") + " is duplicated");
 				// gather all duplicated subject and return info
 				JSONObject duplicatedObject = jsonArray.getJSONObject(i);
-				String duplicated = duplicatedObject.getString("ID") + " / " + duplicatedObject.getString("Name");
+				String duplicated = duplicatedObject.getString("id") + " / " + duplicatedObject.getString("name");
 				
 				duplicatedSubjectList.add(duplicated);
 			}

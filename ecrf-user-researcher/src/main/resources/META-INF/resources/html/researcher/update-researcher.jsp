@@ -437,7 +437,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					%>
 										
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) || hasOwnPermission ) %>">
-					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" name="<portlet:namespace/>save">
+					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="<portlet:namespace/>save">
 						<img class="save-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 					</button>
@@ -449,7 +449,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteResearcherURL.toString());
 					%>
-					<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="delete">
+					<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="delete">
 						<img class="delete-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 					</a>
@@ -460,7 +460,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					
 					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
 										
-					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" name="<portlet:namespace/>save">
+					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="<portlet:namespace/>save">
 						<img class="save-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 					</button>
@@ -470,7 +470,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					</c:otherwise>
 					</c:choose>
 										 
-					<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=backURL %>" name="<portlet:namespace/>cancel">
+					<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=backURL %>" id="<portlet:namespace/>cancel">
 						<img class="cancel-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 					</a>

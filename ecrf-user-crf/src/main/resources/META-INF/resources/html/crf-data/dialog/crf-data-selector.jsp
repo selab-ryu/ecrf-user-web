@@ -18,6 +18,7 @@ long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJ
 
 ArrayList<LinkCRF> linkList = (ArrayList<LinkCRF>)renderRequest.getAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA_LIST);
 
+boolean isUpdate = ParamUtil.getBoolean(renderRequest, ECRFUserCRFDataAttributes.IS_UPDATE, false);
 boolean isAudit = ParamUtil.getBoolean(renderRequest, ECRFUserCRFDataAttributes.IS_AUDIT, false);
 boolean isDelete = ParamUtil.getBoolean(renderRequest, ECRFUserCRFDataAttributes.IS_DELETE, false);
 
@@ -40,6 +41,14 @@ _log.info("base url : " + baseURL);
 		<aui:row>
 			<aui:col md="12">
 			<table class="table crfHistory">
+				<%
+					String actionColHeader = "ecrf-user.button.update-crf-data";
+					if(isAudit) {
+						actionColHeader = "ecrf-user.button.view-audit";
+						if(updateLock) actionColHeader = "ecrf-user.button.view-crf-data";
+					}
+					if(isDelete) actionColHeader = "ecrf-user.button.delete-crf-data";
+				%>
 				<thead>
 					<tr>
 						<th>No</th>
@@ -47,7 +56,7 @@ _log.info("base url : " + baseURL);
 						<th>Modified Date</th>
 						<th>Progress</th>
 						<th>Query</th>
-						<th>Edit</th>
+						<th><liferay-ui:message key="<%=actionColHeader %>" /></th>
 					<tr>
 				</thead>
 				<tbody style="text-align: center;">
@@ -61,7 +70,7 @@ _log.info("base url : " + baseURL);
            				Date visitDate = null;
 						if(Validator.isNotNull(answerForm) && answerForm.has("visit_date")){
 							dateStr = answerForm.getString("visit_date");
-							
+							_log.info(dateStr);
 							try {
 								visitDate = new Date(Long.valueOf(dateStr));
 							} catch(NumberFormatException nfe) {
@@ -69,7 +78,12 @@ _log.info("base url : " + baseURL);
 								try {
 									visitDate = format.parse(dateStr);
 								} catch(ParseException pe) {
-									pe.printStackTrace();
+									try {
+										format = new SimpleDateFormat("yyyy-MM-dd");
+										visitDate = format.parse(dateStr);
+									} catch(NullPointerException npe) {
+										npe.printStackTrace();
+									}
 								}
 							}
 							
@@ -114,63 +128,43 @@ _log.info("base url : " + baseURL);
 							<p style="text-align: center; background-image: linear-gradient(to right, #11aaff <%=progressPercentage%>, #aaa 0%); margin-bottom: 0px; padding: 4px;"><%=progressPercentage%><liferay-ui:icon icon="info-sign" message="<%=eachPercentage%>" /></p>
 						</td>
 						<td>
-							<img src="<%= progressSrc%>" width="50%" height="auto"/>
+							<img src="<%=progressSrc%>" width="50%" height="auto"/>
 						</td>
-						<c:choose>
-						<c:when test="<%=isDelete %>">
 						
-							<c:choose>
-							<c:when test="<%=updateLock %>">	
+						<c:if test="<%=isUpdate %>">
+							<% String updateFncCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 0); %>
+							<td>
+								<button id="updateCRF" class="dh-icon-button update-btn w130" onclick="<%=updateFncCall %>" >		
+									<img class="update-icon" />
+									<span><liferay-ui:message key="ecrf-user.button.update-crf-data"/></span>			
+								</button>							
+							</td>
+						</c:if>
 												
+						<c:if test="<%=isAudit %>">
+							<% 
+								String auditFncCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 1);
+								String auditBtnKey = "ecrf-user.button.view-audit";
+								if(updateLock) auditBtnKey = "ecrf-user.button.view-crf-data";
+							%>
 							<td>
-								<liferay-ui:message key="ecrf-user.crf-data.db-lock" />
+								<button id="auditCRF" class="dh-icon-button audit-trail-btn w180" onclick="<%=auditFncCall %>" >		
+									<img class="audit-icon" />
+									<span><liferay-ui:message key="<%=auditBtnKey %>"/></span>			
+								</button>							
 							</td>
-							
-							</c:when>
-							
-							<c:otherwise>
-							
+						</c:if>
+						
+						<c:if test="<%=isDelete %>">
+							<% String deleteFncCall = "deleteEachCRF("+link.getLinkId()+")"; %>	
 							<td>
-								<aui:button name="deleteCRF" type="button" value="ecrf-user.crf-data.delete-crf" cssClass="delete-btn small-btn" onClick="<%="deleteEachCRF(" + link.getLinkId() +")"%>"></aui:button>							
+								<button id="deleteCRF" class="dh-icon-button delete-btn w130" onclick="<%=deleteFncCall %>" >		
+									<img class="delete-icon" />
+									<span><liferay-ui:message key="ecrf-user.button.delete-crf-data"/></span>			
+								</button>							
 							</td>
-							
-							</c:otherwise>
-							</c:choose>
+						</c:if>
 						
-						</c:when>
-						
-						<c:when test="<%=isAudit %>">
-						
-						<% String auditFunctionCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 1); %>
-						<td>
-							<aui:button name="auditCRF" type="button" value="<%=updateLock ? "ecrf-user.button.view-crf-data" : "ecrf-user.button.view-audit" %>" cssClass="ci-btn small-btn" onClick="<%=auditFunctionCall%>"></aui:button>
-						</td>
-						
-						</c:when>
-						
-						<c:otherwise>
-							
-							<c:choose>
-							<c:when test="<%=updateLock %>">
-							
-							<% String viewFunctionCall = String.format("toViewCRF(%d)", link.getStructuredDataId()); %>
-							<td>
-								<aui:button name="viewCRF" type="button" value="ecrf-user.button.view-crf-data" cssClass="ci-btn small-btn" onClick="<%=viewFunctionCall%>"></aui:button>
-							</td>
-							
-							</c:when>
-							<c:otherwise>
-							
-							<% String updateFunctionCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 0); %>
-							<td>
-								<aui:button name="updateCRF" type="button" value="ecrf-user.button.update-crf-data" cssClass="ci-btn small-btn" onClick="<%=updateFunctionCall%>"></aui:button>
-							</td>
-							
-							</c:otherwise>
-							</c:choose>
-							
-						</c:otherwise>
-						</c:choose>
 					</tr>
 				<%
 					}
@@ -180,44 +174,6 @@ _log.info("base url : " + baseURL);
 			</table>
 			</aui:col>
 		</aui:row>
-		
-		<%
-		String auditHidden = "";
-		String deleteHidden = "";
-		if(isAudit){
-			auditHidden = "hide";
-		}
-		else{
-			auditHidden = "ci-btn small-btn";
-		}
-		
-		if(isDelete){
-			deleteHidden = "delete-btn small-btn";
-			auditHidden = "hide";					
-		}else{
-			deleteHidden = "hide";
-		}
-		
-		if(!hasForm) {
-			auditHidden = "hide";
-		}
-		%>
-		
-		<c:if test="false">
-		<aui:row>
-			<aui:col cssClass="center">
-				<liferay-ui:message key="ecrf-user.validation.no-crf-form" />
-			</aui:col>
-		</aui:row>
-		
-		<aui:row>
-			<aui:col cssClass="center">
-				<span>
-				<liferay-ui:message key="ecrf-user.crf-data.db-lock" />
-				</span>
-			</aui:col>
-		</aui:row>
-		</c:if>
 		
 		<c:choose>
 		<c:when test="<%=!hasForm %>">
@@ -239,11 +195,6 @@ _log.info("base url : " + baseURL);
 			</aui:row>	
 		</c:when>
 		</c:choose>
-	
-		<!--
-		<aui:button name="crfFormNotice" type="button" value="ecrf-user.validation.no-crf-form" cssClass="none-btn full-btn" disabled="true"></aui:button> 
-		<aui:button name="dbLockNotice" type="button" value="ecrf-user.crf-data.db-lock" cssClass="none-btn full-btn" disabled="true"></aui:button>
-	 	-->
 	 	
 	</aui:container>
 </div>

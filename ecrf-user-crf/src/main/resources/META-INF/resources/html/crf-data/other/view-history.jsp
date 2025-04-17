@@ -32,54 +32,52 @@
 				<aui:col>
 					<aui:fieldset-group markupView="lexicon">
 						<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.subject.title.subject-info">
-							<aui:container>
-								<aui:row cssClass="top-border">
-									<aui:col md="3" cssClass="marTr">
-										<aui:field-wrapper
-											name="serialId"
-											label="ecrf-user.subject.serial-id">
-											<p><%=Validator.isNull(subject) ? "-" : String.valueOf(subject.getSerialId()) %></p>
-										</aui:field-wrapper>
-									</aui:col>
-									<%
-									String subjectName = subject.getName();
-									boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
-									if(!hasViewEncryptPermission)
-										subjectName = ECRFUserUtil.encryptName(subjectName);	
-									%>
-									<aui:col md="3" cssClass="marTr">
-										<aui:field-wrapper
-											name="name"
-											label="ecrf-user.subject.name">
-											<p><%=Validator.isNull(subject.getName()) ? "-" : subjectName %></p>
-										</aui:field-wrapper>
-									</aui:col>
-									<aui:col md="3" cssClass="marTr">
-										<aui:field-wrapper
-											name="gender"
-											label="ecrf-user.subject.gender">
-											<p><%=Validator.isNull(subject) ? "-" : (subject.getGender() == 0 ? "male" : "female") %></p>
-										</aui:field-wrapper>
-									</aui:col>
-									<aui:col md="3" cssClass="marTr">
-										<aui:field-wrapper
-											name="birth"
-											label="ecrf-user.subject.birth-age">
-											<p><%=Validator.isNull(subject) ? "-" : sdf.format(subject.getBirth()) + " (" + Math.abs(124 - subject.getBirth().getYear()) + ")" %></p>
-										</aui:field-wrapper>
-									</aui:col>
-								</aui:row>
-								
-								<aui:row cssClass="top-border">
-									<aui:col md="3" cssClass="marTr">
-										<aui:field-wrapper
-											name="createDate"
-											label="ecrf-user.general.create-date">
-											<p><%=Validator.isNull(subject) ? "-" : sdf.format(createDate) %></p>
-										</aui:field-wrapper>
-									</aui:col>
-								</aui:row>
-							</aui:container>
+							<aui:row cssClass="top-border">
+								<aui:col md="3" cssClass="marTr">
+									<aui:field-wrapper
+										name="serialId"
+										label="ecrf-user.subject.serial-id">
+										<p><%=Validator.isNull(subject) ? "-" : String.valueOf(subject.getSerialId()) %></p>
+									</aui:field-wrapper>
+								</aui:col>
+								<%
+								String subjectName = subject.getName();
+								boolean hasViewEncryptPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ENCRYPT_SUBJECT);
+								if(!hasViewEncryptPermission)
+									subjectName = ECRFUserUtil.encryptName(subjectName);	
+								%>
+								<aui:col md="3" cssClass="marTr">
+									<aui:field-wrapper
+										name="name"
+										label="ecrf-user.subject.name">
+										<p><%=Validator.isNull(subject.getName()) ? "-" : subjectName %></p>
+									</aui:field-wrapper>
+								</aui:col>
+								<aui:col md="3" cssClass="marTr">
+									<aui:field-wrapper
+										name="gender"
+										label="ecrf-user.subject.gender">
+										<p><%=Validator.isNull(subject) ? "-" : (subject.getGender() == 0 ? "male" : "female") %></p>
+									</aui:field-wrapper>
+								</aui:col>
+								<aui:col md="3" cssClass="marTr">
+									<aui:field-wrapper
+										name="birth"
+										label="ecrf-user.subject.birth-age">
+										<p><%=Validator.isNull(subject) ? "-" : sdf.format(subject.getBirth()) + " (" + Math.abs(124 - subject.getBirth().getYear()) + ")" %></p>
+									</aui:field-wrapper>
+								</aui:col>
+							</aui:row>
+							
+							<aui:row cssClass="top-border">
+								<aui:col md="3" cssClass="marTr">
+									<aui:field-wrapper
+										name="createDate"
+										label="ecrf-user.general.create-date">
+										<p><%=Validator.isNull(subject) ? "-" : sdf.format(createDate) %></p>
+									</aui:field-wrapper>
+								</aui:col>
+							</aui:row>
 						</aui:fieldset>
 					</aui:fieldset-group>
 				</aui:col>
@@ -113,9 +111,9 @@
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="marL10">
-						<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listHistoryURL %>" name="<portlet:namespace/>cancel">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
-							<span style="color:black;">Cancel</span>
+						<a class="dh-icon-button cancel-btn w130" href="<%=listHistoryURL %>" id="<portlet:namespace/>cancel">
+							<img class="cancel-icon" />					
+							<span><liferay-ui:message key="ecrf-user.button.cancel"/></span>
 						</a>
 					</aui:button-row>
 				</aui:col>

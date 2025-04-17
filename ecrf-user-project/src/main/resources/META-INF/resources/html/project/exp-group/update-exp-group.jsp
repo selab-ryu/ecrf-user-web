@@ -141,7 +141,7 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 			<aui:button-row>
 				<c:if test="<%=!isUpdate %>">
 				<c:if test="<%=hasAddPermission %>">
-				<button type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8" name="<portlet:namespace/>add">
+				<button type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8" id="<portlet:namespace/>add">
 					<img class="add-icon" />
 					<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 				</button>
@@ -150,7 +150,7 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 				
 				<c:if test="<%=isUpdate %>">
 				<c:if test="<%=hasUpdatePermission %>">
-				<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>update">
+				<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>update">
 					<img class="update-icon" />
 					<span><liferay-ui:message key="ecrf-user.button.update" /></span>
 				</button>
@@ -162,13 +162,13 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 					String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 					String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
 				%>
-				<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+				<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="btnDelete">
 					<img class="delete-icon" />
 					<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 				</a>
 				</c:if>
 				</c:if>
-				<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=listExpGroupURL %>" name="<portlet:namespace/>cancel">
+				<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=listExpGroupURL %>" id="<portlet:namespace/>cancel">
 					<img class="cancel-icon" />					
 					<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 				</a>

@@ -252,7 +252,7 @@ if(isSearch) {
 					<a 
 						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" 
 						href="<%= !(hasCRFPermission && hasUpdatePermission) ? "" : updateCRFURL %>" 
-						name="updateCRF" 
+						id="updateCRF" 
 						disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>"
 					>
 						<img class="update-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />
@@ -278,7 +278,7 @@ if(isSearch) {
 					<a 
 						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button crf-form-btn w130"%>" 
 						href="<%=!(hasCRFPermission && hasUpdatePermission) ? "" : updateCRFFormURL %>" 
-						name="crfForm" 
+						id="crfForm" 
 						disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>"
 					>
 						<img class="crf-form-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />
@@ -303,7 +303,7 @@ if(isSearch) {
 					<a 
 						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button crf-data-btn w130"%>" 
 						href="<%=!(hasCRFPermission && hasUpdatePermission) ? "" : updateCRFDataURL %>" 
-						name="crfData" 
+						id="crfData" 
 						<%=(hasCRFPermission && hasUpdatePermission) ? "" : "disabled" %> 
 					>
 						<img class="crf-data-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />
@@ -328,7 +328,7 @@ if(isSearch) {
 					<a 
 						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button crf-query-btn w130"%>" 
 						href="<%=!(hasCRFPermission && hasUpdatePermission) ? "" : updateCRFQueryURL %>" 
-						name="crfQuery" 
+						id="crfQuery" 
 						<%=(hasCRFPermission && hasUpdatePermission) ? "" : "disabled" %> 
 					>
 					
@@ -359,7 +359,7 @@ if(isSearch) {
 					<a 
 						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button delete-btn w130"%>" 
 						onClick="<%=!(hasCRFPermission && hasUpdatePermission) ? "" : deleteFunctionCall %>" 
-						name="delete" 
+						id="delete" 
 						disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>"
 					>
 						<img class="delete-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />

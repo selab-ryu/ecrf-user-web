@@ -286,7 +286,7 @@
 					cssClass="min-width-80"
 				>
 
-				<a class="<%= isDisabled ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=isDisabled ? "javascript:void(0);" : updateQueryURL %>" name="updateCRF">
+				<a class="<%= isDisabled ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=isDisabled ? "javascript:void(0);" : updateQueryURL %>" id="updateCRF">
 					<img src="<%= isDisabled ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
 					<span><liferay-ui:message key="<%=updateBtnKey %>"/></span>	
 				</a>

@@ -48,12 +48,14 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 						<aui:form name="fm" action="${excelDownloadActionURL}" method="POST">
 							<aui:input type="hidden" name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=crfId %>" />
 							<aui:input type="hidden" name="excelParam"></aui:input>
+							
 							<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL) %>">
-							<button type="button" class="dh-icon-button-submit dh-icon-button-submit-update" id="excelDownload" style="width: 220px;">
-								<img src="<%= renderRequest.getContextPath() + "/btn_img/excel_download_icon.png"%>"/>
-								<span>Download Search Result</span>
+							<button type="button" class="dh-icon-button update-btn w220" id="excelDownload" >
+								<img class="excel-download-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.download-search-result"/></span>
 							</button>
 							</c:if>
+							
 						</aui:form>
 					</aui:button-row>
 				</aui:col>

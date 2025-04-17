@@ -186,4 +186,3 @@
 %>
 
 <script charset="utf-8" src="/o/ecrf.user.crf/js/crf-data.js" ></script>
-<script charset="utf-8" src="/o/ecrf.user.crf/js/ecrf-user-crf.js" ></script>

@@ -213,7 +213,7 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+							<button type="button" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
 								<img class="search-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
@@ -330,16 +330,17 @@ if(isSearch) {
 				
 				<%
 					boolean hasViewHistoryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY);
+					String viewOnClickStr = "location.href='"+viewHistoryURL+"'";
 				%>
 				
 				<liferay-ui:search-container-column-text 
 					name="ecrf-user.list.view"
 					cssClass="min-width-80"
 				>
-					<a class="dh-icon-button audit-trail-btn w130" href="<%=hasViewHistoryPermission ? viewHistoryURL : "javascript:void(0);" %>" name="viewHistory" disabled="<%=!hasViewHistoryPermission ? true : false %>">
-						<img class="view-icon" />						
-						<span>View</span>		
-					</a>	
+					<button class="dh-icon-button audit-trail-btn w130" onclick="<%=hasViewHistoryPermission ? viewOnClickStr : "javascript:void(0);" %>" id="viewHistory" <%=!hasViewHistoryPermission ? "disabled" : "" %>">
+						<img class="view-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.view"/></span>		
+					</button>
 				</liferay-ui:search-container-column-text>
 				
 				
@@ -381,13 +382,9 @@ $(document).ready(function() {
 	});
 	$("#<portlet:namespace/>modifiedDateEnd").mask("0000/00/00");
 });
-</script>
 
-<aui:script use="aui-base">
-A.one('#<portlet:namespace/>search').on('click', function() {
-	var isModifiedDateValid = dateCheck("modifiedDateStart", "modifiedDateEnd", '<portlet:namespace/>');
-	
-	alert(isModifiedDateValid);
+Liferay.provide(window, "openValidPopup", function() {
+	var A = AUI();
 	
 	var dialog = new A.Modal({
 		headerContent: '<h3><liferay-ui:message key="Date validation"/></h3>',
@@ -396,16 +393,26 @@ A.one('#<portlet:namespace/>search').on('click', function() {
 		modal: true,
 		height: 200,
 		width: 400,
-		render: '#body-div',
 		zIndex: 1100,
 		close: true
-	});
+	}).render();
 	
+}, ['aui-modal']
+);
+
+</script>
+
+<aui:script use="aui-base aui-modal">
+A.one('#<portlet:namespace/>search').on('click', function() {
+	let isModifiedDateValid = dateCheck("modifiedDateStart", "modifiedDateEnd", '<portlet:namespace/>');
+	
+	console.log(isModifiedDateValid);
+		
 	if(isModifiedDateValid) {
 		var form = $('#<portlet:namespace/>searchOptionFm');
 		form.submit();
-	} else if(!isModifiedDateValid) {
-		dialog.render();
+	} else {
+		openValidPopup();
 	}
 });
 </aui:script>

@@ -3,7 +3,8 @@ let ECRFViewer = function(StationX){
 	//console.log(StationX);
 
 	let SX = {
-		StationX: StationX
+		StationX: StationX,
+		SDE_Namespace: ""
 	};
 
 	class Viewer{
@@ -12,79 +13,88 @@ let ECRFViewer = function(StationX){
 		 * 
 		 */
 
-		constructor(DataStructure, align, structuredData, subjectInfo, isAudit){
+		constructor(DataStructure, align, structuredData, subjectInfo, isAudit, forWhat) {
 			var result = new Object();
-			renderUtil.align = align;
-			renderUtil.isAudit = isAudit;
 			
-			if(SX.stationX) {
-				//console.log("log SX", SX);
+			if(SX.StationX) {
+				console.log("log SX", SX);
 			} else {
 				console.log("SX is Empty or Null");
 			}
 
-			if(isAudit){
-				renderUtil.align = "crf-align-table";
-			}
-			let isProcessing = false;
 			autoCalUtil.initCalculatevalue(DataStructure, subjectInfo);
-			//console.log("sd data", structuredData);
+			console.log("sd data", structuredData);
 			DataStructure.terms = renderUtil.flattenTerms(DataStructure.terms);
+
 			if(structuredData){
 				renderUtil.structuredData = structuredData;
 				result = structuredData;
 			}
-			$(document).ready(function(){
-				let dataPacket = new EventDataPacket();
-				dataPacket.result = result;
-				const eventData = {
-					dataPacket: dataPacket
-				};
-				Liferay.fire( 'value_changed', eventData );	
-			});
-				
-            DataStructure.renderSmartCRF = function(){
-                //console.log("is for render smartCRF");
-                if( $.isEmptyObject( this.terms ) ){
-                    return;
-                }
-                this.$canvas.empty();
-                this.$canvas.html(renderUtil.renderCanvas(this.terms));
-                
-                this.terms.forEach(term=>{
-					if( term.termType === 'List' || term.termType === 'boolean' ){
-						//console.log("List/Boolean Term slave term check : ", term, term.termName, term.hasSlaves());
-						if( term.hasSlaves() ){
-							renderUtil.activateTerms(term);
-						}
-					}
-					if(autoCalUtil.checkExcerciseFlag(term.termName)){
-						$("#" + term.termName + "_outerDiv").hide();
-					}
-				});
-            };
-            /*
-             * value_changed event work on js first, jsp after
-             */
-            Liferay.on('value_changed', function(event){
-				let packet = event.dataPacket;
 
-            	if(packet.term){
-            		let eventTerm = packet.term;
-					//console.log(eventTerm);
-            		//console.log(eventTerm.value);
-            		if(eventTerm.termType === "List"){
-            			renderUtil.activateTerms(eventTerm);
-            		}
-            		result[eventTerm.termName.toString()] = eventTerm.value;
-            		event.dataPacket.result = result;
-                	if(isProcessing) return;
-            		isProcessing = true;
-            		autoCalUtil.checkAutoCal(eventTerm);
-            	}
-            	isProcessing = false;
-            });
-        }
+			let isProcessing = false;
+
+			if(forWhat !== 'station-x') {
+				renderUtil.align = align;
+				renderUtil.isAudit = isAudit;
+
+				if(isAudit){
+					renderUtil.align = "crf-align-table";
+				}
+
+				$(document).ready(function(){
+					let dataPacket = new EventDataPacket();
+					dataPacket.result = result;
+					const eventData = {
+						dataPacket: dataPacket
+					};
+	
+					console.log('crf value changed', eventData);
+					Liferay.fire( 'value_changed', eventData );	
+				});
+					
+				DataStructure.renderSmartCRF = function(){
+					//console.log("is for render smartCRF");
+					if( $.isEmptyObject( this.terms ) ){
+						return;
+					}
+					this.$canvas.empty();
+					this.$canvas.html(renderUtil.renderCanvas(this.terms));
+					
+					this.terms.forEach(term=>{
+						if( term.termType === 'List' || term.termType === 'boolean' ){
+							//console.log("List/Boolean Term slave term check : ", term, term.termName, term.hasSlaves());
+							if( term.hasSlaves() ){
+								renderUtil.activateTerms(term);
+							}
+						}
+						if(autoCalUtil.checkExcerciseFlag(term.termName)){
+							$("#" + term.termName + "_outerDiv").hide();
+						}
+					});
+				};
+				/*
+				 * value_changed event work on js first, jsp after
+				 */
+				Liferay.on('value_changed', function(event){
+					let packet = event.dataPacket;
+	
+					if(packet.term){
+						let eventTerm = packet.term;
+						console.log(eventTerm);
+						console.log(eventTerm.value);
+						if(eventTerm.termType === "List"){
+							renderUtil.activateTerms(eventTerm);
+						}
+						result[eventTerm.termName.toString()] = eventTerm.value;
+						event.dataPacket.result = result;
+						if(isProcessing) return;
+						isProcessing = true;
+						autoCalUtil.checkAutoCal(eventTerm);
+					}
+					isProcessing = false;
+				});
+			}
+		}
 	};
 	
 	/*
@@ -137,1075 +147,1097 @@ let ECRFViewer = function(StationX){
 		 */ 
 		checkExcerciseFlag : function(termName){
 			switch(termName){
-			case "diabetes":
-			case "is_low_risk":
-			case "is_mid_risk":
-				if(this.age > 65){
-					$("#is_mid_risk").val("0").trigger('change');
-				}
-			case "is_high_risk":
-			case "is_high_risk_metabolic":
-				return true;
-				break;
-			case "par_q_under65":
-				if(this.age < 65){
+				case "diabetes":
+				case "is_low_risk":
+				case "is_mid_risk":
+					if(this.age > 65){
+						$("#is_mid_risk").val("0").trigger('change');
+					}
+				case "is_high_risk":
+				case "is_high_risk_metabolic":
+					return true;
+					break;
+				case "par_q_under65":
+					if(this.age < 65){
+						return false;
+					}else {
+						return true;
+					}
+					break;
+				case "par_q_over65":
+					if(this.age > 65){
+						return false;
+					}else {
+						return true;
+					}
+					break;
+				case "treadmill_9min":
+					if(this.gender == 1){
+						$("#treadmill_9min_outerDiv").hide();
+					}
+				case "long_term_round_run_15m":
+					if(this.age > 10 && this.age < 13){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "running_selection":
+				case "dexterity_adult_selection":
+					if(this.age > 12 && this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "jump_or_sit_up_selection":	
+				case "time_of_flight":
+				case "eye_hand_coordination_sec":
+				case "eye_hand_coordination_repeat":
+				case "illinois_agility":
+					if(this.age > 12 && this.age < 19){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "third_by_third_button_press":	
+				case "shuttle_run_5m":
+					if(this.age < 11){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "wall_pass":
+				case "repeat_side_jump":
+					if(this.age>10 && this.age < 13){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "standing_long_jump":
+					if(this.age >19 && this.age < 13){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "lower_limb_function":
+				case "walking_6min":
+				case "walking_2min":
+				case "equilibrium_property":
+				case "coordination_elderly":
+					if(this.age>64){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "cardio_pulmonary_function":
+					if(this.age > 10 && this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "dexterity":
+					if(this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "bdi_depress_grade":
+					if(this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "kgds_depress_grade":
+					if(this.age >= 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "KGDS_GROUP":
+					if(this.age >= 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "SF6D_GROUP":
+					if(this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "BDI_GROUP":
+					if(this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "menopause":
+					if(this.gender == 0){
+						
+						return true;
+					}
 					return false;
-				}else {
-					return true;
-				}
-				break;
-			case "par_q_over65":
-				if(this.age > 65){
+					break;
+				default:
 					return false;
-				}else {
-					return true;
-				}
-				break;
-			case "treadmill_9min":
-				if(this.gender == 1){
-					$("#treadmill_9min_outerDiv").hide();
-				}
-			case "long_term_round_run_15m":
-				if(this.age > 10 && this.age < 13){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "running_selection":
-			case "dexterity_adult_selection":
-				if(this.age > 12 && this.age < 65){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "jump_or_sit_up_selection":	
-			case "time_of_flight":
-			case "eye_hand_coordination_sec":
-			case "eye_hand_coordination_repeat":
-			case "illinois_agility":
-				if(this.age > 12 && this.age < 19){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "third_by_third_button_press":	
-			case "shuttle_run_5m":
-				if(this.age < 11){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "wall_pass":
-			case "repeat_side_jump":
-				if(this.age>10 && this.age < 13){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "standing_long_jump":
-				if(this.age >19 && this.age < 13){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "lower_limb_function":
-			case "walking_6min":
-			case "walking_2min":
-			case "equilibrium_property":
-			case "coordination_elderly":
-				if(this.age>64){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "cardio_pulmonary_function":
-				if(this.age > 10 && this.age < 65){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "dexterity":
-				if(this.age < 65){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "bdi_depress_grade":
-				if(this.age < 65){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "kgds_depress_grade":
-				if(this.age >= 65){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "KGDS_GROUP":
-				if(this.age >= 65){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "SF6D_GROUP":
-				if(this.age < 65){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "BDI_GROUP":
-				if(this.age < 65){
-					return false;
-				}else{
-					return true;
-				}
-				break;
-			case "menopause":
-				if(this.gender == 0){
-					
-					return true;
-				}
-				return false;
-				break;
-			default:
-				return false;
-				break;
+					break;
 			}
 			
 		},
+
 		/*
 		 * Auto calculation part .. for find case each crf id
 		 */
-		checkAutoCal : function(term){
-			if(this.crf){				
+		checkAutoCal : function(term, namespace){
+			
+			if(this.crf){
+				if(term.termName === "testBool") {
+					let testNumId = "#"+namespace+"testNum";
+					console.log(testNumId);
+
+					$(testNumId).val(1234).trigger('change');
+				}
+
 				switch(this.crf.dataTypeName){
 					case "er_crf":
-						//console.log("ER CRF Auto Calculation Running");
-						//console.log(term.termName);
-						//console.log(term.value);
-						if(term.termName === "conciousness") {
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "gcs"){
-									//console.log("find", compareTerm.value);
-									let selectedValue = term.value[0];
-									var beforeValue = compareTerm.termName + "_before_value";
-									switch(selectedValue) {
-									case '0':
-										compareTerm.value = 15;
-										if(this[beforeValue]){
-											if(this[beforeValue] < 12){
-												this.cogasScore--;
-												this[beforeValue] = compareTerm.value;
-											}else{
-												this[beforeValue] = compareTerm.value;
-											}
-										}else{
-											this[beforeValue] = compareTerm.value;
-											
-										}									
-										break;
-									case '1':
-										compareTerm.value = 12;
-										if(this[beforeValue]){
-											if(this[beforeValue] < 12){
-												this.cogasScore--;
-												this[beforeValue] = compareTerm.value;
-											}else{
-												this[beforeValue] = compareTerm.value;
-											}
-										}else{
-											this[beforeValue] = compareTerm.value;
-											
-										}			
-										break;
-									case '2':
-										compareTerm.value = 10;
-										if(this[beforeValue]){
-											if(this[beforeValue] > 12){
-												this.cogasScore++;
-												this[beforeValue] = compareTerm.value;
-											}else{
-												this[beforeValue] = compareTerm.value;
-											}
-										}else{
-											this.cogasScore++;
-											this[beforeValue] = compareTerm.value;
-										}			
-										break;
-									case '3':
-										compareTerm.value = 8;
-										if(this[beforeValue]){
-											if(this[beforeValue] > 12){
-												this.cogasScore++;
-												this[beforeValue] = compareTerm.value;
-											}else{
-												this[beforeValue] = compareTerm.value;
-											}
-										}else{
-											this.cogasScore++;
-											this[beforeValue] = compareTerm.value;
-										}		
-										break;
-									case '4':
-										compareTerm.value = 5;
-										if(this[beforeValue]){
-											if(this[beforeValue] > 12){
-												this.cogasScore++;
-												this[beforeValue] = compareTerm.value;
-											}else{
-												this[beforeValue] = compareTerm.value;
-											}
-										}else{
-											this.cogasScore++;
-											this[beforeValue] = compareTerm.value;
-										}		
-										break;
-									case '5':
-										compareTerm.value = 3;
-										if(this[beforeValue]){
-											if(this[beforeValue] > 12){
-												this.cogasScore++;
-												this[beforeValue] = compareTerm.value;
-											}else{
-												this[beforeValue] = compareTerm.value;
-											}
-										}else{
-											this.cogasScore++;
-											this[beforeValue] = compareTerm.value;
-										}		
-										break;
-									default:
-										compareTerm.value = -1;
-										if(this[beforeValue]){
-											if(this[beforeValue] < 12){
-												this.cogasScore--;
-												this[beforeValue] = compareTerm.value;
-											}else{
-												this[beforeValue] = compareTerm.value;
-											}
-										}else{
-											this[beforeValue] = compareTerm.value;
-											
-										}		
-										break;
-									}
-									$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
-								}
-							});
-						}
-						
-						if(term.termName === "shock") {
-							if(this[beforeValue]){
-								if(term.value[0] === '1' && this[beforeValue] !== '1'){
-									this.cogasScore++;
-									this[beforeValue] = term.value[0];
-								}else{
-									this.cogasScore--;
-									this[beforeValue] = term.value[0];
-								}
-							}else{
-								if(term.value[0] === '1'){
-									this.cogasScore++;
-									this[beforeValue] = term.value[0];
-								}
-							}
-							
-						}
-
-						if(term.termName === "hbotTrial") {
-							if(this[beforeValue]){
-								if(term.value[0] === '0' && this[beforeValue] !== '0'){
-									this.cogasScore++;
-									this[beforeValue] = term.value[0];
-								}else{
-									this.cogasScore--;
-									this[beforeValue] = term.value[0];
-								}
-							}else{
-								if(term.value[0] === '0'){
-									this.cogasScore++;
-									this[beforeValue] = term.value[0];
-								}
-							}
-							
-						}
-						
-						if(term.termName === "ck_0") {
-							if(this[beforeValue]){
-								if(term.value[0] >= 320 && this[beforeValue] < 320){
-									this.cogasScore++;
-									this[beforeValue] = term.value[0];
-								}else{
-									this.cogasScore--;
-									this[beforeValue] = term.value[0];
-								}
-							}else{
-								if(term.value[0] >= 320){
-									cogasScore++;
-									this[beforeValue] = term.value[0];
-								}
-							}
-							
-						}
-						
-						if(this.cogasScore > 0){
-							//console.log(this.cogasScore);
-							$("#cogas_score").val(this.cogasScore).trigger('change');
-						}
-						
-						if(term.termName === "out_hp_date"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "visit_date"){
-									let visitDate = new Date(compareTerm.value);
-									let outDate = new Date(term.value)
-									const diffDate = outDate.getTime() - visitDate.getTime();
-									let totalDate = Math.abs(diffDate / (1000 * 60 * 60 * 24));
-									$("#total_hp_date").val(totalDate).trigger('change');
-								}
-							});
-						}
-								
-						if(term.termName === "alt_0"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "alp_0"){
-									var divValue = term.value / compareTerm.value;
-									$("#alt_alp_0").val(divValue).trigger('change');
-								}
-							});
-						}
-						
-						if(term.termName === "alp_0"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "alt_0"){
-									var divValue = term.value / compareTerm.value;
-									$("#alt_alp_0").val(divValue).trigger('change');
-								}
-							});
-						}
-
-						if(term.termName === "alt_1"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "alp_1"){
-									var divValue = term.value / compareTerm.value;
-									$("#alt_alp_1").val(divValue).trigger('change');
-								}
-							});
-						}
-						
-						if(term.termName === "alp_1"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "alt_1"){
-									var divValue = term.value / compareTerm.value;
-									$("#alt_alp_1").val(divValue).trigger('change');
-								}
-							});
-						}
-						
-						if(term.termName === "alt_2"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "alp_2"){
-									var divValue = term.value / compareTerm.value;
-									$("#alt_alp_2").val(divValue).trigger('change');
-								}
-							});
-						}
-						
-						if(term.termName === "alp_2"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "alt_2"){
-									var divValue = term.value / compareTerm.value;
-									$("#alt_alp_2").val(divValue).trigger('change');
-								}
-							});
-						}
-						
-						if(term.termName === "first_hbot_time"){
-							let hbotTime = new Date(term.value);
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "detect_time"){
-									let detectTime = new Date(compareTerm.value);
-									var hour = (hbotTime.getTime() - detectTime.getTime()) / 3600000;
-									$("#detect_to_1st_hbot").val(hour).trigger('change');
-								}
-								else if(compareTerm.termName === "hp_arrived"){
-									let arrivedTime = new Date(compareTerm.value);
-									var hour = (hbotTime.getTime() - arrivedTime.getTime()) / 3600000;
-									$("#detect_to_1st_hbot").val(hour).trigger('change');
-								}
-							});
-						}
-						
-						if(term.termName === "second_hbot_time"){
-							let hbotTime = new Date(term.value);
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "hp_arrived"){
-									let arrivedTime = new Date(compareTerm.value);
-									var divValue = term.value / compareTerm.value;
-									$("#arrive_to_2nd_hbot").val(hour).trigger('change');
-								}
-							});
-						}
-						
-						if(term.termName === "hp_hbot_num"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "out_hbot_num"){
-									var total = term.value + compareTerm.value;
-									$("#total_hbot").val(total).trigger('change');
-								}
-							});
-						}						
-
-						if(term.termName === "lymphocyte_0"){
-							this.crf.terms.forEach(compareTerm=>{
-								if(compareTerm.termName === "neutropil_0"){
-									var divValue = term.value / compareTerm.value;
-									$("#nrl_0").val(hour).trigger('change');
-								}
-								else if(compareTerm.termName === "monocyte_0"){
-									var divValue = term.value / compareTerm.value;
-									$("#mlr_0").val(hour).trigger('change');
-								}
-								else if(compareTerm.termName === "plt_0"){
-									var divValue = term.value / compareTerm.value;
-									$("#plr_0").val(hour).trigger('change');
-								}
-							});
-						}
-						
+						this.calYM_ER_CRF(term);
 						break; 
 					case "excercise_crf":
-						//console.log("Exercise CRF Auto Calculation Running");
-						var beforeValue = term.termName + "_before_value";
-						switch(term.termName){
-							case "running_selection":
-								if(this.gender == 0 && term.value[0] === '3'){
-									$("#treadmill_9min_outerDiv").show();
-								}
-								break;
-							case "drug_diabetes":
-								if(term.value[0] === '1'){
-									this.crf.terms.forEach(compareTerm=>{
-										if(compareTerm.termName === "diabetes"){
-											compareTerm.value = "1";
-											$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
-										}else if(compareTerm.termName === "is_high_risk"){
-											compareTerm.value = "0";
-											$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
-										}
-									});
-								}else{
-									let highriskContentArr = new Array();
-									this.crf.terms.forEach(compareTerm=>{
-										if(compareTerm.termName === "diabetes"){
-											compareTerm.value = "0";
-											$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');							
-										}
-										if(compareTerm.termName === "drug_thyroid" || compareTerm.termName === "drug_cv" || compareTerm.termName === "drug_a_c" || compareTerm.termName === "drug_lung" || compareTerm.termName === "drug_respiratory" || compareTerm.termName === "drug_liver"){
-											//console.log("comparing term",compareTerm.value);
-											highriskContentArr.push(compareTerm.value);												
-										}
-										
-									});
-									for(const index in highriskContentArr){
-										//console.log("highriskContentArr", highriskContentArr);
-										//console.log("highriskContentArr", highriskContentArr[index][0]);
-										if(highriskContentArr[index][0] !== "0"){
-											$("#is_high_risk").val("0").trigger('change');
-											break;
-										}else{
-											$("#is_high_risk").val("1").trigger('change');
-										}
-									}
-								}
-								break;
-							case "waist_measurement":
-								if(this.gender == 0) {
-									if(this[beforeValue]){
-										if(this[beforeValue] < 90 && term.value >= 90) {
-											if(this.metabolicCount < 5){
-												this.metabolicCount++;
-												this[beforeValue] = term.value;
-											}
-										}else if(this[beforeValue] > 90 && term.value < 90){
-											if(this.metabolicCount > 0){
-												this.metabolicCount--;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}
-									}else{
-										//console.log("dont have beforeValue");
-										if(term.value >= 85) {
-											if(this.metabolicCount < 5){
-												this.metabolicCount++;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}										
-									}
-								}else{
-									if(this[beforeValue]){
-										if(this[beforeValue] < 85 && term.value >= 85) {
-											if(this.metabolicCount < 5){
-												this.metabolicCount++;
-												this[beforeValue] = term.value;
-											}
-										}else if(this[beforeValue] > 85 && term.value < 85){
-											if(this.metabolicCount > 0){
-												this.metabolicCount--;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}
-									}else{
-										//console.log("dont have beforeValue");
-										if(term.value >= 85) {
-											if(this.metabolicCount < 5){
-												this.metabolicCount++;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}										
-									}
-								}
-								break;
-
-							case "myocardial_infarction":
-								if(this[beforeValue]){
-									if(term.value[0] === '1' && term.value[0] !== this[beforeValue]) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value[0];
-										}
-									}else{
-										if(this.riskCount > 0){
-											this.riskCount--;
-											this[beforeValue] = term.value[0];
-										}
-									}
-								}else{
-									if(term.value[0] === '1') {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value[0];
-										}
-									}else{
-										this[beforeValue] = term.value[0];
-									}
-								}
-								break;
-							case "smoke":
-								if(this[beforeValue]){
-									if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this[beforeValue] === '-1' || this[beforeValue] === '1')) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value[0];
-										}
-									}else if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this[beforeValue] === '2' || this[beforeValue] === '3' || this[beforeValue] === '4' || this[beforeValue] === '5' || this[beforeValue] === '6')){
-										this[beforeValue] = term.value[0];
-									}else{
-										if(this.riskCount > 0){
-											this.riskCount--;
-											this[beforeValue] = term.value[0];
-										}
-									}
-								}else{
-									if(term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value[0];
-										}
-									}else{
-										this[beforeValue] = term.value[0];
-									}
-								}
-								break;
-							case "sedentary_life":
-								if(this[beforeValue]){
-									if(term.value[0] === '1' && term.value[0] !== this[beforeValue]) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value[0];
-										}
-									}else{
-										if(this.riskCount > 0){
-											this.riskCount--;
-											this[beforeValue] = term.value[0];
-										}
-									}
-								}else{
-									if(term.value[0] === '1') {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value[0];
-										}
-									}else{
-										this[beforeValue] = term.value[0];
-									}
-								}
-								break;
-							case "middle_stomach":
-								if(this.gender == 0) {
-									if(this[beforeValue]){
-										if(this[beforeValue] < 90 && term.value >= 90) {
-											if(this.riskCount < 10){
-												this.riskCount++;
-												this[beforeValue] = term.value;
-											}
-										}else if(this[beforeValue] >= 90 && term.value < 90){
-											if(this.riskCount > 0){
-												this.riskCount--;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}
-									}else{
-										//console.log("dont have beforeValue");
-										if(term.value >= 90) {
-											if(this.riskCount < 10){
-												this.riskCount++;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}										
-									}
-								}else{
-									if(this[beforeValue]){
-										if(this[beforeValue] < 80 && term.value >= 80) {
-											if(this.riskCount < 10){
-												this.riskCount++;
-												this[beforeValue] = term.value;
-											}
-										}else if(this[beforeValue] >= 80 && term.value < 80){
-											if(this.riskCount > 0){
-												this.riskCount--;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}
-									}else{
-										//console.log("dont have beforeValue");
-										if(term.value >= 80) {
-											if(this.riskCount < 10){
-												this.riskCount++;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}										
-									}
-								}
-								break;
-							case "survey_sbp":
-								if(this[beforeValue]){
-									if(this[beforeValue] < 140 && term.value >= 140) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											if(this[beforeValue] < 130){
-												if(this.metabolicCount < 5){
-													this.metabolicCount++;
-												}
-											}
-											this[beforeValue] = term.value;
-										}
-										
-									}else if(this[beforeValue] >= 130 && term.value < 140){
-										if(this.riskCount > 0){
-											this.riskCount--;
-											this[beforeValue] = term.value;
-										}
-										if(term.value < 130){
-											if(this.metabolicCount > 0){
-												this.metabolicCount--;
-												this[beforeValue] = term.value;
-											}
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}
-								}else{
-									//console.log("dont have beforeValue");
-									if(term.value >= 140) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value;
-										}
-										if(this.metabolicCount < 5){
-											this.metabolicCount++;
-											this[beforeValue] = term.value;
-										}
-									}else if(term.value >= 130){
-										if(this.metabolicCount < 5){
-											this.metabolicCount++;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}										
-								}
-								break;
-							case "survey_dbp":
-								if(this[beforeValue]){
-									if(this[beforeValue] < 90 && term.value >= 90) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value;
-										}
-									}else if(this[beforeValue] >= 90 && term.value < 90){
-										if(this.riskCount > 0){
-											this.riskCount--;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}
-								}else{
-									//console.log("dont have beforeValue");
-									if(term.value >= 90) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}										
-								}
-								break;
-							case "tc":
-								if(this[beforeValue]){
-									if(this[beforeValue] < 200 && term.value >= 200) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value;
-										}
-									}else if(this[beforeValue] >= 200 && term.value < 200){
-										if(this.riskCount > 0){
-											this.riskCount--;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}
-								}else{
-									//console.log("dont have beforeValue");
-									if(term.value >= 200) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}										
-								}
-								break;
-							case "survey_glu_fasting":
-								if(this[beforeValue]){
-									if(this[beforeValue] < 100 && term.value >= 100) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this.metabolicCount++;
-											this[beforeValue] = term.value;
-										}
-									}else if(this[beforeValue] >= 100 && term.value < 100){
-										if(this.riskCount > 0){
-											this.riskCount--;
-											this.metabolicCount--;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}
-								}else{
-									//console.log("dont have beforeValue");
-									if(term.value >= 100) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this.metabolicCount++;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}										
-								}
-								break;
-							case "survey_glu_postprandial":
-								if(this[beforeValue]){
-									if(this[beforeValue] < 140 && term.value >= 140) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this.metabolicCount++;
-											this[beforeValue] = term.value;
-										}
-									}else if(this[beforeValue] >= 140 && term.value < 140){
-										if(this.riskCount > 0){
-											this.riskCount--;
-											this.metabolicCount--;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}
-								}else{
-									//console.log("dont have beforeValue");
-									if(term.value >= 140) {
-										if(this.riskCount < 10){
-											this.riskCount++;
-											this.metabolicCount++;
-											this[beforeValue] = term.value;
-										}
-									}else{
-										this[beforeValue] = term.value;
-									}										
-								}
-								break;
-							case "hdl":
-								if(this.gender == 0) {
-									if(this[beforeValue]){
-										if(this[beforeValue] > 40 && term.value <= 40) {
-											if(this.metabolicCount < 5){
-												this.metabolicCount++;
-												this[beforeValue] = term.value;
-											}
-										}else if(this[beforeValue] < 40 && term.value > 40){
-											if(this.metabolicCount > 0){
-												this.metabolicCount--;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}
-									}else{
-										//console.log("dont have beforeValue");
-										if(term.value < 40) {
-											if(this.metabolicCount < 5){
-												this.metabolicCount++;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}										
-									}
-								}else{
-									if(this[beforeValue]){
-										if(this[beforeValue] > 50 && term.value <= 50) {
-											if(this.metabolicCount < 5){
-												this.metabolicCount++;
-												this[beforeValue] = term.value;
-											}
-										}else if(this[beforeValue] <= 50 && term.value < 50){
-											if(this.metabolicCount > 0){
-												this.metabolicCount--;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}
-									}else{
-										//console.log("dont have beforeValue");
-										if(term.value < 50) {
-											if(this.metabolicCount < 5){
-												this.metabolicCount++;
-												this[beforeValue] = term.value;
-											}
-										}else{
-											this[beforeValue] = term.value;
-										}										
-									}
-								}
-								break;
-							case "drug_thyroid":
-							case "drug_cv":
-							case "drug_a_c":
-							case "drug_lung":
-							case "drug_respiratory":
-							case "drug_liver":
-							case "drug_kidney_ureter":
-								if(term.value[0] === '1'){
-									this.crf.terms.forEach(compareTerm=>{
-										if(compareTerm.termName === "is_high_risk"){
-											compareTerm.value = "0";
-											$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
-										}
-									});
-								}else{
-									let highriskContentArr = new Array();
-									this.crf.terms.forEach(compareTerm=>{
-										if(compareTerm.termName === "drug_thyroid" || compareTerm.termName === "drug_cv" || compareTerm.termName === "drug_a_c" || compareTerm.termName === "drug_lung" || compareTerm.termName === "drug_respiratory" || compareTerm.termName === "drug_liver" || compareTerm.termName === "diabetes"){
-											//console.log("comparing term", compareTerm.value);
-											highriskContentArr.push(compareTerm.value);												
-										}
-										
-									});
-									for(const index in highriskContentArr){
-										//console.log("highriskContentArr", highriskContentArr);
-										//console.log("highriskContentArr", highriskContentArr[index][0]);
-										if(highriskContentArr[index][0] !== "0"){
-											$("#is_high_risk").val("0").trigger('change');
-											break;
-										}else{
-											$("#is_high_risk").val("1").trigger('change');
-										}
-									}
-								}
-								break;
-							case "fitness_hand_grip":
-								if(this.gender == 0){
-									if(term.value < 27){
-										$("#is_sarcopenia_ewgsop2").val("1").trigger('change');
-										$("#is_sarcopenia_awgs2").val("1").trigger('change');
-									}else if(term.value < 28){
-										$("#is_sarcopenia_awgs2").val("1").trigger('change');
-									}
-								}else{
-									if(term.value < 16){
-										$("#is_sarcopenia_ewgsop2").val("1").trigger('change');
-										$("#is_sarcopenia_awgs2").val("1").trigger('change');
-									}else if(term.value < 18){
-										$("#is_sarcopenia_awgs2").val("1").trigger('change');
-									}
-								}
-								
-							case "walking_6m":
-								if(term.value < 0.8){
-									$("#is_low_physical_performance_awgs2").val("1").trigger('change');
-									$("#is_low_physical_performance_ewgsop2").val("1").trigger('change');
-								}else if(term.value < 1.0){
-									$("#is_low_physical_performance_awgs2").val("1").trigger('change');
-								}
-								break;
-							case "inbody_height":
-								$("#sarcopenia_height").val(term.value).trigger('change');
-								break;
-							case "inbody_weight":
-								$("#sarcopenia_weight").val(term.value).trigger('change');
-								break;
-							case "alm":
-								let alm_val = term.value;
-								let height = 0;
-								let weight = 0;
-								this.crf.terms.forEach(compareTerm=>{
-									if(compareTerm.termName === "inbody_height"){
-										if(compareTerm.value){
-											height = compareTerm.value;
-										}
-									}else if (compareTerm.termName === "inbody_weight"){
-										if(compareTerm.value){
-											weight = compareTerm.value;
-										}
-									}
-								});
-								let bmi = weight / (height*height);
-								let alm_height = alm_val / (height*height);
-								let alm_bmi = alm_val / bmi;
-								//TODO: exception control
-								$("#alm_ht_div").val(alm_height).trigger('change');
-								$("#alm_bmi_div").val(alm_bmi).trigger('change');
-								if(this.gender == 0){
-									if(alm_height < 7.0){
-										$("#is_alm_ht_div_awgs").val("1").trigger('change');
-										$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
-									}else if(alm < 20){
-										$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
-									}
-									if(alm_bmi < 0.789){
-										$("#is_low_alm_bmi_div").val("1").trigger('change');
-									}
-								}else{
-									if(alm_height < 5.5){
-										$("#is_alm_ht_div_awgs").val("1").trigger('change');
-										$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
-									}else if(alm < 15){
-										$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
-									}
-									if(alm_bmi < 0.512){
-										$("#is_low_alm_bmi_div").val("1").trigger('change');
-									}
-								}
-								break;
-							case "bone_density_num":
-								//console.log(term.value, typeof term.value);
-								if(term.value >= -1){
-									$("#is_osteoporosis").val("0").trigger('change');
-								}else if(term.value <= -2.5){
-									$("#is_osteoporosis").val("2").trigger('change');
-								}else{
-									$("#is_osteoporosis").val("1").trigger('change');
-								}
-								break;
-							case "depression_grade":
-								var isElderly = false;
-								if(this.age >= 65) isElderly = true;
-								if(isElderly){
-									if(term.value <= 14){
-										$("#bdi_depress_grade").val("0").trigger('change');
-									}else if(term.value <= 18){
-										$("#bdi_depress_grade").val("1").trigger('change');
-									}else if(term.value <= 21){
-										$("#bdi_depress_grade").val("2").trigger('change');
-									}else{
-										$("#bdi_depress_grade").val("3").trigger('change');
-									}
-								}else{
-									if(term.value <= 9){
-										$("#bdi_depress_grade").val("0").trigger('change');
-									}else if(term.value <= 15){
-										$("#bdi_depress_grade").val("1").trigger('change');
-									}else if(term.value <= 23){
-										$("#bdi_depress_grade").val("2").trigger('change');
-									}else{
-										$("#bdi_depress_grade").val("3").trigger('change');
-									}
-								}
-								break;
-						}
-					//console.log("metabolic : " , this.metabolicCount, "risk : ", this.riskCount);		
-					if(this.metabolicCount >= 3){
-						//console.log("metaBolic ON");
-						$("#is_high_risk_metabolic").val("0").trigger('change');
-					}else{
-						$("#is_high_risk_metabolic").val("1").trigger('change');
-					}
-					
-					if(this.riskCount == 1){
-						//console.log("lowRisk ON");
-						$("#is_low_risk").val("0").trigger('change');
-					}else if(this.riskCount > 1){
-						$("#is_low_risk").val("0").trigger('change');
-						$("#is_mid_risk").val("0").trigger('change');
-						//console.log("lowRisk ON");
-						//console.log("midRisk ON");
-					}else{
-						$("#is_low_risk").val("1").trigger('change');
-						$("#is_mid_risk").val("1").trigger('change');
-					}
-						
+						this.calYM_EX_CRF(term);						
 					break;						
 				}
+			}
+		},
+
+		// need to refactoring
+		calYM_ER_CRF : function(term) {
+			//console.log("ER CRF Auto Calculation Running");
+			//console.log(term.termName);
+			//console.log(term.value);
+			if(term.termName === "conciousness") {
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "gcs"){
+						//console.log("find", compareTerm.value);
+						let selectedValue = term.value[0];
+						var beforeValue = compareTerm.termName + "_before_value";
+						switch(selectedValue) {
+						case '0':
+							compareTerm.value = 15;
+							if(this[beforeValue]){
+								if(this[beforeValue] < 12){
+									this.cogasScore--;
+									this[beforeValue] = compareTerm.value;
+								}else{
+									this[beforeValue] = compareTerm.value;
+								}
+							}else{
+								this[beforeValue] = compareTerm.value;
+								
+							}									
+							break;
+						case '1':
+							compareTerm.value = 12;
+							if(this[beforeValue]){
+								if(this[beforeValue] < 12){
+									this.cogasScore--;
+									this[beforeValue] = compareTerm.value;
+								}else{
+									this[beforeValue] = compareTerm.value;
+								}
+							}else{
+								this[beforeValue] = compareTerm.value;
+								
+							}			
+							break;
+						case '2':
+							compareTerm.value = 10;
+							if(this[beforeValue]){
+								if(this[beforeValue] > 12){
+									this.cogasScore++;
+									this[beforeValue] = compareTerm.value;
+								}else{
+									this[beforeValue] = compareTerm.value;
+								}
+							}else{
+								this.cogasScore++;
+								this[beforeValue] = compareTerm.value;
+							}			
+							break;
+						case '3':
+							compareTerm.value = 8;
+							if(this[beforeValue]){
+								if(this[beforeValue] > 12){
+									this.cogasScore++;
+									this[beforeValue] = compareTerm.value;
+								}else{
+									this[beforeValue] = compareTerm.value;
+								}
+							}else{
+								this.cogasScore++;
+								this[beforeValue] = compareTerm.value;
+							}		
+							break;
+						case '4':
+							compareTerm.value = 5;
+							if(this[beforeValue]){
+								if(this[beforeValue] > 12){
+									this.cogasScore++;
+									this[beforeValue] = compareTerm.value;
+								}else{
+									this[beforeValue] = compareTerm.value;
+								}
+							}else{
+								this.cogasScore++;
+								this[beforeValue] = compareTerm.value;
+							}		
+							break;
+						case '5':
+							compareTerm.value = 3;
+							if(this[beforeValue]){
+								if(this[beforeValue] > 12){
+									this.cogasScore++;
+									this[beforeValue] = compareTerm.value;
+								}else{
+									this[beforeValue] = compareTerm.value;
+								}
+							}else{
+								this.cogasScore++;
+								this[beforeValue] = compareTerm.value;
+							}		
+							break;
+						default:
+							compareTerm.value = -1;
+							if(this[beforeValue]){
+								if(this[beforeValue] < 12){
+									this.cogasScore--;
+									this[beforeValue] = compareTerm.value;
+								}else{
+									this[beforeValue] = compareTerm.value;
+								}
+							}else{
+								this[beforeValue] = compareTerm.value;
+								
+							}		
+							break;
+						}
+						$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+					}
+				});
+			}
+			
+			if(term.termName === "shock") {
+				if(this[beforeValue]){
+					if(term.value[0] === '1' && this[beforeValue] !== '1'){
+						this.cogasScore++;
+						this[beforeValue] = term.value[0];
+					}else{
+						this.cogasScore--;
+						this[beforeValue] = term.value[0];
+					}
+				}else{
+					if(term.value[0] === '1'){
+						this.cogasScore++;
+						this[beforeValue] = term.value[0];
+					}
+				}
+				
+			}
+	
+			if(term.termName === "hbotTrial") {
+				if(this[beforeValue]){
+					if(term.value[0] === '0' && this[beforeValue] !== '0'){
+						this.cogasScore++;
+						this[beforeValue] = term.value[0];
+					}else{
+						this.cogasScore--;
+						this[beforeValue] = term.value[0];
+					}
+				}else{
+					if(term.value[0] === '0'){
+						this.cogasScore++;
+						this[beforeValue] = term.value[0];
+					}
+				}
+				
+			}
+			
+			if(term.termName === "ck_0") {
+				if(this[beforeValue]){
+					if(term.value[0] >= 320 && this[beforeValue] < 320){
+						this.cogasScore++;
+						this[beforeValue] = term.value[0];
+					}else{
+						this.cogasScore--;
+						this[beforeValue] = term.value[0];
+					}
+				}else{
+					if(term.value[0] >= 320){
+						cogasScore++;
+						this[beforeValue] = term.value[0];
+					}
+				}
+				
+			}
+			
+			if(this.cogasScore > 0){
+				//console.log(this.cogasScore);
+				$("#cogas_score").val(this.cogasScore).trigger('change');
+			}
+			
+			if(term.termName === "out_hp_date"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "visit_date"){
+						let visitDate = new Date(compareTerm.value);
+						let outDate = new Date(term.value)
+						const diffDate = outDate.getTime() - visitDate.getTime();
+						let totalDate = Math.abs(diffDate / (1000 * 60 * 60 * 24));
+						$("#total_hp_date").val(totalDate).trigger('change');
+					}
+				});
+			}
+					
+			if(term.termName === "alt_0"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "alp_0"){
+						var divValue = term.value / compareTerm.value;
+						$("#alt_alp_0").val(divValue).trigger('change');
+					}
+				});
+			}
+			
+			if(term.termName === "alp_0"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "alt_0"){
+						var divValue = term.value / compareTerm.value;
+						$("#alt_alp_0").val(divValue).trigger('change');
+					}
+				});
+			}
+	
+			if(term.termName === "alt_1"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "alp_1"){
+						var divValue = term.value / compareTerm.value;
+						$("#alt_alp_1").val(divValue).trigger('change');
+					}
+				});
+			}
+			
+			if(term.termName === "alp_1"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "alt_1"){
+						var divValue = term.value / compareTerm.value;
+						$("#alt_alp_1").val(divValue).trigger('change');
+					}
+				});
+			}
+			
+			if(term.termName === "alt_2"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "alp_2"){
+						var divValue = term.value / compareTerm.value;
+						$("#alt_alp_2").val(divValue).trigger('change');
+					}
+				});
+			}
+			
+			if(term.termName === "alp_2"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "alt_2"){
+						var divValue = term.value / compareTerm.value;
+						$("#alt_alp_2").val(divValue).trigger('change');
+					}
+				});
+			}
+			
+			if(term.termName === "first_hbot_time"){
+				let hbotTime = new Date(term.value);
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "detect_time"){
+						let detectTime = new Date(compareTerm.value);
+						var hour = (hbotTime.getTime() - detectTime.getTime()) / 3600000;
+						$("#detect_to_1st_hbot").val(hour).trigger('change');
+					}
+					else if(compareTerm.termName === "hp_arrived"){
+						let arrivedTime = new Date(compareTerm.value);
+						var hour = (hbotTime.getTime() - arrivedTime.getTime()) / 3600000;
+						$("#detect_to_1st_hbot").val(hour).trigger('change');
+					}
+				});
+			}
+			
+			if(term.termName === "second_hbot_time"){
+				let hbotTime = new Date(term.value);
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "hp_arrived"){
+						let arrivedTime = new Date(compareTerm.value);
+						var divValue = term.value / compareTerm.value;
+						$("#arrive_to_2nd_hbot").val(hour).trigger('change');
+					}
+				});
+			}
+			
+			if(term.termName === "hp_hbot_num"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "out_hbot_num"){
+						var total = term.value + compareTerm.value;
+						$("#total_hbot").val(total).trigger('change');
+					}
+				});
+			}						
+	
+			if(term.termName === "lymphocyte_0"){
+				this.crf.terms.forEach(compareTerm=>{
+					if(compareTerm.termName === "neutropil_0"){
+						var divValue = term.value / compareTerm.value;
+						$("#nrl_0").val(hour).trigger('change');
+					}
+					else if(compareTerm.termName === "monocyte_0"){
+						var divValue = term.value / compareTerm.value;
+						$("#mlr_0").val(hour).trigger('change');
+					}
+					else if(compareTerm.termName === "plt_0"){
+						var divValue = term.value / compareTerm.value;
+						$("#plr_0").val(hour).trigger('change');
+					}
+				});
+			}
+			
+		},
+		
+		// need to refactoring
+		calYM_EX_CRF: function(term) {
+			//console.log("Exercise CRF Auto Calculation Running");
+			var beforeValue = term.termName + "_before_value";
+	
+			switch(term.termName){
+				case "running_selection":
+					if(this.gender == 0 && term.value[0] === '3'){
+						$("#treadmill_9min_outerDiv").show();
+					}
+					break;
+				case "drug_diabetes":
+					if(term.value[0] === '1'){
+						this.crf.terms.forEach(compareTerm=>{
+							if(compareTerm.termName === "diabetes"){
+								compareTerm.value = "1";
+								$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+							}else if(compareTerm.termName === "is_high_risk"){
+								compareTerm.value = "0";
+								$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+							}
+						});
+					}else{
+						let highriskContentArr = new Array();
+						this.crf.terms.forEach(compareTerm=>{
+							if(compareTerm.termName === "diabetes"){
+								compareTerm.value = "0";
+								$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');							
+							}
+							if(compareTerm.termName === "drug_thyroid" || compareTerm.termName === "drug_cv" || compareTerm.termName === "drug_a_c" || compareTerm.termName === "drug_lung" || compareTerm.termName === "drug_respiratory" || compareTerm.termName === "drug_liver"){
+								//console.log("comparing term",compareTerm.value);
+								highriskContentArr.push(compareTerm.value);												
+							}
+							
+						});
+						for(const index in highriskContentArr){
+							//console.log("highriskContentArr", highriskContentArr);
+							//console.log("highriskContentArr", highriskContentArr[index][0]);
+							if(highriskContentArr[index][0] !== "0"){
+								$("#is_high_risk").val("0").trigger('change');
+								break;
+							}else{
+								$("#is_high_risk").val("1").trigger('change');
+							}
+						}
+					}
+					break;
+				case "waist_measurement":
+					if(this.gender == 0) {
+						if(this[beforeValue]){
+							if(this[beforeValue] < 90 && term.value >= 90) {
+								if(this.metabolicCount < 5){
+									this.metabolicCount++;
+									this[beforeValue] = term.value;
+								}
+							}else if(this[beforeValue] > 90 && term.value < 90){
+								if(this.metabolicCount > 0){
+									this.metabolicCount--;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}
+						}else{
+							//console.log("dont have beforeValue");
+							if(term.value >= 85) {
+								if(this.metabolicCount < 5){
+									this.metabolicCount++;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}										
+						}
+					}else{
+						if(this[beforeValue]){
+							if(this[beforeValue] < 85 && term.value >= 85) {
+								if(this.metabolicCount < 5){
+									this.metabolicCount++;
+									this[beforeValue] = term.value;
+								}
+							}else if(this[beforeValue] > 85 && term.value < 85){
+								if(this.metabolicCount > 0){
+									this.metabolicCount--;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}
+						}else{
+							//console.log("dont have beforeValue");
+							if(term.value >= 85) {
+								if(this.metabolicCount < 5){
+									this.metabolicCount++;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}										
+						}
+					}
+					break;
+	
+				case "myocardial_infarction":
+					if(this[beforeValue]){
+						if(term.value[0] === '1' && term.value[0] !== this[beforeValue]) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value[0];
+							}
+						}else{
+							if(this.riskCount > 0){
+								this.riskCount--;
+								this[beforeValue] = term.value[0];
+							}
+						}
+					}else{
+						if(term.value[0] === '1') {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value[0];
+							}
+						}else{
+							this[beforeValue] = term.value[0];
+						}
+					}
+					break;
+				case "smoke":
+					if(this[beforeValue]){
+						if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this[beforeValue] === '-1' || this[beforeValue] === '1')) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value[0];
+							}
+						}else if((term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') && (this[beforeValue] === '2' || this[beforeValue] === '3' || this[beforeValue] === '4' || this[beforeValue] === '5' || this[beforeValue] === '6')){
+							this[beforeValue] = term.value[0];
+						}else{
+							if(this.riskCount > 0){
+								this.riskCount--;
+								this[beforeValue] = term.value[0];
+							}
+						}
+					}else{
+						if(term.value[0] === '2' || term.value[0] === '3' || term.value[0] === '4' || term.value[0] === '5' || term.value[0] === '6') {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value[0];
+							}
+						}else{
+							this[beforeValue] = term.value[0];
+						}
+					}
+					break;
+				case "sedentary_life":
+					if(this[beforeValue]){
+						if(term.value[0] === '1' && term.value[0] !== this[beforeValue]) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value[0];
+							}
+						}else{
+							if(this.riskCount > 0){
+								this.riskCount--;
+								this[beforeValue] = term.value[0];
+							}
+						}
+					}else{
+						if(term.value[0] === '1') {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value[0];
+							}
+						}else{
+							this[beforeValue] = term.value[0];
+						}
+					}
+					break;
+				case "middle_stomach":
+					if(this.gender == 0) {
+						if(this[beforeValue]){
+							if(this[beforeValue] < 90 && term.value >= 90) {
+								if(this.riskCount < 10){
+									this.riskCount++;
+									this[beforeValue] = term.value;
+								}
+							}else if(this[beforeValue] >= 90 && term.value < 90){
+								if(this.riskCount > 0){
+									this.riskCount--;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}
+						}else{
+							//console.log("dont have beforeValue");
+							if(term.value >= 90) {
+								if(this.riskCount < 10){
+									this.riskCount++;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}										
+						}
+					}else{
+						if(this[beforeValue]){
+							if(this[beforeValue] < 80 && term.value >= 80) {
+								if(this.riskCount < 10){
+									this.riskCount++;
+									this[beforeValue] = term.value;
+								}
+							}else if(this[beforeValue] >= 80 && term.value < 80){
+								if(this.riskCount > 0){
+									this.riskCount--;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}
+						}else{
+							//console.log("dont have beforeValue");
+							if(term.value >= 80) {
+								if(this.riskCount < 10){
+									this.riskCount++;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}										
+						}
+					}
+					break;
+				case "survey_sbp":
+					if(this[beforeValue]){
+						if(this[beforeValue] < 140 && term.value >= 140) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								if(this[beforeValue] < 130){
+									if(this.metabolicCount < 5){
+										this.metabolicCount++;
+									}
+								}
+								this[beforeValue] = term.value;
+							}
+							
+						}else if(this[beforeValue] >= 130 && term.value < 140){
+							if(this.riskCount > 0){
+								this.riskCount--;
+								this[beforeValue] = term.value;
+							}
+							if(term.value < 130){
+								if(this.metabolicCount > 0){
+									this.metabolicCount--;
+									this[beforeValue] = term.value;
+								}
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}
+					}else{
+						//console.log("dont have beforeValue");
+						if(term.value >= 140) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value;
+							}
+							if(this.metabolicCount < 5){
+								this.metabolicCount++;
+								this[beforeValue] = term.value;
+							}
+						}else if(term.value >= 130){
+							if(this.metabolicCount < 5){
+								this.metabolicCount++;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}										
+					}
+					break;
+				case "survey_dbp":
+					if(this[beforeValue]){
+						if(this[beforeValue] < 90 && term.value >= 90) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value;
+							}
+						}else if(this[beforeValue] >= 90 && term.value < 90){
+							if(this.riskCount > 0){
+								this.riskCount--;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}
+					}else{
+						//console.log("dont have beforeValue");
+						if(term.value >= 90) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}										
+					}
+					break;
+				case "tc":
+					if(this[beforeValue]){
+						if(this[beforeValue] < 200 && term.value >= 200) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value;
+							}
+						}else if(this[beforeValue] >= 200 && term.value < 200){
+							if(this.riskCount > 0){
+								this.riskCount--;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}
+					}else{
+						//console.log("dont have beforeValue");
+						if(term.value >= 200) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}										
+					}
+					break;
+				case "survey_glu_fasting":
+					if(this[beforeValue]){
+						if(this[beforeValue] < 100 && term.value >= 100) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this.metabolicCount++;
+								this[beforeValue] = term.value;
+							}
+						}else if(this[beforeValue] >= 100 && term.value < 100){
+							if(this.riskCount > 0){
+								this.riskCount--;
+								this.metabolicCount--;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}
+					}else{
+						//console.log("dont have beforeValue");
+						if(term.value >= 100) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this.metabolicCount++;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}										
+					}
+					break;
+				case "survey_glu_postprandial":
+					if(this[beforeValue]){
+						if(this[beforeValue] < 140 && term.value >= 140) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this.metabolicCount++;
+								this[beforeValue] = term.value;
+							}
+						}else if(this[beforeValue] >= 140 && term.value < 140){
+							if(this.riskCount > 0){
+								this.riskCount--;
+								this.metabolicCount--;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}
+					}else{
+						//console.log("dont have beforeValue");
+						if(term.value >= 140) {
+							if(this.riskCount < 10){
+								this.riskCount++;
+								this.metabolicCount++;
+								this[beforeValue] = term.value;
+							}
+						}else{
+							this[beforeValue] = term.value;
+						}										
+					}
+					break;
+				case "hdl":
+					if(this.gender == 0) {
+						if(this[beforeValue]){
+							if(this[beforeValue] > 40 && term.value <= 40) {
+								if(this.metabolicCount < 5){
+									this.metabolicCount++;
+									this[beforeValue] = term.value;
+								}
+							}else if(this[beforeValue] < 40 && term.value > 40){
+								if(this.metabolicCount > 0){
+									this.metabolicCount--;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}
+						}else{
+							//console.log("dont have beforeValue");
+							if(term.value < 40) {
+								if(this.metabolicCount < 5){
+									this.metabolicCount++;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}										
+						}
+					}else{
+						if(this[beforeValue]){
+							if(this[beforeValue] > 50 && term.value <= 50) {
+								if(this.metabolicCount < 5){
+									this.metabolicCount++;
+									this[beforeValue] = term.value;
+								}
+							}else if(this[beforeValue] <= 50 && term.value < 50){
+								if(this.metabolicCount > 0){
+									this.metabolicCount--;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}
+						}else{
+							//console.log("dont have beforeValue");
+							if(term.value < 50) {
+								if(this.metabolicCount < 5){
+									this.metabolicCount++;
+									this[beforeValue] = term.value;
+								}
+							}else{
+								this[beforeValue] = term.value;
+							}										
+						}
+					}
+					break;
+				case "drug_thyroid":
+				case "drug_cv":
+				case "drug_a_c":
+				case "drug_lung":
+				case "drug_respiratory":
+				case "drug_liver":
+				case "drug_kidney_ureter":
+					if(term.value[0] === '1'){
+						this.crf.terms.forEach(compareTerm=>{
+							if(compareTerm.termName === "is_high_risk"){
+								compareTerm.value = "0";
+								$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
+							}
+						});
+					}else{
+						let highriskContentArr = new Array();
+						this.crf.terms.forEach(compareTerm=>{
+							if(compareTerm.termName === "drug_thyroid" || compareTerm.termName === "drug_cv" || compareTerm.termName === "drug_a_c" || compareTerm.termName === "drug_lung" || compareTerm.termName === "drug_respiratory" || compareTerm.termName === "drug_liver" || compareTerm.termName === "diabetes"){
+								//console.log("comparing term", compareTerm.value);
+								highriskContentArr.push(compareTerm.value);												
+							}
+							
+						});
+						for(const index in highriskContentArr){
+							//console.log("highriskContentArr", highriskContentArr);
+							//console.log("highriskContentArr", highriskContentArr[index][0]);
+							if(highriskContentArr[index][0] !== "0"){
+								$("#is_high_risk").val("0").trigger('change');
+								break;
+							}else{
+								$("#is_high_risk").val("1").trigger('change');
+							}
+						}
+					}
+					break;
+				case "fitness_hand_grip":
+					if(this.gender == 0){
+						if(term.value < 27){
+							$("#is_sarcopenia_ewgsop2").val("1").trigger('change');
+							$("#is_sarcopenia_awgs2").val("1").trigger('change');
+						}else if(term.value < 28){
+							$("#is_sarcopenia_awgs2").val("1").trigger('change');
+						}
+					}else{
+						if(term.value < 16){
+							$("#is_sarcopenia_ewgsop2").val("1").trigger('change');
+							$("#is_sarcopenia_awgs2").val("1").trigger('change');
+						}else if(term.value < 18){
+							$("#is_sarcopenia_awgs2").val("1").trigger('change');
+						}
+					}
+					
+				case "walking_6m":
+					if(term.value < 0.8){
+						$("#is_low_physical_performance_awgs2").val("1").trigger('change');
+						$("#is_low_physical_performance_ewgsop2").val("1").trigger('change');
+					}else if(term.value < 1.0){
+						$("#is_low_physical_performance_awgs2").val("1").trigger('change');
+					}
+					break;
+				case "inbody_height":
+					$("#sarcopenia_height").val(term.value).trigger('change');
+					break;
+				case "inbody_weight":
+					$("#sarcopenia_weight").val(term.value).trigger('change');
+					break;
+				case "alm":
+					let alm_val = term.value;
+					let height = 0;
+					let weight = 0;
+					this.crf.terms.forEach(compareTerm=>{
+						if(compareTerm.termName === "inbody_height"){
+							if(compareTerm.value){
+								height = compareTerm.value;
+							}
+						}else if (compareTerm.termName === "inbody_weight"){
+							if(compareTerm.value){
+								weight = compareTerm.value;
+							}
+						}
+					});
+					let bmi = weight / (height*height);
+					let alm_height = alm_val / (height*height);
+					let alm_bmi = alm_val / bmi;
+					//TODO: exception control
+					$("#alm_ht_div").val(alm_height).trigger('change');
+					$("#alm_bmi_div").val(alm_bmi).trigger('change');
+					if(this.gender == 0){
+						if(alm_height < 7.0){
+							$("#is_alm_ht_div_awgs").val("1").trigger('change');
+							$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
+						}else if(alm < 20){
+							$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
+						}
+						if(alm_bmi < 0.789){
+							$("#is_low_alm_bmi_div").val("1").trigger('change');
+						}
+					}else{
+						if(alm_height < 5.5){
+							$("#is_alm_ht_div_awgs").val("1").trigger('change');
+							$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
+						}else if(alm < 15){
+							$("#is_alm_ht_div_ewgsop2").val("1").trigger('change');
+						}
+						if(alm_bmi < 0.512){
+							$("#is_low_alm_bmi_div").val("1").trigger('change');
+						}
+					}
+					break;
+				case "bone_density_num":
+					//console.log(term.value, typeof term.value);
+					if(term.value >= -1){
+						$("#is_osteoporosis").val("0").trigger('change');
+					}else if(term.value <= -2.5){
+						$("#is_osteoporosis").val("2").trigger('change');
+					}else{
+						$("#is_osteoporosis").val("1").trigger('change');
+					}
+					break;
+				case "depression_grade":
+					var isElderly = false;
+					if(this.age >= 65) isElderly = true;
+					if(isElderly){
+						if(term.value <= 14){
+							$("#bdi_depress_grade").val("0").trigger('change');
+						}else if(term.value <= 18){
+							$("#bdi_depress_grade").val("1").trigger('change');
+						}else if(term.value <= 21){
+							$("#bdi_depress_grade").val("2").trigger('change');
+						}else{
+							$("#bdi_depress_grade").val("3").trigger('change');
+						}
+					}else{
+						if(term.value <= 9){
+							$("#bdi_depress_grade").val("0").trigger('change');
+						}else if(term.value <= 15){
+							$("#bdi_depress_grade").val("1").trigger('change');
+						}else if(term.value <= 23){
+							$("#bdi_depress_grade").val("2").trigger('change');
+						}else{
+							$("#bdi_depress_grade").val("3").trigger('change');
+						}
+					}
+					break;
+			}
+		
+			//console.log("metabolic : " , this.metabolicCount, "risk : ", this.riskCount);		
+			if(this.metabolicCount >= 3){
+				//console.log("metaBolic ON");
+				$("#is_high_risk_metabolic").val("0").trigger('change');
+			}else{
+				$("#is_high_risk_metabolic").val("1").trigger('change');
+			}
+			
+			if(this.riskCount == 1){
+				//console.log("lowRisk ON");
+				$("#is_low_risk").val("0").trigger('change');
+			}else if(this.riskCount > 1){
+				$("#is_low_risk").val("0").trigger('change');
+				$("#is_mid_risk").val("0").trigger('change');
+				//console.log("lowRisk ON");
+				//console.log("midRisk ON");
+			}else{
+				$("#is_low_risk").val("1").trigger('change');
+				$("#is_mid_risk").val("1").trigger('change');
 			}
 		}
 	}
 	
+	
+
 	/*
 	 * 
 	 * for render Smart CRF UI on canvas

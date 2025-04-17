@@ -135,12 +135,21 @@ _log.info("is audit : " + isAudit);
 			<input type="hidden" id="<portlet:namespace/>hasHashChanged" name="<portlet:namespace/>hasHashChanged" >					
 			<input type="hidden" id="<portlet:namespace/>dataContent" name="<portlet:namespace/>dataContent" >
 			<aui:button-row>
-				<a id="<portlet:namespace/>btnSave" class="dh-icon-button-submit dh-icon-button-submit-save">		
-					<img src="<%= renderRequest.getContextPath() + "/btn_img/save_icon.png"%>"/>
-					<span>Save</span>
+				<a id="<portlet:namespace/>btnSave" class="dh-icon-button inactive w110">		
+					<img id="<portlet:namespace/>iconSave" class="save-icon-inactive" />
+					<span><liferay-ui:message key="ecrf-user.button.save"/></span>
 				</a>
+							
+				<a id="<portlet:namespace/>btnBack" class="dh-icon-button back-btn w110" href="<%=redirect%>">		
+					<img class="back-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.back"/></span>
+				</a>
+				
 			</aui:button-row>
 		</form>
+		
+		
+		
 	</div>
 </div>
 <style>
@@ -212,9 +221,16 @@ dataStructure.renderSmartCRF();
 Liferay.on( 'value_changed', function(evt){
 	if(isLoaded){
 		isEdited = true;
-		$('#<portlet:namespace/>btnSave').css("background-color", "#0B5FFF");
-		$('#<portlet:namespace/>btnSave').css("color", "white");
+		let saveBtn = $('#<portlet:namespace/>btnSave');
+		let saveIcon = $('#<portlet:namespace/>iconSave');
+		
+		saveBtn.removeClass("inactive");
+		saveBtn.addClass("save-btn");
+		
+		saveIcon.removeClass("save-icon-inactive");
+		saveIcon.addClass("save-icon");		
 	}
+	
 	//console.log("value_changed", JSON.stringify(evt.dataPacket.result));
 	let resultStr = JSON.stringify(evt.dataPacket.result);
 	$('#<portlet:namespace/>dataTypeId').val(<%=dataType.getDataTypeId()%>);
@@ -227,14 +243,15 @@ Liferay.on( 'value_changed', function(evt){
 $('#<portlet:namespace/>btnSave').on( 'click', function(event){
 	var renderURL = "<%=listCRFURL%>";
 	
-	if(!$('#visit_date').val()){
-		alert("visit date required");
-		document.getElementById('visit_date').focus();
-	}else{
-		if(isEdited) $('#crfViewerForm').submit();
-		else window.location.href = renderURL;
-	}
-	
+	if(isEdited) {
+		if(!$('#visit_date').val()){
+			openVisitDatePopup();
+			document.getElementById('visit_date').focus();
+		}else{
+			if(isEdited) $('#crfViewerForm').submit();
+			else window.location.href = renderURL;
+		}	
+	}	
 });
 
 $('#<portlet:namespace/>btnTable').on( 'click', function(event){
@@ -255,6 +272,23 @@ $('#<portlet:namespace/>btnVert').on( 'click', function(event){
 });
 
 });
+
+Liferay.provide(window, "openVisitDatePopup", function() {
+	var A = AUI();
+	
+	var dialog = new A.Modal({
+		headerContent: '<h3><liferay-ui:message key="ecrf-user.message.need-visit-date.title"/></h3>',
+		bodyContent: '<span style="color:red;"><liferay-ui:message key="ecrf-user.message.need-visit-date.content"/></span>',
+		centered: true,
+		modal: true,
+		height: 200,
+		width: 400,
+		zIndex: 1100,
+		close: true
+	}).render();
+	
+}, ['aui-modal']
+);
 
 
 Liferay.provide(window, 'openHistoryDialog', function(termName, displayName) {

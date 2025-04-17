@@ -132,7 +132,7 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 			<c:choose>
 				<c:when test="<%=(projectId > 0) %>">
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_PROJECT) %>">			
-						<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" name="<portlet:namespace/>save">
+						<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>save">
 							<img class="save-icon" />
 							<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 						</button>
@@ -144,7 +144,7 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
 						%>
-						<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" name="btnDelete">
+						<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="btnDelete">
 							<img class="delete-icon" />
 							<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
 						</a>
@@ -152,7 +152,7 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 			 	</c:when>
 			 	<c:otherwise>
 			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-							<button type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8" name="<portlet:namespace/>add">
+							<button type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8" id="<portlet:namespace/>add">
 							<img class="add-icon" />
 							<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 						</button>
@@ -160,7 +160,7 @@ Calendar endDateCalendar = CalendarFactoryUtil.getCalendar(date.getTime());
 			 	</c:otherwise>
 		 	</c:choose>		
 		 	
-			<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=viewProjectURL %>" name="<portlet:namespace/>cancel">
+			<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=viewProjectURL %>" id="<portlet:namespace/>cancel">
 				<img class="cancel-icon" />					
 				<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
 			</a>
