@@ -103,9 +103,10 @@ let ECRFViewer = function(StationX){
 	let autoCalUtil = {
 		initCalculatevalue: function(DataStructure, subjectInfo){
 			this.crf = DataStructure;
-
+			
+			this.subjectInfo = subjectInfo;
 			this.gender = subjectInfo["subjectGender"];
-			this.age = autoCalUtil.calculateAge(subjectInfo["subjectBirth"]);
+			this.age = autoCalUtil.calcAge(subjectInfo["subjectBirth"], new Date());
 			
 			//for er crf cogas score
 			this.cogasScore = 0;
@@ -119,191 +120,284 @@ let ECRFViewer = function(StationX){
 			
 		},
 		
-		calculateAge: function (birthDate) {
-			var birthYear = birthDate.getFullYear();
-			var birthMonth = birthDate.getMonth();
-			var birthDay = birthDate.getDate();
+		/**
+		 * calculate age at targetDate (in korean way)
+		 * @param {Date} birthDate
+		 * @param {Date} targetDate
+		 * @returns {int} age
+		 */
+		calcAge: function (birthDate, targetDate) {
+			let birthYear = birthDate.getFullYear();
+			let birthMonth = birthDate.getMonth();
+			let birthDay = birthDate.getDate();
 			
-			var currentDate = new Date();
-			var currentYear = currentDate.getFullYear();
-			var currentMonth = currentDate.getMonth();
-			var currentDay = currentDate.getDate();
+			let targetYear = targetDate.getFullYear();
+			let targetMonth = targetDate.getMonth();
+			let targetDay = targetDate.getDate();
 			
-			var age = currentYear - birthYear;
+			let age = targetYear - birthYear;
 			
-			if (currentMonth < birthMonth) {
+			if (targetMonth < birthMonth) {
 			  age--;
 			}
 			
-			else if (currentMonth === birthMonth && currentDay < birthDay) {
+			else if (targetMonth === birthMonth && targetDay < birthDay) {
 			  age--;
 			}
 			
 			return age;
 		},
+
+		/**
+		 * Calculate smoke period day by year, month, day
+		 * get value from each year, month, day input
+		 * divide total day by option
+		 * @param {String} targetNamespace 
+		 * @param {String} yearId 
+		 * @param {String} monthId 
+		 * @param {String} dayId 
+		 * @param {String} option 
+		 * @returns fixed(4) float smoke period
+		 */
+		calcSmokePeriod: function(targetNamespace, yearId, monthId, dayId, option) {
+			const DAYS_IN_YEAR = 365.0;
+			const DAYS_IN_MONTH = 30.0;
+
+			const yearVal = parseFloat($('#' + targetNamespace + yearId).val()) || 0.0;
+			const monthVal = parseFloat($('#' + targetNamespace + monthId).val()) || 0.0;
+			const dayVal = parseFloat($('#' + targetNamespace + dayId).val()) || 0.0;
+
+			const totalDays = (yearVal * DAYS_IN_YEAR) + (monthVal * DAYS_IN_MONTH) + dayVal;
+
+			let result = totalDays;
+			if(option === 'year')  result = totalDay / DAYS_IN_YEAR;
+			if(option === 'month') result = totalDay / DAYS_IN_MONTH;
+			return result.toFixed(4);
+		},
 		
-		/*
-		 * check age & gender for hide term or change value of exercise crf
-		 */ 
-		checkExcerciseFlag : function(termName){
-			switch(termName){
-				case "diabetes":
-				case "is_low_risk":
-				case "is_mid_risk":
-					if(this.age > 65){
-						$("#is_mid_risk").val("0").trigger('change');
+		/**
+		 * Calculate bmi by height, weight
+		 * get fixed param and return fixed float
+		 * @param {String} targetNamespace 
+		 * @param {String} weightId 
+		 * @param {String} heightId 
+		 * @param {number} fixed 
+		 * @returns fixed(x) float bmi
+		 */
+		calcBMI: function(targetNamespace, weightId, heightId, fixed=1) {
+			const weight = parseFloat($('#'+targetNamespace+weightId)) || 0.0;
+			const height = parseFloat($('#'+targetNamespace+heightId)) || 0.0;
+
+			let bmi = 0.0;
+			if(weight > 0 && height > 0) {
+				height = height / 100.0;	// cm to m
+				bmi = weight / (height * height);
+			}
+
+			return bmi.toFixed(fixed);
+		},
+
+		/**
+		 * Calculate fev1_fvc by fev1, fvc measurement
+		 * get fixed param and return fixed float
+		 * @param {String} targetNamespace 
+		 * @param {String} fev1Id 
+		 * @param {String} fvcId 
+		 * @param {number} fixed
+		 * @returns fixed(x) float fev1_fvc
+		 */
+		calcFEV1_FVC: function(targetNamespace, fev1Id, fvcId, fixed) {
+			const fev1 = parseFloat($('#'+targetNamespace+fev1Id).val()) || 0.0;
+			const fvc = parseFloat($('#'+targetNamespace+fvcId).val()) || 0.0;
+
+			const fev1_fvc = 0.0;
+			if(fev1 > 0 && fvc > 0) {
+				fev1_fvc = fev1Val / fvcVal * 100.0;	// percent
+			}
+
+			return fev1_fvc.toFixed(fixed);
+		},
+
+		calcTNMStage: function(targetNamespace, tId, nId, mId, edition=8) {
+			let tVal = $('#'+targetNamespace+tId).val() || 0;
+			let nVal = $('#'+targetNamespace+nId).val() || 0; 
+			let mVal = $('#'+targetNamespace+mId).val() || 0;
+
+			// $().val() is string, need to change to number
+			if(tVal > 0) tVal = parseInt(tVal, 10);
+			if(nVal > 0) nVal = parseInt(nVal, 10);
+			if(mVal > 0) mVal = parseInt(mVal, 10);
+
+			let stage = "";
+			
+			if(edition === 8) {
+				stage = this.tnmStage8(tVal, nVal, mVal);
+			}
+
+			if (edition === 9) {
+				stage = this.tnmStage9(tVal, nVal, mVal);
+			}
+
+			return stage;
+		},
+
+		tnmStage8: function(_t, _n, _m) {
+			// Stage Matrix (1-based index)
+			// [TX(1), T0(2), Tis(3), T1mi(4), T1(5), T1a(6), T1b(7), T1c(8), T2(9), T2a(10), T2b(11), T3(12), T4(13)]
+			// [NX(1), N0(2), N1(3), N2(4), N3(5)]
+			const stageMatrixTN = [
+				['', '', '',  '', ''],  // TX (1)
+				['', '',  '', ''],  // T0 (2)
+
+				['', '',  '', ''],  // Tis (3)
+				['', '', '',  '', ''],  // T1mi (4)
+
+				['', 'IA1', 'IIB',  'IIIA', 'IIIB'],  // T1 (5)
+				['', 'IA1', 'IIB',  'IIIA', 'IIIB'],  // T1a (6)
+				['', 'IA2', 'IIB',  'IIIA', 'IIIB'],  // T1b (7)
+				['', 'IA3', 'IIB',  'IIIA', 'IIIB'],  // T1c (8)
+
+				['', 'IB',  'IIB',  'IIIA', 'IIIB'],  // T2 (9)
+				['', 'IB',  'IIB',  'IIIA', 'IIIB'],  // T2a (10)
+				['', 'IIA', 'IIB',  'IIIA', 'IIIB'],  // T2b (11)
+
+				['', 'IIB', 'IIIA', 'IIIB', 'IIIC'],  // T3  (12)
+				
+				['', 'IIIA','IIIA', 'IIIB', 'IIIC']   // T4  (13)
+			];
+
+			let stageCal = '';
+			
+			// check T, N value
+			if(_t && _n) {
+				// value validation check
+				if(_t < 1 || _t > 13 || _n < 1 || _n > 5 ) {
+					return '';
+				}
+
+				stageCal = stageMatrixTN[_t-1][_n-1];
+			}
+
+			// check M value
+			// has high priority
+			
+			// TODO: m value is string?
+			console.log("pre / m value : ", _m);
+			if(_m) {
+				console.log("post / m value : ", _m, typeof _m);
+				switch(_m) {
+					case 1:	// M0
+						break;
+					case 2:	// M1
+					case 3:	// M1a
+					case 4:	// M1b
+						stageCal = 'IVA';
+						break;
+					case 5:	// M1c
+						stageCal = 'IVB';
+						break;
+				}
+			}
+
+			console.log("T / N / M", _t, _n, _m);
+			console.log("stage : ", stageCal);
+
+			return stageCal;
+		},
+
+		tnmStage9: function(_t, _n, _m) {
+			const stageMatrixTN = [
+				['', '', '',  '', ''],  // TX (1)
+				['', '',  '', ''],  // T0 (2)
+
+				['', '',  '', ''],  // Tis (3)
+				['', '', '',  '', ''],  // T1mi (4)
+
+				['', 'IA1', 'IIB',  'IIIA', 'IIIB'],  // T1 (5)
+				['', 'IA1', 'IIB',  'IIIA', 'IIIB'],  // T1a (6)
+				['', 'IA2', 'IIB',  'IIIA', 'IIIB'],  // T1b (7)
+				['', 'IA3', 'IIB',  'IIIA', 'IIIB'],  // T1c (8)
+
+				['', 'IB',  'IIB',  'IIIA', 'IIIB'],  // T2 (9)
+				['', 'IB',  'IIB',  'IIIA', 'IIIB'],  // T2a (10)
+				['', 'IIA', 'IIB',  'IIIA', 'IIIB'],  // T2b (11)
+
+				['', 'IIB', 'IIIA', 'IIIB', 'IIIC'],  // T3  (12)
+				
+				['', 'IIIA','IIIA', 'IIIB', 'IIIC']   // T4  (13)
+			];
+
+			let stageCal = "";
+			
+			// check stage by t,n,m
+			// T & N
+			// M & N (higher priority)
+
+			return stageCal;
+		},
+
+		calcCCI: function(targetNamespace, termId) {
+			// weight by input id (disease name)
+			const itemWeight = {
+				adv_pd_com_age_at_diagnosis: {1:0, 2:1, 3:2, 4:3, 5:4},
+				pd_com_dm: {1:0, 2:1, 3:2},
+				adv_pd_com_liver_disease: {1:0, 2:1, 3:3},
+				adv_pd_com_solid_tumor: {1:0, 1:2, 3:6},
+				adv_pd_com_chronic_kidey_ds: {1:0, 2:2},
+				pd_com_mi: {1:0, 2:1},
+				pd_com_congestive_heart_failure: {1:0, 2:1},
+				pd_com_peripheral_vascular_ds: {1:0, 2:1},
+				pd_com_cerebral_vascular_ds: {1:0, 2:1},
+				pd_com_hemiplegia: {1:0, 2:2},
+				pd_com_copd: {1:0, 2:1},
+				pd_com_connective_tissue_ds: {1:0, 2:1},
+				pd_com_leukemia: {1:0, 2:2},
+				pd_com_malignant_lymphoma: {1:0, 2:2},
+				pd_com_peptic_ulcer_ds: {1:0, 2:1},
+				pd_com_aids: {1:0, 2:6},
+				pd_com_dementia: {1:0, 2:1}
+			};
+
+			console.log(itemWeight);
+
+			let score = 0;
+
+			const itemName = targetNamespace+termId;
+			const changedInput = $("input[name='"+itemName+"']:checked");
+			console.log("checked item", changedInput);
+
+			// aggregate weight by loop (disease item)
+			for(const key in itemWeight) {
+				const keyName = targetNamespace+key;
+				const elem = $("input[name='"+keyName+"']:checked");
+				let value = null;
+				value = parseInt(elem.val(), 10);	// parse to int for null check validation
+				console.log("key / value / value type : ", key, value, typeof value);
+
+				if(value) {	// elem value is not null
+					const weight = itemWeight[termId][value.toString()];	// search by string(value)
+					if(weight) {	// item weight is exist
+						console.log("key / value / weight : ", key, value, weight)
+						score += weight;
 					}
-				case "is_high_risk":
-				case "is_high_risk_metabolic":
-					return true;
-					break;
-				case "par_q_under65":
-					if(this.age < 65){
-						return false;
-					}else {
-						return true;
-					}
-					break;
-				case "par_q_over65":
-					if(this.age > 65){
-						return false;
-					}else {
-						return true;
-					}
-					break;
-				case "treadmill_9min":
-					if(this.gender == 1){
-						$("#treadmill_9min_outerDiv").hide();
-					}
-				case "long_term_round_run_15m":
-					if(this.age > 10 && this.age < 13){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "running_selection":
-				case "dexterity_adult_selection":
-					if(this.age > 12 && this.age < 65){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "jump_or_sit_up_selection":	
-				case "time_of_flight":
-				case "eye_hand_coordination_sec":
-				case "eye_hand_coordination_repeat":
-				case "illinois_agility":
-					if(this.age > 12 && this.age < 19){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "third_by_third_button_press":	
-				case "shuttle_run_5m":
-					if(this.age < 11){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "wall_pass":
-				case "repeat_side_jump":
-					if(this.age>10 && this.age < 13){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "standing_long_jump":
-					if(this.age >19 && this.age < 13){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "lower_limb_function":
-				case "walking_6min":
-				case "walking_2min":
-				case "equilibrium_property":
-				case "coordination_elderly":
-					if(this.age>64){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "cardio_pulmonary_function":
-					if(this.age > 10 && this.age < 65){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "dexterity":
-					if(this.age < 65){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "bdi_depress_grade":
-					if(this.age < 65){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "kgds_depress_grade":
-					if(this.age >= 65){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "KGDS_GROUP":
-					if(this.age >= 65){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "SF6D_GROUP":
-					if(this.age < 65){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "BDI_GROUP":
-					if(this.age < 65){
-						return false;
-					}else{
-						return true;
-					}
-					break;
-				case "menopause":
-					if(this.gender == 0){
-						
-						return true;
-					}
-					return false;
-					break;
-				default:
-					return false;
-					break;
+				}
 			}
 			
+			return score;
 		},
 
 		/*
 		 * Auto calculation part .. for find case each crf id
 		 */
-		checkAutoCal : function(term, namespace){
-			
+		checkAutoCal : function(packet){
+			console.log(packet);
+			let term = packet.payload.after;
+			let namespace = packet.sourcePortlet;
+			let dataTypeName = packet.payload.dataTypeName;
+
 			if(this.crf){
+				//console.log("crf : ", this.crf);
+
 				if(term.termName === "testBool") {
 					let testNumId = "#"+namespace+"testNum";
 					console.log(testNumId);
@@ -311,7 +405,11 @@ let ECRFViewer = function(StationX){
 					$(testNumId).val(1234).trigger('change');
 				}
 
-				switch(this.crf.dataTypeName){
+				switch(dataTypeName){
+					case "lung_cancer":
+						//console.log("lung cancer crf auto calculate");
+						this.cal_CNU_TS_Lung_Caner(term, namespace);
+						break;
 					case "er_crf":
 						this.calYM_ER_CRF(term);
 						break; 
@@ -319,6 +417,156 @@ let ECRFViewer = function(StationX){
 						this.calYM_EX_CRF(term);						
 					break;						
 				}
+			}
+		},
+
+		/**
+		 * auto calculdate for Chungbuk University Hospital - Thoracic Surgery
+		 * Lung Cancer CRF
+		 * @param {object} term 
+		 * @param {string} namespace 
+		 */
+		cal_CNU_TS_Lung_Caner: function(term, namespace) {
+			console.log(term);
+			switch(term.termName) {
+				case "gi_ad_addmission_date":	// subject age at admission date
+					let birth = this.subjectInfo["subjectBirth"];
+					let target = new Date(Number(term.value));
+					let age = this.calcAge(birth, target);
+					this.updateTerm(namespace, 'gi_ad_age', age);
+					break;
+				// smoke period
+				case "gi_ad_sh_smoke_year":
+				case "gi_ad_sh_smoke_month":
+				case "gi_ad_sh_smoke_day":
+					let smokeTotalYear = this.calcSmokePeriod(namespace, "gi_ad_sh_smoke_year", "gi_ad_sh_smoke_month", "gi_ad_sh_smoke_day", "year");
+					if(smokeTotalYear > 0)	this.updateTerm(namespace, "gi_ad_sh_smoke_total", smokeTotalYear);
+					else this.updateTerm(namespace, "gi_ad_sh_smoke_total");
+					break;
+				// none smoke period
+				case "gi_ad_sh_quit_time_year":
+				case "gi_ad_sh_quit_time_month":
+				case "gi_ad_sh_quit_time_day":
+					let quitSmokeTotalYear = this.calcSmokePeriod(namespace, "gi_ad_sh_quit_time_year", "gi_ad_sh_quit_time_month", "gi_ad_sh_quit_time_day", "year");
+					if(quitSmokeTotalYear > 0)	this.updateTerm(namespace, "gi_ad_sh_quit_time_total", quitSmokeTotalYear);
+					else this.updateTerm(namespace, "gi_ad_sh_quit_time_total");
+					break;
+				// bmi
+				case "adv_pd_cp_height":
+				case "adv_pd_cp_weight":
+					let bmi = this.calcBMI(namespace, "adv_pd_cp_weight", "adv_pd_cp_height");
+					if(bmi > 0) this.updateTerm(namespace, "adv_pd_cp_bmi", bmi);
+					else this.updateTerm(namespace, "adv_pd_cp_bmi");
+					break;
+				// fvc_fev1
+				case "adv_pd_pft_fvc":
+				case "adv_pd_pft_fev1":
+					let fev1_fvc = this.calcFEV1_FVC(namespace, "adv_pd_pft_fev1", "adv_pd_pft_fvc", 2);
+					if(fev1_fvc > 0) this.updateTerm(namespace, "pd_pft_fev1_fvc", fev1_fvc);
+					else this.updateTerm(namespace, "pd_pft_fev1_fvc");
+					break;
+				// CCI
+				case "adv_pd_com_age_at_diagnosis":
+				case "pd_com_dm":
+				case "adv_pd_com_liver_disease":
+				case "adv_pd_com_solid_tumor":
+				case "adv_pd_com_chronic_kidey_ds":
+				case "pd_com_mi":
+				case "pd_com_congestive_heart_failure":
+				case "pd_com_peripheral_vascular_ds":
+				case "pd_com_cerebral_vascular_ds":
+				case "pd_com_hemiplegia":
+				case "pd_com_copd":
+				case "pd_com_connective_tissue_ds":
+				case "pd_com_leukemia":
+				case "pd_com_malignant_lymphoma":
+				case "pd_com_peptic_ulcer_ds":
+				case "pd_com_aids":
+				case "pd_com_dementia":
+					const cciName = namespace + 'comorbidity_adv';
+					const cciAdv = $("input[name='"+cciName+"']:checked");
+					const cciAdvVal = (cciAdv.val() === 'true');
+					console.log("cci adv : ", cciAdv, cciAdvVal);
+					if(false) {	// test later
+						let score = this.calcCCI(namespace, term.termName);
+						console.log("score : ", score);
+					}
+					break;
+				/*
+				// Nodule#1 TNM8
+				case "pd_cs_noldule1_ajcc_8th_t":
+				case "pd_cs_noldule1_ajcc_8th_n":
+				case "pd_cs_noldule1_ajcc_8th_m":
+					let nodule1TNM8stage = this.calcTNMStage(namespace, "pd_cs_noldule1_ajcc_8th_t", "pd_cs_noldule1_ajcc_8th_n", "pd_cs_noldule1_ajcc_8th_m", 8);
+					if(nodule1TNM8stage) this.updateTerm(namespace, "pd_cs_noldule1_ajcc_8th_clinical_stage", nodule1TNM8stage);
+					else this.updateTerm(namespace, "pd_cs_noldule1_ajcc_8th_clinical_stage");
+					break;
+				// Nodule#2 TNM8
+				case "pd_cs_noldule2_ajcc_8th_t":
+				case "pd_cs_noldule2_ajcc_8th_n":
+				case "pd_cs_noldule2_ajcc_8th_m":
+					let nodule2TNM8stage = this.calcTNMStage(namespace, "pd_cs_noldule2_ajcc_8th_t", "pd_cs_noldule2_ajcc_8th_n", "pd_cs_noldule2_ajcc_8th_m", 8);
+					if(nodule2TNM8stage) this.updateTerm(namespace, "pd_cs_noldule2_ajcc_8th_clinical_stage", nodule2TNM8stage);
+					else this.updateTerm(namespace, "pd_cs_noldule2_ajcc_8th_clinical_stage");
+					break;
+				// Nodule#3 TNM8
+				case "pd_cs_noldule3_ajcc_8th_t":
+				case "pd_cs_noldule3_ajcc_8th_n":
+				case "pd_cs_noldule3_ajcc_8th_m":
+					let nodule3TNM8stage = this.calcTNMStage(namespace, "pd_cs_noldule3_ajcc_8th_t", "pd_cs_noldule3_ajcc_8th_n", "pd_cs_noldule3_ajcc_8th_m", 8);
+					if(nodule3TNM8stage) this.updateTerm(namespace, "pd_cs_noldule3_ajcc_8th_clinical_stage", nodule3TNM8stage);
+					else this.updateTerm(namespace, "pd_cs_noldule3_ajcc_8th_clinical_stage");
+					break;
+				// Nodule#4 TNM8
+				case "pd_cs_noldule4_ajcc_8th_t":
+				case "pd_cs_noldule4_ajcc_8th_n":
+				case "pd_cs_noldule4_ajcc_8th_m":
+					let nodule4TNM8stage = this.calcTNMStage(namespace, "pd_cs_noldule4_ajcc_8th_t", "pd_cs_noldule4_ajcc_8th_n", "pd_cs_noldule4_ajcc_8th_m", 8);
+					if(nodule4TNM8stage) this.updateTerm(namespace, "pd_cs_noldule4_ajcc_8th_clinical_stage", nodule4TNM8stage);
+					else this.updateTerm(namespace, "pd_cs_noldule4_ajcc_8th_clinical_stage");
+					break;
+				// Nodule#5 TNM8
+				case "pd_cs_noldule5_ajcc_8th_t":
+				case "pd_cs_noldule5_ajcc_8th_n":
+				case "pd_cs_noldule5_ajcc_8th_m":
+					let nodule5TNM8stage = this.calcTNMStage(namespace, "pd_cs_noldule5_ajcc_8th_t", "pd_cs_noldule5_ajcc_8th_n", "pd_cs_noldule5_ajcc_8th_m", 8);
+					if(nodule5TNM8stage) this.updateTerm(namespace, "pd_cs_noldule5_ajcc_8th_clinical_stage", nodule5TNM8stage);
+					else this.updateTerm(namespace, "pd_cs_noldule5_ajcc_8th_clinical_stage");
+					break;
+
+				// Nodule#1 TNM9
+				case "pd_cs_noldule1_ajcc_9th_t":
+				case "pd_cs_noldule1_ajcc_9th_n":
+				case "pd_cs_noldule1_ajcc_9th_m":
+					let nodule1TNM9stage = this.calcTNMStage(namespace, "pd_cs_noldule1_ajcc_9th_t", "pd_cs_noldule1_ajcc_9th_n", "pd_cs_noldule1_ajcc_9th_m", 8);
+					if(nodule1TNM9stage) this.updateTerm(namespace, "pd_cs_noldule1_ajcc_9th_clinical_stage", nodule1TNM9stage);
+					else this.updateTerm(namespace, "pd_cs_noldule1_ajcc_9th_clinical_stage");
+					break;
+				// Nodule#2 TNM9
+				// Nodule#3 TNM9
+				// Nodule#4 TNM9
+				// Nodule#5 TNM9
+				*/
+				// Previous Tx. TNM8
+				case "adv_pd_prev_tx_yc_t":
+				case "adv_pd_prev_tx_yc_n":
+				case "adv_pd_prev_tx_yc_m":
+					let preTxTNMstage = this.calcTNMStage(namespace, "adv_pd_prev_tx_yc_t", "adv_pd_prev_tx_yc_n", "adv_pd_prev_tx_yc_m", 8);
+					if(preTxTNMstage) this.updateTerm(namespace, "adv_pd_prev_tx_stage", preTxTNMstage);
+					else this.updateTerm(namespace, "adv_pd_prev_tx_stage");
+					break;
+				
+				// Tumor#1 TNM8
+				// Tumor#2 TNM8
+				// Tumor#3 TNM8
+				// Tumor#4 TNM8
+				// Tumor#5 TNM8
+
+				// Tumor#1 TNM9
+				// Tumor#2 TNM9
+				// Tumor#3 TNM9
+				// Tumor#4 TNM9
+				// Tumor#5 TNM9
 			}
 		},
 
@@ -1233,7 +1481,177 @@ let ECRFViewer = function(StationX){
 				$("#is_low_risk").val("1").trigger('change');
 				$("#is_mid_risk").val("1").trigger('change');
 			}
+		},
+
+		/*
+		 * check age & gender for hide term or change value of exercise crf
+		 */ 
+		checkExcerciseFlag : function(termName){
+			switch(termName){
+				case "diabetes":
+				case "is_low_risk":
+				case "is_mid_risk":
+					if(this.age > 65){
+						$("#is_mid_risk").val("0").trigger('change');
+					}
+				case "is_high_risk":
+				case "is_high_risk_metabolic":
+					return true;
+					break;
+				case "par_q_under65":
+					if(this.age < 65){
+						return false;
+					}else {
+						return true;
+					}
+					break;
+				case "par_q_over65":
+					if(this.age > 65){
+						return false;
+					}else {
+						return true;
+					}
+					break;
+				case "treadmill_9min":
+					if(this.gender == 1){
+						$("#treadmill_9min_outerDiv").hide();
+					}
+				case "long_term_round_run_15m":
+					if(this.age > 10 && this.age < 13){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "running_selection":
+				case "dexterity_adult_selection":
+					if(this.age > 12 && this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "jump_or_sit_up_selection":	
+				case "time_of_flight":
+				case "eye_hand_coordination_sec":
+				case "eye_hand_coordination_repeat":
+				case "illinois_agility":
+					if(this.age > 12 && this.age < 19){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "third_by_third_button_press":	
+				case "shuttle_run_5m":
+					if(this.age < 11){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "wall_pass":
+				case "repeat_side_jump":
+					if(this.age>10 && this.age < 13){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "standing_long_jump":
+					if(this.age >19 && this.age < 13){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "lower_limb_function":
+				case "walking_6min":
+				case "walking_2min":
+				case "equilibrium_property":
+				case "coordination_elderly":
+					if(this.age>64){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "cardio_pulmonary_function":
+					if(this.age > 10 && this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "dexterity":
+					if(this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "bdi_depress_grade":
+					if(this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "kgds_depress_grade":
+					if(this.age >= 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "KGDS_GROUP":
+					if(this.age >= 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "SF6D_GROUP":
+					if(this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "BDI_GROUP":
+					if(this.age < 65){
+						return false;
+					}else{
+						return true;
+					}
+					break;
+				case "menopause":
+					if(this.gender == 0){
+						
+						return true;
+					}
+					return false;
+					break;
+				default:
+					return false;
+					break;
+			}
+			
+		},
+
+		/**
+		 * 
+		 * @param {string} termId 
+		 * @param {*} value //TODO: need to consider term type
+		 * @param {string} namespace 
+		 */
+		updateTerm: function(namespace, termId, value="") {
+			let targetTerm = $('#'+namespace+termId);
+			if(targetTerm) {	// null check
+				targetTerm.val(value).trigger('change');
+			}
 		}
+
 	}
 	
 	

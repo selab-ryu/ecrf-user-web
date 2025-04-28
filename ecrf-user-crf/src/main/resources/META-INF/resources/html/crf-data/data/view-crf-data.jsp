@@ -111,7 +111,7 @@
 
 $(document).ready(function(){
 	let sdPortletKey = "_<%=sdPortlet %>_";
-	console.log(sdPortletKey); 
+	//console.log(sdPortletKey); 
 	
 	var btn = $("#"+sdPortletKey+"btnSave");
 	btn.attr("class", "dh-icon-button save-btn w80");
@@ -141,7 +141,7 @@ $(document).ready(function(){
 	
 	let ev = ECRFViewer(SX_CRF);
 	
-	console.log("ECRFViewer: ", ev);
+	//console.log("ECRFViewer: ", ev);
 	
 	let align = "crf-align-vertical";
 	
@@ -151,16 +151,16 @@ $(document).ready(function(){
 	subjectInfo["subjectGender"] = subjectGender;
 	subjectInfo["subjectBirth"] = subjectBirth;
 	
-	console.log("data structure : ", dataStructure);
+	//console.log("data structure : ", dataStructure);
 	
 	let viewer = new ev.Viewer(dataStructure, align, structuredData, subjectInfo, false, 'station-x');
 	
 	Liferay.on( SX_CRF.Events.AUTO_CALCULATE, function(evt){
-		console.log("crf : auto calculate", evt);
+		//console.log("crf : auto calculate", evt);
 		
 		let payload = evt.dataPacket.payload; 
 		
-		ev.autoCalUtil.checkAutoCal(payload.after, evt.dataPacket.sourcePortlet);
+		ev.autoCalUtil.checkAutoCal(evt.dataPacket);
 	});
 });
 
