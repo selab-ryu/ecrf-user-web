@@ -170,8 +170,8 @@ let ECRFViewer = function(StationX){
 			const totalDays = (yearVal * DAYS_IN_YEAR) + (monthVal * DAYS_IN_MONTH) + dayVal;
 
 			let result = totalDays;
-			if(option === 'year')  result = totalDay / DAYS_IN_YEAR;
-			if(option === 'month') result = totalDay / DAYS_IN_MONTH;
+			if(option === 'year')  result = totalDays / DAYS_IN_YEAR;
+			if(option === 'month') result = totalDays / DAYS_IN_MONTH;
 			return result.toFixed(4);
 		},
 		
