@@ -92,6 +92,8 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 		
 		int addDataCount = 0;
 		
+		ArrayList<String> notExitSerialList = new ArrayList<>(); 
+		
 		for(int i = 0; i < jsonArray.length(); i++) {
 			if(jsonArray.getJSONObject(i).has("visit_date")) {
 				String serialId = jsonArray.getJSONObject(i).getString("id");
@@ -120,13 +122,23 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 					_historyLocalService.addCRFHistory(subject.getName(), subject.getSubjectId(), subject.getSerialId(), storedData.getPrimaryKey(), crfId, "", answerForm.toJSONString(), 0, "1.0.0", crfHistoryServiceContext);
 					_queryLocalService.checkQuery(storedData.getPrimaryKey(), _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId).getJSONArray("terms"), answerForm, subject.getSubjectId(), crfId, queryServiceContext);
 					addDataCount++;
+				} else {
+					notExitSerialList.add(serialId);
 				}
+				
 			}else {
 				_log.info("Wrong file input");
 			}
 		}
 		
 		_log.info("Add Data Count : " + addDataCount);
+		
+		if(notExitSerialList.size() > 0) {
+			_log.info("Import fail count : " + notExitSerialList.size());
+			for(String serial : notExitSerialList) {
+				_log.info("subject is not exit by serial id : " + serial);
+			}
+		}
 		
 		PortletURL renderURL = PortletURLFactoryUtil.create(
 				actionRequest, 

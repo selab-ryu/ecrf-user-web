@@ -86,6 +86,8 @@ $(document).ready(function(){
         reader.onload = function(e){
         	let content = JSON.parse(reader.result);
         	let table = document.getElementById("fileReader");
+        	table.innerHTML = "";
+        	
         	$("#totalLength").text("Total subject num : " + content.length);
         	content.forEach(subject =>{
         		const insertRow = table.insertRow();
