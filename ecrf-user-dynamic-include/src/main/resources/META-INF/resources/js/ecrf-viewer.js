@@ -407,6 +407,7 @@ let ECRFViewer = function(StationX){
 
 				switch(dataTypeName){
 					case "lung_cancer":
+					case "lung_cancer_opt":
 						//console.log("lung cancer crf auto calculate");
 						this.cal_CNU_TS_Lung_Caner(term, namespace);
 						break;
