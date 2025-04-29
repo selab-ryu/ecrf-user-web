@@ -100,7 +100,7 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 					String name = jsonArray.getJSONObject(i).getString("name");
 					String serialId = jsonArray.getJSONObject(i).getString("id");
 					int age = jsonArray.getJSONObject(i).getInt("age");
-					int gender = jsonArray.getJSONObject(i).getInt("Sex");	// 0:male, 1:female
+					int gender = jsonArray.getJSONObject(i).getInt("sex");	// 0:male, 1:female
 					
 					/* 250416 : comment code, for generalization, change value at data parsing step
 					if(jsonArray.getJSONObject(i).getInt("Sex") == 1) {
