@@ -466,18 +466,15 @@ let ECRFViewer = function(StationX){
 					let age = this.calcAge(birth, target);
 					this.updateTerm(namespace, 'gi_ad_age', age);
 					break;
-				// smoke amount
+				// smoke amount year
 				case "gi_ad_sh_smoke_amount":
-					let smokeAmountYear1 = this.calcSmokeAmountYear(namespace, "gi_ad_sh_smoke_amount", "gi_ad_sh_smoke_year");
+				case "gi_ad_sh_smoke_total":
+					let smokeAmountYear1 = this.calcSmokeAmountYear(namespace, "gi_ad_sh_smoke_amount", "gi_ad_sh_smoke_total");
 					if(smokeAmountYear1>0) this.updateTerm(namespace, "gi_ad_sh_smoke_amount_year", smokeAmountYear1);
 					else this.updateTerm(namespace, "gi_ad_sh_smoke_amount_year");
 					break;
 				// smoke period
-				case "gi_ad_sh_smoke_year":	// calculate smoke amount
-					let smokeAmountYear2 = this.calcSmokeAmountYear(namespace, "gi_ad_sh_smoke_amount", "gi_ad_sh_smoke_year");
-					if(smokeAmountYear2>0) this.updateTerm(namespace, "gi_ad_sh_smoke_amount_year", smokeAmountYear2);
-					else this.updateTerm(namespace, "gi_ad_sh_smoke_amount_year");
-					// and calculate smoke period
+				case "gi_ad_sh_smoke_year":
 				case "gi_ad_sh_smoke_month":
 				case "gi_ad_sh_smoke_day":
 					let smokeTotalYear = this.calcSmokePeriod(namespace, "gi_ad_sh_smoke_year", "gi_ad_sh_smoke_month", "gi_ad_sh_smoke_day", "year");
