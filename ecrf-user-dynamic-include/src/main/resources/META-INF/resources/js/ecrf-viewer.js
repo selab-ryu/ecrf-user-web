@@ -18,7 +18,7 @@ let ECRFViewer = function(StationX){
 			
 			if(SX.StationX) {
 				console.log("log SX", SX);
-			} else {
+			} else {.0.
 				console.log("SX is Empty or Null");
 			}
 
@@ -174,6 +174,16 @@ let ECRFViewer = function(StationX){
 			if(option === 'month') result = totalDays / DAYS_IN_MONTH;
 			return result.toFixed(4);
 		},
+
+		calcSmokeAmountYear: function(targetNamespace, amountId, yearId) {
+			const amount = parseFloat($('#'+targetNamespace+amountId).val()) || 0.0;
+			const year = parseFloat($('#'+targetNamespace+yearId).val()) || 0.0;
+
+			const amountYear = amount * year;
+			
+			console.log("smoke amount year :", amountYear);
+			return amountYear.toFixed(2);
+		},
 		
 		/**
 		 * Calculate bmi by height, weight
@@ -185,8 +195,8 @@ let ECRFViewer = function(StationX){
 		 * @returns fixed(x) float bmi
 		 */
 		calcBMI: function(targetNamespace, weightId, heightId, fixed=1) {
-			const weight = parseFloat($('#'+targetNamespace+weightId)) || 0.0;
-			const height = parseFloat($('#'+targetNamespace+heightId)) || 0.0;
+			const weight = parseFloat($('#'+targetNamespace+weightId).val()) || 0.0;
+			const height = parseFloat($('#'+targetNamespace+heightId).val()) || 0.0;
 
 			let bmi = 0.0;
 			if(weight > 0 && height > 0) {
@@ -274,17 +284,13 @@ let ECRFViewer = function(StationX){
 				if(_t < 1 || _t > 13 || _n < 1 || _n > 5 ) {
 					return '';
 				}
-
 				stageCal = stageMatrixTN[_t-1][_n-1];
 			}
 
 			// check M value
 			// has high priority
-			
-			// TODO: m value is string?
-			console.log("pre / m value : ", _m);
 			if(_m) {
-				console.log("post / m value : ", _m, typeof _m);
+				//console.log("post / m value : ", _m, typeof _m);
 				switch(_m) {
 					case 1:	// M0
 						break;
@@ -306,43 +312,70 @@ let ECRFViewer = function(StationX){
 		},
 
 		tnmStage9: function(_t, _n, _m) {
+			// Stage Matrix (1-based index)
+			// [TX(1), T0(2), Tis(3), T1mi(4), T1a(5), T1b(6), T1c(7), T2a(8), T2b(9), T3(10), T4(11)]
+			// [NX(1), N0(2), N1(3), N2a(4), N2b(5), N3(6)]
 			const stageMatrixTN = [
-				['', '', '',  '', ''],  // TX (1)
-				['', '',  '', ''],  // T0 (2)
+				['', '', '',  '', '', ''],  // TX (1)
+				['', '',  '', '', '', ''],  // T0 (2)
 
-				['', '',  '', ''],  // Tis (3)
-				['', '', '',  '', ''],  // T1mi (4)
+				['', '',  '', '', '' , ''],  // Tis (3)
+				['', '', '',  '', '', ''],  // T1mi (4)
 
-				['', 'IA1', 'IIB',  'IIIA', 'IIIB'],  // T1 (5)
-				['', 'IA1', 'IIB',  'IIIA', 'IIIB'],  // T1a (6)
-				['', 'IA2', 'IIB',  'IIIA', 'IIIB'],  // T1b (7)
-				['', 'IA3', 'IIB',  'IIIA', 'IIIB'],  // T1c (8)
+				['', 'IA1', 'IIA', 'IIB', 'IIIA', 'IIIB'],  // T1a (5)
+				['', 'IA2', 'IIA', 'IIB', 'IIIA', 'IIIB'],  // T1b (6)
+				['', 'IA3', 'IIA', 'IIB', 'IIIA', 'IIIB'],  // T1c (7)
 
-				['', 'IB',  'IIB',  'IIIA', 'IIIB'],  // T2 (9)
-				['', 'IB',  'IIB',  'IIIA', 'IIIB'],  // T2a (10)
-				['', 'IIA', 'IIB',  'IIIA', 'IIIB'],  // T2b (11)
+				['', 'IB',  'IIB',  'IIIA', 'IIIB', 'IIIB'],  // T2a (8)
+				['', 'IIA', 'IIB',  'IIIA', 'IIIB', 'IIIB'],  // T2b (9)
 
-				['', 'IIB', 'IIIA', 'IIIB', 'IIIC'],  // T3  (12)
+				['', 'IIB', 'IIIA', 'IIIB', 'IIIC', 'IIIC'],  // T3  (10)
 				
-				['', 'IIIA','IIIA', 'IIIB', 'IIIC']   // T4  (13)
+				['', 'IIIA','IIIA', 'IIIB', 'IIIC', 'IIIC']   // T4  (11)
 			];
 
 			let stageCal = "";
+
+			// check T, N value
+			if(_t && _n) {
+				// value validation check
+				if(_t < 1 || _t > 11 || _n < 1 || _n > 6 ) {
+					return '';
+				}
+				stageCal = stageMatrixTN[_t-1][_n-1];
+			}
 			
-			// check stage by t,n,m
-			// T & N
-			// M & N (higher priority)
+			// check M value
+			// has high priority
+			if(_m) {
+				//console.log("post / m value : ", _m, typeof _m);
+				switch(_m) {
+					case 1:	// M0
+						break;
+					case 2:	// M1a
+					case 3:	// M1b
+						stageCal = 'IVA';
+						break;
+					case 4:	// M1c1
+					case 5:	// M1c2
+						stageCal = 'IVB';
+						break;
+				}
+			}
+
+			console.log("T / N / M", _t, _n, _m);
+			console.log("stage : ", stageCal);
 
 			return stageCal;
 		},
 
-		calcCCI: function(targetNamespace, termId) {
+		calcCCI: function(targetNamespace) {
 			// weight by input id (disease name)
 			const itemWeight = {
 				adv_pd_com_age_at_diagnosis: {1:0, 2:1, 3:2, 4:3, 5:4},
 				pd_com_dm: {1:0, 2:1, 3:2},
 				adv_pd_com_liver_disease: {1:0, 2:1, 3:3},
-				adv_pd_com_solid_tumor: {1:0, 1:2, 3:6},
+				adv_pd_com_solid_tumor: {1:0, 2:2, 3:6},
 				adv_pd_com_chronic_kidey_ds: {1:0, 2:2},
 				pd_com_mi: {1:0, 2:1},
 				pd_com_congestive_heart_failure: {1:0, 2:1},
@@ -358,27 +391,24 @@ let ECRFViewer = function(StationX){
 				pd_com_dementia: {1:0, 2:1}
 			};
 
-			console.log(itemWeight);
-
 			let score = 0;
-
-			const itemName = targetNamespace+termId;
-			const changedInput = $("input[name='"+itemName+"']:checked");
-			console.log("checked item", changedInput);
 
 			// aggregate weight by loop (disease item)
 			for(const key in itemWeight) {
-				const keyName = targetNamespace+key;
-				const elem = $("input[name='"+keyName+"']:checked");
+				let keyName = targetNamespace+key;
+				let elem = $("input[name='"+keyName+"']:checked");
 				let value = null;
 				value = parseInt(elem.val(), 10);	// parse to int for null check validation
-				console.log("key / value / value type : ", key, value, typeof value);
+				//console.log("key / value / value type : ", key, value, typeof value);
 
 				if(value) {	// elem value is not null
-					const weight = itemWeight[termId][value.toString()];	// search by string(value)
+					let weight = itemWeight[key][value];	// search by string(value)
+
 					if(weight) {	// item weight is exist
-						console.log("key / value / weight : ", key, value, weight)
+						//console.log("key / value / weight : ", key, value, weight)
 						score += weight;
+					} else {
+						//console.log("weight is not defined / ", weight, itemWeight[key]);
 					}
 				}
 			}
@@ -390,7 +420,7 @@ let ECRFViewer = function(StationX){
 		 * Auto calculation part .. for find case each crf id
 		 */
 		checkAutoCal : function(packet){
-			console.log(packet);
+			//console.log(packet);
 			let term = packet.payload.after;
 			let namespace = packet.sourcePortlet;
 			let dataTypeName = packet.payload.dataTypeName;
@@ -428,7 +458,7 @@ let ECRFViewer = function(StationX){
 		 * @param {string} namespace 
 		 */
 		cal_CNU_TS_Lung_Caner: function(term, namespace) {
-			console.log(term);
+			//console.log(term);
 			switch(term.termName) {
 				case "gi_ad_addmission_date":	// subject age at admission date
 					let birth = this.subjectInfo["subjectBirth"];
@@ -436,13 +466,23 @@ let ECRFViewer = function(StationX){
 					let age = this.calcAge(birth, target);
 					this.updateTerm(namespace, 'gi_ad_age', age);
 					break;
+				// smoke amount
+				case "gi_ad_sh_smoke_amount":
+					let smokeAmountYear1 = this.calcSmokeAmountYear(namespace, "gi_ad_sh_smoke_amount", "gi_ad_sh_smoke_year");
+					if(smokeAmountYear1>0) this.updateTerm(namespace, "gi_ad_sh_smoke_amount_year", smokeAmountYear1);
+					else this.updateTerm(namespace, "gi_ad_sh_smoke_amount_year");
+					break;
 				// smoke period
-				case "gi_ad_sh_smoke_year":
+				case "gi_ad_sh_smoke_year":	// calculate smoke amount
+					let smokeAmountYear2 = this.calcSmokeAmountYear(namespace, "gi_ad_sh_smoke_amount", "gi_ad_sh_smoke_year");
+					if(smokeAmountYear2>0) this.updateTerm(namespace, "gi_ad_sh_smoke_amount_year", smokeAmountYear2);
+					else this.updateTerm(namespace, "gi_ad_sh_smoke_amount_year");
+					// and calculate smoke period
 				case "gi_ad_sh_smoke_month":
 				case "gi_ad_sh_smoke_day":
 					let smokeTotalYear = this.calcSmokePeriod(namespace, "gi_ad_sh_smoke_year", "gi_ad_sh_smoke_month", "gi_ad_sh_smoke_day", "year");
 					if(smokeTotalYear > 0)	this.updateTerm(namespace, "gi_ad_sh_smoke_total", smokeTotalYear);
-					else this.updateTerm(namespace, "gi_ad_sh_smoke_total");
+					else this.updateTerm(namespace, "gi_ad_sh_smoke_total");					
 					break;
 				// none smoke period
 				case "gi_ad_sh_quit_time_year":
@@ -467,6 +507,7 @@ let ECRFViewer = function(StationX){
 					else this.updateTerm(namespace, "pd_pft_fev1_fvc");
 					break;
 				// CCI
+				case "comorbidity_adv":
 				case "adv_pd_com_age_at_diagnosis":
 				case "pd_com_dm":
 				case "adv_pd_com_liver_disease":
@@ -488,16 +529,20 @@ let ECRFViewer = function(StationX){
 					const cciAdv = $("input[name='"+cciName+"']:checked");
 					const cciAdvVal = (cciAdv.val() === 'true');
 					console.log("cci adv : ", cciAdv, cciAdvVal);
-					if(false) {	// test later
-						let score = this.calcCCI(namespace, term.termName);
-						console.log("score : ", score);
+					if(cciAdvVal) {	
+						let score = this.calcCCI(namespace);
+						//console.log("score : ", score);
+
+						if(score > 0) this.updateTerm(namespace, "pd_com_cci", score);
+						else this.updateTerm(namespace, "pd_com_cci");
 					}
 					break;
-				/*
+				
 				// Nodule#1 TNM8
 				case "pd_cs_noldule1_ajcc_8th_t":
 				case "pd_cs_noldule1_ajcc_8th_n":
 				case "pd_cs_noldule1_ajcc_8th_m":
+					console.log("nodule1 8th tnm");
 					let nodule1TNM8stage = this.calcTNMStage(namespace, "pd_cs_noldule1_ajcc_8th_t", "pd_cs_noldule1_ajcc_8th_n", "pd_cs_noldule1_ajcc_8th_m", 8);
 					if(nodule1TNM8stage) this.updateTerm(namespace, "pd_cs_noldule1_ajcc_8th_clinical_stage", nodule1TNM8stage);
 					else this.updateTerm(namespace, "pd_cs_noldule1_ajcc_8th_clinical_stage");
@@ -534,20 +579,48 @@ let ECRFViewer = function(StationX){
 					if(nodule5TNM8stage) this.updateTerm(namespace, "pd_cs_noldule5_ajcc_8th_clinical_stage", nodule5TNM8stage);
 					else this.updateTerm(namespace, "pd_cs_noldule5_ajcc_8th_clinical_stage");
 					break;
-
+				
 				// Nodule#1 TNM9
 				case "pd_cs_noldule1_ajcc_9th_t":
 				case "pd_cs_noldule1_ajcc_9th_n":
 				case "pd_cs_noldule1_ajcc_9th_m":
-					let nodule1TNM9stage = this.calcTNMStage(namespace, "pd_cs_noldule1_ajcc_9th_t", "pd_cs_noldule1_ajcc_9th_n", "pd_cs_noldule1_ajcc_9th_m", 8);
+					let nodule1TNM9stage = this.calcTNMStage(namespace, "pd_cs_noldule1_ajcc_9th_t", "pd_cs_noldule1_ajcc_9th_n", "pd_cs_noldule1_ajcc_9th_m", 9);
 					if(nodule1TNM9stage) this.updateTerm(namespace, "pd_cs_noldule1_ajcc_9th_clinical_stage", nodule1TNM9stage);
 					else this.updateTerm(namespace, "pd_cs_noldule1_ajcc_9th_clinical_stage");
 					break;
 				// Nodule#2 TNM9
+				case "pd_cs_noldule2_ajcc_9th_t":
+				case "pd_cs_noldule2_ajcc_9th_n":
+				case "pd_cs_noldule2_ajcc_9th_m":
+					let nodule2TNM9stage = this.calcTNMStage(namespace, "pd_cs_noldule2_ajcc_9th_t", "pd_cs_noldule2_ajcc_9th_n", "pd_cs_noldule2_ajcc_9th_m", 9);
+					if(nodule2TNM9stage) this.updateTerm(namespace, "pd_cs_noldule2_ajcc_9th_clinical_stage", nodule2TNM9stage);
+					else this.updateTerm(namespace, "pd_cs_noldule2_ajcc_9th_clinical_stage");
+					break;
 				// Nodule#3 TNM9
+				case "pd_cs_noldule3_ajcc_9th_t":
+				case "pd_cs_noldule3_ajcc_9th_n":
+				case "pd_cs_noldule3_ajcc_9th_m":
+					let nodule3TNM9stage = this.calcTNMStage(namespace, "pd_cs_noldule3_ajcc_9th_t", "pd_cs_noldule3_ajcc_9th_n", "pd_cs_noldule3_ajcc_9th_m", 9);
+					if(nodule3TNM9stage) this.updateTerm(namespace, "pd_cs_noldule3_ajcc_9th_clinical_stage", nodule3TNM9stage);
+					else this.updateTerm(namespace, "pd_cs_noldule3_ajcc_9th_clinical_stage");
+					break;
 				// Nodule#4 TNM9
+				case "pd_cs_noldule4_ajcc_9th_t":
+				case "pd_cs_noldule4_ajcc_9th_n":
+				case "pd_cs_noldule4_ajcc_9th_m":
+					let nodule4TNM9stage = this.calcTNMStage(namespace, "pd_cs_noldule4_ajcc_9th_t", "pd_cs_noldule4_ajcc_9th_n", "pd_cs_noldule4_ajcc_9th_m", 9);
+					if(nodule4TNM9stage) this.updateTerm(namespace, "pd_cs_noldule4_ajcc_9th_clinical_stage", nodule4TNM9stage);
+					else this.updateTerm(namespace, "pd_cs_noldule4_ajcc_9th_clinical_stage");
+					break;
 				// Nodule#5 TNM9
-				*/
+				case "pd_cs_noldule5_ajcc_9th_t":
+				case "pd_cs_noldule5_ajcc_9th_n":
+				case "pd_cs_noldule5_ajcc_9th_m":
+					let nodule5TNM9stage = this.calcTNMStage(namespace, "pd_cs_noldule5_ajcc_9th_t", "pd_cs_noldule5_ajcc_9th_n", "pd_cs_noldule5_ajcc_9th_m", 9);
+					if(nodule5TNM9stage) this.updateTerm(namespace, "pd_cs_noldule5_ajcc_9th_clinical_stage", nodule5TNM9stage);
+					else this.updateTerm(namespace, "pd_cs_noldule5_ajcc_9th_clinical_stage");
+					break;
+
 				// Previous Tx. TNM8
 				case "adv_pd_prev_tx_yc_t":
 				case "adv_pd_prev_tx_yc_n":
@@ -558,16 +631,86 @@ let ECRFViewer = function(StationX){
 					break;
 				
 				// Tumor#1 TNM8
+				case "path_tumor1_ajcc_8th_pathologic_tnm_t":
+				case "path_tumor1_ajcc_8th_pathologic_tnm_n":
+				case "path_tumor1_ajcc_8th_pathologic_tnm_m":
+					let tumor1TNM8stage = this.calcTNMStage(namespace, "path_tumor1_ajcc_8th_pathologic_tnm_t", "path_tumor1_ajcc_8th_pathologic_tnm_n", "path_tumor1_ajcc_8th_pathologic_tnm_m", 8);
+					if(tumor1TNM8stage) this.updateTerm(namespace, "path_tumor1_ajcc_8th_pathologic_stage", tumor1TNM8stage);
+					else this.updateTerm(namespace, "path_tumor1_ajcc_8th_pathologic_stage");
+					break;
 				// Tumor#2 TNM8
+				case "path_tumor2_ajcc_8th_pathologic_tnm_t":
+				case "path_tumor2_ajcc_8th_pathologic_tnm_n":
+				case "path_tumor2_ajcc_8th_pathologic_tnm_m":
+					let tumor2TNM8stage = this.calcTNMStage(namespace, "path_tumor2_ajcc_8th_pathologic_tnm_t", "path_tumor2_ajcc_8th_pathologic_tnm_n", "path_tumor2_ajcc_8th_pathologic_tnm_m", 8);
+					if(tumor2TNM8stage) this.updateTerm(namespace, "path_tumor2_ajcc_8th_pathologic_stage", tumor2TNM8stage);
+					else this.updateTerm(namespace, "path_tumor2_ajcc_8th_pathologic_stage");
+					break;
 				// Tumor#3 TNM8
+				case "path_tumor3_ajcc_8th_pathologic_tnm_t":
+				case "path_tumor3_ajcc_8th_pathologic_tnm_n":
+				case "path_tumor3_ajcc_8th_pathologic_tnm_m":
+					let tumor3TNM8stage = this.calcTNMStage(namespace, "path_tumor3_ajcc_8th_pathologic_tnm_t", "path_tumor3_ajcc_8th_pathologic_tnm_n", "path_tumor3_ajcc_8th_pathologic_tnm_m", 8);
+					if(tumor3TNM8stage) this.updateTerm(namespace, "path_tumor3_ajcc_8th_pathologic_stage", tumor3TNM8stage);
+					else this.updateTerm(namespace, "path_tumor3_ajcc_8th_pathologic_stage");
+					break;
 				// Tumor#4 TNM8
+				case "path_tumor4_ajcc_8th_pathologic_tnm_t":
+				case "path_tumor4_ajcc_8th_pathologic_tnm_n":
+				case "path_tumor4_ajcc_8th_pathologic_tnm_m":
+					let tumor4TNM8stage = this.calcTNMStage(namespace, "path_tumor4_ajcc_8th_pathologic_tnm_t", "path_tumor4_ajcc_8th_pathologic_tnm_n", "path_tumor4_ajcc_8th_pathologic_tnm_m", 8);
+					if(tumor4TNM8stage) this.updateTerm(namespace, "path_tumor4_ajcc_8th_pathologic_stage", tumor4TNM8stage);
+					else this.updateTerm(namespace, "path_tumor4_ajcc_8th_pathologic_stage");
+					break;
 				// Tumor#5 TNM8
+				case "path_tumor5_ajcc_8th_pathologic_tnm_t":
+				case "path_tumor5_ajcc_8th_pathologic_tnm_n":
+				case "path_tumor5_ajcc_8th_pathologic_tnm_m":
+					let tumor5TNM8stage = this.calcTNMStage(namespace, "path_tumor5_ajcc_8th_pathologic_tnm_t", "path_tumor5_ajcc_8th_pathologic_tnm_n", "path_tumor5_ajcc_8th_pathologic_tnm_m", 8);
+					if(tumor5TNM8stage) this.updateTerm(namespace, "path_tumor5_ajcc_8th_pathologic_stage", tumor5TNM8stage);
+					else this.updateTerm(namespace, "path_tumor5_ajcc_8th_pathologic_stage");
+					break;
 
 				// Tumor#1 TNM9
+				case "path_tumor1_ajcc_9th_pathologic_tnm_t":
+				case "path_tumor1_ajcc_9th_pathologic_tnm_n":
+				case "path_tumor1_ajcc_9th_pathologic_tnm_m":
+					let tumor1TNM9stage = this.calcTNMStage(namespace, "path_tumor1_ajcc_9th_pathologic_tnm_t", "path_tumor1_ajcc_9th_pathologic_tnm_n", "path_tumor1_ajcc_9th_pathologic_tnm_m", 9);
+					if(tumor1TNM9stage) this.updateTerm(namespace, "path_tumor1_ajcc_9th_pathologic_stage", tumor1TNM9stage);
+					else this.updateTerm(namespace, "path_tumor1_ajcc_9th_pathologic_stage");
+					break;
 				// Tumor#2 TNM9
+				case "path_tumor2_ajcc_9th_pathologic_tnm_t":
+				case "path_tumor2_ajcc_9th_pathologic_tnm_n":
+				case "path_tumor2_ajcc_9th_pathologic_tnm_m":
+					let tumor2TNM9stage = this.calcTNMStage(namespace, "path_tumor2_ajcc_9th_pathologic_tnm_t", "path_tumor2_ajcc_9th_pathologic_tnm_n", "path_tumor2_ajcc_9th_pathologic_tnm_m", 9);
+					if(tumor2TNM9stage) this.updateTerm(namespace, "path_tumor2_ajcc_9th_pathologic_stage", tumor2TNM9stage);
+					else this.updateTerm(namespace, "path_tumor2_ajcc_9th_pathologic_stage");
+					break;
 				// Tumor#3 TNM9
+				case "path_tumor3_ajcc_9th_pathologic_tnm_t":
+				case "path_tumor3_ajcc_9th_pathologic_tnm_n":
+				case "path_tumor3_ajcc_9th_pathologic_tnm_m":
+					let tumor3TNM9stage = this.calcTNMStage(namespace, "path_tumor3_ajcc_9th_pathologic_tnm_t", "path_tumor3_ajcc_9th_pathologic_tnm_n", "path_tumor3_ajcc_9th_pathologic_tnm_m", 9);
+					if(tumor3TNM9stage) this.updateTerm(namespace, "path_tumor3_ajcc_9th_pathologic_stage", tumor3TNM9stage);
+					else this.updateTerm(namespace, "path_tumor3_ajcc_9th_pathologic_stage");
+					break;
 				// Tumor#4 TNM9
+				case "path_tumor4_ajcc_9th_pathologic_tnm_t":
+				case "path_tumor4_ajcc_9th_pathologic_tnm_n":
+				case "path_tumor4_ajcc_9th_pathologic_tnm_m":
+					let tumor4TNM9stage = this.calcTNMStage(namespace, "path_tumor4_ajcc_9th_pathologic_tnm_t", "path_tumor4_ajcc_9th_pathologic_tnm_n", "path_tumor4_ajcc_9th_pathologic_tnm_m", 9);
+					if(tumor4TNM9stage) this.updateTerm(namespace, "path_tumor4_ajcc_9th_pathologic_stage", tumor4TNM9stage);
+					else this.updateTerm(namespace, "path_tumor4_ajcc_9th_pathologic_stage");
+					break;
 				// Tumor#5 TNM9
+				case "path_tumor5_ajcc_9th_pathologic_tnm_t":
+				case "path_tumor5_ajcc_9th_pathologic_tnm_n":
+				case "path_tumor5_ajcc_9th_pathologic_tnm_m":
+					let tumor5TNM9stage = this.calcTNMStage(namespace, "path_tumor5_ajcc_9th_pathologic_tnm_t", "path_tumor5_ajcc_9th_pathologic_tnm_n", "path_tumor5_ajcc_9th_pathologic_tnm_m", 9);
+					if(tumor5TNM9stage) this.updateTerm(namespace, "path_tumor5_ajcc_9th_pathologic_stage", tumor5TNM9stage);
+					else this.updateTerm(namespace, "path_tumor5_ajcc_9th_pathologic_stage");
+					break;
 			}
 		},
 
