@@ -305,8 +305,8 @@ let ECRFViewer = function(StationX){
 				}
 			}
 
-			console.log("T / N / M", _t, _n, _m);
-			console.log("stage : ", stageCal);
+			//console.log("T / N / M", _t, _n, _m);
+			//console.log("stage : ", stageCal);
 
 			return stageCal;
 		},
@@ -363,8 +363,8 @@ let ECRFViewer = function(StationX){
 				}
 			}
 
-			console.log("T / N / M", _t, _n, _m);
-			console.log("stage : ", stageCal);
+			//console.log("T / N / M", _t, _n, _m);
+			//console.log("stage : ", stageCal);
 
 			return stageCal;
 		},
@@ -528,7 +528,7 @@ let ECRFViewer = function(StationX){
 					const cciName = namespace + 'comorbidity_adv';
 					const cciAdv = $("input[name='"+cciName+"']:checked");
 					const cciAdvVal = (cciAdv.val() === 'true');
-					console.log("cci adv : ", cciAdv, cciAdvVal);
+					//console.log("cci adv : ", cciAdv, cciAdvVal);
 					if(cciAdvVal) {	
 						let score = this.calcCCI(namespace);
 						//console.log("score : ", score);
