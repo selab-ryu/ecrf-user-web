@@ -182,7 +182,7 @@ let ECRFViewer = function(StationX){
 			const amountYear = amount * year;
 			
 			console.log("smoke amount year :", amountYear);
-			return amountYear.toFixed(2);
+			return amountYear.toFixed(4);
 		},
 		
 		/**
