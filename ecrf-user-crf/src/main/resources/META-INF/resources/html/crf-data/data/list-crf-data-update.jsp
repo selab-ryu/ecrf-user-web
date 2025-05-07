@@ -245,6 +245,7 @@ _log.info("url : " + baseURL.toString());
 						List<LinkCRF> linkList = LinkCRFLocalServiceUtil.getLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
 						if(linkList.size() > 0){
 							LinkCRF link = linkList.get(linkList.size() - 1);
+							//_log.info("subject / link " + rowSubject.getSubjectId() + " / " + link.getLinkId());
 							String answer = DataTypeLocalServiceUtil.getStructuredData(link.getStructuredDataId());
 							JSONObject answerObj = JSONFactoryUtil.createJSONObject(answer);
 							long rowDataTypeId = CRFLocalServiceUtil.getDataTypeId(link.getCrfId());
@@ -445,8 +446,10 @@ _log.info("url : " + baseURL.toString());
 					List<LinkCRF> links = LinkCRFLocalServiceUtil.getLinkCRFByC_S(crfId, rowSubjectId);
 					
 					long singleSdId = 0;
+					long singleLinkId = 0;
 					if(crfDataCount == 1){
 						LinkCRF getLink = links.get(0);
+						singleLinkId = getLink.getLinkId();
 						singleSdId = getLink.getStructuredDataId();
 					}
 				%>
@@ -580,7 +583,7 @@ _log.info("url : " + baseURL.toString());
 				
 				<%
 					String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 2, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
-					String deleteSingleFunctionCallStr = String.format("deleteSingleCRF(%d, %d, '%s', '%s')", singleSdId, crfId, themeDisplay.getPortletDisplay().getId(), baseURL.toString());				
+					String deleteSingleFunctionCallStr = String.format("deleteSingleCRF(%d, %d, '%s', '%s')", singleLinkId, crfId, themeDisplay.getPortletDisplay().getId(), baseURL.toString());				
 				
 					String deleteBtnClass = "dh-icon-button w130 delete-btn";
 					String deleteBtnKey = "ecrf-user.button.delete-crf-data";
