@@ -160,19 +160,21 @@ let ECRFViewer = function(StationX){
 		 * @returns fixed(4) float smoke period
 		 */
 		calcSmokePeriod: function(targetNamespace, yearId, monthId, dayId, option) {
-			const DAYS_IN_YEAR = 365.0;
-			const DAYS_IN_MONTH = 30.0;
+			const YEAR_MONTH = 12.0;
+			const YEAR_DAY = 360.0;
+			const MONTH_DAY = 30.0;
 
 			const yearVal = parseFloat($('#' + targetNamespace + yearId).val()) || 0.0;
 			const monthVal = parseFloat($('#' + targetNamespace + monthId).val()) || 0.0;
 			const dayVal = parseFloat($('#' + targetNamespace + dayId).val()) || 0.0;
 
-			const totalDays = (yearVal * DAYS_IN_YEAR) + (monthVal * DAYS_IN_MONTH) + dayVal;
+			let total = 0.0;
+			
+			if(option === 'year')  total = yearVal + (monthVal / YEAR_MONTH) + (dayVal / YEAR_DAY);
+			if(option === 'month') total = (yearVal * YEAR_MONTH) + monthVal + (dayVal / MONTH_DAY);
+			if(option === 'day') total = (yearVal * YEAR_DAY) + (monthVal * MONTH_DAY) + dayVal;
 
-			let result = totalDays;
-			if(option === 'year')  result = totalDays / DAYS_IN_YEAR;
-			if(option === 'month') result = totalDays / DAYS_IN_MONTH;
-			return result.toFixed(4);
+			return total.toFixed(4);
 		},
 
 		calcSmokeAmountYear: function(targetNamespace, amountId, yearId) {
