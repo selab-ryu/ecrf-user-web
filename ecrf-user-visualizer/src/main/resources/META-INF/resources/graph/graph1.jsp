@@ -65,7 +65,7 @@ function getGraphData(crfId) {
 			console.log("data :", data);
 			
 			// set data to chart
-			$("#<portlet:namespace/>dataCount").val("120");
+			$("#<portlet:namespace/>dataCount").text("120");
 			
 		},
 		error: function(jqXHR, a, b){
