@@ -201,9 +201,10 @@ let ECRFViewer = function(StationX){
 			const height = parseFloat($('#'+targetNamespace+heightId).val()) || 0.0;
 
 			let bmi = 0.0;
+			let heightM = 0.0;
 			if(weight > 0 && height > 0) {
-				height = height / 100.0;	// cm to m
-				bmi = weight / (height * height);
+				heightM = height / 100.0;	// cm to m
+				bmi = weight / (heightM * heightM);
 			}
 
 			return bmi.toFixed(fixed);
@@ -621,12 +622,21 @@ let ECRFViewer = function(StationX){
 					break;
 
 				// Previous Tx. TNM8
-				case "adv_pd_prev_tx_yc_t":
-				case "adv_pd_prev_tx_yc_n":
-				case "adv_pd_prev_tx_yc_m":
-					let preTxTNMstage = this.calcTNMStage(namespace, "adv_pd_prev_tx_yc_t", "adv_pd_prev_tx_yc_n", "adv_pd_prev_tx_yc_m", 8);
-					if(preTxTNMstage) this.updateTerm(namespace, "adv_pd_prev_tx_stage", preTxTNMstage);
-					else this.updateTerm(namespace, "adv_pd_prev_tx_stage");
+				case "adv_pd_prev_tx_yc_8th_t":
+				case "adv_pd_prev_tx_yc_8th_n":
+				case "adv_pd_prev_tx_yc_8th_m":
+					let preTxTNM8stage = this.calcTNMStage(namespace, "adv_pd_prev_tx_yc_8th_t", "adv_pd_prev_tx_yc_8th_n", "adv_pd_prev_tx_yc_8th_m", 8);
+					if(preTxTNM8stage) this.updateTerm(namespace, "adv_pd_prev_tx_8th_stage", preTxTNM8stage);
+					else this.updateTerm(namespace, "adv_pd_prev_tx_8th_stage");
+					break;
+
+				// Previous Tx. TNM9
+				case "adv_pd_prev_tx_yc_9th_t":
+				case "adv_pd_prev_tx_yc_9th_n":
+				case "adv_pd_prev_tx_yc_9th_m":
+					let preTxTNM9stage = this.calcTNMStage(namespace, "adv_pd_prev_tx_yc_9th_t", "adv_pd_prev_tx_yc_9th_n", "adv_pd_prev_tx_yc_9th_m", 9);
+					if(preTxTNM9stage) this.updateTerm(namespace, "adv_pd_prev_tx_9th_stage", preTxTNM9stage);
+					else this.updateTerm(namespace, "adv_pd_prev_tx_9th_stage");
 					break;
 				
 				// Tumor#1 TNM8
@@ -709,6 +719,15 @@ let ECRFViewer = function(StationX){
 					let tumor5TNM9stage = this.calcTNMStage(namespace, "path_tumor5_ajcc_9th_pathologic_tnm_t", "path_tumor5_ajcc_9th_pathologic_tnm_n", "path_tumor5_ajcc_9th_pathologic_tnm_m", 9);
 					if(tumor5TNM9stage) this.updateTerm(namespace, "path_tumor5_ajcc_9th_pathologic_stage", tumor5TNM9stage);
 					else this.updateTerm(namespace, "path_tumor5_ajcc_9th_pathologic_stage");
+					break;
+
+				// Preoperative data > Other comorbidity > Lung_op_Hx > TNM
+				case "adv_pd_other_stage_of_prev_lung_ca_op_t":
+				case "adv_pd_other_stage_of_prev_lung_ca_op_n":
+				case "adv_pd_other_stage_of_prev_lung_ca_op_m":
+					let lungOpHxTNMstage = this.calcTNMStage(namespace, "adv_pd_other_stage_of_prev_lung_ca_op_t", "adv_pd_other_stage_of_prev_lung_ca_op_n", "adv_pd_other_stage_of_prev_lung_ca_op_m", 8);
+					if(lungOpHxTNMstage) this.updateTerm(namespace, "adv_pd_other_stage_of_prev_lung_ca_op_stage", lungOpHxTNMstage);
+					else this.updateTerm(namespace, "adv_pd_other_stage_of_prev_lung_ca_op_stage");
 					break;
 			}
 		},
