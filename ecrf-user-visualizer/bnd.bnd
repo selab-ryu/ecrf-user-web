@@ -1,0 +1,13 @@
+Bundle-Name: ecrf-user-visualizer
+Bundle-SymbolicName: ecrf.user.visualizer
+Bundle-Version: 1.0.0
+
+Web-ContextPath: /ecrf.user.visualizer
+
+-privatepackage: \
+	ecrf.user.constants,\
+	ecrf.user.model.custom,\
+	com.sx.constant,\
+	com.sx.icecap.constant,\
+	ecrf.user.constants.attribute,\
+	ecrf.user.constants.type
