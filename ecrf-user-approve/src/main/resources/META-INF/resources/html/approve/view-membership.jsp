@@ -245,7 +245,7 @@ if(membershipRequestCount <= 0) {
 				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.review">
-					<a class="dh-icon-button review w130" href="<%=approveURL %>" name="<portlet:namespace/>review">
+					<a class="dh-icon-button review-btn w130" href="<%=approveURL %>" name="<portlet:namespace/>review">
 						<img class="review-icon" />					
 						<span><liferay-ui:message key="ecrf-user.button.review" /></span>
 					</a>

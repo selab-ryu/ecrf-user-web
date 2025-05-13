@@ -435,7 +435,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 						boolean hasOwnPermission = false;
 						if(user.getUserId() == researcher.getResearcherUserId()) hasOwnPermission = true; 
 					%>
-										
+					
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) || hasOwnPermission ) %>">
 					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="<portlet:namespace/>save">
 						<img class="save-icon" />
@@ -457,15 +457,11 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					
 					</c:when>
 					<c:otherwise>
-					
-					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
 										
 					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="<portlet:namespace/>save">
 						<img class="save-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 					</button>
-					
-					</c:if>
 					
 					</c:otherwise>
 					</c:choose>
