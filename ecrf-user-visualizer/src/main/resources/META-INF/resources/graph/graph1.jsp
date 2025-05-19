@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/init.jsp" %>
 
 <div class="ecrf-user">
@@ -17,10 +18,10 @@
 			<!-- variable option -->
 			<aui:row>
 				<aui:col md="3">
-					<liferay-ui:message key="ecrf-user.visualizer.title.variable-option" />
+					
 				</aui:col>
 				<aui:col md="9">
-					<aui:input id="" name="" type="checkbox" label="" />
+					
 				</aui:col>
 			</aui:row>
 			
@@ -30,8 +31,10 @@
 					<liferay-ui:message key="ecrf-user.visualizer.title.graph" />
 				</aui:col>
 			</aui:row>
+			
 			<aui:row>
 				<aui:col md="12">
+					<div id="enrollmentChart" style="height: 400px"></div>
 				</aui:col>
 			</aui:row>
 		</aui:container>
