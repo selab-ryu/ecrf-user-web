@@ -4,7 +4,6 @@
 	<div class="pad1r">
 		<liferay-ui:header title="ecrf-user.visualizer.title.graph1" />
 		
-		
 		<aui:container>
 			<aui:row>
 				<aui:col md="3">
@@ -15,33 +14,33 @@
 				</aui:col>
 			</aui:row>
 			
+			<!-- variable option -->
 			<aui:row>
-				<aui:col md="3">	<!-- 1st trimester -->
-				</aui:col>
 				<aui:col md="3">
+					<liferay-ui:message key="ecrf-user.visualizer.title.variable-option" />
 				</aui:col>
-				<aui:col md="3">	<!-- 2nd trimester -->
-				</aui:col>
-				<aui:col md="3">
+				<aui:col md="9">
+					<aui:input id="" name="" type="checkbox" label="" />
 				</aui:col>
 			</aui:row>
 			
+			<!-- graph -->
 			<aui:row>
-				<aui:col md="3">	<!-- 3rd trimester -->
+				<aui:col md="12">
+					<liferay-ui:message key="ecrf-user.visualizer.title.graph" />
 				</aui:col>
-				<aui:col md="3">
-				</aui:col>
-				<aui:col md="3">	<!-- 4th trimester -->
-				</aui:col>
-				<aui:col md="3">
+			</aui:row>
+			<aui:row>
+				<aui:col md="12">
 				</aui:col>
 			</aui:row>
 		</aui:container>
 	</div>
 </div>
 
-
 <script>
+wijmo.setLicenseKey('licenseKey');
+
 
 $(document).ready(function() {
 	console.log("graph data loading");
@@ -67,11 +66,54 @@ function getGraphData(crfId) {
 			// set data to chart
 			$("#<portlet:namespace/>dataCount").text("120");
 			
+			
+			let chartData = null;
+			// data pre processing
+			
+			//setGraphData(chartData);
+			
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
 		}
 	});
+}
+
+function setGraphData(data) {
+	 // 1. 환자 등록 현황 차트
+    new wijmo.chart.FlexChart('#enrollmentChart', {
+        header: '임상시험 시계열 현황',
+        legendToggle: true,
+        bindingX: 'quater',
+        itemsSource: data,
+        series: [{
+                name: '임상실험1',
+                binding: 'value1',
+                chartType: 'LineSymbols'
+            },{
+                name: '임상실험2',
+                binding: 'value2',
+                chartType: 'LineSymbols'
+            },{
+                name: '임상실험3',
+                binding: 'value3',
+                chartType: 'LineSymbols'
+            },{
+                name: '임상실험4',
+                binding: 'value4',
+                chartType: 'LineSymbols'
+            }
+        ],
+        axisY: {
+            title: '실험 데이터(수치)'
+        },
+        legend: {
+            position: 'Bottom'
+        },
+        dataLabel: {
+            content: '{y}'
+        }
+    });
 }
 
 </script>
