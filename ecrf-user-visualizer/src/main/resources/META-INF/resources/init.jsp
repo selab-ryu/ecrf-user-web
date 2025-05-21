@@ -89,8 +89,8 @@
 
 
 <!-- Wijmo css/js referenece goes here -->
-<link rel="stylesheet" href="http://cdn.mescius.com/wijmo/5.latest/styles/wijmo.min.css" />
-<script src="http://cdn.mescius.com/wijmo/5.latest/controls/wijmo.min.js"></script>
-<script src="http://cdn.mescius.com/wijmo/5.latest/controls/wijmo.chart.min.js"></script>
-<script src="http://cdn.mescius.com/wijmo/5.latest/controls/wijmo.grid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.mescius.com/wijmo/5.latest/styles/wijmo.min.css" />
+<script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.min.js"></script>
+<script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.chart.min.js"></script>
+<script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.grid.min.js"></script>
 <!-- Wijmo css/js referenece goes here -->

@@ -3,32 +3,15 @@
 
 <div class="ecrf-user">
 	<div class="pad1r">
-		<liferay-ui:header title="ecrf-user.visualizer.title.graph1" />
+		<liferay-ui:header title="ecrf-user.visualizer.title.view-visualizer" />
 		
-		<aui:container>
-			<aui:row>
-				<aui:col md="3">
-					<liferay-ui:message key="ecrf-user.visualizer.title.data-count" />
-				</aui:col>
-				<aui:col md="9">
-					<span id="<portlet:namespace/>dataCount"></span>
-				</aui:col>
-			</aui:row>
-			
-			<!-- variable option -->
-			<aui:row>
-				<aui:col md="3">
-					
-				</aui:col>
-				<aui:col md="9">
-					
-				</aui:col>
-			</aui:row>
-			
+		<aui:container>						
 			<!-- graph -->
 			<aui:row>
 				<aui:col md="12">
-					<liferay-ui:message key="ecrf-user.visualizer.title.graph" />
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph1" />
+					</span>
 				</aui:col>
 			</aui:row>
 			
@@ -40,7 +23,23 @@
 			
 			<aui:row>
 				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph2" />
+					</span>
+				</aui:col>
+			</aui:row>
+			
+			<aui:row>
+				<aui:col md="12">
 					<div id="enrollmentChart2" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
+
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph3" />
+					</span>
 				</aui:col>
 			</aui:row>
 
@@ -60,7 +59,11 @@ wijmo.setLicenseKey('smart-crf.medbiz.or.kr,951833985592528#B0IMJojIyVmdiwSZzxWY
 $(document).ready(function() {
 	console.log("graph data loading");
 	
-	let crfId = 56603;
+	// smart-crf noe_moc crf id : 330797 => for deploy
+	// ryu local noe_moc crf id : 41733
+	// gssong local noe_moc crf id : 
+	
+	let crfId = 41733;
 	
 	getGraphData(crfId);
 	
