@@ -43,6 +43,12 @@
 					<div id="enrollmentChart2" style="height: 400px"></div>
 				</aui:col>
 			</aui:row>
+
+			<aui:row>
+				<aui:col md="12">
+					<div id="enrollmentChart3" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
 		</aui:container>
 	</div>
 </div>
@@ -82,6 +88,10 @@ function getGraphData(crfId) {
 		
 			let chartData2 = processChartData2(data); // 데이터 전처리 함수 추가
 	        setGraphData2(chartData2); // 차트 데이터 설정
+
+			let chartData3 = processChartData3(data); // 데이터 전처리 함수 추가
+	        setGraphData3(chartData3); // 차트 데이터 설정
+		
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
@@ -102,8 +112,8 @@ function processChartData(in_data) {
 			if(in_data.data[i].hasOwnProperty("trimester")){
 				const f_data = new Object();
 				f_data.trimester = 'T-'+in_data.data[i].trimester[0]
-				console.log(f_data.trimester,':',in_data.data[i].trimester[0])
-	
+
+//				console.log(f_data.trimester,':',in_data.data[i].trimester[0])
 //				console.log('BPA :',in_data.data[i]["BPA"])
 //				console.log('BPF :',in_data.data[i]["BPF"])
 //				console.log('BPS :',in_data.data[i]["BPS"])
@@ -122,7 +132,7 @@ function processChartData(in_data) {
 						f_data[termName] = in_data.data[i][termName]
 					}
 				}
-				console.log("==================================")
+
 				if ( noTerms > 0 ) {
 					//	console.log(f_data)
 					processedData.push(f_data)
@@ -175,8 +185,8 @@ function processChartData2(in_data) {
 		}
 	}
 	
-	console.log("processed Data :",originalData)
 	processedData = transFormData(originalData)
+	console.log("transformed Data :",processedData)
 	
 //	processedData = [
 //		{termName:'BPA','T-1':1,'T-2':2,'T-3':3},	    
@@ -195,8 +205,6 @@ function transFormData(in_data) {
 	const transformedData = [];
 	const termNames = Object.keys(in_data[0]).filter(key => key !== 'trimester')
 	
-	console.log("termNames : ",termNames);
-	
 	termNames.forEach(term => {
 		const newObject = { termName: term };
 		in_data.forEach(item => {
@@ -205,10 +213,65 @@ function transFormData(in_data) {
 		transformedData.push(newObject);
 	});
 	
-	console.log("transformed Data :",transformedData)
-	
 	return transformedData;
 };
+
+function processChartData3(in_data) {
+    // 표시할  termName List 
+	const edu_label = {"e1":"1-HighSchool","e2":"2-College","e3":"3-University","e4":"4-Graduate"};
+    
+	let processedData = [];
+	let originalData  = [];
+//	console.log(termNames)
+//	console.log('Length=',termNames.length)
+
+	var  edu_code = ""
+	const f_data = new Object();
+	
+	for (i=0; i<in_data.data.length; i++) {
+		
+		if(in_data.data[i].hasOwnProperty("trimester")){
+			if(in_data.data[i].trimester[0] !== '1')
+				continue
+			
+			if(in_data.data[i].hasOwnProperty("education")){
+
+				edu_code = "e"+in_data.data[i].education[0];
+				
+				if( !edu_label.hasOwnProperty(edu_code)) 
+					continue
+				
+				if( !f_data.hasOwnProperty(edu_code)){
+					f_data[edu_code] = 0;
+				}
+				f_data[edu_code] += 1
+			}
+		}
+	}
+	console.log("==================================")
+	console.log("f- :",f_data)
+	
+	
+	for( let key in f_data ) {
+		let edu_record = {};
+		edu_record.education = edu_label[key];
+		edu_record.count = f_data[key];
+		
+		processedData.push(edu_record);
+	}
+	
+
+	console.log("processed Data :",processedData)
+	
+//	processedData = [
+//		{education:'1-High School',count:3},	    
+//		{education:'2-College',count:50},	    
+//		{education:'3-University',count:150},	    
+//		{education:'4-Graduate',count:39},	    
+//	];
+
+	return processedData;
+}
 
 function setGraphData(data) {
 	 // 1. 환자 등록 현황 차트
@@ -267,6 +330,23 @@ function setGraphData2(data) {
             content: '{y}'
         }
     });
+}
+function setGraphData3(data) {
+	 // 1. 환자 현황 차트
+   new wijmo.chart.FlexPie('#enrollmentChart3', {
+       header: '임상 산모학력 현황',
+       bindingName: 'education',
+       binding: 'count',
+       dataLabel: {
+   	      	content: (ht) => {
+   	          	return `${ht.name} ${core.Globalize.format(ht.value / sum, 'p2')}`;
+	   		},
+       },
+       itemsSource: data,
+       palette: ['rgba(42,159,214,1)', 'rgba(119,179,0,1)', 'rgba(153,51,204,1)', 'rgba(255,136,0,1)',
+           'rgba(204,0,0,1)', 'rgba(0,204,163,1)', 'rgba(61,109,204,1)', 'rgba(82,82,82,1)', 'rgba(0,0,0,1)']
+       
+   });
 }
 
 </script>
