@@ -49,6 +49,11 @@
 					<div id="enrollmentChart3" style="height: 400px"></div>
 				</aui:col>
 			</aui:row>
+			<aui:row>
+				<aui:col md="12">
+					<div id="theGrid" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
 		</aui:container>
 	</div>
 </div>
@@ -92,11 +97,44 @@ function getGraphData(crfId) {
 			let chartData3 = processChartData3(data); // 데이터 전처리 함수 추가
 	        setGraphData3(chartData3); // 차트 데이터 설정
 		
+			let gridData = processGridData(data); // 데이터 전처리 함수 추가
+	        setGridData(gridData); // 그리드 데이터 설정
+		
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
 		}
 	});
+}
+
+function setGraphData(data) {
+	 // 1. 환자 등록 현황 차트
+  new wijmo.chart.FlexChart('#enrollmentChart', {
+      header: '임상시험 시계열 현황',
+      legendToggle: true,
+      bindingX: 'trimester',
+      itemsSource: data,
+      series: [
+   	   { name: 'BPA',   binding: 'BPA' ,	chartType: 'LineSymbols'},
+   	   { name: 'BPF',   binding: 'BPF' ,	chartType: 'LineSymbols'},
+   	   { name: 'BPS',   binding: 'BPS' ,	chartType: 'LineSymbols'},
+   	   { name: 'TCS',   binding: 'TCS' ,	chartType: 'LineSymbols'},
+   	   { name: 'BP3',   binding: 'BP3' ,	chartType: 'LineSymbols'},
+   	   { name: 'MP',   binding: 'MP' ,	chartType: 'LineSymbols'},
+   	   { name: 'EP',   binding: 'EP' ,	chartType: 'LineSymbols'},
+   	   { name: 'PP',   binding: 'PP' , 	chartType: 'LineSymbols'},
+   	   { name: 'BP',   binding: 'BP' ,	chartType: 'LineSymbols'},
+      ],
+      axisY: {
+          title: '실험 데이터(수치)'
+      },
+      legend: {
+          position: 'Bottom'
+      },
+      dataLabel: {
+          content: '{y}'
+      }
+  });
 }
 
 function processChartData(in_data) {
@@ -150,6 +188,37 @@ function processChartData(in_data) {
 //	];
 	return processedData;
 }
+
+function setGraphData2(data) {
+	 // 1. 환자 등록 현황 차트
+    new wijmo.chart.FlexChart('#enrollmentChart2', {
+        header: '임상시험 시계열 현황',
+        legendToggle: true,
+        bindingX: 'termName',
+        itemsSource: data,
+        series: [{
+                name: '1stTrimester',
+                binding: 'T-1'
+            },{
+                name: '2ndTrimester',
+                binding: 'T-2'
+            },{
+                name: '3rdTrimester',
+                binding: 'T-3'
+            }
+        ],
+        axisY: {
+            title: '실험 데이터(수치)'
+        },
+        legend: {
+            position: 'Bottom'
+        },
+        dataLabel: {
+            content: '{y}'
+        }
+    });
+}
+
 function processChartData2(in_data) {
     // 표시할  termName List 
 	const termNames = new Array("BPA","BPF","BPS","TCS","BP3","MP","EP","PP","BP");
@@ -160,30 +229,31 @@ function processChartData2(in_data) {
 //	console.log('Length=',termNames.length)
 	
 	for (i=0; i<in_data.data.length; i++) {
-		if( in_data.data[i].name === "NOE_1001") {
+		if( !(in_data.data[i].name === "NOE_1001"))
+			continue;
 			
-			if(in_data.data[i].hasOwnProperty("trimester")){
-				const f_data = new Object();
-				f_data.trimester = 'T-'+in_data.data[i].trimester[0]
-			//	console.log(f_data.trimester,':',in_data.data[i].trimester[0])
+		if( !(in_data.data[i].hasOwnProperty("trimester")))
+			continue;
+		
+		const f_data = new Object();
+		f_data.trimester = 'T-'+in_data.data[i].trimester[0]
+		//	console.log(f_data.trimester,':',in_data.data[i].trimester[0])
 	
-				let noTerms = 0;
-				for (i2=0; i2<termNames.length; i2++) {
-					termName = termNames[i2]
-					if(in_data.data[i].hasOwnProperty(termName)){
-					//	console.log(termName,':', in_data.data[i][termName])
-						noTerms += 1
-						f_data[termName] = in_data.data[i][termName]
-					}
-				}
-			//	console.log("==================================")
-				if ( noTerms > 0 ) {
-					//	console.log(f_data)
-					originalData.push(f_data)
-				}
+		let noTerms = 0;
+		for (i2=0; i2<termNames.length; i2++) {
+			termName = termNames[i2]
+			if(in_data.data[i].hasOwnProperty(termName)){
+				//	console.log(termName,':', in_data.data[i][termName])
+				noTerms += 1
+				f_data[termName] = in_data.data[i][termName]
 			}
+		} /* for i2 */
+		//	console.log("==================================")
+		if ( noTerms > 0 ) {
+			//	console.log(f_data)
+			originalData.push(f_data)
 		}
-	}
+	} /* for i */
 	
 	processedData = transFormData(originalData)
 	console.log("transformed Data :",processedData)
@@ -201,9 +271,10 @@ function processChartData2(in_data) {
 
 	return processedData;
 }
+
 function transFormData(in_data) {
-	const transformedData = [];
-	const termNames = Object.keys(in_data[0]).filter(key => key !== 'trimester')
+	let transformedData = [];
+	let termNames = Object.keys(in_data[0]).filter(key => key !== 'trimester')
 	
 	termNames.forEach(term => {
 		const newObject = { termName: term };
@@ -215,6 +286,24 @@ function transFormData(in_data) {
 	
 	return transformedData;
 };
+
+function setGraphData3(data) {
+	 // 1. 환자 현황 차트
+  new wijmo.chart.FlexPie('#enrollmentChart3', {
+      header: '임상 산모학력 현황',
+      bindingName: 'education',
+      binding: 'count',
+      dataLabel: {
+  	      	content: (ht) => {
+  	          	return `${ht.name} ${core.Globalize.format(ht.value / sum, 'p2')}`;
+	   		},
+      },
+      itemsSource: data,
+      palette: ['rgba(42,159,214,1)', 'rgba(119,179,0,1)', 'rgba(153,51,204,1)', 'rgba(255,136,0,1)',
+          'rgba(204,0,0,1)', 'rgba(0,204,163,1)', 'rgba(61,109,204,1)', 'rgba(82,82,82,1)', 'rgba(0,0,0,1)']
+      
+  });
+}
 
 function processChartData3(in_data) {
     // 표시할  termName List 
@@ -230,26 +319,30 @@ function processChartData3(in_data) {
 	
 	for (i=0; i<in_data.data.length; i++) {
 		
-		if(in_data.data[i].hasOwnProperty("trimester")){
-			if(in_data.data[i].trimester[0] !== '1')
-				continue
+		if(!(in_data.data[i].hasOwnProperty("trimester")))
+			continue;
+		
+		if(in_data.data[i].trimester[0] !== '1')
+			continue
 			
-			if(in_data.data[i].hasOwnProperty("education")){
-
-				edu_code = "e"+in_data.data[i].education[0];
+		if(!(in_data.data[i].hasOwnProperty("education")))
+			continue;
+		
+		edu_code = "e"+in_data.data[i].education[0];
 				
-				if( !edu_label.hasOwnProperty(edu_code)) 
-					continue
+		if( !edu_label.hasOwnProperty(edu_code)) 
+			continue
 				
-				if( !f_data.hasOwnProperty(edu_code)){
-					f_data[edu_code] = 0;
-				}
-				f_data[edu_code] += 1
-			}
+		if( !f_data.hasOwnProperty(edu_code)){
+			f_data[edu_code] = 0;
 		}
-	}
+	
+		f_data[edu_code] += 1
+
+	} /* for i */
+	
 	console.log("==================================")
-	console.log("f- :",f_data)
+	console.log("f-data :",f_data)
 	
 	
 	for( let key in f_data ) {
@@ -260,7 +353,6 @@ function processChartData3(in_data) {
 		processedData.push(edu_record);
 	}
 	
-
 	console.log("processed Data :",processedData)
 	
 //	processedData = [
@@ -273,80 +365,92 @@ function processChartData3(in_data) {
 	return processedData;
 }
 
-function setGraphData(data) {
-	 // 1. 환자 등록 현황 차트
-   new wijmo.chart.FlexChart('#enrollmentChart', {
-       header: '임상시험 시계열 현황',
-       legendToggle: true,
-       bindingX: 'trimester',
-       itemsSource: data,
-       series: [
-    	   { name: 'BPA',   binding: 'BPA' ,	chartType: 'LineSymbols'},
-    	   { name: 'BPF',   binding: 'BPF' ,	chartType: 'LineSymbols'},
-    	   { name: 'BPS',   binding: 'BPS' ,	chartType: 'LineSymbols'},
-    	   { name: 'TCS',   binding: 'TCS' ,	chartType: 'LineSymbols'},
-    	   { name: 'BP3',   binding: 'BP3' ,	chartType: 'LineSymbols'},
-    	   { name: 'MP',   binding: 'MP' ,	chartType: 'LineSymbols'},
-    	   { name: 'EP',   binding: 'EP' ,	chartType: 'LineSymbols'},
-    	   { name: 'PP',   binding: 'PP' , 	chartType: 'LineSymbols'},
-    	   { name: 'BP',   binding: 'BP' ,	chartType: 'LineSymbols'},
-       ],
-       axisY: {
-           title: '실험 데이터(수치)'
-       },
-       legend: {
-           position: 'Bottom'
-       },
-       dataLabel: {
-           content: '{y}'
-       }
-   });
+function setGridData(data) {
+	// 1. 환자 현황 차트
+	var theGrid = new FlexGrid('#theGrid', {
+	   autoGenerateColumns: false,
+	   columns: [
+		//	{binding: 'id', header: 'No', width: '1*'},
+		   {binding: 'termName', header: 'TermName', width: '2*'},
+		   {binding: 't1', header: '1st Trimester', width: '*', format: 'n2'},
+		   {binding: 't2', header: '2nd Trimester', width: '*', format: 'n2'},
+		   {binding: 't3', header: '3rd Trimester', width: '*', format: 'n2'}
+	   ],
+      itemsSource: data
+	});
+	 
+	// show the current item
+	var selItemElement = document.getElementById('selectedItem');
+	function updateCurrentInfo() {
+		selItemElement.innerHTML = format('TermName: <b>{termName}</b>, 1st Trimester:<b>{t-1:c0}</b> 2nd Trimester:<b>{t-2:c0}</b>  3rd Trimester:<b>{t-3:c0}</b>',
+				theGrid.collectionView.currentItem	);
+	}
+	
+	// update current item now and when the grid selection changes
+	updateCurrentInfo();
+	var sd = new SortDescription('id', true);
+	theGrid.collectionView.sortDescription.push(sd);
 }
-function setGraphData2(data) {
-	 // 1. 환자 등록 현황 차트
-    new wijmo.chart.FlexChart('#enrollmentChart2', {
-        header: '임상시험 시계열 현황',
-        legendToggle: true,
-        bindingX: 'termName',
-        itemsSource: data,
-        series: [{
-                name: '1stTri',
-                binding: 'T-1'
-            },{
-                name: '2ndTri',
-                binding: 'T-2'
-            },{
-                name: '3rdTri',
-                binding: 'T-3'
-            }
-        ],
-        axisY: {
-            title: '실험 데이터(수치)'
-        },
-        legend: {
-            position: 'Bottom'
-        },
-        dataLabel: {
-            content: '{y}'
-        }
-    });
-}
-function setGraphData3(data) {
-	 // 1. 환자 현황 차트
-   new wijmo.chart.FlexPie('#enrollmentChart3', {
-       header: '임상 산모학력 현황',
-       bindingName: 'education',
-       binding: 'count',
-       dataLabel: {
-   	      	content: (ht) => {
-   	          	return `${ht.name} ${core.Globalize.format(ht.value / sum, 'p2')}`;
-	   		},
-       },
-       itemsSource: data,
-       palette: ['rgba(42,159,214,1)', 'rgba(119,179,0,1)', 'rgba(153,51,204,1)', 'rgba(255,136,0,1)',
-           'rgba(204,0,0,1)', 'rgba(0,204,163,1)', 'rgba(61,109,204,1)', 'rgba(82,82,82,1)', 'rgba(0,0,0,1)']
-       
-   });
+
+function processGridData(in_data) {
+    // 표시할  termName List 
+	const tri_label = {"t1":"1st Trimester","t2":"2nd Trimester","t3":"3rd Trimester"};
+	const termNames = new Array("BPA","BPF","BPS","TCS","BP3","MP","EP","PP","BP");
+    
+	let processedData = [];
+	let originalData  = [];
+//	console.log(termNames)
+//	console.log('Length=',termNames.length)
+
+	var  tri_code = ""
+	const f_data = new Object();
+	
+	for (i=0; i<in_data.data.length; i++) {
+		if(!(in_data.data[i].name == "NOE_1001"))
+			continue;
+			
+		if( !in_data.data[i].hasOwnProperty("trimester"))
+			continue;
+
+		tri_code = "t"+in_data.data[i].trimester[0];
+				
+		let noTerms = 0;
+		for (i2=0; i2<termNames.length; i2++) {
+			termName = termNames[i2]
+			if(in_data.data[i].hasOwnProperty(termName)){
+				//	console.log(termName,':', in_data.data[i][termName])
+				noTerms += 1
+				f_data[termName] = in_data.data[i][termName]
+			}
+			//	console.log("==================================")
+			if ( noTerms > 0 ) {
+				//	console.log(f_data)
+				originalData.push(f_data)
+			}
+		} /* for - i2 */
+		
+	} /* for - i */
+		
+	processedData = transFormData(originalData)
+	console.log("transformed Data :",processedData)
+	console.log("==================================")
+	
+	originalData = [];
+	for( j=0; j<processedData.length; j++ ) {
+		let term_record = processedData[j];
+		term_record["id"] = j;
+		
+		originalData.push(term_record);
+	}
+
+	console.log("processed Data :",originalData)
+	
+//	processedData = [
+//		{id:1 ,termName:'BPA', t1:0.22, t2:10.00, t3:300.04},	    
+//	    {id:2 ,termName:'BPF', t1:0.13, t2:15.50, t3:100.50},
+//	];
+
+	return originalData;
 }
 
 </script>
