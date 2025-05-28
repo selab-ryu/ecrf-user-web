@@ -93,4 +93,5 @@
 <script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.min.js"></script>
 <script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.chart.min.js"></script>
 <script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.grid.min.js"></script>
+<script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.input.min.js"></script>
 <!-- Wijmo css/js referenece goes here -->

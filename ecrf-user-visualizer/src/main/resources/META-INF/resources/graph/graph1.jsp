@@ -48,9 +48,19 @@
 					<div id="enrollmentChart3" style="height: 400px"></div>
 				</aui:col>
 			</aui:row>
+			
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.grid1" />
+					</span>
+				</aui:col>
+			</aui:row>
+
 			<aui:row>
 				<aui:col md="12">
 					<div id="theGrid" style="height: 400px"></div>
+					<div id="pager" style="margin:10px 0"></div>
 				</aui:col>
 			</aui:row>
 		</aui:container>
@@ -66,9 +76,9 @@ $(document).ready(function() {
 	
 	// smart-crf noe_moc crf id : 330797 => for deploy
 	// ryu local noe_moc crf id : 41733
-	// gssong local noe_moc crf id : 
+	// gssong local noe_moc crf id : 56603
 	
-	let crfId = 41733;
+	let crfId = 56603;
 	
 	getGraphData(crfId);
 	
@@ -112,12 +122,25 @@ function getGraphData(crfId) {
 
 function setGraphData(data) {
 	 // 1. 환자 등록 현황 차트
+	const termNames = new Array("BPA","BPF","BPS","TCS","BP3","MP","EP","PP","BP");
+	var series_obj = [];
+
+	for(i=0; i<termNames.length; i++ ) {
+		termName = termNames[i];
+	    var one_series = new Object();
+	    one_series['name'] = termName;
+	    one_series['binding'] = termName;
+	    one_series['chartType'] = 'LineSymbols';
+	    series_obj.push(one_series);
+	};
+	 
   new wijmo.chart.FlexChart('#enrollmentChart', {
       header: '임상시험 시계열 현황',
       legendToggle: true,
       bindingX: 'trimester',
       itemsSource: data,
-      series: [
+      series: series_obj,
+/*      series: [
    	   { name: 'BPA',   binding: 'BPA' ,	chartType: 'LineSymbols'},
    	   { name: 'BPF',   binding: 'BPF' ,	chartType: 'LineSymbols'},
    	   { name: 'BPS',   binding: 'BPS' ,	chartType: 'LineSymbols'},
@@ -128,6 +151,7 @@ function setGraphData(data) {
    	   { name: 'PP',   binding: 'PP' , 	chartType: 'LineSymbols'},
    	   { name: 'BP',   binding: 'BP' ,	chartType: 'LineSymbols'},
       ],
+*/
       axisY: {
           title: '실험 데이터(수치)'
       },
@@ -182,7 +206,7 @@ function processChartData(in_data) {
 		}
 	}
 	
-	console.log("processed Data :",processedData)
+	console.log("LINE processed Data :",processedData)
 	
 //	processedData = [
 //		{trimester:'T-1','BPA':1,'BPF':2,'BPS':3,'TCS':4,'BP3':5,'MP':6,'EP':7,'PP':8,'BP':9},  
@@ -259,7 +283,7 @@ function processChartData2(in_data) {
 	} /* for i */
 	
 	processedData = transFormData(originalData)
-	console.log("transformed Data :",processedData)
+	console.log("BAR transformed Data :",processedData)
 	
 //	processedData = [
 //		{termName:'BPA','T-1':1,'T-2':2,'T-3':3},	    
@@ -354,9 +378,9 @@ function processChartData3(in_data) {
 		edu_record.count = f_data[key];
 		
 		processedData.push(edu_record);
-	}
+	};
 	
-	console.log("processed Data :",processedData)
+	console.log("PIE processed Data :",processedData)
 	
 //	processedData = [
 //		{education:'1-High School',count:3},	    
@@ -369,30 +393,30 @@ function processChartData3(in_data) {
 }
 
 function setGridData(data) {
-	// 1. 환자 현황 차트
-	var theGrid = new FlexGrid('#theGrid', {
+	// Collection View로 페이징 데이터 소스 생성
+	var view = new wijmo.collections.CollectionView(data,{
+		pageSize: 10	// 한 페이지에 10건
+	});
+	
+	var theGrid = new wijmo.grid.FlexGrid('#theGrid', {
 	   autoGenerateColumns: false,
 	   columns: [
-		//	{binding: 'id', header: 'No', width: '1*'},
-		   {binding: 'termName', header: 'TermName', width: '2*'},
-		   {binding: 't1', header: '1st Trimester', width: '*', format: 'n2'},
-		   {binding: 't2', header: '2nd Trimester', width: '*', format: 'n2'},
-		   {binding: 't3', header: '3rd Trimester', width: '*', format: 'n2'}
+			{binding: 'id', header: 'No', width: '1*'},
+		   	{binding: 'termName', header: 'TermName', width: '2*'},
+		   	{binding: 't1', header: '1st Trimester', width: '*', format: 'n2'},
+		   	{binding: 't2', header: '2nd Trimester', width: '*', format: 'n2'},
+		   	{binding: 't3', header: '3rd Trimester', width: '*', format: 'n2'}
 	   ],
-      itemsSource: data
+      itemsSource: view
 	});
 	 
-	// show the current item
-	var selItemElement = document.getElementById('selectedItem');
-	function updateCurrentInfo() {
-		selItemElement.innerHTML = format('TermName: <b>{termName}</b>, 1st Trimester:<b>{t-1:c0}</b> 2nd Trimester:<b>{t-2:c0}</b>  3rd Trimester:<b>{t-3:c0}</b>',
-				theGrid.collectionView.currentItem	);
-	}
+	// 페이지 네비게이터 생성
+	var navigator = new wijmo.input.CollectionViewNavigator('#pager',{
+		byPage: true,
+		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
+		cv: view
+	});
 	
-	// update current item now and when the grid selection changes
-	updateCurrentInfo();
-	var sd = new SortDescription('id', true);
-	theGrid.collectionView.sortDescription.push(sd);
 }
 
 function processGridData(in_data) {
@@ -400,13 +424,14 @@ function processGridData(in_data) {
 	const tri_label = {"t1":"1st Trimester","t2":"2nd Trimester","t3":"3rd Trimester"};
 	const termNames = new Array("BPA","BPF","BPS","TCS","BP3","MP","EP","PP","BP");
     
-	let processedData = [];
 	let originalData  = [];
+	let transformedData = [];
+	let processedData = [];
 //	console.log(termNames)
 //	console.log('Length=',termNames.length)
 
 	var  tri_code = ""
-	const f_data = new Object();
+//	const f_data = new Object();
 	
 	for (i=0; i<in_data.data.length; i++) {
 		if(!(in_data.data[i].name == "NOE_1001"))
@@ -414,8 +439,10 @@ function processGridData(in_data) {
 			
 		if( !in_data.data[i].hasOwnProperty("trimester"))
 			continue;
-
+		
+		const f_data = new Object();
 		tri_code = "t"+in_data.data[i].trimester[0];
+		f_data.trimester = tri_code;
 				
 		let noTerms = 0;
 		for (i2=0; i2<termNames.length; i2++) {
@@ -434,26 +461,27 @@ function processGridData(in_data) {
 		
 	} /* for - i */
 		
-	processedData = transFormData(originalData)
-	console.log("transformed Data :",processedData)
+	transformedData = transFormData(originalData)
+	console.log("GRID transformed Data :",transformedData)
 	console.log("==================================")
 	
-	originalData = [];
-	for( j=0; j<processedData.length; j++ ) {
-		let term_record = processedData[j];
+
+	processedData = [];
+	for( j=0; j<transformedData.length; j++ ) {
+		let term_record = transformedData[j];
 		term_record["id"] = j;
 		
-		originalData.push(term_record);
+		processedData.push(term_record);
 	}
 
-	console.log("processed Data :",originalData)
-	
+	console.log("GRID processed Data :",processedData)
+
 //	processedData = [
 //		{id:1 ,termName:'BPA', t1:0.22, t2:10.00, t3:300.04},	    
 //	    {id:2 ,termName:'BPF', t1:0.13, t2:15.50, t3:100.50},
 //	];
 
-	return originalData;
+	return processedData;
 }
 
 </script>
