@@ -87,11 +87,14 @@
 
 <portlet:defineObjects />
 
-
 <!-- Wijmo css/js referenece goes here -->
 <link rel="stylesheet" href="https://cdn.mescius.com/wijmo/5.latest/styles/wijmo.min.css" />
 <script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.min.js"></script>
 <script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.chart.min.js"></script>
 <script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.grid.min.js"></script>
 <script src="https://cdn.mescius.com/wijmo/5.latest/controls/wijmo.input.min.js"></script>
+
+<script>
+wijmo.setLicenseKey('smart-crf.medbiz.or.kr,951833985592528#B0IMJojIyVmdiwSZzxWYmpjIyNHZisnOiwmbBJye0ICRiwiI34zdalVOkVHOrQ7VVd6UoNlcyFVey2meP94Q4x4YMFUQw44YnhmaHFlMG56RL3GWllVSYNnZXFTSzdXe7VncQNXcmVzLm3SUrE5LmZUcKNDZZVnMEhWZwgTTPJENyw6KYhWNP3SazpkZ9gETXNVN4hndzxWZzlFWrckY4hWWyllQOtWOUh7MxRWMUNVYyBTdJ3kQLhTO6okaWpkSPRHTw56NNdGVzFDTzkTW4hWSnF6TaJkZH3SUTpER4FmW48WY6BDNtdFN446QPBlTFZkNwMDapZDcxNzNnRjcnZVQ49WdCh5NhVGVz34S4JkWTdFUOZUM92Ue8tGNuZjTrlVWIFlRXZHZEV6SNVDUUdGSIN7dDJzSMRTOjN7NmNFTEpkZrUmW9NXVpZWVUFEc5IXd4FjcJ9EcxEVd05GNvYVUURkaGdUT9BnY0ZHN7lkW8ADdyoFcqB7RhVlI0IyUiwiIDJ4N9kTNwYjI0ICSiwCO5UTO6EjNxMTM0IicfJye=#Qf35VfikEMyIlI0IyQiwiIu3Waz9WZ4hXRgACdlVGaThXZsZEIv5mapdlI0IiTisHL3JSNJ9UUiojIDJCLi86bpNnblRHeFBCIyV6dllmV4J7bwVmUg2Wbql6ViojIOJyes4nILdDOIJiOiMkIsIibvl6cuVGd8VEIgc7bSlGdsVXTg2Wbql6ViojIOJyes4nI4YkNEJiOiMkIsIibvl6cuVGd8VEIgAVQM3EIg2Wbql6ViojIOJyes4nIzMEMCJiOiMkIsISZy36Qg2Wbql6ViojIOJyes4nIVhzNBJiOiMkIsIibvl6cuVGd8VEIgQnchh6QsFWaj9WYulmRg2Wbql6ViojIOJyebpjIkJHUiwiI4ATMzEDMgITM5ATNyAjMiojI4J7QiwiIwEDOwUjMwIjI0ICc8VkIsIicr9icv9iepJGZl5mLmJ7YtQnch56ciojIz5GRiwiI8qY1ESZ1MaI1YmL146J1QeJ1US90iojIh94QiwiI8ITNykTN5gTOzMDOxUTOiojIklkIs4XXbpjInxmZiwiIyYYNhA');
+</script>
 <!-- Wijmo css/js referenece goes here -->

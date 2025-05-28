@@ -20,7 +20,7 @@ import org.osgi.service.component.annotations.Component;
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=ECRF-Visualizer",
 		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/graph/graph1.jsp",
+		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + ECRFVisualizerPortletKeys.ECRFVISUALIZER,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
