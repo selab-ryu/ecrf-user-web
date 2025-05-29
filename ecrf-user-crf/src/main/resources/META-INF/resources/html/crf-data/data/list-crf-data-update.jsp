@@ -274,7 +274,7 @@ _log.info("url : " + baseURL.toString());
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.serial-id"
 				>
-					<p style="text-align: center; background-image: linear-gradient(to right, #11aaff <%=progressPercentage%>, #aaa 0%); margin-bottom: 0px; padding: 4px;"><%=String.valueOf(rowSubject.getSerialId()) %><liferay-ui:icon icon="info-sign" message="<%=progressPercentage%>" /></p>
+					<p style="text-align: center; margin-bottom: 0px; padding: 4px; border-radius:6px; background-image: linear-gradient(to right, #11aaff <%=progressPercentage%>, #aaa 0%);"><%=String.valueOf(rowSubject.getSerialId()) %><liferay-ui:icon icon="info-sign" message="<%=progressPercentage%>" /></p>
 				</liferay-ui:search-container-column-text>
 				
 				<portlet:renderURL var="viewURL">
@@ -324,12 +324,6 @@ _log.info("url : " + baseURL.toString());
 					value="<%=Validator.isNull(rowSubject.getBirth()) ? "-" : sdf.format(rowSubject.getBirth()) %>"
 				/>
 				
-				<liferay-ui:search-container-column-text
-					name="ecrf-user.list.progress"
-				>
-					<img src="<%= progressSrc%>" width="50%" height="auto" style="min-width:60px;"/>			
-				</liferay-ui:search-container-column-text>	
-				
 				<%	// Permission and Update Lock Check
 					boolean hasAddPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF_DATA);	
 					boolean hasUpdatePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_DATA);
@@ -349,15 +343,15 @@ _log.info("url : " + baseURL.toString());
 				</portlet:actionURL>
 				
 				<%
-					String lockBtnKey = "ecrf-user.button.db-lock";
+					String lockBtnKey = "ecrf-user.button.lock";
 					String lockIcon = "db-lock-icon";
-					String lockClass = "dh-icon-button db-lock-btn w130";
+					String lockClass = "dh-icon-button w110";
 					String dblockOnClickStr = "location.href='"+changeUpdateLock+"'";
 					boolean isLockDisabled = false;
 					
 					// check update lock
 					if(updateLock) {
-						lockBtnKey = "ecrf-user.button.db-unlock";
+						lockBtnKey = "ecrf-user.button.unlock";
 						lockIcon = "db-unlock-icon";
 					}
 					
@@ -367,8 +361,10 @@ _log.info("url : " + baseURL.toString());
 					}
 					
 					if(isLockDisabled) {
-						lockClass = "dh-icon-button inactive w130";
+						lockClass += " inactive";
 						dblockOnClickStr = "";
+					} else {
+						lockClass += " db-lock-btn";
 					}
 					
 					
@@ -408,8 +404,8 @@ _log.info("url : " + baseURL.toString());
 				</portlet:renderURL>
 				
 				<%
-					String CRFAddBtnClass = "dh-icon-button w130 add-btn";			
-					String addDataBtnKey = "ecrf-user.button.insert-data";				
+					String CRFAddBtnClass = "dh-icon-button w110";	
+					String addDataBtnKey = "ecrf-user.button.insert";				
 					String addOnClickStr = "location.href='" + renderAddCRFURL + "'";
 					boolean isAddDisabled = false;
 					
@@ -424,9 +420,11 @@ _log.info("url : " + baseURL.toString());
 					}
 					
 					if(isAddDisabled) {
-						CRFAddBtnClass = "dh-icon-button w130 inactive";
+						CRFAddBtnClass += " inactive";
 						addDataBtnKey = "ecrf-user.button.locked";
 						addOnClickStr = "";
+					} else {
+						CRFAddBtnClass += " add-btn";
 					}
 				%>
 				
@@ -467,8 +465,8 @@ _log.info("url : " + baseURL.toString());
 				<%
 					String updateFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 0, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 					
-					String CRFUpdateBtnClass = "dh-icon-button w130 update-btn";
-					String updateDataBtnKey = "ecrf-user.button.update-data";
+					String CRFUpdateBtnClass = "dh-icon-button w110";
+					String updateDataBtnKey = "ecrf-user.button.update";
 					String updateOnClickStr = "";
 					
 					boolean isUpdateDisabled = false;
@@ -497,8 +495,10 @@ _log.info("url : " + baseURL.toString());
 					
 					// change button class and onclick code
 					if(isUpdateDisabled) {
-						CRFUpdateBtnClass = "dh-icon-button w130 inactive";
+						CRFUpdateBtnClass += " inactive";
 						updateOnClickStr = "";
+					} else {
+						CRFUpdateBtnClass += " update-btn";
 					}
 				%>
 				
@@ -585,8 +585,8 @@ _log.info("url : " + baseURL.toString());
 					String deleteFunctionCallStr = String.format("openMultiCRFDialog(%d, %d, %d, '%s', '%s')", rowSubjectId, crfId, 2, themeDisplay.getPortletDisplay().getId(), baseURL.toString());
 					String deleteSingleFunctionCallStr = String.format("deleteSingleCRF(%d, %d, '%s', '%s')", singleLinkId, crfId, themeDisplay.getPortletDisplay().getId(), baseURL.toString());				
 				
-					String deleteBtnClass = "dh-icon-button w130 delete-btn";
-					String deleteBtnKey = "ecrf-user.button.delete-crf-data";
+					String deleteBtnClass = "dh-icon-button w110";
+					String deleteBtnKey = "ecrf-user.button.delete";
 					String deleteOnClickStr = "";
 					boolean isDeleteDisabled = false;
 					
@@ -614,8 +614,10 @@ _log.info("url : " + baseURL.toString());
 					}
 	
 					if(isDeleteDisabled) {
-						deleteBtnClass = "dh-icon-button w130 inactive";
+						deleteBtnClass += " inactive";
 						deleteOnClickStr = "";
+					} else {
+						deleteBtnClass += " delete-btn";
 					}
 				%>
 				

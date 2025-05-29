@@ -122,6 +122,13 @@
 
 	.vertical-middle { vertical-align:middle; }
 	
+	.policy-container {
+		max-height:400px;
+		overflow-y:auto;
+		border: 1px solid lightgray;
+		border-radius: 4px;
+		padding: 1rem;
+	}
 	
 	.breadcrumb {
 	    padding: 0;
@@ -284,7 +291,7 @@
 	/* side navigation style */
     /* Page content. The value of the margin-left property should match the value of the sidebar's width property */        
 	div.page-content {
-	    padding:16px 16px 16px 195px; 
+	    padding:16px 16px 16px 180px; 
 	    max-width:2000px;
 	}
 	
@@ -297,10 +304,10 @@
 	   	margin-top: 16px;
 	    margin-left: 12px;
 	    padding: 4px;
-	    width: 170px;
+	    width: 155px;
 	    position: absolute;
 	    overflow: auto;
-		min-width: 170px;
+		min-width: 155px;
 		line-height: 1rem;
 		background-color:white;
 		overflow:visible
@@ -311,16 +318,16 @@
         align-items: center;
         justify-content: left;
         
-        gap: 10px;
+        gap: 8px;
         width: 96%;
         padding: 0px 10px;
         border: none;
-        border-radius: 0px;
+        border-top-left-radius: 8px;
         font-size: 15px;
         font-weight: bold;
         cursor: pointer;		      
         text-decoration: none!important;
-        margin-bottom: 2px;
+        margin-bottom: 3px;
         border-bottom: 1px solid #888;
         height: 3rem;
 	}
@@ -365,13 +372,13 @@
 	.menu-main { background-color: rgb(40,60,160); }    
     .menu-main:hover { background-color: rgb(50,70,180); }    
 
-	.menu-1 { background-color: rgb(60,90,200); margin-top:4px; }
+	.menu-1 { background-color: rgb(60,90,200); }
 	.menu-1:hover { background-color: rgb(50,70,180); }
 
     .menu-1.inactive { background-color: rgb(100,170,255); }
     .menu-1.inactive:hover { background-color: rgb(80,150,240); }
 
-	.menu-2 { background-color: rgb(0,160,100); margin-top:2px; }
+	.menu-2 { background-color: rgb(0,160,100); }
 	.menu-2:hover { background-color: rgb(0,140,90); }
     
     .menu-2.inactive { background-color: rgb(0,210,140); }
@@ -383,7 +390,7 @@
     .menu-3.inactive { background-color: rgb(170,160,255); }
     .menu-3.inactive:hover { background-color: rgb(140,130,240); }
 
-    .side-menu div:nth-child(2)>a {margin-top:0px;}
+    //.side-menu div:nth-child(2)>a {margin-top:0px;}
 
     .current-crf { 
     	width:96%;
@@ -590,7 +597,7 @@
         justify-content: center;
         gap: 8px;
         border: none;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;		      
         text-decoration: none!important;
         font-size: 0.875rem;
