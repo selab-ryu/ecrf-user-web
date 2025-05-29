@@ -1,11 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/init.jsp" %>
 
 <div class="ecrf-user">
 	<div class="pad1r">
 		<liferay-ui:header title="ecrf-user.visualizer.title.view-visualizer" />
-		
-		<aui:container>						
+				
+		<aui:container>				
 			<!-- graph -->
 			<aui:row>
 				<aui:col md="12">
@@ -78,7 +77,11 @@ $(document).ready(function() {
 	// ryu local noe_moc crf id : 41733
 	// gssong local noe_moc crf id : 56603
 	
-	let crfId = 56603;
+	// noe_moc crf var : noc_moc_crf
+	// epds crf var : edps_2018_crf
+	// katri crf var : katri_2023_crf
+	
+	let crfId = 41733;
 	
 	getGraphData(crfId);
 	
