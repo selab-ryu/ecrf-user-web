@@ -68,7 +68,53 @@ $(document).ready(function() {
 		getGraphData(nmId);	
 	}
 	
+	if(edpsId > 0) {
+		getEDPSData(edpsId);
+	}
+	
+	if(katriId > 0) {
+		getKATRIData(katriId);
+	}
+	
 });
+
+function getEDPSData(crfId) {
+	console.log("edps cohort data loading");
+	$.ajax({
+		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_EDPS %>"></portlet:resourceURL>',
+		type:'post',
+		dataType: 'json',
+		data:{
+			<portlet:namespace/>crfId: crfId,
+		},
+		success: function(obj){
+			console.log("crfId : ", crfId);
+			console.log("data : ", obj.data);		
+		},
+		error: function(jqXHR, a, b){
+			console.log('Fail to render trimester graph');
+		}
+	});
+}
+
+function getKATRIData(crfId) {
+	console.log("katri cohort data loading");
+	$.ajax({
+		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_KATRI %>"></portlet:resourceURL>',
+		type:'post',
+		dataType: 'json',
+		data:{
+			<portlet:namespace/>crfId: crfId,
+		},
+		success: function(obj){
+			console.log("crfId : ", crfId);
+			console.log("data : ", obj.data);		
+		},
+		error: function(jqXHR, a, b){
+			console.log('Fail to render trimester graph');
+		}
+	});
+}
 
 function getGraphData(crfId) {
 	$.ajax({
@@ -78,25 +124,25 @@ function getGraphData(crfId) {
 		data:{
 			<portlet:namespace/>crfId: crfId,
 		},
-		success: function(data){
+		success: function(obj){
 
 			console.log("crfId : ", crfId);
-			console.log("data : ", data.data[0]);
+			console.log("data : ", obj.data[0]);
 
 			// set data to chart
 			$("#<portlet:namespace/>dataCount").text(100);
 			
 			// do pre-process data for chart
-			let chartData = processChartData(data); // 데이터 전처리 함수 추가
+			let chartData = processChartData(obj); // 데이터 전처리 함수 추가
             setGraphData(chartData); // 차트 데이터 설정
 		
-			let chartData2 = processChartData2(data); // 데이터 전처리 함수 추가
+			let chartData2 = processChartData2(obj); // 데이터 전처리 함수 추가
 	        setGraphData2(chartData2); // 차트 데이터 설정
 
-			let chartData3 = processChartData3(data); // 데이터 전처리 함수 추가
+			let chartData3 = processChartData3(obj); // 데이터 전처리 함수 추가
 	        setGraphData3(chartData3); // 차트 데이터 설정
 		
-			let gridData = processGridData(data); // 데이터 전처리 함수 추가
+			let gridData = processGridData(obj); // 데이터 전처리 함수 추가
 	        setGridData(gridData); // 그리드 데이터 설정
 		
 		},
