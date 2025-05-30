@@ -2,62 +2,55 @@
 	<liferay-ui:header title="ecrf-user.visualizer.title.noe-moc" />
 
 	<aui:container>
-		<!-- graph -->
-		<aui:row>
-			<aui:col md="12">
-				<span class="sub-title-span">
-					<liferay-ui:message key="ecrf-user.visualizer.title.graph1" />
-				</span>
-			</aui:col>
-		</aui:row>
 		
 		<aui:row>
-			<aui:col md="12">
-				<div id="enrollmentChart" style="height: 400px"></div>
-			</aui:col>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph4" />
+					</span>
+				</aui:col>
+			</aui:row>
+			
+			<aui:row>
+				<aui:col md="12">
+					<div id="enrollmentChart4" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
+			
+			
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph5" />
+					</span>
+				</aui:col>
+			</aui:row>
+			
+			<aui:row>
+				<aui:col md="12">
+					<div id="enrollmentChart5" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
+			
+			
+			
+			
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.grid2" />
+					</span>
+				</aui:col>
+			</aui:row>
+
+			<aui:row>
+				<aui:col md="12">
+					<div id="theGrid2" style="height: 330px"></div>
+					<div id="pager2" style="margin = 10px 0"></div>
+				</aui:col>
 		</aui:row>
 		
-		<aui:row>
-			<aui:col md="12">
-				<span class="sub-title-span">
-					<liferay-ui:message key="ecrf-user.visualizer.title.graph2" />
-				</span>
-			</aui:col>
-		</aui:row>
 		
-		<aui:row>
-			<aui:col md="12">
-				<div id="enrollmentChart2" style="height: 400px"></div>
-			</aui:col>
-		</aui:row>
-	
-		<aui:row>
-			<aui:col md="12">
-				<span class="sub-title-span">
-					<liferay-ui:message key="ecrf-user.visualizer.title.graph3" />
-				</span>
-			</aui:col>
-		</aui:row>
-	
-		<aui:row>
-			<aui:col md="12">
-				<div id="enrollmentChart3" style="height: 400px"></div>
-			</aui:col>
-		</aui:row>
 		
-		<aui:row>
-			<aui:col md="12">
-				<span class="sub-title-span">
-					<liferay-ui:message key="ecrf-user.visualizer.title.grid1" />
-				</span>
-			</aui:col>
-		</aui:row>
-	
-		<aui:row>
-			<aui:col md="12">
-				<div id="theGrid" style="height: 400px"></div>
-				<div id="pager" style="margin:10px 0"></div>
-			</aui:col>
-		</aui:row>
 	</aui:container>
 </div>

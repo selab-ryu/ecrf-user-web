@@ -90,6 +90,16 @@ function getEDPSData(crfId) {
 		success: function(obj){
 			console.log("crfId : ", crfId);
 			console.log("data : ", obj.data);		
+			
+			$("#<portlet:namespace/>dataCount").text(100);
+			
+			let average = averageData3(obj); 
+			let processedData = reverseTransformData(average);
+			setGraphData6(processedData); 
+			
+			setGraphData7(average);
+			setGridData3(average); // 그리드 데이터 설정	   
+			
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
@@ -109,6 +119,15 @@ function getKATRIData(crfId) {
 		success: function(obj){
 			console.log("crfId : ", crfId);
 			console.log("data : ", obj.data);		
+			
+			$("#<portlet:namespace/>dataCount").text(100);
+			
+			let average = averageData4(obj); 
+			let processedData = reverseTransformData(average);
+			setGraphData8(processedData); 
+			
+			setGraphData9(average);
+			setGridData4(average); // 그리드 데이터 설정	   
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
@@ -132,24 +151,218 @@ function getGraphData(crfId) {
 			// set data to chart
 			$("#<portlet:namespace/>dataCount").text(100);
 			
-			// do pre-process data for chart
-			let chartData = processChartData(obj); // 데이터 전처리 함수 추가
-            setGraphData(chartData); // 차트 데이터 설정
-		
-			let chartData2 = processChartData2(obj); // 데이터 전처리 함수 추가
-	        setGraphData2(chartData2); // 차트 데이터 설정
 
-			let chartData3 = processChartData3(obj); // 데이터 전처리 함수 추가
-	        setGraphData3(chartData3); // 차트 데이터 설정
-		
-			let gridData = processGridData(obj); // 데이터 전처리 함수 추가
-	        setGridData(gridData); // 그리드 데이터 설정
+	        
+			let average = averageData2(obj); // 데이터 전처리 함수 추가
+			setGraphData4(average); // 차트 데이터 설정
+			
+			let average2 = averageData(obj); // 데이터 전처리 함수 추가
+			setGraphData5(average2); // 차트 데이터 설정
+	        
+			let average3 = averageData(obj); // 데이터 전처리 함수 추가
+			setGridData2(average3); // 그리드 데이터 설정	   
 		
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
 		}
 	});
+}
+
+
+function averageData(data) {
+	 const dataArray = data.data;
+	  const termNames = ["BPA", "BPF", "BPS", "TCS", "BP3", "MP", "EP", "PP", "BP"];
+
+	  let processedData = [];
+	  const trimesterSums = {};
+	  const trimesterCounts = {}; // 각 term별로 trimester별 카운트 저장
+
+	  dataArray.forEach(item => {
+	    const trimester = item.trimester?.[0]; // '1', '2', '3'
+	    if (!trimester) return;
+
+	    termNames.forEach(term => {
+	      const value = item[term];
+	      if (typeof value === 'number') {
+	        // 합계 초기화
+	        if (!trimesterSums[term]) {
+	          trimesterSums[term] = { t1: 0, t2: 0, t3: 0 };
+	        }
+
+	        // 카운트 초기화
+	        if (!trimesterCounts[term]) {
+	          trimesterCounts[term] = { t1: 0, t2: 0, t3: 0 };
+	        }
+
+	        if (trimester === '1') {
+	          trimesterSums[term].t1 += value;
+	          trimesterCounts[term].t1++;
+	        } else if (trimester === '2') {
+	          trimesterSums[term].t2 += value;
+	          trimesterCounts[term].t2++;
+	        } else if (trimester === '3') {
+	          trimesterSums[term].t3 += value;
+	          trimesterCounts[term].t3++;
+	        }
+	      }
+	    });
+	  });
+
+	  console.log("=== Count by Term and Trimester ===");
+	  console.table(trimesterCounts);
+	  
+	  const result = Object.entries(trimesterSums).map(([termName, { t1: sum1, t2: sum2, t3: sum3 }], index) => {
+	    const { t1: count1 = 0, t2: count2 = 0, t3: count3 = 0 } = trimesterCounts[termName] || {};
+	    return {
+	      id: index + 1,
+	      termName,
+	      t1: count1 ? sum1 / count1 : 0,
+	      t2: count2 ? sum2 / count2 : 0,
+	      t3: count3 ? sum3 / count3 : 0,
+	    };
+	  });
+
+	  console.log("result :", result);
+	  return result;
+}
+
+
+function averageData2(data) {
+	 
+	  const result =averageData(data);
+	  processedData = reverseTransformData(result);
+	  console.log("transformed Data :", processedData);
+
+	  return processedData;
+	}
+	
+function averageData3(data) {
+	  const dataArray = data.data;
+	  const termNames = ["BPA", "EP", "MBZP", "MECPP"];
+
+	  let processedData = [];
+	  const trimesterSums = {};
+	  const trimesterCounts = {};
+
+	  dataArray.forEach(item => {
+	    const trimester = item.trimester?.[0]; 
+	    const category = (trimester === '1' || trimester === '2' || trimester === '3') ? trimester : 'other';
+
+	    termNames.forEach(term => {
+	      const value = item[term];
+	      if (typeof value === 'number') {
+	        if (!trimesterSums[term]) {
+	          trimesterSums[term] = { other: 0 };
+	        }
+	        if (!trimesterCounts[term]) {
+	          trimesterCounts[term] = {other: 0 };
+	        }
+
+	        if (category === '1') {
+	         
+	        } else if (category === '2') {
+	          
+	        } else if (category === '3') {
+	         
+	        } else {
+	          trimesterSums[term].other += value;
+	          trimesterCounts[term].other++;
+	        }
+	      }
+	    });
+	  });
+
+	  console.log("=== Count by Term and Trimester ===");
+	  console.table(trimesterCounts);
+
+	  const result = Object.entries(trimesterSums).map(([termName, { other }], index) => {
+	    const { other: cOther = 0 } = trimesterCounts[termName] || {};
+	    return {
+	      id: index + 1,
+	      termName,
+	      other: cOther ? other / cOther : 0,
+	    };
+	  });
+
+	  console.log("result :", result);
+	  return result;
+	}
+
+
+function averageData4(data) {
+	  const dataArray = data.data;
+	  
+	  const termNames = ["age_months", "born_height", "born_weight", "current_height", "current_weight"];
+
+	  let processedData = [];
+	  const trimesterSums = {};
+	  const trimesterCounts = {};
+
+	  dataArray.forEach(item => {
+	    const trimester = item.trimester?.[0]; 
+	    const category = (trimester === '1' || trimester === '2' || trimester === '3') ? trimester : 'other';
+
+	    termNames.forEach(term => {
+	      const value = item[term];
+	      if (typeof value === 'number') {
+	        if (!trimesterSums[term]) {
+	          trimesterSums[term] = { other: 0 };
+	        }
+	        if (!trimesterCounts[term]) {
+	          trimesterCounts[term] = {other: 0 };
+	        }
+
+	        if (category === '1') {
+	         
+	        } else if (category === '2') {
+	          
+	        } else if (category === '3') {
+	         
+	        } else {
+	          trimesterSums[term].other += value;
+	          trimesterCounts[term].other++;
+	        }
+	      }
+	    });
+	  });
+
+	  console.log("=== Count by Term and Trimester ===");
+	  console.table(trimesterCounts);
+
+	  const result = Object.entries(trimesterSums).map(([termName, { other }], index) => {
+	    const { other: cOther = 0 } = trimesterCounts[termName] || {};
+	    return {
+	      id: index + 1,
+	      termName,
+	      other: cOther ? other / cOther : 0,
+	    };
+	  });
+
+	  console.log("result :", result);
+	  return result;
+	}
+
+
+
+function reverseTransformData(transformedData) {
+	const result = [];
+
+	const trimesterKeys = Object.keys(transformedData[0]).filter(key => key !== 'termName');
+
+	trimesterKeys.forEach(trimester => {
+		if (trimester === 'id') return; // 'id' 항목은 무시
+
+		const row = { trimester };
+
+		transformedData.forEach(item => {
+			row[item.termName] = item[trimester];
+		});
+
+		result.push(row);
+	});
+
+	return result;
 }
 
 function setGraphData(data) {
@@ -515,5 +728,273 @@ function processGridData(in_data) {
 
 	return processedData;
 }
+
+
+function setGraphData4(data) {
+	 // 1. 환자 등록 현황 차트
+new wijmo.chart.FlexChart('#enrollmentChart4', {
+    header: '임상시험(평균) 시계열 현황',
+    legendToggle: true,
+    bindingX: 'trimester',
+    itemsSource: data,
+    series: [
+ 	   { name: 'BPA',   binding: 'BPA' ,	chartType: 'LineSymbols'},
+ 	   { name: 'BPF',   binding: 'BPF' ,	chartType: 'LineSymbols'},
+ 	   { name: 'BPS',   binding: 'BPS' ,	chartType: 'LineSymbols'},
+ 	   { name: 'TCS',   binding: 'TCS' ,	chartType: 'LineSymbols'},
+ 	   { name: 'BP3',   binding: 'BP3' ,	chartType: 'LineSymbols'},
+ 	   { name: 'MP',   binding: 'MP' ,	chartType: 'LineSymbols'},
+ 	   { name: 'EP',   binding: 'EP' ,	chartType: 'LineSymbols'},
+ 	   { name: 'PP',   binding: 'PP' , 	chartType: 'LineSymbols'},
+ 	   { name: 'BP',   binding: 'BP' ,	chartType: 'LineSymbols'},
+    ],
+    axisY: {
+        title: '실험 데이터(수치)'
+    },
+    legend: {
+        position: 'Bottom'
+    },
+    dataLabel: {
+        content: '{y}'
+    }
+});
+}
+
+
+function setGraphData5(data) {
+	 // 1. 환자 등록 현황 차트
+  new wijmo.chart.FlexChart('#enrollmentChart5', {
+      header: '임상시험(평균) 시계열 현황',
+      legendToggle: true,
+      bindingX: 'termName',
+      itemsSource: data,
+      series: [{
+              name: '1stTrimester',
+              binding: 't1'
+          },{
+              name: '2ndTrimester',
+              binding: 't2'
+          },{
+              name: '3rdTrimester',
+              binding: 't3'
+          }
+      ],
+      axisY: {
+          title: '실험 데이터(수치)'
+      },
+      legend: {
+          position: 'Bottom'
+      },
+      dataLabel: {
+          content: '{y}'
+      }
+  });
+}
+
+function transFormData2(in_data) {
+	console.log("indata :", in_data);
+	let transformedData = [];
+	let termNames = Object.keys(in_data[0]).filter(key => key !== 'trimester')
+	
+	termNames.forEach(term => {
+		const newObject = { termName: term };
+		in_data.forEach(item => {
+
+			newObject[item.trimester] = item[term];
+		});
+		transformedData.push(newObject);
+	});
+	
+	return transformedData;
+};
+
+
+function setGridData2(data) {
+	// Collection View로 페이징 데이터 소스 생성
+	var view = new wijmo.collections.CollectionView(data,{
+		pageSize: 10	// 한 페이지에 10건
+	});
+	
+	var theGrid = new wijmo.grid.FlexGrid('#theGrid2', {
+	   autoGenerateColumns: false,
+	   columns: [
+			{binding: 'id', header: 'No', width: '1*'},
+		   	{binding: 'termName', header: 'TermName', width: '2*'},
+		   	{binding: 't1', header: '1st Trimester', width: '*', format: 'n2'},
+		   	{binding: 't2', header: '2nd Trimester', width: '*', format: 'n2'},
+		   	{binding: 't3', header: '3rd Trimester', width: '*', format: 'n2'}
+	   ],
+     itemsSource: view
+	});
+	 
+	// 페이지 네비게이터 생성
+	var navigator = new wijmo.input.CollectionViewNavigator('#pager2',{
+		byPage: true,
+		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
+		cv: view
+	});
+	
+}
+
+function setGraphData6(data) {
+	 // 1. 환자 등록 현황 차트
+new wijmo.chart.FlexChart('#enrollmentChart6', {
+   header: 'EDPS 항목별 평균값(꺾은선그래프)',
+   legendToggle: true,
+   bindingX: 'trimester',
+   itemsSource: data,
+   series: [
+	   { name: 'BPA',   binding: 'BPA' ,	chartType: 'LineSymbols'},
+	   { name: 'EP',   binding: 'EP' ,	chartType: 'LineSymbols'},
+	   { name: 'MBZP',   binding: 'MBZP' ,	chartType: 'LineSymbols'},
+	   { name: 'MECPP',   binding: 'MECPP' ,	chartType: 'LineSymbols'},
+   ],
+   axisY: {
+       title: '실험 데이터(수치)'
+   },
+   legend: {
+       position: 'Bottom'
+   },
+   dataLabel: {
+       content: '{y}'
+   }
+});
+	 
+	  
+	 
+}
+
+function setGraphData7(data) {
+	 // 1. 환자 등록 현황 차트
+new wijmo.chart.FlexChart('#enrollmentChart7', {
+    header: 'EDPS 항목별 평균값(막대그래프)',
+    legendToggle: true,
+    bindingX: 'termName',
+    itemsSource: data,
+    series: [
+   	 {
+            name: 'other',
+            binding: 'other'
+        }
+    ],
+    axisY: {
+        title: '실험 데이터(수치)'
+    },
+    legend: {
+        position: 'Bottom'
+    },
+    dataLabel: {
+        content: '{y}'
+    }
+});
+}	
+
+
+function setGridData3(data) {
+	// Collection View로 페이징 데이터 소스 생성
+	var view = new wijmo.collections.CollectionView(data,{
+		pageSize: 10	// 한 페이지에 10건
+	});
+	
+	var theGrid = new wijmo.grid.FlexGrid('#theGrid3', {
+	   autoGenerateColumns: false,
+	   columns: [
+			{binding: 'id', header: 'No', width: '1*'},
+		   	{binding: 'termName', header: 'TermName', width: '2*'},
+		   	{binding: 'other', header: 'other', width: '*', format: 'n2'},
+	   ],
+     itemsSource: view
+	});
+	 
+	// 페이지 네비게이터 생성
+	var navigator = new wijmo.input.CollectionViewNavigator('#pager3',{
+		byPage: true,
+		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
+		cv: view
+	});
+	
+}
+
+
+function setGraphData8(data) {
+	 // 1. 환자 등록 현황 차트
+new wijmo.chart.FlexChart('#enrollmentChart8', {
+  header: 'KATRI 항목별 평균값(꺾은선그래프)',
+  legendToggle: true,
+  bindingX: 'trimester',
+  itemsSource: data,
+  series: [
+	   { name: 'age_months',   binding: 'age_months' ,	chartType: 'LineSymbols'},
+	   { name: 'born_height',   binding: 'born_height' ,	chartType: 'LineSymbols'},
+	   { name: 'born_weight',   binding: 'born_weight' ,	chartType: 'LineSymbols'},
+	   { name: 'current_height',   binding: 'current_height' ,	chartType: 'LineSymbols'},
+	   { name: 'current_weight',   binding: 'current_weight' ,	chartType: 'LineSymbols'},
+  ],
+  axisY: {
+      title: '실험 데이터(수치)'
+  },
+  legend: {
+      position: 'Bottom'
+  },
+  dataLabel: {
+      content: '{y}'
+  }
+});
+	 
+	  
+	 
+}
+
+function setGraphData9(data) {
+	 // 1. 환자 등록 현황 차트
+new wijmo.chart.FlexChart('#enrollmentChart9', {
+   header: 'KATRI 항목별 평균값(막대그래프)',
+   legendToggle: true,
+   bindingX: 'termName',
+   itemsSource: data,
+   series: [
+  	 {
+           name: 'other',
+           binding: 'other'
+       }
+   ],
+   axisY: {
+       title: '실험 데이터(수치)'
+   },
+   legend: {
+       position: 'Bottom'
+   },
+   dataLabel: {
+       content: '{y}'
+   }
+});
+}	
+
+
+function setGridData4(data) {
+	// Collection View로 페이징 데이터 소스 생성
+	var view = new wijmo.collections.CollectionView(data,{
+		pageSize: 10	// 한 페이지에 10건
+	});
+	
+	var theGrid = new wijmo.grid.FlexGrid('#theGrid4', {
+	   autoGenerateColumns: false,
+	   columns: [
+			{binding: 'id', header: 'No', width: '1*'},
+		   	{binding: 'termName', header: 'TermName', width: '2*'},
+		   	{binding: 'other', header: 'other', width: '*', format: 'n2'},
+	   ],
+    itemsSource: view
+	});
+	 
+	// 페이지 네비게이터 생성
+	var navigator = new wijmo.input.CollectionViewNavigator('#pager4',{
+		byPage: true,
+		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
+		cv: view
+	});
+	
+}
+
 
 </script>

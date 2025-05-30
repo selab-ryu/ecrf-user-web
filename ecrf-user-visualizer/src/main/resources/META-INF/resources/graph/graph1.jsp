@@ -62,6 +62,64 @@
 					<div id="pager" style="margin:10px 0"></div>
 				</aui:col>
 			</aui:row>
+			
+			
+			
+			
+			
+			
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph1" />
+					</span>
+				</aui:col>
+			</aui:row>
+			
+			<aui:row>
+				<aui:col md="12">
+					<div id="enrollmentChart4" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
+			
+			
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph5" />
+					</span>
+				</aui:col>
+			</aui:row>
+			
+			<aui:row>
+				<aui:col md="12">
+					<div id="enrollmentChart5" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
+			
+			
+			
+			
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.grid2" />
+					</span>
+				</aui:col>
+			</aui:row>
+
+			<aui:row>
+				<aui:col md="12">
+					<div id="theGrid2" style="height: 330px"></div>
+					<div id="pager2" style="margin = 10px 0"></div>
+				</aui:col>
+			</aui:row>
+			
+			
+			
+			
+			
+			
 		</aui:container>
 	</div>
 </div>
@@ -81,7 +139,7 @@ $(document).ready(function() {
 	// epds crf var : edps_2018_crf
 	// katri crf var : katri_2023_crf
 	
-	let crfId = 41733;
+	let crfId = 38203;
 	
 	getGraphData(crfId);
 	
@@ -115,6 +173,17 @@ function getGraphData(crfId) {
 		
 			let gridData = processGridData(data); // 데이터 전처리 함수 추가
 	        setGridData(gridData); // 그리드 데이터 설정
+	        
+ 			console.log("===========여기서부터 평균값============= ");
+	        
+			let average = averageData2(data); // 데이터 전처리 함수 추가
+			setGraphData4(average); // 차트 데이터 설정
+			
+			let average2 = averageData(data); // 데이터 전처리 함수 추가
+			setGraphData5(average2); // 차트 데이터 설정
+	        
+			let average3 = averageData(data); // 데이터 전처리 함수 추가
+			setGridData2(average3); // 그리드 데이터 설정	   
 		
 		},
 		error: function(jqXHR, a, b){
@@ -122,6 +191,127 @@ function getGraphData(crfId) {
 		}
 	});
 }
+
+
+function averageData(data) {
+	  const dataArray = data.data;
+	  const counts = data.count; // [전체, t1 count, t2 count, t3 count, t4 count]
+	  const termNames = ["BPA", "BPF", "BPS", "TCS", "BP3", "MP", "EP", "PP", "BP"];
+
+	  const trimesterSums = {};
+
+	  dataArray.forEach(item => {
+	    const trimester = item.trimester?.[0]; // '1', '2', '3'
+
+	    if (!trimester) return;
+
+	    termNames.forEach(term => {
+	      const value = item[term];
+	      if (typeof value === 'number') {
+	        if (!trimesterSums[term]) {
+	          trimesterSums[term] = { t1: 0, t2: 0, t3: 0 };
+	        }
+
+	        if (trimester === '1') trimesterSums[term].t1 += value;
+	        else if (trimester === '2') trimesterSums[term].t2 += value;
+	        else if (trimester === '3') trimesterSums[term].t3 += value;
+	      }
+	    });
+	  });
+
+	  const [_, t1Count, t2Count, t3Count] = counts;
+
+	  const result = Object.entries(trimesterSums).map(([termName, { t1, t2, t3 }], index) => ({
+	    id: index + 1,
+	    termName,
+	    t1: t1Count ? t1 / t1Count : 0,
+	    t2: t2Count ? t2 / t2Count : 0,
+	    t3: t3Count ? t3 / t3Count : 0,
+	  }));
+
+
+	  console.log("result : ", result);
+	  return result;
+
+}
+
+
+function averageData2(data) {
+	  const dataArray = data.data;
+	  const termNames = ["BPA", "BPF", "BPS", "TCS", "BP3", "MP", "EP", "PP", "BP"];
+	  
+	  let processedData = [];
+	  const trimesterSums = {};
+	  const trimesterCounts = { t1: 0, t2: 0, t3: 0 }; // 직접 count 세기
+
+	  dataArray.forEach(item => {
+	    const trimester = item.trimester?.[0]; // '1', '2', '3'
+
+	    if (!trimester) return;
+
+	    // 카운트 증가
+	    if (trimester === '1') trimesterCounts.t1++;
+	    else if (trimester === '2') trimesterCounts.t2++;
+	    else if (trimester === '3') trimesterCounts.t3++;
+
+	    termNames.forEach(term => {
+	      const value = item[term];
+	      if (typeof value === 'number') {
+	        if (!trimesterSums[term]) {
+	          trimesterSums[term] = { t1: 0, t2: 0, t3: 0 };
+	        }
+
+	        if (trimester === '1') trimesterSums[term].t1 += value;
+	        else if (trimester === '2') trimesterSums[term].t2 += value;
+	        else if (trimester === '3') trimesterSums[term].t3 += value;
+	      }
+	    });
+	  });
+
+	  const { t1, t2, t3 } = trimesterCounts;
+	  console.log("t1 :", t1);
+	  console.log("t2 :", t2);
+	  console.log("t3 :", t3);
+	  
+	  const result = Object.entries(trimesterSums).map(([termName, { t1: sum1, t2: sum2, t3: sum3 }], index) => ({
+	    id: index + 1,
+	    termName,
+	    t1: t1 ? sum1 / t1 : 0,
+	    t2: t2 ? sum2 / t2 : 0,
+	    t3: t3 ? sum3 / t3 : 0,
+	  }));
+
+	  console.log("result :", result);
+
+	  processedData = reverseTransformData(result);
+	  console.log("transformed Data :", processedData);
+
+	  return processedData;
+}
+
+
+function reverseTransformData(transformedData) {
+	const result = [];
+
+	const trimesterKeys = Object.keys(transformedData[0]).filter(key => key !== 'termName');
+
+	trimesterKeys.forEach(trimester => {
+		if (trimester === 'id') return; // 'id' 항목은 무시
+
+		const row = { trimester };
+
+		transformedData.forEach(item => {
+			row[item.termName] = item[trimester];
+		});
+
+		result.push(row);
+	});
+
+	return result;
+}
+
+
+
 
 function setGraphData(data) {
 	 // 1. 환자 등록 현황 차트
@@ -486,5 +676,114 @@ function processGridData(in_data) {
 
 	return processedData;
 }
+
+
+function setGraphData4(data) {
+	 // 1. 환자 등록 현황 차트
+new wijmo.chart.FlexChart('#enrollmentChart4', {
+    header: '임상시험(평균) 시계열 현황',
+    legendToggle: true,
+    bindingX: 'trimester',
+    itemsSource: data,
+    series: [
+ 	   { name: 'BPA',   binding: 'BPA' ,	chartType: 'LineSymbols'},
+ 	   { name: 'BPF',   binding: 'BPF' ,	chartType: 'LineSymbols'},
+ 	   { name: 'BPS',   binding: 'BPS' ,	chartType: 'LineSymbols'},
+ 	   { name: 'TCS',   binding: 'TCS' ,	chartType: 'LineSymbols'},
+ 	   { name: 'BP3',   binding: 'BP3' ,	chartType: 'LineSymbols'},
+ 	   { name: 'MP',   binding: 'MP' ,	chartType: 'LineSymbols'},
+ 	   { name: 'EP',   binding: 'EP' ,	chartType: 'LineSymbols'},
+ 	   { name: 'PP',   binding: 'PP' , 	chartType: 'LineSymbols'},
+ 	   { name: 'BP',   binding: 'BP' ,	chartType: 'LineSymbols'},
+    ],
+    axisY: {
+        title: '실험 데이터(수치)'
+    },
+    legend: {
+        position: 'Bottom'
+    },
+    dataLabel: {
+        content: '{y}'
+    }
+});
+}
+
+
+function setGraphData5(data) {
+	 // 1. 환자 등록 현황 차트
+  new wijmo.chart.FlexChart('#enrollmentChart5', {
+      header: '임상시험(평균) 시계열 현황',
+      legendToggle: true,
+      bindingX: 'termName',
+      itemsSource: data,
+      series: [{
+              name: '1stTrimester',
+              binding: 't1'
+          },{
+              name: '2ndTrimester',
+              binding: 't2'
+          },{
+              name: '3rdTrimester',
+              binding: 't3'
+          }
+      ],
+      axisY: {
+          title: '실험 데이터(수치)'
+      },
+      legend: {
+          position: 'Bottom'
+      },
+      dataLabel: {
+          content: '{y}'
+      }
+  });
+}
+
+function transFormData2(in_data) {
+	console.log("indata :", in_data);
+	let transformedData = [];
+	let termNames = Object.keys(in_data[0]).filter(key => key !== 'trimester')
+	
+	termNames.forEach(term => {
+		const newObject = { termName: term };
+		in_data.forEach(item => {
+
+			newObject[item.trimester] = item[term];
+		});
+		transformedData.push(newObject);
+	});
+	
+	return transformedData;
+};
+
+
+function setGridData2(data) {
+	// Collection View로 페이징 데이터 소스 생성
+	var view = new wijmo.collections.CollectionView(data,{
+		pageSize: 10	// 한 페이지에 10건
+	});
+	
+	var theGrid = new wijmo.grid.FlexGrid('#theGrid2', {
+	   autoGenerateColumns: false,
+	   columns: [
+			{binding: 'id', header: 'No', width: '1*'},
+		   	{binding: 'termName', header: 'TermName', width: '2*'},
+		   	{binding: 't1', header: '1st Trimester', width: '*', format: 'n2'},
+		   	{binding: 't2', header: '2nd Trimester', width: '*', format: 'n2'},
+		   	{binding: 't3', header: '3rd Trimester', width: '*', format: 'n2'}
+	   ],
+     itemsSource: view
+	});
+	 
+	// 페이지 네비게이터 생성
+	var navigator = new wijmo.input.CollectionViewNavigator('#pager2',{
+		byPage: true,
+		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
+		cv: view
+	});
+	
+}
+
+
 
 </script>
