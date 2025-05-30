@@ -305,3 +305,14 @@ Liferay.provide(window, 'createGraphPopupRenderURL', function(portletId, termNam
 	elements[0].style.textAlign = "center";
 	
 }, ['liferay-util-window', 'liferay-portlet-url']);
+
+Liferay.provide(window, 'moveUpdateCRF', function(renderURL, plId, crfId) {	
+	console.log(renderURL, plId, crfId);
+	let namespace = "_"+plId+"_";
+	let crfIdParam = "&" + namespace + "crfId=" + crfId;;
+	//renderURL += namespace + "crfId=" + crfId;
+	console.log(crfIdParam);
+	renderURL += crfIdParam;
+	
+	window.location.href = renderURL;	
+},['liferay-util-window', 'liferay-portlet-url']);

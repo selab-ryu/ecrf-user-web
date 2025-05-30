@@ -1,3 +1,4 @@
+<%@page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="ecrf.user.constants.TagAttrUtil"%>
@@ -158,6 +159,42 @@
 	<div>
 		<div class="current-crf">
 			<strong><liferay-ui:message key="ecrf-user.menu.current-crf-x" arguments="<%=crfName %>" /></strong>
+		</div>
+	</div>
+	
+	<%
+		List<CRF> allCRFList = CRFLocalServiceUtil.getCRFByGroupId(scopeGroupId);
+		
+		_log.info("check portlet id : " + themeDisplay.getPortletDisplay().getId());
+		
+		// set command by current page?
+		_log.info("current menu : " + menu);
+		_log.info("command by menu : " + ECRFUserMVCCommand.getRenderCommandByMenu(menu));
+		String movePageCommand = "";
+		movePageCommand = ECRFUserMVCCommand.getRenderCommandByMenu(menu);
+		if(Validator.isNull(movePageCommand)) movePageCommand = ECRFUserMVCCommand.RENDER_UPDATE_CRF;
+	%>
+	
+	<portlet:renderURL var="movePageURL">
+		<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=movePageCommand %>" />
+	</portlet:renderURL>
+	
+	<style>
+		.click-div { cursor:pointer; color:white; border-bottom: 1px solid lightgray; }
+	</style>
+	
+	<!-- crf list on side menu => move to that crf -->
+	<div>
+		<div class="current-crf">
+			<strong><liferay-ui:message key="ecrf-user.menu.all-crf" /></strong>
+			<%for(int i=0; i<allCRFList.size(); i++) { %>
+			<%
+				CRF tempCRF = allCRFList.get(i);
+				DataType dt = DataTypeLocalServiceUtil.getDataType(tempCRF.getDatatypeId());				 
+				String onClickStr = String.format("moveUpdateCRF('%s', '%s', %d)", movePageURL.toString(), themeDisplay.getPortletDisplay().getId(), tempCRF.getCrfId());
+			%>
+				<div class="click-div" onclick="<%=onClickStr%>;"><span><%=dt.getDisplayName(themeDisplay.getLocale()) %></span></div>
+			<%} %>
 		</div>
 	</div>
 	
