@@ -65,7 +65,7 @@ $(document).ready(function() {
 	
 	// NoE_MoC Data Graph
 	if(nmId > 0) {
-		getGraphData(nmId);	
+		getNoEMoCData(nmId);	
 	}
 	
 	if(edpsId > 0) {
@@ -77,6 +77,38 @@ $(document).ready(function() {
 	}
 	
 });
+
+
+function getNoEMoCData(crfId) {
+	$.ajax({
+		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_NOE_MOC %>"></portlet:resourceURL>',
+		type:'post',
+		dataType: 'json',
+		data:{
+			<portlet:namespace/>crfId: crfId,
+		},
+		success: function(obj){
+
+			console.log("crfId : ", crfId);
+			console.log("data : ", obj.data[0]);
+
+			// set data to chart
+			$("#<portlet:namespace/>dataCount").text(100);
+			
+				
+			let NoEMoCData = setNoEMoCData(obj);
+			transposedNoEMoCData = reverseTransformData(NoEMoCData);
+			
+			setNoEMoCLineGraphData(transposedNoEMoCData); 
+			setNoEMoCBarGraphData(NoEMoCData); 
+			setNoEMoCGridData(NoEMoCData);
+		
+		},
+		error: function(jqXHR, a, b){
+			console.log('Fail to render trimester graph');
+		}
+	});
+}
 
 function getEDPSData(crfId) {
 	console.log("edps cohort data loading");
@@ -93,12 +125,12 @@ function getEDPSData(crfId) {
 			
 			$("#<portlet:namespace/>dataCount").text(100);
 			
-			let average = averageData3(obj); 
-			let processedData = reverseTransformData(average);
-			setGraphData6(processedData); 
+			let EDPSData = setEDPSData(obj); 
+			let transposedEDPSData = reverseTransformData(EDPSData);
 			
-			setGraphData7(average);
-			setGridData3(average); // 그리드 데이터 설정	   
+			setEDPSLineGraphData(transposedEDPSData); 			
+			setEDPSBarGraphData(EDPSData);
+			setEDPSGridData(EDPSData); // 그리드 데이터 설정	   
 			
 		},
 		error: function(jqXHR, a, b){
@@ -122,46 +154,13 @@ function getKATRIData(crfId) {
 			
 			$("#<portlet:namespace/>dataCount").text(100);
 			
-			let average = averageData4(obj); 
-			let processedData = reverseTransformData(average);
-			setGraphData8(processedData); 
+			let KATRIData = setKATRIData(obj); 
+			let transposedKATRIData = reverseTransformData(KATRIData);
 			
-			setGraphData9(average);
-			setGridData4(average); // 그리드 데이터 설정	   
-		},
-		error: function(jqXHR, a, b){
-			console.log('Fail to render trimester graph');
-		}
-	});
-}
-
-function getGraphData(crfId) {
-	$.ajax({
-		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_NOE_MOC %>"></portlet:resourceURL>',
-		type:'post',
-		dataType: 'json',
-		data:{
-			<portlet:namespace/>crfId: crfId,
-		},
-		success: function(obj){
-
-			console.log("crfId : ", crfId);
-			console.log("data : ", obj.data[0]);
-
-			// set data to chart
-			$("#<portlet:namespace/>dataCount").text(100);
 			
-
-	        
-			let average = averageData2(obj); // 데이터 전처리 함수 추가
-			setGraphData4(average); // 차트 데이터 설정
-			
-			let average2 = averageData(obj); // 데이터 전처리 함수 추가
-			setGraphData5(average2); // 차트 데이터 설정
-	        
-			let average3 = averageData(obj); // 데이터 전처리 함수 추가
-			setGridData2(average3); // 그리드 데이터 설정	   
-		
+			setKATRILineGraphData(transposedKATRIData); 		
+			setKATRIBarGraphData(KATRIData);
+			setKATRIGridData(KATRIData); // 그리드 데이터 설정	   
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
@@ -170,7 +169,9 @@ function getGraphData(crfId) {
 }
 
 
-function averageData(data) {
+
+
+function setNoEMoCData(data) {
 	 const dataArray = data.data;
 	  const termNames = ["BPA", "BPF", "BPS", "TCS", "BP3", "MP", "EP", "PP", "BP"];
 
@@ -226,18 +227,9 @@ function averageData(data) {
 	  console.log("result :", result);
 	  return result;
 }
-
-
-function averageData2(data) {
-	 
-	  const result =averageData(data);
-	  processedData = reverseTransformData(result);
-	  console.log("transformed Data :", processedData);
-
-	  return processedData;
-	}
 	
-function averageData3(data) {
+//edps data preprocessing
+function setEDPSData(data) {
 	  const dataArray = data.data;
 	  const termNames = ["BPA", "EP", "MBZP", "MECPP"];
 
@@ -289,8 +281,8 @@ function averageData3(data) {
 	  return result;
 	}
 
-
-function averageData4(data) {
+//katri data preprocessing
+function setKATRIData(data) {
 	  const dataArray = data.data;
 	  
 	  const termNames = ["age_months", "born_height", "born_weight", "current_height", "current_weight"];
@@ -637,102 +629,11 @@ function processChartData3(in_data) {
 	return processedData;
 }
 
-function setGridData(data) {
-	// Collection View로 페이징 데이터 소스 생성
-	var view = new wijmo.collections.CollectionView(data,{
-		pageSize: 10	// 한 페이지에 10건
-	});
-	
-	var theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-	   autoGenerateColumns: false,
-	   columns: [
-			{binding: 'id', header: 'No', width: '1*'},
-		   	{binding: 'termName', header: 'TermName', width: '2*'},
-		   	{binding: 't1', header: '1st Trimester', width: '*', format: 'n2'},
-		   	{binding: 't2', header: '2nd Trimester', width: '*', format: 'n2'},
-		   	{binding: 't3', header: '3rd Trimester', width: '*', format: 'n2'}
-	   ],
-      itemsSource: view
-	});
-	 
-	// 페이지 네비게이터 생성
-	var navigator = new wijmo.input.CollectionViewNavigator('#pager',{
-		byPage: true,
-		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
-		cv: view
-	});
-	
-}
-
-function processGridData(in_data) {
-    // 표시할  termName List 
-	const tri_label = {"t1":"1st Trimester","t2":"2nd Trimester","t3":"3rd Trimester"};
-	const termNames = new Array("BPA","BPF","BPS","TCS","BP3","MP","EP","PP","BP");
-    
-	let originalData  = [];
-	let transformedData = [];
-	let processedData = [];
-//	console.log(termNames)
-//	console.log('Length=',termNames.length)
-
-	var  tri_code = ""
-//	const f_data = new Object();
-	
-	for (i=0; i<in_data.data.length; i++) {
-		if(!(in_data.data[i].name == "NOE_1001"))
-			continue;
-			
-		if( !in_data.data[i].hasOwnProperty("trimester"))
-			continue;
-		
-		const f_data = new Object();
-		tri_code = "t"+in_data.data[i].trimester[0];
-		f_data.trimester = tri_code;
-				
-		let noTerms = 0;
-		for (i2=0; i2<termNames.length; i2++) {
-			termName = termNames[i2]
-			if(in_data.data[i].hasOwnProperty(termName)){
-				//	console.log(termName,':', in_data.data[i][termName])
-				noTerms += 1
-				f_data[termName] = in_data.data[i][termName]
-			}
-			//	console.log("==================================")
-			if ( noTerms > 0 ) {
-				//	console.log(f_data)
-				originalData.push(f_data)
-			}
-		} /* for - i2 */
-		
-	} /* for - i */
-		
-	transformedData = transFormData(originalData)
-	console.log("GRID transformed Data :",transformedData)
-	console.log("==================================")
-	
-
-	processedData = [];
-	for( j=0; j<transformedData.length; j++ ) {
-		let term_record = transformedData[j];
-		term_record["id"] = j;
-		
-		processedData.push(term_record);
-	}
-
-	console.log("GRID processed Data :",processedData)
-
-//	processedData = [
-//		{id:1 ,termName:'BPA', t1:0.22, t2:10.00, t3:300.04},	    
-//	    {id:2 ,termName:'BPF', t1:0.13, t2:15.50, t3:100.50},
-//	];
-
-	return processedData;
-}
 
 
-function setGraphData4(data) {
+function setNoEMoCLineGraphData(data) {
 	 // 1. 환자 등록 현황 차트
-new wijmo.chart.FlexChart('#enrollmentChart4', {
+new wijmo.chart.FlexChart('#NoeMoCLineGraph', {
     header: '임상시험(평균) 시계열 현황',
     legendToggle: true,
     bindingX: 'trimester',
@@ -761,9 +662,9 @@ new wijmo.chart.FlexChart('#enrollmentChart4', {
 }
 
 
-function setGraphData5(data) {
+function setNoEMoCBarGraphData(data) {
 	 // 1. 환자 등록 현황 차트
-  new wijmo.chart.FlexChart('#enrollmentChart5', {
+  new wijmo.chart.FlexChart('#NoeMocBarGraph', {
       header: '임상시험(평균) 시계열 현황',
       legendToggle: true,
       bindingX: 'termName',
@@ -791,31 +692,14 @@ function setGraphData5(data) {
   });
 }
 
-function transFormData2(in_data) {
-	console.log("indata :", in_data);
-	let transformedData = [];
-	let termNames = Object.keys(in_data[0]).filter(key => key !== 'trimester')
-	
-	termNames.forEach(term => {
-		const newObject = { termName: term };
-		in_data.forEach(item => {
 
-			newObject[item.trimester] = item[term];
-		});
-		transformedData.push(newObject);
-	});
-	
-	return transformedData;
-};
-
-
-function setGridData2(data) {
+function setNoEMoCGridData(data) {
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(data,{
 		pageSize: 10	// 한 페이지에 10건
 	});
 	
-	var theGrid = new wijmo.grid.FlexGrid('#theGrid2', {
+	var theGrid = new wijmo.grid.FlexGrid('#NoEMoCGrid', {
 	   autoGenerateColumns: false,
 	   columns: [
 			{binding: 'id', header: 'No', width: '1*'},
@@ -828,7 +712,7 @@ function setGridData2(data) {
 	});
 	 
 	// 페이지 네비게이터 생성
-	var navigator = new wijmo.input.CollectionViewNavigator('#pager2',{
+	var navigator = new wijmo.input.CollectionViewNavigator('#NoEMoCPager',{
 		byPage: true,
 		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
 		cv: view
@@ -836,9 +720,9 @@ function setGridData2(data) {
 	
 }
 
-function setGraphData6(data) {
+function setEDPSLineGraphData(data) {
 	 // 1. 환자 등록 현황 차트
-new wijmo.chart.FlexChart('#enrollmentChart6', {
+new wijmo.chart.FlexChart('#EDPSLineGraph', {
    header: 'EDPS 항목별 평균값(꺾은선그래프)',
    legendToggle: true,
    bindingX: 'trimester',
@@ -864,9 +748,9 @@ new wijmo.chart.FlexChart('#enrollmentChart6', {
 	 
 }
 
-function setGraphData7(data) {
+function setEDPSBarGraphData(data) {
 	 // 1. 환자 등록 현황 차트
-new wijmo.chart.FlexChart('#enrollmentChart7', {
+new wijmo.chart.FlexChart('#EDPSBarGraph', {
     header: 'EDPS 항목별 평균값(막대그래프)',
     legendToggle: true,
     bindingX: 'termName',
@@ -890,13 +774,13 @@ new wijmo.chart.FlexChart('#enrollmentChart7', {
 }	
 
 
-function setGridData3(data) {
+function setEDPSGridData(data) {
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(data,{
 		pageSize: 10	// 한 페이지에 10건
 	});
 	
-	var theGrid = new wijmo.grid.FlexGrid('#theGrid3', {
+	var theGrid = new wijmo.grid.FlexGrid('#EDPSGrid', {
 	   autoGenerateColumns: false,
 	   columns: [
 			{binding: 'id', header: 'No', width: '1*'},
@@ -907,7 +791,7 @@ function setGridData3(data) {
 	});
 	 
 	// 페이지 네비게이터 생성
-	var navigator = new wijmo.input.CollectionViewNavigator('#pager3',{
+	var navigator = new wijmo.input.CollectionViewNavigator('#EDPSPager',{
 		byPage: true,
 		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
 		cv: view
@@ -916,9 +800,9 @@ function setGridData3(data) {
 }
 
 
-function setGraphData8(data) {
+function setKATRILineGraphData(data) {
 	 // 1. 환자 등록 현황 차트
-new wijmo.chart.FlexChart('#enrollmentChart8', {
+new wijmo.chart.FlexChart('#KATRILineGraph', {
   header: 'KATRI 항목별 평균값(꺾은선그래프)',
   legendToggle: true,
   bindingX: 'trimester',
@@ -945,9 +829,9 @@ new wijmo.chart.FlexChart('#enrollmentChart8', {
 	 
 }
 
-function setGraphData9(data) {
+function setKATRIBarGraphData(data) {
 	 // 1. 환자 등록 현황 차트
-new wijmo.chart.FlexChart('#enrollmentChart9', {
+new wijmo.chart.FlexChart('#KATRIBarGraph', {
    header: 'KATRI 항목별 평균값(막대그래프)',
    legendToggle: true,
    bindingX: 'termName',
@@ -971,13 +855,13 @@ new wijmo.chart.FlexChart('#enrollmentChart9', {
 }	
 
 
-function setGridData4(data) {
+function setKATRIGridData(data) {
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(data,{
 		pageSize: 10	// 한 페이지에 10건
 	});
 	
-	var theGrid = new wijmo.grid.FlexGrid('#theGrid4', {
+	var theGrid = new wijmo.grid.FlexGrid('#KATRIGrid', {
 	   autoGenerateColumns: false,
 	   columns: [
 			{binding: 'id', header: 'No', width: '1*'},
@@ -988,7 +872,7 @@ function setGridData4(data) {
 	});
 	 
 	// 페이지 네비게이터 생성
-	var navigator = new wijmo.input.CollectionViewNavigator('#pager4',{
+	var navigator = new wijmo.input.CollectionViewNavigator('#KATRIPager',{
 		byPage: true,
 		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
 		cv: view

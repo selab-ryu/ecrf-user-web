@@ -7,14 +7,14 @@
 		<aui:row>
 				<aui:col md="12">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.graph6" />
+						<liferay-ui:message key="ecrf-user.visualizer.title.EDPSLineGraph" />
 					</span>
 				</aui:col>
 			</aui:row>
 			
 			<aui:row>
 				<aui:col md="12">
-					<div id="enrollmentChart6" style="height: 400px"></div>
+					<div id="EDPSLineGraph" style="height: 400px"></div>
 				</aui:col>
 			</aui:row>
 			
@@ -22,14 +22,14 @@
 			<aui:row>
 				<aui:col md="12">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.graph7" />
+						<liferay-ui:message key="ecrf-user.visualizer.title.EDPSBarGraph" />
 					</span>
 				</aui:col>
 			</aui:row>
 			
 			<aui:row>
 				<aui:col md="12">
-					<div id="enrollmentChart7" style="height: 400px"></div>
+					<div id="EDPSBarGraph" style="height: 400px"></div>
 				</aui:col>
 			</aui:row>
 			
@@ -39,15 +39,15 @@
 			<aui:row>
 				<aui:col md="12">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.grid3" />
+						<liferay-ui:message key="ecrf-user.visualizer.title.EDPSGrid" />
 					</span>
 				</aui:col>
 			</aui:row>
 
 			<aui:row>
 				<aui:col md="12">
-					<div id="theGrid3" style="height: 170px"></div>
-					<div id="pager3" style="margin = 10px 0"></div>
+					<div id="EDPSGrid" style="height: 170px"></div>
+					<div id="EDPSPager" style="margin = 10px 0"></div>
 				</aui:col>
 		</aui:row>
 		

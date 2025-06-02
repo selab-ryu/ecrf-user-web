@@ -6,14 +6,14 @@
 		<aui:row>
 				<aui:col md="12">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.graph4" />
+						<liferay-ui:message key="ecrf-user.visualizer.title.NoeMoCLineGraph" />
 					</span>
 				</aui:col>
 			</aui:row>
 			
 			<aui:row>
 				<aui:col md="12">
-					<div id="enrollmentChart4" style="height: 400px"></div>
+					<div id="NoeMoCLineGraph" style="height: 400px"></div>
 				</aui:col>
 			</aui:row>
 			
@@ -21,14 +21,14 @@
 			<aui:row>
 				<aui:col md="12">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.graph5" />
+						<liferay-ui:message key="ecrf-user.visualizer.title.NoeMocBarGraph" />
 					</span>
 				</aui:col>
 			</aui:row>
 			
 			<aui:row>
 				<aui:col md="12">
-					<div id="enrollmentChart5" style="height: 400px"></div>
+					<div id="NoeMocBarGraph" style="height: 400px"></div>
 				</aui:col>
 			</aui:row>
 			
@@ -38,15 +38,15 @@
 			<aui:row>
 				<aui:col md="12">
 					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.grid2" />
+						<liferay-ui:message key="ecrf-user.visualizer.title.NoEMoCGrid" />
 					</span>
 				</aui:col>
 			</aui:row>
 
 			<aui:row>
 				<aui:col md="12">
-					<div id="theGrid2" style="height: 330px"></div>
-					<div id="pager2" style="margin = 10px 0"></div>
+					<div id="NoEMoCGrid" style="height: 330px"></div>
+					<div id="NoEMoCPager" style="margin = 10px 0"></div>
 				</aui:col>
 		</aui:row>
 		
