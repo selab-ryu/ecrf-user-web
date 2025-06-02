@@ -81,7 +81,7 @@ public class CRFViewerRenderCommand implements MVCRenderCommand {
 		
 		// get crf data (structured data)
 		if(sdId > 0) {
-			String answerFormStr = _dataTypeLocalService.getStructuredData(sdId);;
+			String answerFormStr = _dataTypeLocalService.getStructuredData(sdId);
 			renderRequest.setAttribute(ECRFUserCRFDataAttributes.ANSWER_FORM, answerFormStr);
 		}
 		

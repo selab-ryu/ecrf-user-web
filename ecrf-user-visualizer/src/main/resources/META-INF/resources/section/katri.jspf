@@ -1,0 +1,57 @@
+<div class="pad1r">
+	<liferay-ui:header title="ecrf-user.visualizer.title.katri" />
+	
+	
+	<aui:container>
+
+		<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph8" />
+					</span>
+				</aui:col>
+			</aui:row>
+			
+			<aui:row>
+				<aui:col md="12">
+					<div id="enrollmentChart8" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
+			
+			
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.graph9" />
+					</span>
+				</aui:col>
+			</aui:row>
+			
+			<aui:row>
+				<aui:col md="12">
+					<div id="enrollmentChart9" style="height: 400px"></div>
+				</aui:col>
+			</aui:row>
+			
+			
+			
+			
+			<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.grid4" />
+					</span>
+				</aui:col>
+			</aui:row>
+
+			<aui:row>
+				<aui:col md="12">
+					<div id="theGrid4" style="height: 200px"></div>
+					<div id="pager4" style="margin = 10px 0"></div>
+				</aui:col>
+		</aui:row>
+		
+		
+		
+	</aui:container>
+</div>

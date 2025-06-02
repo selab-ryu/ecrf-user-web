@@ -22,7 +22,7 @@ _log.info("searchcrfjsp: " + dataType);
 
 PortletURL portletURL = null;
 
-String menu="search-crf-data";
+String menu = ECRFUserMenuConstants.SEARCH_CRF_DATA;
 
 String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 %>
@@ -48,9 +48,14 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 						<aui:form name="fm" action="${excelDownloadActionURL}" method="POST">
 							<aui:input type="hidden" name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=crfId %>" />
 							<aui:input type="hidden" name="excelParam"></aui:input>
+							
 							<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL) %>">
-							<aui:button type="button" name="download" value="ecrf-user.button.download-excel" cssClass="add-btn medium-btn radius-btn"></aui:button>
+							<button type="button" class="dh-icon-button update-btn w220" id="excelDownload" >
+								<img class="excel-download-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.download-search-result"/></span>
+							</button>
 							</c:if>
+							
 						</aui:form>
 					</aui:button-row>
 				</aui:col>
@@ -60,7 +65,7 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 </div>
 
 <aui:script use="liferay-portlet-url">
-A.one("#<portlet:namespace/>download").on("click", function(event) {
+$("#excelDownload").on("click", function(event) {
 		var form = $("#<portlet:namespace/>fm");
 		var excelPackage = $('#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_searchResults').val();
 		

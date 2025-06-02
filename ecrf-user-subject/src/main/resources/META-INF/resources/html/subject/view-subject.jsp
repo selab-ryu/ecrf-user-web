@@ -8,7 +8,7 @@
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
 
-String menu=ParamUtil.getString(renderRequest, "menu", "subject-view");
+String menu = ParamUtil.getString(renderRequest, "menu", ECRFUserMenuConstants.VIEW_SUBJECT);
 
 long subjectId = ParamUtil.getLong(renderRequest, ECRFUserSubjectAttributes.SUBJECT_ID, 0);
 

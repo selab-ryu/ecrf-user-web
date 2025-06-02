@@ -1,3 +1,4 @@
+<%@page import="com.liferay.frontend.taglib.servlet.taglib.util.EmptyResultMessageKeys"%>
 <%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ include file="../init.jsp" %>
 
@@ -10,7 +11,7 @@ Project project = null;
 long projectId = 0;
 int projectCount = ProjectLocalServiceUtil.getProjectCount(scopeGroupId);
 
-String menu = "project-info";
+String menu = ECRFUserMenuConstants.PROJECT_INFO;
 
 if(projectCount > 0) {
 	List<Project> projectList = ProjectLocalServiceUtil.getProjectByGroupId(scopeGroupId);
@@ -72,10 +73,12 @@ if(!isPrivate) pageClass = "mar16px";
 	<c:choose>
 	<c:when test="<%=Validator.isNull(project) %>">
 		<aui:row>
-			<aui:col>
-				<span>
-					<liferay-ui:message key="ecrf.user.project.info.no-project" />
-				</span>
+			<aui:col cssClass="padTr">
+				<liferay-frontend:empty-result-message
+				animationType="<%=EmptyResultMessageKeys.AnimationType.EMPTY %>"
+				description='<%= LanguageUtil.get(request, "ecrf-user.empty-no-project-info-were-found") %>'
+				elementType='<%= LanguageUtil.get(request, "Project Info") %>'
+			/>
 			</aui:col>
 		</aui:row>
 	</c:when>
@@ -119,32 +122,34 @@ if(!isPrivate) pageClass = "mar16px";
 				<c:choose>
 				<c:when test="<%=(projectId > 0) %>">
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">			
-						<aui:button type="button" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn" onClick="<%=updateProjectURL.toString() %>" />			
+						<a href="<%=updateProjectURL %>" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>update">
+							<img class="update-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.update" /></span>
+						</a>					
 					</c:if>
 					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_PROJECT) %>">
-						<aui:button name="btnDelete" type="button" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" />
+						<%
+							String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
+						%>
+						<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="btnDelete">
+							<img class="delete-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
+						</a>
 					</c:if>
 			 	</c:when>
 			 	<c:otherwise>
 			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-			 			<aui:button type="button" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn" onClick="<%=addProjectURL.toString() %>" />
+						<a href="<%=addProjectURL %>" class="dh-icon-button submit-btn add-btn w110 h36 marR8" id="<portlet:namespace/>add">
+							<img class="add-icon" />
+							<span><liferay-ui:message key="ecrf-user.button.add" /></span>
+						</a>	
 			 		</c:if>
 			 	</c:otherwise>
 			 	</c:choose>		
 			</aui:button-row>
 		</aui:col>
 	</aui:row>
-
 	</div>
 </div>
-
-
-<script>
-$(document).ready(function() {	
-	$('#<portlet:namespace/>btnDelete').click( function(event){
-		var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.title"/>';
-		var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-project-info.content"/>';
-		deleteConfirm(title, content, '<%= deleteProjectURL.toString() %>');
-	});
-});
-</script>

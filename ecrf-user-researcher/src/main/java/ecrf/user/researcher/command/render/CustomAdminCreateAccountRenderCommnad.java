@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.servlet.DynamicServletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -49,10 +50,23 @@ public class CustomAdminCreateAccountRenderCommnad implements MVCRenderCommand {
 	
 		long p_u_i_d = ParamUtil.getLong(renderRequest, "p_u_i_d");
 		
+		String from = ParamUtil.getString(renderRequest, "from", "login");
+		_log.info("from : " + from);
+		
 		if(Validator.isNotNull(p_u_i_d)) {	// when click user name on user admin portlet
 			return mvcRenderCommand.render(renderRequest, renderResponse);
 		} else {	// when click add user at user admin portlet
-			RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
+			RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_VIEW_PRIVACY_AGREEMENT);
+			
+			if(from.equals("privacy")) {
+				_log.info("from privacy page");
+				requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
+			} else {
+				_log.info("from login module");
+			}
+			
+			// for deploy
+			requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
 			
 			try {
 				HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);

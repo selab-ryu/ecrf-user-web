@@ -37,15 +37,14 @@ function dateCheck(startDateId, endDateId, namespace) {
 	} else {
 		isValidDate = true;
 	}
-	
-	//alert("is start / end : " + isStart + " / " + isEnd )
-	console.log("is start / end : " + isStart + " / " + isEnd )
-	
+		
 	if(isStart && isEnd) {
 		isValidDate = (toDate.getTime() > fromDate.getTime());
 	} else {
 		isValidDate = true;
 	}
+	console.log("is start / end / valid : ", isStart, isEnd, isValidDate);
+	
 	console.groupEnd();
 	return isValidDate;
 }

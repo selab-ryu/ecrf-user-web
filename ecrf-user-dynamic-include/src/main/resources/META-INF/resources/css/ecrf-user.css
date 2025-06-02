@@ -7,47 +7,9 @@
 .text-right { text-align:right; }
 .text-left { text-align:left; }
 
-.pad1R{ padding:1rem; }
-.padTr { padding-top: 1rem; }
-.padBr { padding-bottom: 1rem; }
-
-.padV5 { padding-top:5px; padding-bottom:5px; }
-.padVr { padding-top:1rem; padding-bottom:1rem; }
-
-.pad8 { padding:8px!important; }
-.pad16 { padding:16px; }
-.padT20 { padding-top:20px; }
-
-.mar1r {margin: 1rem; }   
-.marLr { margin-left: 1rem; }
-.marRr { margin-right: 1rem; }
-.marTr { margin-top: 1rem; }
-.marBr { margin-bottom: 1rem; }
-.marTrh { margin-top:0.5rem; }
-.marBrh { margin-bottom:0.5rem; }
-
-.mar2Tr { margin-top: 2rem; }
-
-.marBr-date { margin-bottom:1.5rem; }
-
-.mar16px { margin:16px; }
-
-.marT10 { margin-top:10px; }
-.marT20 { margin-top:20px;}
-.marT25 { margin-top:25px;}
-.marT30 { margin-top:30px; }
-.marB10 { margin-bottom:10px; }
-.marB20 { margin-bottom: 20px; }
-.marL10 { margin-left:10px; }
-
-.marV5 { margin-top:5px; margin-bottom:5px; }
-.marVr { margin-top:1rem; margin-bottom:1rem; }
-
-.marH0 { margin-right:0px; margin-left:0px; }
-.mar0 {margin:0px;}
-
-.h35 {height:35px;}
 .align-control {width:250px; display:inline-block; margin-left:1rem;}
+
+.input-button-align { display: flex; align-items: stretch; }
 
 .crf-align-table {width:15%; height: auto; display:inline-block; margin-left:1rem;}
 .crf-align-vertical {width:80%; display:block;}
@@ -72,21 +34,6 @@ table.crf-grid-table {
 }
 .label-controller{margin-bottom:1rem; height:30px;}
 
-.round-container { border: 1px solid #aaaaaa; border-radius:3px; }
-.title-span { font-size:20px; font-weight:bold; }
-.header-title-span { font-size:20px; font-weight:bold; }
-.sub-title-span { font-size:15px; font-weight:bold; }
-
-.sub-title-bottom-border { border-bottom: 1px solid #dcdcde; margin-bottom: 1rem; }
-
-.title-cell { background-color: #f9f9f9; border-right: 1px solid #dcdcde; font-weight:bold; }
-.title-middle-cell { background-color: #f9f9f9; border-left: 1px solid #dcdcde; border-right: 1px solid #dcdcde; font-weight:bold; }
-
-.header-hr { border-top-color: rgba(255, 255, 255, 0.5); }
-
-.search-option {
-	border-color: #E7E7ED!important;
-}	
 
 .div-center { text-align:center; }
 
@@ -101,13 +48,8 @@ table.crf-grid-table {
     padding-top: 0.5rem;
 }
 
-.form-control {
-	background-color:#FCFCFC;
-	border-color:#72AEE6;
-}
-
 .search-input {
-	backgroud-color:#FCFCFC;
+	background-color:#FCFCFC;
 	border-color:#72AEE6;
 }
 
@@ -137,6 +79,16 @@ table.crf-grid-table {
 	height:24px;
 }
 
+.index-table {table-layout:fixed; border:1px solid white; font-size:small;}
+	
+.title-cell { background-color: #f9f9f9; border-right: 1px solid #dcdcde; font-weight:bold; }
+.title-middle-cell { background-color: #f9f9f9; border-left: 1px solid #dcdcde; border-right: 1px solid #dcdcde; font-weight:bold; }
+
+td.table-cell { min-width: 80px; }
+
+td.min-width-80 { min-width: 80px; }
+td.min-width-120 { min-width: 120px; }
+
 .radius-shadow-container {
 	padding: 16px;
 	background-color:#FFFFFF!important;
@@ -145,157 +97,8 @@ table.crf-grid-table {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
-/* The side navigation menu */
-/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
-div.page-content {
-    padding:16px 16px 16px 170px; 
-    max-width:2000px;
-}
-
-div.page-content-sub {
-    padding:16px 16px 16px 162px; 
-    max-width:2000px;
-}
-        
-.side-menu {
-   	margin-top: 16px;
-    margin-left: 12px;
-    padding: 4px;
-    width: 145px;
-    position: absolute;
-    overflow: auto;
-	min-width: 145px;
-	line-height: 12px;
-		
-	background-color:white;
-}
-        
-.main-menu-bar {
-   	width:100%;
-   	border-radius:4px;
-   	margin-top:2px;
-   	margin-bottom:2px;
-   	font-size: 0.9rem;
-   	
-   	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-}
-.main-menu-bar:hover {
-	background-color:#58BD84; 
-	border-color:#58BD84; 
-	color:white;
-}
-
-.active-menu-bar {
-	background-color:#58BD84; 
-	border-color:#58BD84; 
-	color:white;
-}
-
-.active-menu-bar:active {
-	background-color:#58BD84!important; 
-	border-color:#58BD84!important; 
-	color:white!important;
-}
-
-.deactive-menu-bar {
-  	background-color:#A8AAAD;
-   	border-color:#A8AAAD;
-   	color:white;
-}
-
-.deactive-menu-bar:active {
-	background-color:#A8AAAD!important;
- 	border-color:#A8AAAD!important;
-  	color:white!important;
-}
-    
-
-.sub-menu-bar {
-   	width:100%;
-   	border-radius:0px;
-   	margin-top:4px;
-   	margin-bottom:4px;
-  	font-size:0.9rem;
-   	
-	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-}
-
-.active-sub-menu-bar {
-	background-color:#5f73ff; 
-	border-color:#5f73ff; 
-	color:white;
-}
-
-.active-sub-menu-bar:active {
-	background-color:#5f73ff!important; 
-	border-color:#5f73ff!important; 
-	color:white!important;
-}
-
-.deactive-sub-menu-bar {
-  	background-color:#DCDDDE;
-  	border-color:#DCDDDE;
-   	color:black;
-}
-
-.deactive-sub-menu-bar:active {
-  	background-color:#DCDDDE!important;
- 	border-color:#DCDDDE!important;
-	color:black!important;
-}
-
-.sub-main-menu-bar {
-   	width:96%;
-   	border-radius:4px;
-   	margin-top:4px;
-   	margin-bottom:4px;
-  	font-size:0.8rem;
-   	
-	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-}
-
-.sub-main-sub-menu-bar {
-	width:96%;
-   	border-radius:0px;
-   	margin-top:2px;
-   	margin-bottom:2px;
-  	font-size:0.8rem;
-   	
-	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-}
-
-.last-menu {
-	margin-top: 8px;
-}
-
-.active-version-bar {
-   	background-color:#4c51b7; 
-   	border-color:#4c51b7; 
-   	color:white;
-   	font-size:0.8rem;
-   	line-height:1.2rem;
-   	
-   	padding:4px 12px;
-   	
-   	width:100%;
-   	margin-top:4px;
-   	margin-bottom:4px;
-   	
-   	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-}
-
-.active-version-bar:hover {
-	background-color:#4c51b7; 
-   	border-color:#4c51b7; 
-   	color:white;
-}
-
-/* The side navigation menu */
-
-
 
 /* override attribute */
-
 .pagination {
 	font-size:0.8rem;
 }
@@ -316,6 +119,12 @@ div.dataTables_wrapper div.dataTables_info {
 .portlet-header
 {
 	display:none;	
+}
+
+.station-x .center-button {width:100%;}
+
+#wrapper .main-content-card {
+	min-height:0px;
 }
 
 /* override attribute */

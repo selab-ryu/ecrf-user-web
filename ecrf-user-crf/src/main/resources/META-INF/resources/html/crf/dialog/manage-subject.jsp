@@ -76,8 +76,13 @@
 			</aui:row>
 			
 			<aui:button-row cssClass="div-center">
-				<aui:button name="addSubjectBtn" value="add" icon="icon-arrow-up" iconAlign="left" ></aui:button>
-				<aui:button name="removeSubjectBtn" value="remove" icon="icon-arrow-down" iconAlign="right" ></aui:button>
+				<div id="<portlet:namespace/>addSubjectBtn" class="dh-icon-button submit-btn up-btn w120 h36" >
+					<span><img class="up-icon marR8"/><liferay-ui:message key="ecrf-user.button.add"/></span>
+				</div>
+				
+				<div id="<portlet:namespace/>removeSubjectBtn" class="dh-icon-button submit-btn down-btn w120 h36" >
+					<span><liferay-ui:message key="ecrf-user.button.remove"/><img class="down-icon marL8"/></span>
+				</div>
 			</aui:button-row>
 			
 			<aui:row>
@@ -105,8 +110,14 @@
 			</aui:row>
 			
 			<aui:button-row>
-				<aui:button type="button" name="saveBtn" value="ecrf-user.button.save" />
-				<aui:button type="buutton" name="closeDialog" value="ecrf-user.button.cancel" />
+				<button id="<portlet:namespace/>saveBtn" class="dh-icon-button submit-btn save-btn w120 h36 marR8" >
+					<img class="save-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.save"/></span>
+				</button>
+				<button id="<portlet:namespace/>closeDialog" class="dh-icon-button submit-btn cancel-btn w120 h36" >
+					<img class="cancel-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.cancel"/></span>
+				</button>
 			</aui:button-row>
 			
 		</aui:container>

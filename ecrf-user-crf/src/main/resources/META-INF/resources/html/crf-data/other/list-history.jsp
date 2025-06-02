@@ -6,7 +6,7 @@
 <%
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
-String menu="crf-data-history";
+String menu = ECRFUserMenuConstants.LIST_HISTORY;
 
 ArrayList<CRFHistory> wholeHistoryList = new ArrayList<CRFHistory>();
 
@@ -70,6 +70,9 @@ if(isSearch) {
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA_HISTORY %>"/>
 	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
 
 <div class="ecrf-user-crf-data ecrf-user">
 	<%@ include file="../other/sidebar.jspf" %>
@@ -210,8 +213,14 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+							<button type="button" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+								<img class="search-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
+							</button>
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+								<img class="clear-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
+							</a>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -321,14 +330,19 @@ if(isSearch) {
 				
 				<%
 					boolean hasViewHistoryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY);
+					String viewOnClickStr = "location.href='"+viewHistoryURL+"'";
 				%>
 				
 				<liferay-ui:search-container-column-text 
 					name="ecrf-user.list.view"
 					cssClass="min-width-80"
 				>
-					<aui:button name="view" type="button" value="ecrf-user.button.view" cssClass="edit-btn small-btn" onClick="<%=viewHistoryURL %>" disabled="<%=hasViewHistoryPermission ? false : true %>"></aui:button>
+					<button class="dh-icon-button audit-trail-btn w130" onclick="<%=hasViewHistoryPermission ? viewOnClickStr : "javascript:void(0);" %>" id="viewHistory" <%=!hasViewHistoryPermission ? "disabled" : "" %>">
+						<img class="view-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.view"/></span>		
+					</button>
 				</liferay-ui:search-container-column-text>
+				
 				
 			</liferay-ui:search-container-row>
 	
@@ -368,13 +382,9 @@ $(document).ready(function() {
 	});
 	$("#<portlet:namespace/>modifiedDateEnd").mask("0000/00/00");
 });
-</script>
 
-<aui:script use="aui-base">
-A.one('#<portlet:namespace/>search').on('click', function() {
-	var isModifiedDateValid = dateCheck("modifiedDateStart", "modifiedDateEnd", '<portlet:namespace/>');
-	
-	alert(isModifiedDateValid);
+Liferay.provide(window, "openValidPopup", function() {
+	var A = AUI();
 	
 	var dialog = new A.Modal({
 		headerContent: '<h3><liferay-ui:message key="Date validation"/></h3>',
@@ -383,16 +393,26 @@ A.one('#<portlet:namespace/>search').on('click', function() {
 		modal: true,
 		height: 200,
 		width: 400,
-		render: '#body-div',
 		zIndex: 1100,
 		close: true
-	});
+	}).render();
 	
+}, ['aui-modal']
+);
+
+</script>
+
+<aui:script use="aui-base aui-modal">
+A.one('#<portlet:namespace/>search').on('click', function() {
+	let isModifiedDateValid = dateCheck("modifiedDateStart", "modifiedDateEnd", '<portlet:namespace/>');
+	
+	console.log(isModifiedDateValid);
+		
 	if(isModifiedDateValid) {
 		var form = $('#<portlet:namespace/>searchOptionFm');
 		form.submit();
-	} else if(!isModifiedDateValid) {
-		dialog.render();
+	} else {
+		openValidPopup();
 	}
 });
 </aui:script>

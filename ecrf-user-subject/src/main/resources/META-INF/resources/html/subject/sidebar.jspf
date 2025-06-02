@@ -1,3 +1,7 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="ecrf.user.constants.ECRFUserMenuConstants"%>
+<%@page import="ecrf.user.constants.TagAttrUtil"%>
 <%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@page import="ecrf.user.subject.security.permission.resource.SubjectPermission"%>
 <portlet:renderURL var="addSubjectRenderURL">
@@ -17,21 +21,30 @@
 	<div class="side-menu radius-shadow-container" style="text-align:center;">
 		<!-- Subject Management -->
 		<div>
-			<a href="<%=updateListURL%>">		
-				<img src="<%=renderRequest.getContextPath() + "/img/subject_main_btn.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			<a class="dh-sidebar menu-main" href="<%=updateListURL %>" name="SubjectMain">
+				<img class="subject-icon"/>
+				<span><liferay-ui:message key="ecrf-user.menu.subject" /></span>
 			</a>	
 		</div>
 		
+		<%
+			List<String> subjectMenu = new ArrayList<>();
+			subjectMenu.add(ECRFUserMenuConstants.LIST_SUBJECT);
+			subjectMenu.add(ECRFUserMenuConstants.UPDATE_SUBJECT);
+		%>
+		
 		<div>
-			<a href="<%=updateListURL%>">		
-				<img src="<%=(menu.equals("subject-list-update") || menu.equals("subject-update")) ?  renderRequest.getContextPath() + "/img/subject_list_btn.png" : renderRequest.getContextPath() + "/img/subject_list_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
-			</a>	
+			<a class="dh-sidebar menu-1<%=TagAttrUtil.inactive(menu,  TagAttrUtil.TYPE_MENU, subjectMenu.toArray(new String[0]))%>" href="<%=updateListURL %>" name="SubjectList">
+				<img class="subject-list-icon<%=TagAttrUtil.inactive(menu,  TagAttrUtil.TYPE_ICON, subjectMenu.toArray(new String[0]))%>" />
+				<span><liferay-ui:message key="ecrf-user.menu.subject.list" /></span>
+			</a>
 		</div>
 		
 		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
 		<div>
-			<a href="<%=addSubjectRenderURL%>">		
-				<img src="<%=menu.equals("subject-add") ?  renderRequest.getContextPath() + "/img/add_subject_btn.png" : renderRequest.getContextPath() + "/img/add_subject_btn_deactivated.png"%>" width="100%" height="auto" style="min-width:60px; cursor:pointer;"/>
+			<a class="dh-sidebar menu-1<%=TagAttrUtil.inactive(menu,  TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.ADD_SUBJECT)%>" href="<%=addSubjectRenderURL %>" name="SubjectList">
+				<img class="add-subject-icon<%=TagAttrUtil.inactive(menu,  TagAttrUtil.TYPE_ICON, ECRFUserMenuConstants.ADD_SUBJECT)%>" />
+				<span><liferay-ui:message key="ecrf-user.menu.subject.add" /></span>
 			</a>
 		</div>
 		</c:if>

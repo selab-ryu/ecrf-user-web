@@ -12,14 +12,14 @@
 	String sId = (String)renderRequest.getAttribute("sId");
 	String value = (String)renderRequest.getAttribute("value");
 	
-	String menu = "add-crf-query";
+	String menu = ECRFUserMenuConstants.ADD_QUERY;
 	
 	Subject subject = null;
 	if(sId != null) {
 		isUpdate = true;
 		subject = (Subject)renderRequest.getAttribute("subject");
 		
-		menu = "update-crf-query";
+		menu = ECRFUserMenuConstants.VALIDATE_QUERY;
 	}
 
 	CRFAutoquery query = null;

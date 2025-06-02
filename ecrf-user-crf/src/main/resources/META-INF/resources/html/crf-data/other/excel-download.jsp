@@ -9,7 +9,7 @@
 
 <%
 	_log.info("Render Excel Download JSP");
-	String menu = "crf-data-excel";
+	String menu = ECRFUserMenuConstants.EXCEL_DOWNLOAD;
 	
 	_log.info("1. Get data from java");
 	String subjectJson = (String)renderRequest.getAttribute("subjectJson");
@@ -149,7 +149,7 @@
 	<div class="page-content">
 	
 		<liferay-ui:header backURL="<%=redirect %>" title='ecrf-user.crf-data.title.excel-download' />
-		<!--  -->
+		<!-- CRF Info Header -->
 		<aui:fieldset-group markupView="lexicon">
 			<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.crf.title.crf-info">
 				<aui:container>
@@ -203,13 +203,31 @@
 			<hr style="border: solid 1px #787878">
 			<!-- Display Term -->
 		    <span id="searchText"></span>
-		    <input type="radio" id="group" name="divideOption" value="group">
-		    <label for="group">Divide Group</label>
-		    <input type="radio" id="whole" name="divideOption" value="whole" checked = "checked">
-		    <label for="whole">No Divide Group</label>
-		    <br>
-		    <input id="xlsx_name" placeholder="FileName">.xlsx &nbsp</input>
-		    <button id="btn_1" <%=hasDownloadExcelPermission ? "" : "disabled"%> >Export xlsx</button>
+		    
+		    <!-- Option to choose whether to divide the selected Term by Sheet -->
+		    <aui:container>
+		    	<aui:row cssClass="vertical-middle">		    		
+		    		<span class="sub-title-span marR16"><liferay-ui:message key="ecrf-user.crf-data.sheet-divide"/></span>
+	    			
+    				<input type="radio" id="group" name="divideOption" class="marR8" value="group">
+		    		<label for="group" class="marR16">Divide Group</label>
+		    		
+    				<input type="radio" id="whole" name="divideOption" class="marR8" value="whole" checked = "checked">
+			    	<label for="whole">No Divide Group</label>
+		    	</aui:row>
+		    					
+		    	<aui:row cssClass="marTr">
+					<span class="sub-title-span lh2_4r marR16"><liferay-ui:message key="ecrf-user.crf-data.file-name"/></span>
+					
+		    		<input id="xlsx_name" class="h2_4r" placeholder="FileName"></input>
+		    		<span class="lh2_4r marR16"><liferay-ui:message key="ecrf-user.general.xlsx-ext"/></span>
+		    		
+		    		<button id="btn_1" class="dh-icon-button save-btn h2_4r" <%=hasDownloadExcelPermission ? "" : "disabled"%>>
+				    	<img class="excel-download-icon"/>
+				    	<span><liferay-ui:message key="ecrf-user.button.download-excel"/></span>
+				    </button>
+		    	</aui:row>    	
+		    </aui:container>
 		</div>
 	</div>
 </div>
@@ -288,6 +306,7 @@
 		var type = "";
 		var displayName = "";
 		for(var i = 0; i < inspectionData.length; i++){
+			// Currently, there are 2 types to output the Graph
 			if(inspectionData[i].termName === termName){
 				if(inspectionData[i].termType === "List"){
 					type = "List";
@@ -396,7 +415,7 @@
 	var categoryFirst = [];
     var categoryNoGroup = [];
 
-    // 
+    // Divide the only Term without a Group Term
     for(var i = 0; i < inspectionData.length; i++){
         if(inspectionData[i].termType == 'Group'){
 			if(!('groupTermId' in inspectionData[i]))
@@ -456,7 +475,6 @@
             
          	// Check if any of the middle Term has a lower Term (Group Term)
 			var isGroup = false;
-			console.log(categorySecond);
 			for(var j = 0 ; j < categorySecond.length; j++){
 				if(categorySecond[j].termType == 'Group'){
 					isGroup = true;
@@ -481,7 +499,7 @@
                     else{
                     	mainCateClass = "padL214";
                     }
-
+					// Depth is 2 but there is no sub-Term
                     if(categorySecond[j].termType != 'Group'){
                     	contentText = renderTerm(contentText, "Sub_Category", mainCateClass
                     							, indexC, categorySecond[j].termName, 'w250'
@@ -587,11 +605,13 @@
 		return buf;
 	}
 
+	// Functions that get values from an array
 	function getProperty(object, property) {
 		  var result = object[property]
 		  return result
 	}
 	
+	// Functions that change the Date value for use in Liferay
 	function getDateData(Data_answer){
 		var Data_date = new Date(Data_answer);
 		
@@ -612,6 +632,13 @@
 
 	// Make the Excel File And Download
 	function makeExcel(){
+		const xlsxName = document.getElementById('xlsx_name').value;
+		console.log(xlsxName);
+		if(!xlsxName) {
+			alert("excel name is empty");
+			return;
+		}
+		
 		console.log("2. Change the received data to json format");
 		var inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
 		// Total list variable to enter Excel and list variable to enter each line
@@ -692,9 +719,9 @@
         			arrOptions[<%= i %>] = "<%= arr_options[i] %>";
         		<% } %>
         		
+        		// As I received the DB value as it is, I extracted only the value from the format of that value
         		var optionFinal = "Choose Term: ";
         		for(var i = 0; i < arrOptions.length; i++){
-        			//console.log("options: " + arr_options[i]);
         			var extract_termName = null;
         			
         			if(arrOptions[i].includes("EXACT")){
@@ -728,11 +755,7 @@
         	// Top Category Row
         	//-------------------------------------------------------------------------------------------
 
-        	
-        	
-        	
         	// list containing the basic information column of the subject
-        	//var arrInfo = ["ID", "Sex", "Age", "Name"];
         	if(isVisit){
         		arrInfo = ["ID", "Sex", "Age", "Name", "Visit_Date"];
         	}
@@ -886,6 +909,7 @@
         	console.log("8. If Grid Term is included, add the name to the term that belongs to that term");
         	//Gird Row
         	//-------------------------------------------------------------------------------------------
+        	// If Grid Term is included, it must be output by dividing it into Grid Term sub-Terms, so a separate Row is added
         	if(isGrid){
         		arrRow = [];
             	
@@ -954,7 +978,7 @@
     					arrRow.push(patientData[i].Sex);
     					arrRow.push(patientData[i].Age);
                 		arrRow.push(patientData[i].Name);
-                		//arrRow.push(answerData[i]["visit_date"]);
+                		// The method of putting data in each type is different, so it is processed as follows
                 		for(var k = 0; k < (deleteIndex - 1); k++){
                 			var Data_answer = "";
                 			if(checkedList[k].value in answerData[i]){
@@ -972,19 +996,9 @@
                 				}
                 				continue;
                 			}
-        					/* console.log("Data_answer:" + JSON.stringify(Data_answer)); */
         					if(j == 0){
         						if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Date'){
         							Data_answer = getDateData(Data_answer);
-        							/*var Data_date = new Date(Data_answer);
-                    				Data_date.setHours(Data_date.getHours() - 9)
-                    				
-                    				if(Data_date.toLocaleString() == 'Invalid Date'){
-                    					Data_answer = "";
-                    				}
-                    				else{
-                    					Data_answer = Data_date.toLocaleString();
-                    				}*/
         						}
         						else if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
         							var gridInfo = inspectionData.find(v => v.termName === checkedList[k].value).columnDefs;
@@ -996,7 +1010,6 @@
         							for(var l = 0; l < list_order.length; l++){
         								var strIndex = (j + 1).toString();
         								arrRow.push(Data_answer[strIndex][list_order[l]]);
-        								//console.log("list_order: " + JSON.stringify(Data_answer[(j + 1).toString()]));
         							}
         							continue;
         							
@@ -1016,7 +1029,6 @@
             							for(var l = 0; l < list_order.length; l++){
             								var strIndex = (j + 1).toString();
             								arrRow.push(Data_answer[strIndex][list_order[l]]);
-            								//console.log("list_order: " + list_order[l]);
             							}
         							}
         							else{
@@ -1031,13 +1043,11 @@
         					}
                 		}
                 		arrFinal.push(arrRow);
-                		console.log("Array_row: " + arrRow);
     				}
     			}
     		}
     		else{
     			console.log("9.2 If Grid Term is not available, insert data");
-    			console.log("data: " + answerData.length);
     			
     			for(var i = 0; i < answerData.length; i++){
     				arrRow = [];
@@ -1059,19 +1069,9 @@
             			// termType == 'Date' -> milliseconds to date
             			if(inspectionData.find(v => v.termName === checkedList[j].value).termType == 'Date'){
             				Data_answer = getDateData(Data_answer);
-    						/*var Data_date = new Date(Data_answer);
-            				Data_date.setHours(Data_date.getHours() - 9)
-            				
-            				if(Data_date.toLocaleString() == 'Invalid Date'){
-            					Data_answer = "";
-            				}
-            				else{
-            					Data_answer = Data_date.toLocaleString();
-            				}*/
             			}
             			
             			if(typeof(Data_answer) == 'object'){
-            				//console.log("ob: " + JSON.stringify(Data_answer));
             				Data_answer = Data_answer.toString();
             			}
             			arrRow.push(Data_answer);
@@ -1080,8 +1080,6 @@
             		var jTime = new Date();
             		arrFinal.push(arrRow);
             		
-            		//checkedList[j].checked = false;
-            		//console.log("ew: " + arrRow);
     			}
     			console.log("9.2 End");
     			
@@ -1103,10 +1101,11 @@
         	
             // Create xlsx sheet 
             var newWorksheet = excelHandler.getWorksheet();
-            //var newWorksheet1 = excelHandler.getWorksheet();
          	// It puts coordinates for merging the cell of the initial patient information data.
             let merge = [];
          	
+         	// The criteria for merging Cells are to merge when the same data is in the next col
+         	// For example, if there is ['a', 'b', 'b', 'c', 'c', 'c', 'c', 'd', find the coordinate values that show continuous data such as (0, 0), (1, 2), (3, 5), and (6, 6)
          	if(<%=isSearch%>){
          		if(isGrid){
          			console.log("isSearch = yes, isGrid = yes");
@@ -1234,62 +1233,6 @@
          			}
          		}
          	}
-         	
-            <%-- if(<%=isSearch%>){
-            	for(var i = 0; i < 3; i++){
-                    let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
-                    merge.push(test);
-                }
-            	
-            	for(var i = 1; i < 3; i++){
-                	var same_range = search_range(arrFinal[i]);
-
-                	for(var j = 0; j < same_range.length; j++){
-                		if(i == 2 && j == 0){
-                			j = 1;
-                		}
-                			
-                		try{
-                			var merge_range = { s: {c: same_range[j][0], r: i}, e: {c: same_range[j][1], r: i}};
-                    		merge.push(merge_range);
-                		}catch{
-                			
-                		}
-                		
-                	}
-                }
-            }
-            else{
-            	var length_info = 0;
-            	if(bool_is_grid){
-            		length_info = 4;
-            	}else{
-            		length_info = 3;
-            	}
-
-            	for(var i = 0; i < 4; i++){
-                    let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
-                    merge.push(range_info);
-                }
-
-                for(var i = 0; i < 2; i++){
-                	var same_range = search_range(arrFinal[i]);
-
-                	for(var j = 0; j < same_range.length; j++){
-                		if(i == 1 && j == 0){
-                			j = 1;
-                		}
-                			
-                		try{
-                			var merge_range = { s: {c: same_range[j][0], r: i}, e: {c: same_range[j][1], r: i}};
-                    		merge.push(merge_range);
-                		}catch{
-                			
-                		}
-                		
-                	}
-                }
-            } --%>
             
          	// If you put all the coordinate information, cell merge.
             newWorksheet["!merges"] = merge;
@@ -1305,7 +1248,6 @@
             if(splitValue == 'group'){
             	if(checkedList.length > 0 || noGroupSheet.length > 0){
             		XLSX.utils.book_append_sheet(wb, newWorksheet, sheetName);
-            		
             	}
             	else{
             		XLSX.utils.book_append_sheet(wb, newWorksheet, 'noGroupSheet');
@@ -1315,9 +1257,6 @@
             else{
             	XLSX.utils.book_append_sheet(wb, newWorksheet, 'Whole Data');
             }
-            
-            
-            console.log(checkedList);
     	}
     	
     	// Create xlsx File
@@ -1337,620 +1276,3 @@
 	var hw = document.getElementById('btn_1');
 	hw.addEventListener('click', makeExcel);
 </script>
-
-    <script>
-    
-    //var ContentText = "";
-    var inspectionData = "";
-    
-    /*AUI().ready(function() {
-    	//setUI();
-    	var hw = document.getElementById('btn_1');
-	    hw.addEventListener('click', download_excel);
-    });
-    
- 	// Insert the UI to be printed so far into the text.
-   	$(document).ready(function(){
-    	
-   	}); */
-    
-        
-    	/*let $dialog = $('<div>');
-    	let $table = $('<table style="width:100%;">').appendTo( $dialog );
-    	
-		let $pagination = $('<div class="pagination" style="margin-top:30px; width:100%; display:flex; justify-content:center;">').appendTo($dialog);
-	    let dialogProperty = {
-				autoOpen: true,
-				title:'',
-				modal: true,
-				draggable: true,
-				width: 400,
-				highr: 200,
-				buttons:dlgButtons
-		};*/
-		
-	</script>
-		
-	<script>
-        
-        // This function finds the range of cells to merge in Excel.
-        /*function search_range(arr){
-        	var range = {};
-            var duplicateRange = [];
-            
-            for(var i = 0; i < arr.length; i++) {
-                if(!range[arr[i]]) {
-                    range[arr[i]] = [i, i];
-                } else {
-                    range[arr[i]][1] = i;
-                }
-            }
-
-            for(var key in range) {
-                if(range[key][0] !== range[key][1]) {
-                    duplicateRange.push(range[key]);
-                }
-            }
-            return duplicateRange;
-        }*/
-     	
-        
-     // This function imports only the selected term values to Excel and downloads them to a file.
-        function download_excel(){
-        	
-        	var bool_is_grid = false;
-        	
-        	// Total list variable to enter Excel and list variable to enter each line
-        	var Array_row = [];
-        	var arrInfo = [];
-        	
-        	console.log("3. Put crf information");
-        	
-        	// CRF information Row
-        	//-------------------------------------------------------------------------------------------
-        	
-        	Array_row.push("<%=fin_dName[0]%>");
-        	Array_Final.push(Array_row);
-        	
-        	//-------------------------------------------------------------------------------------------
-        	console.log("3. End");
-        	// Total Search Option Row
-        	//-------------------------------------------------------------------------------------------
-        	var Array_TotalSearch = new Array();
-        	Array_row = [];
-        	console.log("4. Processes and puts the selected options in the integrated search");
-        	// In the case of total search, only the id that meets the search conditions is added
-        	if(<%=isSearch%>){
-				var arr_options = new Array();
-        		
-        		<% for (int i=0; i < arr_options.length; i++) { %>
-        			arr_options[<%= i %>] = "<%= arr_options[i] %>";
-        		<% } %>
-        		
-        		var final_option = "Choose Term: ";
-        		for(var i = 0; i < arr_options.length; i++){
-        			//console.log("options: " + arr_options[i]);
-        			var extract_termName = null;
-        			
-        			if(arr_options[i].includes("EXACT")){
-        				extract_termName = arr_options[i].split(" EXACT ");
-        				final_option += inspectionData.find(v => v.termName === extract_termName[0]).displayName.en_US;
-        				
-        				var json_options = inspectionData.find(v => v.termName === extract_termName[0]).options;
-        				final_option += " => (";
-						final_option += json_options.find(v => v.value == extract_termName[1]).label.en_US;
-						final_option += ")";
-        			}
-        			else if(arr_options[i].includes("RANGE")){
-        				extract_termName = arr_options[i].split(" RANGE ");
-        				final_option += inspectionData.find(v => v.termName === extract_termName[0]).displayName.en_US;
-        				final_option += " => (";
-						final_option += extract_termName[1];
-						final_option += ")";
-        			}
-        			
-        			if((i + 1) != arr_options.length){
-        				final_option += " / ";
-        			}
-        		}
-            	
-        		Array_row.push(final_option);
-            	Array_Final.push(Array_row);
-        	}
-        	//-------------------------------------------------------------------------------------------
-			console.log("4. End");
-			console.log("5. Put in the highest Term Name");
-        	// Top Category Row
-        	//-------------------------------------------------------------------------------------------
-        	
-        	// list containing the basic information column of the subject
-        	var Array_Info = ["ID", "Sex", "Age", "Name"];
-        	Array_row = [];
-        	
-        	// Gets the information of the term selected on the page
-        	var CheckedList = $('input:checkbox[name="Section"]:checked');
-
-        	for(var i = 0; i < Array_Info.length; i++){
-        		Array_row.push(Array_Info[i]);
-        	}
-        	
-        	for(var i = 0; i < CheckedList.length; i++){
-        		var data_input_excel = "";
-        		
-        		var term_first = inspectionData.find(v => v.termName === CheckedList[i].value);
-        		
-        		if(inspectionData.find(v => v.termName === term_first.termName).groupTermId == undefined){
-        			data_input_excel = "";
-        		}else{
-        			var term_second = inspectionData.find(v => v.termName === term_first.groupTermId.name);
-        			
-        			if(inspectionData.find(v => v.termName === term_second.termName).groupTermId == undefined){
-        				data_input_excel = term_second.displayName.en_US;
-            		}else{
-        				var term_third = inspectionData.find(v => v.termName === term_second.groupTermId.name);
-        				data_input_excel = term_third.displayName.en_US;
-        			}
-        		}
-        		
-        		var length_grid = 1;
-        		
-				if(term_first.termType == 'Grid'){
-        			length_grid = Object.keys(term_first.columnDefs).length;
-        			bool_is_grid = true;
-        		}
-				
-				for(var j = 0; j < length_grid; j++){
-					Array_row.push(data_input_excel);
-				}
-        	}
-        	Array_Final.push(Array_row);	
-        	//-------------------------------------------------------------------------------------------
-        	console.log("5. End");
-        	console.log("6. Put in the middle Term Name");
-        	// Middle Category Row
-        	//-------------------------------------------------------------------------------------------
-        	Array_row = [];
-
-        	for(var j = 0; j < Array_Info.length; j++){
-        		Array_row.push("");
-        	}
-        	
-        	for(var i = 0; i < CheckedList.length; i++){
-        		var data_input_excel = "";
-        		
-        		var term_first = inspectionData.find(v => v.termName === CheckedList[i].value);
-        		
-        		if(inspectionData.find(v => v.termName === term_first.termName).groupTermId == undefined){
-        			data_input_excel = "";
-        		}else{
-        			var term_second = inspectionData.find(v => v.termName === term_first.groupTermId.name);
-        			if(inspectionData.find(v => v.termName === term_second.termName).groupTermId == undefined){
-        				data_input_excel = "";
-            		}else{
-        				var term_third = inspectionData.find(v => v.termName === term_second.groupTermId.name);
-        				data_input_excel = term_second.displayName.en_US;
-        			}
-        		}
-        		
-        		var length_grid = 1;
-        		
-				if(term_first.termType == 'Grid'){
-        			length_grid = Object.keys(term_first.columnDefs).length;
-        		}
-				
-				for(var j = 0; j < length_grid; j++){
-					Array_row.push(data_input_excel);
-				}
-        	}
-        	Array_Final.push(Array_row);
-        	//-------------------------------------------------------------------------------------------
-        	console.log("6. End");
-        	console.log("7. Put in the low Term Name");
-        	// Low Category Row
-        	//-------------------------------------------------------------------------------------------
-        	Array_row = [];
-
-        	for(var j = 0; j < Array_Info.length; j++){
-        		Array_row.push("");
-        	}
-        	
-        	for(var i = 0; i < CheckedList.length; i++){
-        		var data_input_excel = "";
-        		
-        		var term_first = inspectionData.find(v => v.termName === CheckedList[i].value);
-        		
-        		data_input_excel = term_first.displayName.en_US;
-        		
-        		var length_grid = 1;
-        		
-				if(term_first.termType == 'Grid'){
-        			length_grid = Object.keys(term_first.columnDefs).length;
-        		}
-				
-				for(var j = 0; j < length_grid; j++){
-					Array_row.push(data_input_excel);
-				}
-        	}
-        	Array_Final.push(Array_row);
-        	//-------------------------------------------------------------------------------------------
-        	console.log("7. End");
-        	console.log("8. If Grid Term is included, add the name to the term that belongs to that term");
-        	//Gird Row
-        	//-------------------------------------------------------------------------------------------
-        	if(bool_is_grid){
-        		Array_row = [];
-            	
-            	for(var i = 0; i < Array_Info.length; i++){
-            		Array_row.push("");
-            	}
-            	
-            	for(var i = 0; i < CheckedList.length; i++){
-    				var term_first = inspectionData.find(v => v.termName === CheckedList[i].value);
-
-            		if(term_first.termType == 'Grid'){
-            			var length_grid = Object.keys(term_first.columnDefs).length;
-            			var array_grid_order = [];
-            			
-            			for(var j = 0; j < length_grid; j++){
-            				var data_key_grid = Object.keys(term_first.columnDefs)[j];
-    						var data_order_grid = JSON.stringify(term_first.columnDefs[data_key_grid].order);
-    						array_grid_order[data_order_grid - 1] = term_first.columnDefs[data_key_grid];
-            			}
-            			
-            			for(var j = 0; j < length_grid; j++){
-    						Array_row.push(array_grid_order[j].displayName.en_US);
-    					}
-            		}else{
-            			Array_row.push("");
-            		}
-            	}
-            	Array_Final.push(Array_row);
-        	}
-        	console.log("8. End");
-        	/* for(var i = 0; i < Array_Final.length; i++){
-        		console.log(i + ": " + Array_Final[i]);
-        	} */
-        	console.log("9. Putting actual data in");
-        	// Real Data
-			//-------------------------------------------------------------------------------------------
-			// Total Search
-        	if(<%=isSearch%>){
-        		for(var i = 0; i < answerData.length; i++){
-    				Array_row = [];
-    				Array_row.push(patientData[i].ID);
-    				Array_row.push(patientData[i].Sex);
-					Array_row.push(patientData[i].Age);
-            		Array_row.push(patientData[i].Name);
-            		
-            		for(var j = 0; j < CheckedList.length; j++){
-            			var Obj_PatientAnswer = answerData[i];
-            			var Data_answer ="";
-            			
-            			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
-            			// termType == 'Date' -> milliseconds to date
-            			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
-            				var Data_date = new Date(Data_answer);
-            				Data_date.setHours(Data_date.getHours() - 9)
-            				
-            				if(Data_date.toLocaleString() == 'Invalid Date'){
-            					Data_answer = "";
-            				}
-            				else{
-            					Data_answer = Data_date.toLocaleString();
-            				}
-            			}
-            			
-            			if(typeof(Data_answer) == 'object'){
-            				//console.log("ob: " + JSON.stringify(Data_answer));
-            				Data_answer = Data_answer.toString();
-            			}
-            			Array_row.push(Data_answer);
-            		}
-            		Array_Final.push(Array_row);
-    			}
-        	}
-        	else{
-        		console.log("9.1 Verify that Grid Term is present");
-        		var isGrid = false;
-        		for(var j = 0; j < CheckedList.length; j++){
-        			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Grid'){
-        				isGrid = true;
-        				break;
-        			}
-        		}
-        		console.log("9.1 End");
-        		if(isGrid){
-        			
-        			for(var i = 0; i < answerData.length; i++){
-						// find grid's max length
-        				var length_grid_max = 0;
-        				
-        				for(var j = 0; j < CheckedList.length; j++){
-        					if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Grid'){
-        						if(CheckedList[j].value in answerData[i]){
-        							if(length_grid_max < Object.keys(answerData[i][CheckedList[j].value]).length){
-            							length_grid_max = Object.keys(answerData[i][CheckedList[j].value]).length;
-            						}
-        						}
-        						else{
-        							if(length_grid_max <= 1){
-        								length_grid_max = 1;
-        							}
-        							
-        						}
-        					}
-        				}
-        				// insert real data per grid max length
-        				for(var j = 0; j < length_grid_max; j++){
-        					Array_row = [];
-        					//insert info
-        					Array_row.push(Obj_PatientInfo.ID);
-        					Array_row.push(Obj_PatientInfo.Sex);
-        					Array_row.push(Obj_PatientInfo.Age);
-                    		Array_row.push(Obj_PatientInfo.Name);
-                    		
-                    		for(var k = 0; k < CheckedList.length; k++){
-                    			var Data_answer = "";
-                    			if(CheckedList[k].value in answerData[i]){
-                    				Data_answer = answerData[i][CheckedList[k].value];
-                    			}
-                    			else{
-                    				if(inspectionData.find(v => v.termName === CheckedList[k].value).termType == 'Grid'){
-                    					var no_answer = Object.keys(inspectionData.find(v => v.termName === CheckedList[k].value).columnDefs).length;
-                        				for(var l = 0; l < no_answer; l++){
-                        					Array_row.push("");
-                        				}
-                    				}
-                    				else{
-                    					Array_row.push("");
-                    				}
-                    				continue;
-                    			}
-            					/* console.log("Data_answer:" + JSON.stringify(Data_answer)); */
-            					if(j == 0){
-            						if(inspectionData.find(v => v.termName === CheckedList[k].value).termType == 'Date'){
-            							var Data_date = new Date(Data_answer);
-                        				Data_date.setHours(Data_date.getHours() - 9)
-                        				
-                        				if(Data_date.toLocaleString() == 'Invalid Date'){
-                        					Data_answer = "";
-                        				}
-                        				else{
-                        					Data_answer = Data_date.toLocaleString();
-                        				}
-            						}
-            						else if(inspectionData.find(v => v.termName === CheckedList[k].value).termType == 'Grid'){
-            							var gridInfo = inspectionData.find(v => v.termName === CheckedList[k].value).columnDefs;
-            							var list_key = Object.keys(gridInfo);
-            							var list_order = [];
-            							for(var l = 0; l < list_key.length; l++){
-            								list_order[gridInfo[list_key[l]].order - 1] = gridInfo[list_key[l]].termName;
-            							}
-            							for(var l = 0; l < list_order.length; l++){
-            								var strIndex = (j + 1).toString();
-            								Array_row.push(Data_answer[strIndex][list_order[l]]);
-            								//console.log("list_order: " + JSON.stringify(Data_answer[(j + 1).toString()]));
-            							}
-            							continue;
-            							
-            						}
-            						
-            						Array_row.push(Data_answer);
-            					}
-            					else{
-            						if(inspectionData.find(v => v.termName === CheckedList[k].value).termType == 'Grid'){
-            							var gridInfo = inspectionData.find(v => v.termName === CheckedList[k].value).columnDefs;
-            							var list_key = Object.keys(gridInfo);
-            							if(j < Object.keys(Data_answer).length){
-            								var list_order = [];
-                							for(var l = 0; l < list_key.length; l++){
-                								list_order[gridInfo[list_key[l]].order - 1] = gridInfo[list_key[l]].termName;
-                							}
-                							for(var l = 0; l < list_order.length; l++){
-                								var strIndex = (j + 1).toString();
-                								Array_row.push(Data_answer[strIndex][list_order[l]]);
-                								//console.log("list_order: " + list_order[l]);
-                							}
-            							}
-            							else{
-            								for(var l = 0; l < list_key.length; l++){
-            									Array_row.push("");
-                							}
-            							}
-            						}
-            						else{
-            							Array_row.push("");
-            						}
-            					}
-                    		}
-                    		Array_Final.push(Array_row);
-                    		//console.log("Array_row: " + Array_row);
-        				}
-        			}
-        		}
-        		else{
-        			console.log("9.2 If Grid Term is not available, insert data");
-        			console.log("data: " + answerData.length);
-        			for(var i = 0; i < answerData.length; i++){
-        				Array_row = [];
-        				Array_row.push(patientData[i].ID);
-        				Array_row.push(patientData[i].Sex);
-    					Array_row.push(patientData[i].Age);
-                		Array_row.push(patientData[i].Name);
-                		for(var j = 0; j < CheckedList.length; j++){
-                			
-                			var Obj_PatientAnswer = answerData[i];
-                			var Data_answer ="";
-                			
-                			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
-                			// termType == 'Date' -> milliseconds to date
-                			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
-                				var Data_date = new Date(Data_answer);
-                				Data_date.setHours(Data_date.getHours() - 9)
-                				
-                				if(Data_date.toLocaleString() == 'Invalid Date'){
-                					Data_answer = "";
-                				}
-                				else{
-                					Data_answer = Data_date.toLocaleString();
-                				}
-                			}
-                			
-                			if(typeof(Data_answer) == 'object'){
-                				//console.log("ob: " + JSON.stringify(Data_answer));
-                				Data_answer = Data_answer.toString();
-                			}
-                			Array_row.push(Data_answer);
-                			
-                		}
-                		var jTime = new Date();
-                		Array_Final.push(Array_row);
-        			}
-        			console.log("9.2 End");
-        			
-        			/*for(var i = 0; i < answerData.length; i++){
-            			//console.log("sKey:" + JSON.stringify(answerData[i]));
-                		Array_row = [];
-                		var Obj_PatientInfo = {};
-                		
-                		for(var j = 0; j < patientData.length; j++){
-                			if(patientData[j].ID == answerData[i].ID){
-                				Obj_PatientInfo = patientData[j];
-                				break;
-                			}
-                		}
-                		
-                		Array_row.push(Obj_PatientInfo.ID);
-    					Array_row.push(Obj_PatientInfo.Age);
-    					Array_row.push(Obj_PatientInfo.Sex);
-                		Array_row.push(Obj_PatientInfo.Name);
-                		console.log("Array_row: " + Array_row);
-                		for(var j = 0; j < CheckedList.length; j++){
-                			var Obj_PatientAnswer = answerData[i];
-                			var Data_answer ="";
-                			
-                			Data_answer = getProperty(Obj_PatientAnswer, CheckedList[j].value);
-                			// termType == 'Date' -> milliseconds to date
-                			if(inspectionData.find(v => v.termName === CheckedList[j].value).termType == 'Date'){
-                				var Data_date = new Date(Data_answer);
-                				Data_date.setHours(Data_date.getHours() - 9)
-                				
-                				if(Data_date.toLocaleString() == 'Invalid Date'){
-                					Data_answer = "";
-                				}
-                				else{
-                					Data_answer = Data_date.toLocaleString();
-                				}
-                			}
-                			
-                			if(typeof(Data_answer) == 'object'){
-                				//console.log("ob: " + JSON.stringify(Data_answer));
-                				Data_answer = Data_answer.toString();
-                			}
-                			Array_row.push(Data_answer);
-                		}
-                		Array_Final.push(Array_row);
-                	}*/
-        		}
-        		
-        	}
-        	
-        	// Name each sheet, put the aoa variable in Excel, and put the aoa variable in the sheet
-        	var excelHandler = {
-                    getSheetName : function(){
-                        return 'qwe';
-                    },
-                    getExcelData : function(){
-                        return Array_Final;
-                    },
-                    getWorksheet : function(){
-                        return XLSX.utils.aoa_to_sheet(this.getExcelData());
-                    }
-            }
-        	
-        	// Create xlsx workbook 
-            var wb = XLSX.utils.book_new();
-            // Create xlsx sheet 
-            var newWorksheet = excelHandler.getWorksheet();
-            
-            //var newWorksheet1 = excelHandler.getWorksheet();
-         	// It puts coordinates for merging the cell of the initial patient information data.
-            <%-- let merge = [];
-         	
-            if(<%=isSearch%>){
-            	for(var i = 0; i < 3; i++){
-                    let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
-                    merge.push(test);
-                }
-            	
-            	for(var i = 1; i < 3; i++){
-                	var same_range = search_range(Array_Final[i]);
-
-                	for(var j = 0; j < same_range.length; j++){
-                		if(i == 2 && j == 0){
-                			j = 1;
-                		}
-                			
-                		try{
-                			var merge_range = { s: {c: same_range[j][0], r: i}, e: {c: same_range[j][1], r: i}};
-                    		merge.push(merge_range);
-                		}catch{
-                			
-                		}
-                		
-                	}
-                }
-            }
-            else{
-            	var length_info = 0;
-            	if(bool_is_grid){
-            		length_info = 4;
-            	}else{
-            		length_info = 3;
-            	}
-
-            	for(var i = 0; i < 4; i++){
-                    let range_info = { s: {c: i, r: 1}, e: {c: i, r: length_info}};
-                    merge.push(range_info);
-                }
-
-                for(var i = 0; i < 2; i++){
-                	var same_range = search_range(Array_Final[i]);
-
-                	for(var j = 0; j < same_range.length; j++){
-                		if(i == 1 && j == 0){
-                			j = 1;
-                		}
-                			
-                		try{
-                			var merge_range = { s: {c: same_range[j][0], r: i}, e: {c: same_range[j][1], r: i}};
-                    		merge.push(merge_range);
-                		}catch{
-                			
-                		}
-                		
-                	}
-                }
-            }
-            
-         	// If you put all the coordinate information, cell merge.
-            newWorksheet["!merges"] = merge; --%>
-         	
-            newWorksheet.s = {
-            	aligment: {
-            		wrapText: true
-            	}
-            }
-         	// Give a name to the newly created worksheet in the workbook.
-            XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
-            //XLSX.utils.book_append_sheet(wb, newWorksheet1);
-            
-            // Create xlsx File
-            var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
-
-            // Export xlsx File
-            const xlsx_name = document.getElementById('xlsx_name').value + ('.xlsx');
-            saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), xlsx_name);
-        }
-           
-    </script>

@@ -135,9 +135,21 @@ _log.info("is audit : " + isAudit);
 			<input type="hidden" id="<portlet:namespace/>hasHashChanged" name="<portlet:namespace/>hasHashChanged" >					
 			<input type="hidden" id="<portlet:namespace/>dataContent" name="<portlet:namespace/>dataContent" >
 			<aui:button-row>
-				<aui:button type="button" id="btnSave" value="save"></aui:button>
+				<a id="<portlet:namespace/>btnSave" class="dh-icon-button inactive w110">		
+					<img id="<portlet:namespace/>iconSave" class="save-icon-inactive" />
+					<span><liferay-ui:message key="ecrf-user.button.save"/></span>
+				</a>
+							
+				<a id="<portlet:namespace/>btnBack" class="dh-icon-button back-btn w110" href="<%=redirect%>">		
+					<img class="back-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.back"/></span>
+				</a>
+				
 			</aui:button-row>
 		</form>
+		
+		
+		
 	</div>
 </div>
 <style>
@@ -175,7 +187,7 @@ let SX = StationX(  '<portlet:namespace/>',
 		'<%= locale.toString() %>',
 		<%= jsonLocales.toJSONString() %> );
 		
-console.log(SX);
+//console.log(SX);
 let profile = {
 		dataTypeId: '<%= dataType.getDataTypeId() %>',
 		dataTypeName:  '<%= dataType.getDataTypeName() %>',
@@ -183,9 +195,9 @@ let profile = {
 		dataTypeDisplayName:  '<%= dataType.getDisplayName(locale) %>',
 		structuredDataId: '<%= sdId %>'
 };
-console.log(profile);
+//console.log(profile);
 
-let ev = ECRFViewer();
+let ev = ECRFViewer(SX);
 let dataStructure = SX.newDataStructure(<%=crfForm%>, profile, SX.Constants.FOR_EDITOR, $('#<portlet:namespace/>canvasPanel'));
 
 let align = "crf-align-table";
@@ -203,35 +215,43 @@ let subjectBirth = new Date(<%=subject.getBirth().getTime()%>);
 subjectInfo["subjectGender"] = subjectGender;
 subjectInfo["subjectBirth"] = subjectBirth;
 let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectInfo, <%=isAudit%>);
-console.log($('#<portlet:namespace/>dataContent').val());
+//console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
 
 Liferay.on( 'value_changed', function(evt){
 	if(isLoaded){
 		isEdited = true;
-		$('#<portlet:namespace/>btnSave').css("background-color", "#0B5FFF");
-		$('#<portlet:namespace/>btnSave').css("color", "white");
+		let saveBtn = $('#<portlet:namespace/>btnSave');
+		let saveIcon = $('#<portlet:namespace/>iconSave');
+		
+		saveBtn.removeClass("inactive");
+		saveBtn.addClass("save-btn");
+		
+		saveIcon.removeClass("save-icon-inactive");
+		saveIcon.addClass("save-icon");		
 	}
-	console.log("value_changed", JSON.stringify(evt.dataPacket.result));
+	
+	//console.log("value_changed", JSON.stringify(evt.dataPacket.result));
 	let resultStr = JSON.stringify(evt.dataPacket.result);
 	$('#<portlet:namespace/>dataTypeId').val(<%=dataType.getDataTypeId()%>);
 	$('#<portlet:namespace/>structuredDataId').val(<%=sdId%>);
 	$('#<portlet:namespace/>dataContent').val(resultStr);
-	console.log( 'dataContent: ', $('#<portlet:namespace/>dataContent').val());
+	//console.log( 'dataContent: ', $('#<portlet:namespace/>dataContent').val());
 	isLoaded = true;
 });
 
 $('#<portlet:namespace/>btnSave').on( 'click', function(event){
 	var renderURL = "<%=listCRFURL%>";
 	
-	if(!$('#visit_date').val()){
-		alert("visit date required");
-		document.getElementById('visit_date').focus();
-	}else{
-		if(isEdited) $('#crfViewerForm').submit();
-		else window.location.href = renderURL;
-	}
-	
+	if(isEdited) {
+		if(!$('#visit_date').val()){
+			openVisitDatePopup();
+			document.getElementById('visit_date').focus();
+		}else{
+			if(isEdited) $('#crfViewerForm').submit();
+			else window.location.href = renderURL;
+		}	
+	}	
 });
 
 $('#<portlet:namespace/>btnTable').on( 'click', function(event){
@@ -252,6 +272,23 @@ $('#<portlet:namespace/>btnVert').on( 'click', function(event){
 });
 
 });
+
+Liferay.provide(window, "openVisitDatePopup", function() {
+	var A = AUI();
+	
+	var dialog = new A.Modal({
+		headerContent: '<h3><liferay-ui:message key="ecrf-user.message.need-visit-date.title"/></h3>',
+		bodyContent: '<span style="color:red;"><liferay-ui:message key="ecrf-user.message.need-visit-date.content"/></span>',
+		centered: true,
+		modal: true,
+		height: 200,
+		width: 400,
+		zIndex: 1100,
+		close: true
+	}).render();
+	
+}, ['aui-modal']
+);
 
 
 Liferay.provide(window, 'openHistoryDialog', function(termName, displayName) {

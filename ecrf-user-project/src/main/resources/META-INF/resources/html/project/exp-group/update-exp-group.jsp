@@ -7,7 +7,7 @@
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 
-String menu="add-exp-group";
+String menu = ECRFUserMenuConstants.ADD_EXP_GROUP;
 
 boolean isUpdate = false;
 
@@ -17,12 +17,12 @@ long expGroupId = ParamUtil.getLong(renderRequest, ECRFUserExpGroupAttributes.EX
 
 if(expGroupId > 0) {
 	isUpdate = true;
-	menu="update-exp-group";
+	menu = ECRFUserMenuConstants.UPDATE_EXP_GROUP;
 	
 	expGroup = ExperimentalGroupLocalServiceUtil.getExperimentalGroup(expGroupId);
 }
 
-boolean hasAddPermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_EXP_GROUP);
+boolean hasAddPermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_EXP_GROUP);
 boolean hasUpdatePermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_EXP_GROUP);
 boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_EXP_GROUP);
 
@@ -135,41 +135,45 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 							%>
 						</aui:select>
 					</aui:col>
-				</aui:row>
-			
-				<aui:button-row>
-				
-					<c:if test="<%=!isUpdate %>">
-					<c:if test="<%=hasAddPermission %>">
-					<aui:button type="submit" name="add" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn"/>
-					</c:if>
-					</c:if>
-					
-					<c:if test="<%=isUpdate %>">
-					<c:if test="<%=hasUpdatePermission %>">
-					<aui:button type="submit" name="update" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn"/>
-					</c:if>
-					
-					<c:if test="<%=hasDeletePermission %>">
-					<aui:button name="btnDelete" value="ecrf-user.button.delete" cssClass="delete-btn medium-btn radius-btn" />
-					</c:if>
-					</c:if>
-					
-					<aui:button name="cancel" value="ecrf-user.button.cancel" cssClass="cancel-btn medium-btn radius-btn" onClick="<%=listExpGroupURL %>" />
-				</aui:button-row>
-			
+				</aui:row>			
 			</aui:container>
+			
+			<aui:button-row>
+				<c:if test="<%=!isUpdate %>">
+				<c:if test="<%=hasAddPermission %>">
+				<button type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8" id="<portlet:namespace/>add">
+					<img class="add-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.add" /></span>
+				</button>
+				</c:if>
+				</c:if>
+				
+				<c:if test="<%=isUpdate %>">
+				<c:if test="<%=hasUpdatePermission %>">
+				<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>update">
+					<img class="update-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.update" /></span>
+				</button>
+				</c:if>
+				
+				<c:if test="<%=hasDeletePermission %>">
+				<%
+					String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+					String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+					String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
+				%>
+				<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="btnDelete">
+					<img class="delete-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
+				</a>
+				</c:if>
+				</c:if>
+				<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=listExpGroupURL %>" id="<portlet:namespace/>cancel">
+					<img class="cancel-icon" />					
+					<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
+				</a>
+			</aui:button-row>
 		</aui:form>
 		
 	</div>
 </div>
-
-<script>
-$(document).ready(function() {
-	$('#<portlet:namespace/>btnDelete').click( function(event){
-		var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-exp-group.title"/>';
-		var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-exp-group.content"/>';
-		deleteConfirm(title, content, '<%= deleteExpGroupURL.toString() %>');
-	});
-});
-</script>
