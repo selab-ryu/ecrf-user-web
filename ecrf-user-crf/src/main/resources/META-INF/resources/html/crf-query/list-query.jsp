@@ -5,7 +5,7 @@
 <%
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 		
-	String menu = "crf-query-list";
+	String menu = ECRFUserMenuConstants.LIST_QUERY;
 		
 	ArrayList<CRFAutoquery> queryList = new ArrayList<CRFAutoquery>();
 	queryList.addAll(CRFAutoqueryLocalServiceUtil.getQueryByGroupCRF(scopeGroupId, crfId));
@@ -33,6 +33,8 @@
 <liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_ALL_CRF_QUERY%>" var="addAllQueryURL">
 	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </liferay-portlet:actionURL>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
 <div class="ecrf-user ecrf-user-query">
 
@@ -93,8 +95,14 @@
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+								<img class="search-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
+							</button>
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+								<img class="clear-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
+							</a>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -264,24 +272,25 @@
 				<%
 					boolean updateLock = CRFSubjectLocalServiceUtil.getUpdateLockByC_S(crfId, crfAutoquery.getSubjectId());
 					boolean hasUpdateQueryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_QUERY);
+					
+					boolean isDisabled = updateLock || !hasUpdateQueryPermission;
+					
+					_log.info("update lock / permission / disabled : " + updateLock + " / " + hasUpdateQueryPermission + " / " + isDisabled);
+					
+					String updateBtnKey = "ecrf-user.button.update";
+					if(isDisabled) updateBtnKey = "ecrf-user.button.lock";
 				%>
 				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.update"
 					cssClass="min-width-80"
 				>
-					<c:choose>
-					<c:when test="<%=updateLock %>">
-					
-					<aui:button name="lockCRF" type="button" value="ecrf-user.button.lock" cssClass="none-btn small-btn" disabled="true"></aui:button>
-					
-					</c:when>
-					<c:otherwise>
-					
-					<aui:button name="updateQuery" type="button" value="ecrf-user.button.update" cssClass="edit-btn small-btn" onClick="<%=updateQueryURL%>" disabled="<%=hasUpdateQueryPermission ? false : true %>"></aui:button>
-					
-					</c:otherwise>
-					</c:choose>
+
+				<a class="<%= isDisabled ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=isDisabled ? "javascript:void(0);" : updateQueryURL %>" id="updateCRF">
+					<img src="<%= isDisabled ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+					<span><liferay-ui:message key="<%=updateBtnKey %>"/></span>	
+				</a>
+
 				
 				</liferay-ui:search-container-column-text>
 			
@@ -293,6 +302,8 @@
 				searchContainer="<%=searchContainer%>"
 			/>
 		</liferay-ui:search-container>
+		
+		<c:if test="<%=isAdmin %>">
 		<aui:row>
 			<aui:col>
 				<aui:button-row cssClass="marL10">
@@ -301,6 +312,7 @@
 				</aui:button-row>
 				
 			</aui:col>
-		</aui:row>	
+		</aui:row>
+		</c:if>
 	</div>
 </div>

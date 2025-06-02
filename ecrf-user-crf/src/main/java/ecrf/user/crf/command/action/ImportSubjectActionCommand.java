@@ -3,7 +3,9 @@ package ecrf.user.crf.command.action;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -58,11 +60,11 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		System.out.println("Import Subjects Start");
+		_log.info("Import Subjects Start");
 		
 		long crfId = ParamUtil.getLong(actionRequest, ECRFUserCRFAttributes.CRF_ID);
 		long dataTypeId = ParamUtil.getLong(actionRequest, ECRFUserCRFAttributes.DATATYPE_ID);
-		System.out.println(crfId + ", " + dataTypeId);
+		_log.info("crf id, datatype id : " + crfId + ", " + dataTypeId);
 		
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		
@@ -75,37 +77,65 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 		HttpSession session = httpServletRequest.getSession();
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Company company = themeDisplay.getCompany();
+		long groupId = themeDisplay.getScopeGroupId();
 		
 		ServiceContext subjectServiceContext = ServiceContextFactory.getInstance(Subject.class.getName(), actionRequest);
 		ArrayList<CRFSubject> crfSubjectList = new ArrayList<CRFSubject>();
 		
+		ArrayList<String> duplicatedSubjectList = new ArrayList<>();
+		
+		int addSubjectCount = 0;
+		
 		for(int i = 0; i < jsonArray.length(); i++) {
-			if(Validator.isNull(_subjectLocalService.getSubjectBySerialId(jsonArray.getJSONObject(i).getString("ID")))) {
-				String dateStr = jsonArray.getJSONObject(i).getString("Visit_date");
+			if(Validator.isNull(_subjectLocalService.getSubjectBySerialId(groupId, jsonArray.getJSONObject(i).getString("id")))) {
+				String dateStr = jsonArray.getJSONObject(i).getString("visit_date");
+				String birthStr = jsonArray.getJSONObject(i).getString("birth");
+				
+				boolean existBirth = false;
+				boolean existVisitDate = false;
+				if(Validator.isNotNull(birthStr) || !birthStr.equals("")) existBirth = true;
+				if(Validator.isNotNull(dateStr) || !dateStr.equals("")) existVisitDate = true;
 	
-				if(Validator.isNotNull(dateStr) || !dateStr.equals("")) {
-					String name = jsonArray.getJSONObject(i).getString("Name");
-					String serialId = jsonArray.getJSONObject(i).getString("ID");
-					int age = jsonArray.getJSONObject(i).getInt("Age");
-					int gender = 0;
+				if(existBirth || existVisitDate) {
+					String name = jsonArray.getJSONObject(i).getString("name");
+					String serialId = jsonArray.getJSONObject(i).getString("id");
+					int age = jsonArray.getJSONObject(i).getInt("age");
+					int gender = jsonArray.getJSONObject(i).getInt("sex");	// 0:male, 1:female
+					
+					/* 250416 : comment code, for generalization, change value at data parsing step
 					if(jsonArray.getJSONObject(i).getInt("Sex") == 1) {
 						gender = 0;
 					}else {
 						gender = 1;
 					}
+					*/
 					
-					SimpleDateFormat  formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					SimpleDateFormat  formatter = new SimpleDateFormat("yyyy-MM-dd");
 					Calendar cal = Calendar.getInstance();
 			
-					Date visitDate = formatter.parse(dateStr);
-					cal.setTime(visitDate);
-					int birthYear = visitDate.getYear() + 1900 - age;
+					int birthYear = 1970; 
 					int birthMonth = 0;
 					int birthDay = 1;
+					
+					if(existBirth) {
+						Date birthDate = formatter.parse(birthStr);
+						cal.setTime(birthDate);
+						
+						birthYear = cal.get(Calendar.YEAR);
+						birthMonth = cal.get(Calendar.MONTH);
+						birthDay = cal.get(Calendar.DAY_OF_MONTH);
+						
+					} else if(existVisitDate) {
+						Date visitDate = formatter.parse(dateStr);
+						cal.setTime(visitDate);
+						
+						birthYear = cal.get(Calendar.YEAR) - age;
+					}
+					
 					String lunarBirth = null;
 					String address = null;
 					int hospitalCode = 1001;
-					int expGroupId = 45509;
+					int expGroupId = 0;
 					String phone = "010-0000-0000";
 					String phone2 = null;
 					
@@ -120,7 +150,7 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 								expGroupId,
 								subjectServiceContext);
 					} catch(PortalException e) {
-						_log.error("subject is null");	
+						_log.error("fail to create subject : " + serialId);	
 					}
 					
 					CRFSubject crfSubject = CRFSubjectLocalServiceUtil.createCRFSubject(0);
@@ -134,19 +164,34 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 					crfSubject.setParticipationStartDate(new Date());
 					crfSubject.setUpdateLock(false);
 					crfSubjectList.add(crfSubject);
+					
+					addSubjectCount++;
 				}else {
-					System.out.println("Wrong file input");
+					_log.info("Wrong file input");
 				}
-			}else {
-				System.out.println(jsonArray.getJSONObject(i).getString("ID") + " " + jsonArray.getJSONObject(i).getString("Name") + " is duplicated");
+			} else {
+				// remove comment when need more specific log
+				_log.info(jsonArray.getJSONObject(i).getString("ID") + " " + jsonArray.getJSONObject(i).getString("Name") + " is duplicated");
+				// gather all duplicated subject and return info
+				JSONObject duplicatedObject = jsonArray.getJSONObject(i);
+				String duplicated = duplicatedObject.getString("id") + " / " + duplicatedObject.getString("name");
+				
+				duplicatedSubjectList.add(duplicated);
 			}
-		}	
+		}
+		
+		_log.info("Upload Subject Count : " + addSubjectCount );
+		
+		if(duplicatedSubjectList.size() > 0) {
+			_log.info("Duplicated Subject Count : " + duplicatedSubjectList.size());
+		}
+		
 		ServiceContext crfSubjectSC = ServiceContextFactory.getInstance(CRFSubject.class.getName(), actionRequest);
 		
 		if(crfSubjectList.size() > 0) {
 			_crfSubjectLocalService.updateCRFSubjects(crfId, crfSubjectList, crfSubjectSC);
 		}else {
-			System.out.println("None subject detected");
+			_log.info("None subject detected");
 		}
 		
 		PortletURL renderURL = PortletURLFactoryUtil.create(
@@ -169,6 +214,6 @@ public class ImportSubjectActionCommand extends BaseMVCActionCommand{
 	@Reference
 	private Portal _portal;
 	
-	private Log _log;
+	private Log _log = LogFactoryUtil.getLog(ImportSubjectActionCommand.class);
 
 }

@@ -74,6 +74,8 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
+<%@ page import="ecrf.user.constants.TagAttrUtil"%>
+<%@ page import="ecrf.user.constants.ECRFUserMenuConstants"%>
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 <%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>

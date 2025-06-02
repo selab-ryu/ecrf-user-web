@@ -4,6 +4,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -63,11 +64,11 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		System.out.println("Import Datas Start");
+		_log.info("Import Datas Start");
 		
 		long crfId = ParamUtil.getLong(actionRequest, ECRFUserCRFAttributes.CRF_ID);
 		long dataTypeId = ParamUtil.getLong(actionRequest, ECRFUserCRFAttributes.DATATYPE_ID);
-		System.out.println(crfId + ", " + dataTypeId);
+		_log.info("crf id, datatype id : " + crfId + ", " + dataTypeId);
 		
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		
@@ -80,6 +81,7 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 		HttpSession session = httpServletRequest.getSession();
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Company company = themeDisplay.getCompany();
+		long groupId = themeDisplay.getScopeGroupId();
 		
 		ServiceContext linkServiceContext = ServiceContextFactory.getInstance(LinkCRF.class.getName(), actionRequest);
 		ServiceContext dataTypeServiceContext = ServiceContextFactory.getInstance(DataType.class.getName(), actionRequest);
@@ -88,10 +90,14 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 		ServiceContext subjectServiceContext = ServiceContextFactory.getInstance(Subject.class.getName(), actionRequest);
 		ServiceContext queryServiceContext = ServiceContextFactory.getInstance(CRFAutoquery.class.getName(), actionRequest);
 		
+		int addDataCount = 0;
+		
+		ArrayList<String> notExitSerialList = new ArrayList<>(); 
+		
 		for(int i = 0; i < jsonArray.length(); i++) {
 			if(jsonArray.getJSONObject(i).has("visit_date")) {
-				String serialId = jsonArray.getJSONObject(i).getString("ID");
-				jsonArray.getJSONObject(i).remove("ID");
+				String serialId = jsonArray.getJSONObject(i).getString("id");
+				jsonArray.getJSONObject(i).remove("id");
 				JSONObject answerForm = jsonArray.getJSONObject(i);
 				Iterator<String> keys = answerForm.keys();
 				ArrayList<String> deleteKeys = new ArrayList<String>();
@@ -106,15 +112,31 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 				for(String deleteKey : deleteKeys) {
 					answerForm.remove(deleteKey);
 				}
-				Subject subject = _subjectLocalService.getSubjectBySerialId(serialId);
+				
+				//_log.info(answerForm.toJSONString());
+				
+				Subject subject = _subjectLocalService.getSubjectBySerialId(groupId, serialId);
 				if(Validator.isNotNull(subject)) {
 					StructuredData storedData = _dataTypeLocalService.addStructuredData(0, dataTypeId, answerForm.toJSONString(), WorkflowConstants.STATUS_APPROVED, dataTypeServiceContext);
 					_linkLocalService.addLinkCRF(subject.getSubjectId(), crfId, storedData.getStructuredDataId(), linkServiceContext);
 					_historyLocalService.addCRFHistory(subject.getName(), subject.getSubjectId(), subject.getSerialId(), storedData.getPrimaryKey(), crfId, "", answerForm.toJSONString(), 0, "1.0.0", crfHistoryServiceContext);
 					_queryLocalService.checkQuery(storedData.getPrimaryKey(), _dataTypeLocalService.getDataTypeStructureJSONObject(dataTypeId).getJSONArray("terms"), answerForm, subject.getSubjectId(), crfId, queryServiceContext);
+					addDataCount++;
+				} else {
+					notExitSerialList.add(serialId);
 				}
+				
 			}else {
-				System.out.println("Wrong file input");
+				_log.info("Wrong file input");
+			}
+		}
+		
+		_log.info("Add Data Count : " + addDataCount);
+		
+		if(notExitSerialList.size() > 0) {
+			_log.info("Import fail count : " + notExitSerialList.size());
+			for(String serial : notExitSerialList) {
+				_log.info("subject is not exit by serial id : " + serial);
 			}
 		}
 		
@@ -148,5 +170,5 @@ public class ImportDatasActionCommand extends BaseMVCActionCommand{
 	@Reference
 	private Portal _portal;
 	
-	private Log _log;
+	private Log _log = LogFactoryUtil.getLog(ImportDatasActionCommand.class);
 }

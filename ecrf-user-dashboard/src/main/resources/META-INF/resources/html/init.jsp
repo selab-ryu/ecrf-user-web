@@ -1,3 +1,4 @@
+<%@page import="java.util.Locale"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
@@ -73,6 +74,7 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
+<%@ page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>
 <%@ page import="ecrf.user.constants.ECRFUserJspPaths"%>
@@ -87,6 +89,7 @@
 <%@ page import="ecrf.user.service.CRFLocalServiceUtil"%>
 <%@ page import="ecrf.user.service.CRFSubjectLocalServiceUtil"%>
 <%@ page import="ecrf.user.service.LinkCRFLocalServiceUtil"%>
+<%@ page import="ecrf.user.service.CRFResearcherLocalServiceUtil"%>
 
 <%@ page import="com.sx.icecap.model.DataType"%>
 <%@ page import="com.sx.icecap.service.DataTypeLocalServiceUtil"%>
@@ -98,8 +101,15 @@
 <%@ page import="com.liferay.frontend.taglib.chart.model.MultiValueColumn" %>
 <%@ page import="com.liferay.frontend.taglib.chart.model.AxisX" %>
 
+<%@ page import="com.liferay.frontend.taglib.servlet.taglib.util.EmptyResultMessageKeys"%>
+
 <%@ page import="com.liferay.portal.kernel.json.JSONArray"%>
 <%@ page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@ page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@ page import="com.liferay.portal.kernel.json.JSON"%>
+
+<%@ page import="ecrf.user.dashboard.security.permission.resource.CRFPermission"%>
+
 
 
 <liferay-theme:defineObjects />
@@ -110,4 +120,22 @@
 	String currentURL = themeDisplay.getURLCurrent();
 	String backURL = ParamUtil.getString(renderRequest, ECRFUserWebKeys.BACK_URL, "");
 	String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT, "");
+	
+	Locale defaultLocale = PortalUtil.getSiteDefaultLocale(themeDisplay.getScopeGroupId());
+	
+	Set<Locale> availableLocales = LanguageUtil.getAvailableLocales();
+	
+	JSONArray jsonLocales = JSONFactoryUtil.createJSONArray();
+	availableLocales.forEach( jsonLocales::put );
+	
+	boolean isAdmin = false;
+	
+	//check user roles
+	if(user != null) {
+		List<Role> roleList = user.getRoles();
+		for(int i=0; i<roleList.size(); i++) {
+			Role role = roleList.get(i);
+			if(role.getName().equals("Administrator")) isAdmin = true;
+		}
+	}
 %>

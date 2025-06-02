@@ -1,5 +1,6 @@
-<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.json.JSON"%>
+
+<%@page import="com.liferay.portal.kernel.util.LocalizationUtil"%>
+<%@page import="com.liferay.portal.kernel.util.Localization"%>
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html/dashboard/view_jsp"); %>
@@ -16,6 +17,7 @@ JSONObject obj = (JSONObject)renderRequest.getAttribute("chartDataObj");
 JSONArray chartDataArr = obj.getJSONArray("chart-data");
 
 String chartDataStr = chartDataArr.toJSONString();
+boolean isNoemoc = false;
 
 %>
 
@@ -41,7 +43,16 @@ String chartDataStr = chartDataArr.toJSONString();
 			<chart:bar config="<%=_barChartConfig %>" />
 		</div>
 		
-		<!-- CRF 단위 visit date 기준 연도별 / 월별 데이터 현황 -->
+		<!-- Display Info DIV if there is no CRF -->
+		<c:if test="<%=(chartDataArr.length()<=0)%>">
+			<liferay-frontend:empty-result-message
+				animationType="<%=EmptyResultMessageKeys.AnimationType.EMPTY %>"
+				description='<%= LanguageUtil.get(request, "ecrf-user.empty-no-crf-were-found") %>'
+				elementType='<%= LanguageUtil.get(request, "CRF") %>'
+			/>
+		</c:if>
+		
+		<!-- For each CRF, Display Graph by visit date (Annualy / Monthly) -->
 		<%
 		
 		for(int i=0; i<chartDataArr.length(); i++) {
@@ -63,7 +74,7 @@ String chartDataStr = chartDataArr.toJSONString();
 			if(Validator.isNotNull(datatype)) {
 		%>
 			<aui:fieldset-group markupView="lexicon">
-				<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="false" collapsible="true" label="<%=datatype.getDisplayName() %>">
+				<aui:fieldset cssClass="search-option radius-shadow-container panel-content" collapsed="false" collapsible="true" label="<%=datatype.getDisplayName(themeDisplay.getLanguageId()) %>">
 										
 				<aui:container>
 					<!-- CRF Info -->
@@ -81,15 +92,65 @@ String chartDataStr = chartDataArr.toJSONString();
 								<aui:row>	
 									<aui:col md="3">
 										<aui:field-wrapper
+											cssClass=""
 											label="ecrf-user.crf.crf-title"
 										>
 										</aui:field-wrapper>
 									</aui:col>
-									<aui:col md="9">
-										<p><%=datatype.getDisplayName() %></p>
+									<aui:col md="3" cssClass="right-border-gray">
+										<p class=""><%=datatype.getDisplayName(themeDisplay.getLanguageId()) %></p>
+									</aui:col>
+									
+									<aui:col md="6" cssClass="text-right marBr">
+										
+										<%
+										boolean hasCRFPermission = CRFResearcherLocalServiceUtil.isResearcherInCRF(crf.getCrfId(), user.getUserId());
+										if(isAdmin) hasCRFPermission = true;
+										if(CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ALL_UPDATE_CRF)) hasCRFPermission = true;
+										
+										boolean hasUpdatePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF);
+										%>
+										
+										<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_REDIRECT_UPDATE_CRF %>" var="moveCRFInfoURL" >
+											<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+											<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(crf.getDatatypeId()) %>" />
+											<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+										</portlet:actionURL>
+										
+										<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
+										<a class="dh-icon-button submit-btn update-btn w120 h32 marR8" href="<%=moveCRFInfoURL%>" name="<portlet:namespace/>moveCRFInfo">
+											<img class="update-icon h20" />
+											<span><liferay-ui:message key="ecrf-user.button.crf-info" /></span>
+										</a>
+										</c:if>
+										
+										<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_REDIRECT_CRF_FORM %>" var="moveCRFFormURL" >
+											<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+											<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(crf.getDatatypeId()) %>" />
+											<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+										</portlet:actionURL>
+										
+										<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
+										<a class="dh-icon-button submit-btn crf-form-btn w120 h32 marR8" href="<%=moveCRFFormURL%>" name="<portlet:namespace/>moveCRFForm">
+											<img class="crf-form-icon h20" />					
+											<span><liferay-ui:message key="ecrf-user.button.crf-builder" /></span>
+										</a>
+										</c:if>
+									
+										<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_REDIRECT_CRF_DATA_LIST %>" var="moveCRFDataURL" >
+											<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+											<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(crf.getDatatypeId()) %>" />
+											<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+										</portlet:actionURL>
+										
+										<a class="dh-icon-button submit-btn crf-data-btn w120 h32 marR8" href="<%=moveCRFDataURL%>" name="<portlet:namespace/>moveCRFData">
+											<img class="crf-data-icon h20" />					
+											<span><liferay-ui:message key="ecrf-user.button.crf-data" /></span>
+										</a>
+
 									</aui:col>
 								</aui:row>
-								
+
 								<%
 									int formCount = 0;
 																	
@@ -125,7 +186,7 @@ String chartDataStr = chartDataArr.toJSONString();
 										>
 										</aui:field-wrapper>
 									</aui:col>
-									<aui:col md="3">
+									<aui:col md="3" cssClass="right-border-gray">
 										<p><%=String.valueOf(crfSubjectCount) %></p>
 									</aui:col>
 									
@@ -139,6 +200,30 @@ String chartDataStr = chartDataArr.toJSONString();
 										<p><%=String.valueOf(linkCount) %></p>
 									</aui:col>
 								</aui:row>
+								
+								<%
+									boolean isDescriptionVisible = false;
+									String datatypeName = datatype.getDataTypeName();
+									String description = datatype.getDescription(themeDisplay.getLanguageId());
+									
+									if( Validator.isNotNull(description) ) {
+										isDescriptionVisible = true;
+									}
+									//_log.info(description);
+								%>
+								
+								<c:if test="<%=isDescriptionVisible %>">
+								<!-- Description Title -->
+								<aui:row>
+									<aui:col>
+										<aui:field-wrapper
+											label="ecrf-user.crf.description"
+										>
+											<pre class="description-pre"><c:out value="<%=description%>"/></pre>
+										</aui:field-wrapper>
+									</aui:col>
+								</aui:row>
+								</c:if>
 							</aui:container>
 						</aui:col>
 					</aui:row>
@@ -167,6 +252,26 @@ String chartDataStr = chartDataArr.toJSONString();
 						</aui:col>
 					</aui:row>
 					
+					
+					<%
+						String dataTypeVarName = datatype.getDataTypeName();
+						//if(dataTypeVarName.equals("noe_moc_crf")) isNoemoc = true;
+					%>
+					
+					<c:if test="<%=isNoemoc %>">
+					<aui:row>
+						<!-- Noe_Moc Trimester Graph -->
+						<aui:col md="12" lg="12">
+							<div class=" sub-title-bottom-border marBr">
+								<span class="sub-title-span">
+									<liferay-ui:message key="ecrf-user.crf.title.trimester-chart" />
+								</span>
+							</div>
+							
+							<div id="trimesterChart"></div>
+						</aui:col>
+					</aui:row>
+					</c:if>
 				</aui:container>
 				
 				</aui:fieldset>
@@ -247,6 +352,40 @@ function setMonthChart(id, freqData, timeData) {
 	});
 }
 
+function setTrimesterChart(crfId) {
+	$.ajax({
+		url: '<portlet:resourceURL id="<%= ECRFUserMVCCommand.RESOURCE_GET_TRIMESTER_DATA %>"></portlet:resourceURL>',
+		type:'post',
+		dataType: 'json',
+		data:{
+			<portlet:namespace/>crfId: crfId,
+		},
+		success: function(data){
+			
+			// do pre-process data for chart
+			
+			let chart = myChart.bb.generate({
+				bindto: 'trimesterChart',
+				data: {
+					
+				},
+				axis: {
+				},
+				point: {
+					focus: {
+						only: true
+					}
+				}
+			});
+		},
+		error: function(jqXHR, a, b){
+			console.log('Fail to render trimester graph');
+		}
+	});
+
+	
+}
+
 var chartDataArr = [];
 
 
@@ -283,6 +422,12 @@ $(document).ready(function() {
 		}
 		
 		setMonthChart('#monthChart-'+crfId, monthFreqData, monthTimeData);
+	}
+	
+	let isNoemoc = <%=isNoemoc %>;
+	
+	if(isNoemoc) {
+		console.log('noemoc crf');
 	}
 });
 </aui:script>

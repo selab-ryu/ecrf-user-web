@@ -6,7 +6,7 @@
 
 <%
 
-String menu = "researcher-add";
+String menu = ECRFUserMenuConstants.ADD_RESEARCHER;
 
 boolean isUpdate = false;
 
@@ -18,7 +18,7 @@ if(researcherId > 0) {
 	researcher = ResearcherLocalServiceUtil.getResearcher(researcherId);
 	researcherUser = UserLocalServiceUtil.getUser(researcher.getResearcherUserId());
 	isUpdate = true;
-	menu =  "researcher-update";
+	menu = ECRFUserMenuConstants.UPDATE_RESEARCHER;
 }
 
 String birthStr = null;
@@ -47,20 +47,20 @@ String headerTitle = "ecrf-user.researcher.title.add-researcher";
 boolean isAdminMenu = ParamUtil.getBoolean(renderRequest, "isAdminMenu", false);
 _log.info("is admin menu : " + isAdminMenu);
 
+PortletURL viewURL = renderResponse.createRenderURL();
+
+_log.info("back url : " + backURL);
+_log.info("view url : " + viewURL);
+
+if(Validator.isNull(backURL)) {
+	backURL = viewURL.toString();
+	_log.info("view url : " + viewURL);
+}
+
 // set backURL at admin menu
-if(isAdminMenu) {
-	PortletURL viewURL = renderResponse.createRenderURL();
-	
-	_log.info("back url : " + backURL);
-	if(Validator.isNull(backURL)) {
-		backURL = viewURL.toString();
-		_log.info("view url : " + viewURL);
-	}
-	
+if(isAdminMenu) {	
 	divClass += " mar1r";
 	headerTitle = "ecrf-user.researcher.title.add-researcher.admin";
-} else {
-	backURL = redirect;
 }
 
 // Custom Update User Render added parameter (for admin menu))
@@ -435,30 +435,41 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 						boolean hasOwnPermission = false;
 						if(user.getUserId() == researcher.getResearcherUserId()) hasOwnPermission = true; 
 					%>
-										
+					
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) || hasOwnPermission ) %>">
-					<aui:button type="submit" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.update" ></aui:button>
+					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="<portlet:namespace/>save">
+						<img class="save-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
+					</button>
 					</c:if>
 					
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_RESEARCHER) || hasOwnPermission )%>">
-					<aui:button type="button" name="delete" cssClass="delete-btn medium-btn radius-btn" value="ecrf-user.button.delete"></aui:button>
+					<%
+						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteResearcherURL.toString());
+					%>
+					<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="delete">
+						<img class="delete-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
+					</a>
 					</c:if>
 					
 					</c:when>
 					<c:otherwise>
-					
-					<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
-					<aui:button type="submit" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.add" ></aui:button>
-					</c:if>
-					
-					<c:if test="<%=fromLiferay %>">
-					<aui:button type="submit" name="save" cssClass="add-btn medium-btn radius-btn" value="ecrf-user.button.add" ></aui:button>
-					</c:if>
+										
+					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="<portlet:namespace/>save">
+						<img class="save-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
+					</button>
 					
 					</c:otherwise>
-					</c:choose>			
-							
-					<aui:button type="button" name="cancel" cssClass="cancel-btn medium-btn radius-btn" value="ecrf-user.button.cancel" onClick="<%=listResearcherURL %>"></aui:button>
+					</c:choose>
+										 
+					<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=backURL %>" id="<portlet:namespace/>cancel">
+						<img class="cancel-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
+					</a>
 				</aui:button-row>
 			</aui:col>
 		</aui:row>
@@ -682,13 +693,5 @@ $(document).ready(function() {
 	});
 	$("#<portlet:namespace/>birth").mask("0000/00/00", {placehodler:"yyyy/mm/dd"});
 	
-	$(document).ready(function() {
-		
-		$('#<portlet:namespace/>delete').click( function(event){
-			var title = '<liferay-ui:message key="ecrf-user.message.confirm-delete-researcher.title"/>';
-			var content = '<liferay-ui:message key="ecrf-user.message.confirm-delete-researcher.content"/>';
-			deleteConfirm(title, content, '<%= deleteResearcherURL.toString() %>');
-		});
-	});
 });
 </script>

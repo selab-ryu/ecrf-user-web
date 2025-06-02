@@ -13,7 +13,7 @@ researcherList.addAll(ResearcherLocalServiceUtil.getResearcherBySite(scopeGroupI
 
 _log.info("all researcher size : "+totalCount);
 
-String menu = "researcher-list";
+String menu = ECRFUserMenuConstants.LIST_RESEARCHER;
 
 boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false); 
 
@@ -64,6 +64,8 @@ if(isSearch) {
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_ADD_RESEARCHER %>" />
 	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
 <div class="ecrf-user ecrf-user-researcher">
 
@@ -176,8 +178,14 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+								<img class="search-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
+							</button>
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+								<img class="clear-icon" />							
+								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
+							</a>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -271,14 +279,23 @@ if(isSearch) {
 						<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />						
 					</portlet:renderURL>
-					
-					<aui:button disabled="<%=hasUpdatePermission ? false : true %>" name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateResearcherURL %>" />
+					<a class="<%= !hasUpdatePermission ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" href="<%=updateResearcherURL %>" name="updateCRF" disabled="<%=!hasUpdatePermission ? true : false %>">
+						<img class="update-icon<%=TagAttrUtil.inactive(hasUpdatePermission) %>" />
+						
+						<c:if test="<%=!hasUpdatePermission %>">
+							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
+						</c:if>
+						<c:if test="<%=hasUpdatePermission %>">
+							<span><liferay-ui:message key="ecrf-user.button.update-data" /></span>
+						</c:if>			
+					</a>
 				</liferay-ui:search-container-column-text>
 			</liferay-ui:search-container-row>
 			
 		<liferay-ui:search-iterator />
 		
 		</liferay-ui:search-container>
+		
 	</div>
 </div>
 

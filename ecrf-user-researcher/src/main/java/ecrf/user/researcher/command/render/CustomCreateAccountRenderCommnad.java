@@ -1,13 +1,16 @@
 package ecrf.user.researcher.command.render;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayRenderRequest;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderConstants;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -43,7 +46,23 @@ public class CustomCreateAccountRenderCommnad implements MVCRenderCommand {
 		dynamicRequest.setParameter("isAdmin", String.valueOf(false));
 		dynamicRequest.setParameter("fromLiferay", String.valueOf(true));
 		
-		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
+		String redirect = ParamUtil.getString(renderRequest, WebKeys.REDIRECT);
+		_log.info("redirect : " + redirect);
+		
+		String from = ParamUtil.getString(renderRequest, "from", "login");
+		_log.info("from : " + from);
+		
+		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_VIEW_PRIVACY_AGREEMENT);
+		
+		if(from.equals("privacy")) {
+			_log.info("from privacy page");
+			requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
+		} else {
+			_log.info("from login module");
+		}
+		
+		// for deploy
+		requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
 		
 		try {
 			HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);

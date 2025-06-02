@@ -9,7 +9,7 @@
 
 <%
 	_log.info("Render Excel Download JSP");
-	String menu = "crf-data-excel";
+	String menu = ECRFUserMenuConstants.EXCEL_DOWNLOAD;
 	
 	_log.info("1. Get data from java");
 	String subjectJson = (String)renderRequest.getAttribute("subjectJson");
@@ -203,14 +203,31 @@
 			<hr style="border: solid 1px #787878">
 			<!-- Display Term -->
 		    <span id="searchText"></span>
+		    
 		    <!-- Option to choose whether to divide the selected Term by Sheet -->
-		    <input type="radio" id="group" name="divideOption" value="group">
-		    <label for="group">Divide Group</label>
-		    <input type="radio" id="whole" name="divideOption" value="whole" checked = "checked">
-		    <label for="whole">No Divide Group</label>
-		    <br>
-		    <input id="xlsx_name" placeholder="FileName">.xlsx &nbsp</input>
-		    <button id="btn_1" <%=hasDownloadExcelPermission ? "" : "disabled"%> >Export xlsx</button>
+		    <aui:container>
+		    	<aui:row cssClass="vertical-middle">		    		
+		    		<span class="sub-title-span marR16"><liferay-ui:message key="ecrf-user.crf-data.sheet-divide"/></span>
+	    			
+    				<input type="radio" id="group" name="divideOption" class="marR8" value="group">
+		    		<label for="group" class="marR16">Divide Group</label>
+		    		
+    				<input type="radio" id="whole" name="divideOption" class="marR8" value="whole" checked = "checked">
+			    	<label for="whole">No Divide Group</label>
+		    	</aui:row>
+		    					
+		    	<aui:row cssClass="marTr">
+					<span class="sub-title-span lh2_4r marR16"><liferay-ui:message key="ecrf-user.crf-data.file-name"/></span>
+					
+		    		<input id="xlsx_name" class="h2_4r" placeholder="FileName"></input>
+		    		<span class="lh2_4r marR16"><liferay-ui:message key="ecrf-user.general.xlsx-ext"/></span>
+		    		
+		    		<button id="btn_1" class="dh-icon-button save-btn h2_4r" <%=hasDownloadExcelPermission ? "" : "disabled"%>>
+				    	<img class="excel-download-icon"/>
+				    	<span><liferay-ui:message key="ecrf-user.button.download-excel"/></span>
+				    </button>
+		    	</aui:row>    	
+		    </aui:container>
 		</div>
 	</div>
 </div>
@@ -615,6 +632,13 @@
 
 	// Make the Excel File And Download
 	function makeExcel(){
+		const xlsxName = document.getElementById('xlsx_name').value;
+		console.log(xlsxName);
+		if(!xlsxName) {
+			alert("excel name is empty");
+			return;
+		}
+		
 		console.log("2. Change the received data to json format");
 		var inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
 		// Total list variable to enter Excel and list variable to enter each line

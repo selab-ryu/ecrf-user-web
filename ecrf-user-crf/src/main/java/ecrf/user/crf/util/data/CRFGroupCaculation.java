@@ -63,49 +63,63 @@ public class CRFGroupCaculation {
 				}
 			}
 			
-			Iterator<String> groupKeys = termPackage.keys();
-			while(groupKeys.hasNext()) {
+			_log.info(termPackage.toJSONString());
+			
+			// TODO: need to analyze => need to change code to caculate all depth 
+			Iterator<String> groupKeys = termPackage.keys();	// group name iterator
+			while(groupKeys.hasNext()) {	// each by group 'G'
 				String groupName = groupKeys.next();
 				int terms = 0;
 				int answers = 0;
 				boolean hasSubGroup = false;
 				JSONObject tempPackage = null;
-				for(int k = 0; k < crfForm.length(); k++) {
-					if(crfForm.getJSONObject(k).has("groupTermId")) {
-						if(crfForm.getJSONObject(k).getJSONObject("groupTermId").getString("name").equals(groupName)){
-							if(crfForm.getJSONObject(k).getString("termType").equals("Group")) {
-								String subGroupName = crfForm.getJSONObject(k).getString("termName");
+				
+				// check 2nd depth group
+				// what if group has more group? => terms variable value is zero
+				for(int k = 0; k < crfForm.length(); k++) {	// each by all term | term 'T'
+					if(crfForm.getJSONObject(k).has("groupTermId")) {	// T has groupTermId => group's slave term
+						if(crfForm.getJSONObject(k).getJSONObject("groupTermId").getString("name").equals(groupName)){	// T's master group is matched to G
+							if(crfForm.getJSONObject(k).getString("termType").equals("Group")) {	// T is also group => 2-depth
+								String subGroupName = crfForm.getJSONObject(k).getString("termName");	// sub group name (T)
 								hasSubGroup = true;
-								for(int m = 0; m < crfForm.length(); m++) {
-									if(crfForm.getJSONObject(m).has("groupTermId")){
-										if(crfForm.getJSONObject(m).getJSONObject("groupTermId").getString("name").equals(subGroupName)){
-											if(!crfForm.getJSONObject(m).getString("termType").equals("Group")) {
+								for(int m = 0; m < crfForm.length(); m++) {		// each by all term
+									if(crfForm.getJSONObject(m).has("groupTermId")){	// term T2 has groupTermId => group's slave term
+										if(crfForm.getJSONObject(m).getJSONObject("groupTermId").getString("name").equals(subGroupName)){	 // T2's master group is matched to T(sub group)
+											if(!crfForm.getJSONObject(m).getString("termType").equals("Group")) {	// T2 is not group
 												terms++;
-												if(answerForm.has(crfForm.getJSONObject(m).getString("termName"))) {
+												if(answerForm.has(crfForm.getJSONObject(m).getString("termName"))) {	// T2 has value
 													answers++;
 												}
 											}										
 										}
 									}
 								}
-							}else {
-								if(crfForm.getJSONObject(k).has("groupTermId")){
-									if(crfForm.getJSONObject(k).getJSONObject("groupTermId").getString("name").equals(groupName)){
-										if(!crfForm.getJSONObject(k).getString("termType").equals("Group")) {
-											terms++;
-											if(answerForm.has(crfForm.getJSONObject(k).getString("termName"))) {
-												answers++;
-											}
-										}										
+							}else {	// T is not group
+								if(crfForm.getJSONObject(k).has("groupTermId")){	// T has master group 
+									if(crfForm.getJSONObject(k).getJSONObject("groupTermId").getString("name").equals(groupName)){	// T's master group is matched to G
+										terms++;
+										if(answerForm.has(crfForm.getJSONObject(k).getString("termName"))) {	// T has value
+											answers++;
+										}									
 									}
 								}
 							}
 						}
 					}
 				}
+				
+				// 2-depth issue temp solve
+				int percentage = 0;
+				if(terms > 0) {
+					percentage = answers * 100 / terms;
+				} else {
+					//_log.info("2depth issue");
+					percentage = 0;
+				}
+				
 				tempPackage = termPackage.getJSONObject(groupName);
 				tempPackage.put("total", answers + "/" + terms);
-				tempPackage.put("percent", answers * 100 / terms + "%");
+				tempPackage.put("percent", percentage + "%");
 			}
 		}
 		

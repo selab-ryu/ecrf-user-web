@@ -12,6 +12,7 @@
 
 <%@ page import="javax.portlet.PortletURL" %>
 
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
 <%@ page import="com.liferay.portal.kernel.security.permission.ActionKeys" %>
@@ -48,6 +49,8 @@
 
 <%@ page import="com.liferay.petra.string.StringPool" %>
 
+<%@ page import="ecrf.user.constants.TagAttrUtil"%>
+<%@ page import="ecrf.user.constants.ECRFUserMenuConstants"%>
 <%@ page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserWebKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserMVCCommand"%>

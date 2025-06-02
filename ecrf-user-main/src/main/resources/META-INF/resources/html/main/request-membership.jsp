@@ -14,13 +14,17 @@ long siteGroupId = ParamUtil.getLong(renderRequest, ECRFUserMainAttributes.SITE_
 
 %>
 
+<portlet:renderURL var="viewSiteURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_SITE %>" />
+</portlet:renderURL>
+
 <portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_ADD_MEMBERSHIP_REQUEST %>" var="requestMembershipURL">
 	<portlet:param name="<%=WebKeys.USER_ID %>" value="<%=String.valueOf(curUser.getUserId()) %>" />
 	<portlet:param name="<%=ECRFUserMainAttributes.SITE_GROUP_ID %>" value="<%=String.valueOf(siteGroupId) %>" />
 	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=redirect %>" />
 </portlet:actionURL>
 
-<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.main.title.request-membership" />
+<liferay-ui:header backURL="<%=viewSiteURL %>" title="ecrf-user.main.title.request-membership" />
 
 <aui:container cssClass="radius-shadow-container">
 	<aui:row>
@@ -64,7 +68,7 @@ long siteGroupId = ParamUtil.getLong(renderRequest, ECRFUserMainAttributes.SITE_
 		<aui:col>
 			<aui:button-row>
 				<aui:button type="submit" name="request" value="Request" />
-				<aui:button value="Back" onClick="<%=redirect.toString() %>" />
+				<aui:button value="Back" onClick="<%=viewSiteURL %>" />
 			</aui:button-row>
 		</aui:col>
 	</aui:row>

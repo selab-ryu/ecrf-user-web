@@ -12,14 +12,12 @@
 	String sId = (String)renderRequest.getAttribute("sId");
 	String value = (String)renderRequest.getAttribute("value");
 	
-	String menu = "add-crf-query";
+	String menu = ECRFUserMenuConstants.VALIDATE_QUERY;
 	
 	Subject subject = null;
 	if(sId != null) {
 		isUpdate = true;
 		subject = (Subject)renderRequest.getAttribute("subject");
-		
-		menu = "update-crf-query";
 	}
 
 	CRFAutoquery query = null;
@@ -369,19 +367,28 @@
 										<c:when test="<%=isUpdate %>">
 										
 										<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VALIDATE_CRF_QUERY)%>">
-											<aui:button type="button" name="save" value="ecrf-user.button.update" cssClass="add-btn medium-btn radius-btn"></aui:button>
+											<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
+												<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+												<span>Update</span>
+											</button>
 										</c:if>
 										
 										</c:when>
 										<c:otherwise>
 										
 										<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF_QUERY)%>">
-											<aui:button type="button" name="save" value="ecrf-user.button.add" cssClass="add-btn medium-btn radius-btn"></aui:button>
+											<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
+												<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+												<span>Update</span>
+											</button>					
 										</c:if>
 										</c:otherwise>
 										</c:choose>
 										
-										<aui:button type="button" name="cancel" value="ecrf-user.button.cancel" cssClass="cancel-btn medium-btn radius-btn" onClick="<%=listCRFQueryURL %>"></aui:button>
+										<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listCRFQueryURL %>" name="<portlet:namespace/>cancel">
+											<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
+											<span style="color:black;">Cancel</span>
+										</a>
 									</aui:button-row>
 								</aui:col>
 							</aui:row>	

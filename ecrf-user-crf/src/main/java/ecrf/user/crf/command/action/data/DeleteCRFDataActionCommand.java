@@ -1,5 +1,6 @@
 package ecrf.user.crf.command.action.data;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
@@ -7,6 +8,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.sx.icecap.service.DataTypeLocalService;
 
@@ -50,19 +52,21 @@ public class DeleteCRFDataActionCommand extends BaseMVCActionCommand{
         long crfId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
         
         long linkCRFId = ParamUtil.getLong(actionRequest, ECRFUserCRFDataAttributes.LINK_CRF_ID, 0);
-        _log.info("link crf id : " + linkCRFId);
+        //_log.info("link crf id : " + linkCRFId);
         
         LinkCRF linkCRF = null;
         
         if(linkCRFId > 0) {
-        	linkCRF = _linkCRFLocalService.getLinkCRF(linkCRFId);
-        	
         	try {
-            	_linkCRFLocalService.deleteLinkCRF(linkCRF.getLinkId());
-
-            } catch (Exception e) {
-            	e.printStackTrace();
-            }
+        		linkCRF = _linkCRFLocalService.getLinkCRF(linkCRFId);
+        		_log.info("delete link crf : " + linkCRFId);
+        		
+        		_linkCRFLocalService.deleteLinkCRF(linkCRF.getLinkId());
+        	} catch (PortalException pe) {
+        		_log.error("link crf is null : " + linkCRFId);
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        	}
         }
         
 		String renderCommand = ECRFUserMVCCommand.RENDER_LIST_CRF_DATA;

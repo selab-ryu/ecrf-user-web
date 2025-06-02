@@ -3,16 +3,14 @@ Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portlet
 		
 	var isAudit = false;
 	var isDelete = false;
+	var isUpdate = false;
 	
 	// set dialog type value by type param 
 	if(type === 0) {
-		isAudit = false;
-		isDelete = false;
+		isUpdate = true;
 	} else if (type === 1) {
 		isAudit = true;
-		isDelete = false;
 	} else if (type === 2) {
-		isAudit = false;
 		isDelete = true;
 	}
 	
@@ -25,6 +23,7 @@ Liferay.provide(window, 'openMultiCRFDialog', function(sId, crfId, type, portlet
 			'subjectId' : sId,
 			'crfId' : crfId,
 			'baseURL' : baseURL,
+			'isUpdate' : isUpdate,
 			'isAudit' : isAudit,
 			'isDelete' : isDelete,
 			'mvcRenderCommandName' : '/render/crf-data/crf-data-selector'
@@ -306,3 +305,14 @@ Liferay.provide(window, 'createGraphPopupRenderURL', function(portletId, termNam
 	elements[0].style.textAlign = "center";
 	
 }, ['liferay-util-window', 'liferay-portlet-url']);
+
+Liferay.provide(window, 'moveUpdateCRF', function(renderURL, plId, crfId) {	
+	console.log(renderURL, plId, crfId);
+	let namespace = "_"+plId+"_";
+	let crfIdParam = "&" + namespace + "crfId=" + crfId;;
+	//renderURL += namespace + "crfId=" + crfId;
+	console.log(crfIdParam);
+	renderURL += crfIdParam;
+	
+	window.location.href = renderURL;	
+},['liferay-util-window', 'liferay-portlet-url']);

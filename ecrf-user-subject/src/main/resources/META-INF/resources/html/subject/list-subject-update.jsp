@@ -11,7 +11,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
 ArrayList<Subject> subjectList = new ArrayList<Subject>();
 subjectList.addAll(SubjectLocalServiceUtil.getSubjectByGroupId(scopeGroupId));
 
-String menu="subject-list-update";
+String menu = ECRFUserMenuConstants.LIST_SUBJECT;
 
 boolean isSearch = ParamUtil.getBoolean(renderRequest, "isSearch", false); 
 
@@ -61,6 +61,7 @@ if(isSearch) {
 	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
 <div class="ecrf-user">
 
@@ -159,8 +160,14 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<aui:button name="search" cssClass="add-btn medium-btn radius-btn"  type="submit" value="ecrf-user.button.search"></aui:button>
-							<aui:button name="clear" cssClass="reset-btn medium-btn radius-btn" type="button" value="ecrf-user.button.clear" onClick="<%=clearSearchURL %>"></aui:button>
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+								<img class="search-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
+							</button>
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+								<img class="clear-icon" />
+								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
+							</a>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -175,7 +182,7 @@ if(isSearch) {
 			emptyResultsMessageCssClass="taglib-empty-result-message-header"
 			total="<%=subjectList.size() %>"
 			var="searchContainer"
-			cssClass="marTrh center-table radius-shadow-container"
+			cssClass="marBr marTrh center-table radius-shadow-container"
 			>
 		
 			<liferay-ui:search-container-results>
@@ -226,7 +233,6 @@ if(isSearch) {
 				</portlet:renderURL>
 			
 				<liferay-ui:search-container-column-text
-					href="<%=hasViewPermission ? viewURL.toString() : ""%>"
 					name="ecrf-user.list.serial-id"
 					value="<%=subject.getSerialId() %>"
 				/>
@@ -284,7 +290,15 @@ if(isSearch) {
 					name="ecrf-user.list.update"
 				>	
 
-					<aui:button name="update" type="button" value="ecrf-user.button.update" cssClass="small-btn edit-btn" onClick="<%=updateURL %>" disabled="<%=hasUpdatePermission ? false : true %>"></aui:button>
+					<a class="<%= !hasUpdatePermission ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" href="<%=updateURL %>" name="updateSubject" disabled="<%=!hasUpdatePermission ? true : false %>">
+						<img class="update-icon<%=TagAttrUtil.inactive(hasUpdatePermission) %>" />
+						<c:if test="<%=!hasUpdatePermission %>">
+							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
+						</c:if>
+						<c:if test="<%=hasUpdatePermission %>">
+							<span><liferay-ui:message key="ecrf-user.button.update" /></span>
+						</c:if>			
+					</a>
 
 				</liferay-ui:search-container-column-text>
 				
@@ -303,12 +317,16 @@ if(isSearch) {
 				String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-subject.content");
 				String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s', 'large')", title, content, deleteSubjectURL.toString());
 				%>
-					<aui:button 
-						value="ecrf-user.button.delete" 
-						cssClass="delete-btn small-btn" 
-						onClick="<%=deleteFunctionCall %>" 
-						disabled="<%=hasDeletePermission ? false : true  %>" 
-					/>
+				
+					<a class="<%= !hasDeletePermission ? "dh-icon-button inactive w130" : "dh-icon-button delete-btn w130"%>" onclick="<%=deleteFunctionCall %>" name="deleteSubject" disabled="<%=!hasDeletePermission ? true : false %>">
+						<img class="delete-icon<%=TagAttrUtil.inactive(hasDeletePermission) %>" />
+						<c:if test="<%=!hasDeletePermission %>">
+							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
+						</c:if>
+						<c:if test="<%=hasDeletePermission %>">
+							<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
+						</c:if>			
+					</a>	
 				</liferay-ui:search-container-column-text>
 				
 			</liferay-ui:search-container-row>
@@ -323,16 +341,20 @@ if(isSearch) {
 		</liferay-ui:search-container>
 		
 		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
-		
-			<aui:button type="button" name="add" value="Add Subject" cssClass="add-btn medium-btn radius-btn marTr" onClick="<%=addSubjectRenderURL %>"></aui:button>
-
+			<a class="dh-icon-button submit-btn add-btn w150 h36 marR8" href="<%=addSubjectRenderURL %>" name="addSubject">
+				<img class="add-icon" />
+				<span><liferay-ui:message key="ecrf-user.subject.button.add-subject" /></span>
+			</a>
 		</c:if>
 		
 		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_ALL_SUBJECT) %>">
 			<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_ALL_SUBJECT %>" var="deleteAllSubjectURL">
 			</liferay-portlet:actionURL>
 			
-			<aui:button type="button" name="deleteAll" value="Delete All Subject" cssClass="delete-btn medium-btn radius-btn marTr" onClick="<%=deleteAllSubjectURL %>"></aui:button>
+			<a class="dh-icon-button submit-btn delete-btn w130 h36" href="<%=deleteAllSubjectURL %>" name="deleteAllSubject">
+				<img class="delete-icon" />
+				<span><liferay-ui:message key="ecrf-user.subject.button.delete-all" /></span>		
+			</a>	
 		</c:if>
 	</div>
 </div>
