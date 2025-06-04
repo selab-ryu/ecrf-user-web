@@ -2,7 +2,7 @@
 	<liferay-ui:header title="ecrf-user.visualizer.title.edps" />
 
 
-<aui:container>
+	<aui:container>
 
 		<aui:row>
 				<aui:col md="12">

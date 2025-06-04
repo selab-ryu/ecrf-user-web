@@ -80,6 +80,7 @@ $(document).ready(function() {
 
 
 function getNoEMoCData(crfId) {
+	console.log("NoEMoC cohort data loading");
 	$.ajax({
 		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_NOE_MOC %>"></portlet:resourceURL>',
 		type:'post',
@@ -95,13 +96,11 @@ function getNoEMoCData(crfId) {
 			// set data to chart
 			$("#<portlet:namespace/>dataCount").text(100);
 			
-				
-			let NoEMoCData = setNoEMoCData(obj);
-			transposedNoEMoCData = reverseTransformData(NoEMoCData);
-			
-			setNoEMoCLineGraphData(transposedNoEMoCData); 
-			setNoEMoCBarGraphData(NoEMoCData); 
-			setNoEMoCGridData(NoEMoCData);
+	         transposedNoEMoCData = reverseTransformData(obj.data); // 평균값 배열을 transpose
+	         
+	         setNoEMoCLineGraphData(transposedNoEMoCData); // transpose된 NoEMoC 데이터를 wijmo 꺾은선 Graph로 변환
+	         setNoEMoCBarGraphData(obj.data);  // transpose된 NoEMoC 데이터를 wijmo 막대 Graph로 변환
+	         setNoEMoCGridData(obj.data); // transpose된 NoeMoC 데이터를 wijmo Grid로 변환
 		
 		},
 		error: function(jqXHR, a, b){
@@ -172,114 +171,124 @@ function getKATRIData(crfId) {
 
 
 function setNoEMoCData(data) {
-	 const dataArray = data.data;
-	  const termNames = ["BPA", "BPF", "BPS", "TCS", "BP3", "MP", "EP", "PP", "BP"];
+	
+	
+	const termNames = ["BPA", "BPF", "BPS", "TCS", "BP3", "MP", "EP", "PP", "BP"];	
+	  const dataArray = data.data;
 
-	  let processedData = [];
 	  const trimesterSums = {};
-	  const trimesterCounts = {}; // 각 term별로 trimester별 카운트 저장
+	  const trimesterCounts = {};
+	  const trimesterSet = new Set();
 
 	  dataArray.forEach(item => {
-	    const trimester = item.trimester?.[0]; // '1', '2', '3'
+	    const trimester = item.trimester?.[0]; // 예: '1', '3', '5'
 	    if (!trimester) return;
+
+	    trimesterSet.add(trimester); // 등장한 trimester 저장
 
 	    termNames.forEach(term => {
 	      const value = item[term];
 	      if (typeof value === 'number') {
-	        // 합계 초기화
-	        if (!trimesterSums[term]) {
-	          trimesterSums[term] = { t1: 0, t2: 0, t3: 0 };
+	        if (!trimesterSums[term]) trimesterSums[term] = {};
+	        if (!trimesterCounts[term]) trimesterCounts[term] = {};
+
+	        if (!trimesterSums[term][trimester]) {
+	          trimesterSums[term][trimester] = 0;
+	          trimesterCounts[term][trimester] = 0;
 	        }
 
-	        // 카운트 초기화
-	        if (!trimesterCounts[term]) {
-	          trimesterCounts[term] = { t1: 0, t2: 0, t3: 0 };
-	        }
-
-	        if (trimester === '1') {
-	          trimesterSums[term].t1 += value;
-	          trimesterCounts[term].t1++;
-	        } else if (trimester === '2') {
-	          trimesterSums[term].t2 += value;
-	          trimesterCounts[term].t2++;
-	        } else if (trimester === '3') {
-	          trimesterSums[term].t3 += value;
-	          trimesterCounts[term].t3++;
-	        }
+	        trimesterSums[term][trimester] += value;
+	        trimesterCounts[term][trimester]++;
 	      }
 	    });
 	  });
 
+	  console.log("최종 trimester 목록:", Array.from(trimesterSet).sort());
 	  console.log("=== Count by Term and Trimester ===");
 	  console.table(trimesterCounts);
-	  
-	  const result = Object.entries(trimesterSums).map(([termName, { t1: sum1, t2: sum2, t3: sum3 }], index) => {
-	    const { t1: count1 = 0, t2: count2 = 0, t3: count3 = 0 } = trimesterCounts[termName] || {};
-	    return {
+
+	  const trimesterKeys = Array.from(trimesterSet).sort();
+
+	  const result = Object.entries(trimesterSums).map(([termName, sumObj], index) => {
+	    const countObj = trimesterCounts[termName] || {};
+	    const resultRow = {
 	      id: index + 1,
-	      termName,
-	      t1: count1 ? sum1 / count1 : 0,
-	      t2: count2 ? sum2 / count2 : 0,
-	      t3: count3 ? sum3 / count3 : 0,
+	      termName
 	    };
+
+	    trimesterKeys.forEach(key => {
+	      const sum = sumObj[key] || 0;
+	      const count = countObj[key] || 0;
+	      resultRow['t' + key] = count ? sum / count : 0;
+	    });
+
+	    return resultRow;
 	  });
 
 	  console.log("result :", result);
 	  return result;
 }
+
+
 	
 //edps data preprocessing
 function setEDPSData(data) {
-	  const dataArray = data.data;
-	  const termNames = ["BPA", "EP", "MBZP", "MECPP"];
+  const dataArray = data.data;
+  const termNames = ["BPA", "EP", "MBZP", "MECPP"];
 
-	  let processedData = [];
-	  const trimesterSums = {};
-	  const trimesterCounts = {};
+  const trimesterSums = {};
+  const trimesterCounts = {};
+  const trimesterSet = new Set();
 
-	  dataArray.forEach(item => {
-	    const trimester = item.trimester?.[0]; 
-	    const category = (trimester === '1' || trimester === '2' || trimester === '3') ? trimester : 'other';
+  dataArray.forEach(item => {
+    const trimester = item.trimester?.[0];
+    if (!trimester) return;
 
-	    termNames.forEach(term => {
-	      const value = item[term];
-	      if (typeof value === 'number') {
-	        if (!trimesterSums[term]) {
-	          trimesterSums[term] = { other: 0 };
-	        }
-	        if (!trimesterCounts[term]) {
-	          trimesterCounts[term] = {other: 0 };
-	        }
+    trimesterSet.add(trimester); // 등장한 trimester 값 저장
 
-	        if (category === '1') {
-	         
-	        } else if (category === '2') {
-	          
-	        } else if (category === '3') {
-	         
-	        } else {
-	          trimesterSums[term].other += value;
-	          trimesterCounts[term].other++;
-	        }
-	      }
-	    });
-	  });
+    termNames.forEach(term => {
+      const value = item[term];
+      if (typeof value === 'number') {
+        if (!trimesterSums[term]) trimesterSums[term] = {};
+        if (!trimesterCounts[term]) trimesterCounts[term] = {};
 
-	  console.log("=== Count by Term and Trimester ===");
-	  console.table(trimesterCounts);
+        if (!trimesterSums[term][trimester]) {
+          trimesterSums[term][trimester] = 0;
+          trimesterCounts[term][trimester] = 0;
+        }
 
-	  const result = Object.entries(trimesterSums).map(([termName, { other }], index) => {
-	    const { other: cOther = 0 } = trimesterCounts[termName] || {};
-	    return {
-	      id: index + 1,
-	      termName,
-	      other: cOther ? other / cOther : 0,
-	    };
-	  });
+        trimesterSums[term][trimester] += value;
+        trimesterCounts[term][trimester]++;
+      }
+    });
+  });
 
-	  console.log("result :", result);
-	  return result;
-	}
+  console.log("=== Count by Term and Trimester ===");
+  console.table(trimesterCounts);
+  console.log("수집된 trimester 목록:", Array.from(trimesterSet).sort());
+
+  const trimesterKeys = Array.from(trimesterSet).sort();
+
+  const result = Object.entries(trimesterSums).map(([termName, sumObj], index) => {
+    const countObj = trimesterCounts[termName] || {};
+    const resultRow = {
+      id: index + 1,
+      termName
+    };
+
+    trimesterKeys.forEach(key => {
+      const sum = sumObj[key] || 0;
+      const count = countObj[key] || 0;
+      resultRow['t' + key] = count ? sum / count : 0;
+    });
+
+    return resultRow;
+  });
+
+  console.log("result :", result);
+  return result;
+}
+
 
 //katri data preprocessing
 function setKATRIData(data) {
@@ -353,7 +362,7 @@ function reverseTransformData(transformedData) {
 
 		result.push(row);
 	});
-
+	console.log("reversed result :", result);
 	return result;
 }
 
@@ -749,18 +758,23 @@ new wijmo.chart.FlexChart('#EDPSLineGraph', {
 }
 
 function setEDPSBarGraphData(data) {
+	
+	 const sample = data[0];
+	 const keys = Object.keys(sample).filter(k => k !== 'id' && k !== 'termName');
+	
+	 const seriesList = keys.map(key => ({
+	   name: key,
+	   binding: key
+	 }));
+	
+	
 	 // 1. 환자 등록 현황 차트
 new wijmo.chart.FlexChart('#EDPSBarGraph', {
     header: 'EDPS 항목별 평균값(막대그래프)',
     legendToggle: true,
     bindingX: 'termName',
     itemsSource: data,
-    series: [
-   	 {
-            name: 'other',
-            binding: 'other'
-        }
-    ],
+    series: seriesList,
     axisY: {
         title: '실험 데이터(수치)'
     },
