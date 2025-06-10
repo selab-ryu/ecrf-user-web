@@ -75,9 +75,9 @@ let ECRFViewer = function(StationX){
 				/*
 				 * value_changed event work on js first, jsp after
 				 */
-				Liferay.on('value_changed', function(event){
+				Liferay.on('value_changed', function(event){ // -> Never Used Anymore. call checkAutoCal in jsp
 					let packet = event.dataPacket;
-	
+					console.log(packet.term);
 					if(packet.term){
 						let eventTerm = packet.term;
 						console.log(eventTerm);
@@ -89,6 +89,7 @@ let ECRFViewer = function(StationX){
 						event.dataPacket.result = result;
 						if(isProcessing) return;
 						isProcessing = true;
+						console.log("Value Changed! call checkAutoCal...");
 						autoCalUtil.checkAutoCal(eventTerm);
 					}
 					isProcessing = false;
@@ -424,12 +425,13 @@ let ECRFViewer = function(StationX){
 		 */
 		checkAutoCal : function(packet){
 			//console.log(packet);
+			console.log("checkAutoCal Activated");
 			let term = packet.payload.after;
 			let namespace = packet.sourcePortlet;
 			let dataTypeName = packet.payload.dataTypeName;
 
 			if(this.crf){
-				//console.log("crf : ", this.crf);
+				console.log("crf : ", this.crf);
 
 				if(term.termName === "testBool") {
 					let testNumId = "#"+namespace+"testNum";
@@ -450,8 +452,67 @@ let ECRFViewer = function(StationX){
 					case "excercise_crf":
 						this.calYM_EX_CRF(term);						
 					break;						
+					case "AutoCalculateTest":
+						this.cal_Auto_Calc_Test(term, namespace);
+						break;
 				}
 			}
+		},
+
+		cal_Auto_Calc_Test: function(term, namespace) {
+			switch(term.termName) {
+				case "testingTermName1":
+					console.log("testingTermName1 Changed");
+					this.updateTerm(namespace, "testingTermName1_Result", "Value Changed!");	
+					break;
+				case "testingTermName2":
+					console.log("testingTermName2 Changed");
+					if(term.value == "lock") {
+						console.log("lock!");
+						let targetTerm = $('#'+namespace+"testingTermName2_Result");
+						if(targetTerm) {
+							targetTerm.disabled = true; // -> dont work
+							targetTerm.hidden = true; // -> dont work
+							targetTerm.val("locked!").trigger('change');
+						}
+					}
+					break;
+				case "testNumericTermName1":
+					console.log("testNumericTermName1 Changed");
+					if(term.value != null) {
+						let ResultSet = 1000 - term.value;
+						this.updateTerm(namespace, "testNumericTermName1_Result", ResultSet);
+					}
+					else {
+						this.updateTerm(namespace, "testNumericTermName1_Result", null);
+					}
+					break;
+				case "testDateTermName1":
+					console.log("testDateTermName1 Changed");
+					if(term.value != null) {
+						let birth = new Date(Number(term.value));
+						let today = new Date();
+						let age = this.calcAge(birth, today);
+						this.updateTerm(namespace, "testDateTermName1_Result", age);
+					}
+					else {
+						this.updateTerm(namespace, "testDateTermName1_Result", null);
+					}
+					break;
+				case "testBooleanName1":
+					console.log("testBooleanName1 Changed");
+					if (term.value == true) {
+						this.updateTerm(namespace, "testBooleanName1_Result", "True!");
+					}
+					else if (term.value == false) {
+						this.updateTerm(namespace, "testBooleanName1_Result", "False!");
+					}
+					else {
+						this.updateTerm(namespace, "testBooleanName1_Result", null);
+					}
+					break;
+			}
+		
 		},
 
 		/**
@@ -1041,6 +1102,9 @@ let ECRFViewer = function(StationX){
 					break;
 				case "drug_diabetes":
 					if(term.value[0] === '1'){
+						this.updateTerm(namespace, "diabetes", "1");
+						this.updateTerm(namespace, "is_high_risk", "0");
+						/*
 						this.crf.terms.forEach(compareTerm=>{
 							if(compareTerm.termName === "diabetes"){
 								compareTerm.value = "1";
@@ -1049,7 +1113,7 @@ let ECRFViewer = function(StationX){
 								compareTerm.value = "0";
 								$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');
 							}
-						});
+						}); */
 					}else{
 						let highriskContentArr = new Array();
 						this.crf.terms.forEach(compareTerm=>{
