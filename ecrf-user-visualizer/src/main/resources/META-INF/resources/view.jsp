@@ -147,6 +147,7 @@ function getGraphData(crfId) {
 
 			console.log("crfId : ", crfId);
 			console.log("data : ", obj.data[0]);
+			console.log("group : ", obj.group);
 
 			// set data to chart
 			$("#<portlet:namespace/>dataCount").text(100);

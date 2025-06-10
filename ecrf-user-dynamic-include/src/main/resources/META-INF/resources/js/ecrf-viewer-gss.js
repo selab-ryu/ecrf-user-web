@@ -17,9 +17,13 @@ let ECRFViewer = function(StationX){
 			var result = new Object();
 			
 			if(SX.StationX) {
-				console.log("log SX", SX);
+				console.log("***************************************************************************");
+				console.log("** log SX", SX);
+				console.log("***************************************************************************");
 			} else {.0.
-				console.log("SX is Empty or Null");
+				console.log("***************************************************************************");
+				console.log("** SX is Empty or Null");
+				console.log("***************************************************************************");
 			}
 
 			autoCalUtil.initCalculatevalue(DataStructure, subjectInfo);
