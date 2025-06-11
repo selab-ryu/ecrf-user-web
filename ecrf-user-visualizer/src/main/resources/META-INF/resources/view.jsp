@@ -36,10 +36,7 @@
 		<liferay-ui:header title="ecrf-user.visualizer.title.view-visualizer"/>
 		
 		<!-- Display each cohort data chart by Tab -->
-		<liferay-ui:tabs names="select, NoE_MoC, EDPS, KATRI" refresh="false" value="${param.tab}">
-			<liferay-ui:section>
-				<%@ include file="/section/select.jspf"  %>
-			</liferay-ui:section>
+		<liferay-ui:tabs names="NoE_MoC, EDPS, KATRI" refresh="false" value="${param.tab}">
 		
 		
 			<liferay-ui:section>
@@ -81,7 +78,9 @@ $(document).ready(function() {
 		getKATRIData(katriId);
 	}
 	
+
 });
+
 
 
 
@@ -119,6 +118,7 @@ function getEDPSData(crfId) {
 
 function getKATRIData(crfId) {
 	console.log("katri cohort data loading");
+	
 	$.ajax({
 		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_KATRI %>"></portlet:resourceURL>',
 		type:'post',
@@ -132,12 +132,14 @@ function getKATRIData(crfId) {
 			
 			$("#<portlet:namespace/>dataCount").text(100);
 			
+			let groupData = obj.group; //추가 한것
+			
+			console.log("*******KATRI******", obj.data);
+			let mergedGroupData = getGroupData(groupData);
+			
 			let average = averageData4(obj); 
 			let processedData = reverseTransformData(average);
-			setGraphData8(processedData); 
-			
-			setGraphData9(average);
-			setGridData4(average); // 그리드 데이터 설정	   
+			setKATRIGridData(mergedGroupData, processedData, average); 
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
@@ -170,6 +172,9 @@ function getGraphData(crfId) {
 			let average = averageData2(obj); // 데이터 전처리 함수 추가
 			let average2 = averageData(obj); // 데이터 전처리 함수 추가
 			setNoEMoCGridData(mergedGroupData, average, average2);// 추가한 것
+			
+			
+
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
@@ -731,6 +736,28 @@ function setNoEMoCGridData(data, transposedAverage, average) {
 				e.cell.innerHTML = '<button class="btn btn-primary btn-sm">선택</button>';
 				const button = e.cell.querySelector('button');
 				button.addEventListener('click', function () {
+					  // 컨테이너 아이디 목록
+	                const ids = [
+	                    'enrollmentChart4',  // 꺾은선 그래프 컨테이너
+	                    'enrollmentChart5',  // 막대 그래프 컨테이너
+	                    'theGrid2',          // 그리드 컨테이너
+	                    'pager2'             // 페이저(네비게이터) 컨테이너
+	                ];
+
+	                ids.forEach(id => {
+	        			
+	        			
+	                    const el = document.getElementById(id);
+	                    if (el) {
+	                        // 1) 이 요소 내부의 Wijmo 컨트롤 전부 dispose
+	                        wijmo.Control.disposeAll(el);
+	                        // 2) DOM 을 깨끗이 비우기
+	                        el.innerHTML = '';
+	                    }
+	                });
+	
+	                $('#enrollmentChart4, #enrollmentChart5, #theGrid2, #pager2').show();
+
 					//alert("선택된 항목: " + item.termNames);
 				    const terms = item.termNames; // "BPA, BPF, BPS"
 				    
@@ -782,6 +809,27 @@ function setEDPSGridData(data, transposedAverage, average) {
 				e.cell.innerHTML = '<button class="btn btn-primary btn-sm">선택</button>';
 				const button = e.cell.querySelector('button');
 				button.addEventListener('click', function () {
+					
+				     // 컨테이너 아이디 목록
+	                const ids = [
+	                    'enrollmentChart6',  // 꺾은선 그래프 컨테이너
+	                    'enrollmentChart7',  // 막대 그래프 컨테이너
+	                    'theGrid3',          // 그리드 컨테이너
+	                    'pager3'             // 페이저(네비게이터) 컨테이너
+	                ];
+
+	                ids.forEach(id => {
+	                    const el = document.getElementById(id);
+	                    if (el) {
+	                        // 1) 이 요소 내부의 Wijmo 컨트롤 전부 dispose
+	                        wijmo.Control.disposeAll(el);
+	                        // 2) DOM 을 깨끗이 비우기
+	                        el.innerHTML = '';
+	                    }
+	                });
+	
+	                $('#enrollmentChart6, #enrollmentChart7, #theGrid3, #pager3').show();
+	                
 					//alert("선택된 항목: " + item.termNames);
 				    const terms = item.termNames; // "BPA, BPF, BPS"
 					setGraphData6(transposedAverage, terms); 
@@ -794,6 +842,83 @@ function setEDPSGridData(data, transposedAverage, average) {
 	
 	
 	new wijmo.input.CollectionViewNavigator('#EDPSPager', {
+		byPage: true,
+		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
+		cv: view
+	});
+}
+
+
+
+function setKATRIGridData(data, transposedAverage, average) {
+	const view = new wijmo.collections.CollectionView(data, {
+		pageSize: 10
+	});
+
+
+	const theGrid = new wijmo.grid.FlexGrid('#theKATRIGrid', {
+		autoGenerateColumns: false,
+		columns: [
+			{ binding: 'cohot', header: 'No', width: '1*' },
+			{ binding: 'termNames', header: 'TermNames', width: '2*' },
+			{ binding: 'g2', header: 'g2', width: '*' },
+			{ binding: 'g1', header: 'g1', width: '*' },
+			{ // 선택 버튼 컬럼 추가
+				header: 'Action',
+				width: '*',
+				// binding 없이 Action 열만 출력
+			}
+		],
+		itemsSource: view
+	});
+
+	theGrid.formatItem.addHandler(function (s, e) {
+		if (e.panel === s.cells) {
+			const col = s.columns[e.col];
+			if (col.header === 'Action') {
+				const item = s.rows[e.row].dataItem;
+
+				e.cell.innerHTML = '<button class="btn btn-primary btn-sm">선택</button>';
+				const button = e.cell.querySelector('button');
+				button.addEventListener('click', function () {
+					
+					  // 컨테이너 아이디 목록
+	                const ids = [
+	                    'enrollmentChart8',  // 꺾은선 그래프 컨테이너
+	                    'enrollmentChart9',  // 막대 그래프 컨테이너
+	                    'theGrid4',          // 그리드 컨테이너
+	                    'pager4'             // 페이저(네비게이터) 컨테이너
+	                ];
+
+	                ids.forEach(id => {
+	                    const el = document.getElementById(id);
+	                    if (el) {
+	                        // 1) 이 요소 내부의 Wijmo 컨트롤 전부 dispose
+	                        wijmo.Control.disposeAll(el);
+	                        // 2) DOM 을 깨끗이 비우기
+	                        el.innerHTML = '';
+	                    }
+	                });
+	
+	                $('#enrollmentChart8, #enrollmentChart9, #theGrid4, #pager4').show();
+	                
+					//alert("선택된 항목: " + item.termNames);
+				    //const terms = item.termNames; // "BPA, BPF, BPS"
+					//setGraphData6(transposedAverage, terms); 
+					//setGraphData7(average, terms);
+					//setGridData3(average, terms); // 그리드 데이터 설정	   
+					const terms = item.termNames;
+					setGraphData8(transposedAverage, terms); 
+			
+					setGraphData9(average, terms);
+					setGridData4(average, terms); // 그리드 데이터 설정	  
+				});
+			}
+		}
+	});
+	
+	
+	new wijmo.input.CollectionViewNavigator('#KATRIPager', {
 		byPage: true,
 		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
 		cv: view
@@ -875,6 +1000,8 @@ function setGraphData4(data, termNamesStr) {
         binding: term,
         chartType: 'LineSymbols'
     }));	
+	
+	
 	
 	 // 1. 환자 등록 현황 차트
 new wijmo.chart.FlexChart('#enrollmentChart4', {
@@ -1157,20 +1284,21 @@ function setGridData3(data, termNamesStr) {
 }
 
 
-function setGraphData8(data) {
+function setGraphData8(data, termNamesStr) {
+	
+	const terms = termNamesStr.split(',').map(t => t.trim()).filter(t => t);// 추가한 것
+    const seriesArray = terms.map(term => ({
+        name: term,
+        binding: term,
+        chartType: 'LineSymbols'
+    }));	
 	 // 1. 환자 등록 현황 차트
 new wijmo.chart.FlexChart('#enrollmentChart8', {
   header: 'KATRI 항목별 평균값(꺾은선그래프)',
   legendToggle: true,
   bindingX: 'trimester',
   itemsSource: data,
-  series: [
-	   { name: 'age_months',   binding: 'age_months' ,	chartType: 'LineSymbols'},
-	   { name: 'born_height',   binding: 'born_height' ,	chartType: 'LineSymbols'},
-	   { name: 'born_weight',   binding: 'born_weight' ,	chartType: 'LineSymbols'},
-	   { name: 'current_height',   binding: 'current_height' ,	chartType: 'LineSymbols'},
-	   { name: 'current_weight',   binding: 'current_weight' ,	chartType: 'LineSymbols'},
-  ],
+  series: seriesArray,
   axisY: {
       title: '실험 데이터(수치)'
   },
@@ -1186,13 +1314,37 @@ new wijmo.chart.FlexChart('#enrollmentChart8', {
 	 
 }
 
-function setGraphData9(data) {
+function setGraphData9(data, termNamesStr) {
+	
+	const terms = termNamesStr
+	   .split(',')
+	   .map(t => t.trim())
+	   .filter(t => t);
+
+	//const filteredData = data.filter(item => terms.includes(item.termName));
+
+	const dataMap = new Map();
+	data.forEach(item => {
+	    dataMap.set(item.termName, item);
+	});
+
+	const filledData = terms.map((term, index) => {
+	    if (dataMap.has(term)) {
+	        return dataMap.get(term); // 있으면 그대로
+	    } else {
+	        return {
+	            id: index + 1,
+	            termName: term,
+	            other: null // 없으면 기본값으로 항목 구성
+	        };
+	    }
+	});
 	 // 1. 환자 등록 현황 차트
-new wijmo.chart.FlexChart('#enrollmentChart9', {
+	new wijmo.chart.FlexChart('#enrollmentChart9', {
    header: 'KATRI 항목별 평균값(막대그래프)',
    legendToggle: true,
    bindingX: 'termName',
-   itemsSource: data,
+   itemsSource: filledData,
    series: [
   	 {
            name: 'other',
@@ -1212,9 +1364,34 @@ new wijmo.chart.FlexChart('#enrollmentChart9', {
 }	
 
 
-function setGridData4(data) {
+function setGridData4(data, termNamesStr) {
+	
+	const terms = termNamesStr
+	   .split(',')
+	   .map(t => t.trim())
+	   .filter(t => t);
+
+	//const filteredData = data.filter(item => terms.includes(item.termName));
+
+	const dataMap = new Map();
+	data.forEach(item => {
+	    dataMap.set(item.termName, item);
+	});
+
+	const filledData = terms.map((term, index) => {
+	    if (dataMap.has(term)) {
+	        return dataMap.get(term); // 있으면 그대로
+	    } else {
+	        return {
+	            id: index + 1,
+	            termName: term,
+	            other: null // 없으면 기본값으로 항목 구성
+	        };
+	    }
+	});
+	
 	// Collection View로 페이징 데이터 소스 생성
-	var view = new wijmo.collections.CollectionView(data,{
+	var view = new wijmo.collections.CollectionView(filledData,{
 		pageSize: 10	// 한 페이지에 10건
 	});
 	

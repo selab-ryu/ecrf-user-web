@@ -19,50 +19,27 @@
 		</aui:row>
 		
 		
-		<aui:row>
+			
+			<aui:row id="chartContent4" >
 				<aui:col md="12">
-					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.graph4" />
-					</span>
+					<div id="enrollmentChart4" style="height: 400px display: none"></div>
 				</aui:col>
 			</aui:row>
 			
-			<aui:row>
-				<aui:col md="12">
-					<div id="enrollmentChart4" style="height: 400px"></div>
-				</aui:col>
-			</aui:row>
-			
-			
-			<aui:row>
-				<aui:col md="12">
-					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.graph5" />
-					</span>
-				</aui:col>
-			</aui:row>
-			
-			<aui:row>
-				<aui:col md="12">
-					<div id="enrollmentChart5" style="height: 400px"></div>
-				</aui:col>
-			</aui:row>
-			
-			
-			
-			
-			<aui:row>
-				<aui:col md="12">
-					<span class="sub-title-span">
-						<liferay-ui:message key="ecrf-user.visualizer.title.grid2" />
-					</span>
-				</aui:col>
-			</aui:row>
 
-			<aui:row>
+		
+			<aui:row id="chartContent5">
 				<aui:col md="12">
-					<div id="theGrid2" style="height: 330px"></div>
-					<div id="pager2" style="margin = 10px 0"></div>
+					<div id="enrollmentChart5" style="height: 400px display: none"></div>
+				</aui:col>
+			</aui:row>
+			
+
+
+			<aui:row  id="chartGrid2">
+				<aui:col md="12">
+					<div id="theGrid2" style="height: 330px display: none"></div>
+					<div id="pager2" style="display: none margin = 10px 0 "></div>
 				</aui:col>
 			</aui:row>
 			
@@ -72,3 +49,5 @@
 		
 	</aui:container>
 </div>
+
+
