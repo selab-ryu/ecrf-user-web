@@ -7,6 +7,21 @@
 		<aui:row>
 				<aui:col md="12">
 					<span class="sub-title-span">
+						<liferay-ui:message key="ecrf-user.visualizer.title.grid" />
+					</span>
+				</aui:col>
+			</aui:row>
+
+			<aui:row>
+				<aui:col md="12">
+					<div id="theEDPSGrid" style="height: 330px"></div>
+					<div id="EDPSPager" style="margin = 10px 0"></div>
+				</aui:col>
+		</aui:row>
+
+		<aui:row>
+				<aui:col md="12">
+					<span class="sub-title-span">
 						<liferay-ui:message key="ecrf-user.visualizer.title.graph6" />
 					</span>
 				</aui:col>

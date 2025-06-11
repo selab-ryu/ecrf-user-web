@@ -132,18 +132,19 @@ public class ECRFUserVisualizerUtil {
 
 		for(int i=0; i<groupData.length ; i++ ) {			
 			JSONObject obj = JSONFactoryUtil.createJSONObject();
+				
+			if( GroupName == groupData[i][3]) {
+				
+					obj.put("termName", groupData[i][0]);
+					obj.put("g1", groupData[i][1]);
+					obj.put("g2", groupData[i][2]);
+					obj.put("cohot", groupData[i][3]);
+				
+					_log.info(obj.toJSONString());
+					if( obj != null)
+					array.put(obj);
+			}
 			
-//			if( GroupName == groupData[i][3]) {
-			
-				obj.put("termName", groupData[i][0]);
-				obj.put("g1", groupData[i][1]);
-				obj.put("g2", groupData[i][2]);
-				obj.put("cohot", groupData[i][3]);
-			
-				_log.info(obj.toJSONString());
-//			}
-			if( obj != null)
-				array.put(obj);
 		}
 
 		return array;
