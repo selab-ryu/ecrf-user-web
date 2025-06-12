@@ -14,7 +14,6 @@
 			<aui:row>
 				<aui:col md="12">
 					<div id="theNoEMoCGrid" style="height: 330px"></div>
-					<div id="NoEMoCPager" style="margin = 10px 0"></div>
 				</aui:col>
 		</aui:row>
 		
@@ -39,7 +38,6 @@
 			<aui:row  id="chartGrid2">
 				<aui:col md="12">
 					<div id="theGrid2" style="height: 330px display: none"></div>
-					<div id="pager2" style="display: none margin = 10px 0 "></div>
 				</aui:col>
 			</aui:row>
 			

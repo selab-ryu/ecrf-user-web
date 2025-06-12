@@ -309,7 +309,7 @@ function averageData2(data, terms) {
 	
 function averageData3(data, terms) {
 	  const dataArray = data.data;
-	  const termNames = terms
+	  const termNames = terms;
 
 	  let processedData = [];
 	  const trimesterSums = {};
@@ -713,7 +713,7 @@ function processChartData3(in_data) {
 
 function setNoEMoCGridData(data, obj) {
 	const view = new wijmo.collections.CollectionView(data, {
-		pageSize: 10
+		pageSize: 20
 	});
 
 	const theGrid = new wijmo.grid.FlexGrid('#theNoEMoCGrid', {
@@ -781,16 +781,11 @@ function setNoEMoCGridData(data, obj) {
 	});
 	
 	
-	new wijmo.input.CollectionViewNavigator('#NoEMoCPager', {
-		byPage: true,
-		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
-		cv: view
-	});
 }
 
 function setEDPSGridData(data, obj) {
 	const view = new wijmo.collections.CollectionView(data, {
-		pageSize: 10
+		pageSize: 20
 	});
 
 	const theGrid = new wijmo.grid.FlexGrid('#theEDPSGrid', {
@@ -840,13 +835,14 @@ function setEDPSGridData(data, obj) {
 	                $('#enrollmentChart6, #enrollmentChart7, #theGrid3, #pager3').show();
 	                
 					//alert("선택된 항목: " + item.termNames);
+					const displayName = item.cohot + ' ' + item.g2 + ' ' + item.g1;
 				    const terms = item.termNames; // "BPA, BPF, BPS"
 				    const termNameSelected = item.termNames.split(',').map(term => term.trim());
 				    
 					let average = averageData3(obj, termNameSelected); 
 					let processedData = reverseTransformData(average);
 					
-					setGraphData6(processedData, terms); 
+					setGraphData6(processedData, terms, displayName); 
 					setGraphData7(average, terms);
 					setGridData3(average, terms); // 그리드 데이터 설정	   
 				});
@@ -855,18 +851,13 @@ function setEDPSGridData(data, obj) {
 	});
 	
 	
-	new wijmo.input.CollectionViewNavigator('#EDPSPager', {
-		byPage: true,
-		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
-		cv: view
-	});
 }
 
 
 
 function setKATRIGridData(data, obj) {
 	const view = new wijmo.collections.CollectionView(data, {
-		pageSize: 10
+		pageSize: 20
 	});
 
 
@@ -938,12 +929,13 @@ function setKATRIGridData(data, obj) {
 		}
 	});
 	
-	
+	/*
 	new wijmo.input.CollectionViewNavigator('#KATRIPager', {
 		byPage: true,
 		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
 		cv: view
 	});
+	*/
 }
 
 function processGridData(in_data) {
@@ -1146,7 +1138,7 @@ function setGridData2(data, termNamesStr) {
 	
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(filledData,{
-		pageSize: 10	// 한 페이지에 10건
+		pageSize: 20	// 한 페이지에 10건
 	});
 	
 	var theGrid = new wijmo.grid.FlexGrid('#theGrid2', {
@@ -1161,16 +1153,10 @@ function setGridData2(data, termNamesStr) {
       itemsSource: view
 	});
 	 
-	// 페이지 네비게이터 생성
-	var navigator = new wijmo.input.CollectionViewNavigator('#pager2',{
-		byPage: true,
-		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
-		cv: view
-	});
 	
 }
 
-function setGraphData6(data, termNamesStr) {
+function setGraphData6(data, termNamesStr, displayName) {
 const terms = termNamesStr.split(',').map(t => t.trim()).filter(t => t);// 추가한 것
 const seriesArray = terms.map(term => ({
     name: term,
@@ -1182,7 +1168,7 @@ const seriesArray = terms.map(term => ({
 	
 	 // 1. 환자 등록 현황 차트
 new wijmo.chart.FlexChart('#enrollmentChart6', {
-   header: 'EDPS 항목별 평균값(꺾은선그래프)',
+   header: displayName,
    legendToggle: true,
    bindingX: 'trimester',
    itemsSource: data,
@@ -1282,7 +1268,7 @@ function setGridData3(data, termNamesStr) {
 	
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(filledData,{
-		pageSize: 10	// 한 페이지에 10건
+		pageSize: 20	// 한 페이지에 10건
 	});
 	
 	var theGrid = new wijmo.grid.FlexGrid('#theGrid3', {
@@ -1296,11 +1282,7 @@ function setGridData3(data, termNamesStr) {
 	});
 	 
 	// 페이지 네비게이터 생성
-	var navigator = new wijmo.input.CollectionViewNavigator('#pager3',{
-		byPage: true,
-		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
-		cv: view
-	});
+
 	
 }
 
@@ -1413,7 +1395,7 @@ function setGridData4(data, termNamesStr) {
 	
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(filledData,{
-		pageSize: 10	// 한 페이지에 10건
+		pageSize: 20	// 한 페이지에 10건
 	});
 	
 	var theGrid = new wijmo.grid.FlexGrid('#theGrid4', {
@@ -1427,11 +1409,6 @@ function setGridData4(data, termNamesStr) {
 	});
 	 
 	// 페이지 네비게이터 생성
-	var navigator = new wijmo.input.CollectionViewNavigator('#pager4',{
-		byPage: true,
-		headerFormat: 'Page {currentPage:n0} / {pageCount:n0}',
-		cv: view
-	});
 	
 }
 

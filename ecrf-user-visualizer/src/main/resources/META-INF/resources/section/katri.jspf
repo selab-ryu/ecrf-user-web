@@ -15,7 +15,6 @@
 			<aui:row>
 				<aui:col md="12">
 					<div id="theKATRIGrid" style="height: 330px"></div>
-					<div id="KATRIPager" style="margin = 10px 0"></div>
 				</aui:col>
 		</aui:row>
 	
@@ -40,7 +39,7 @@
 			<aui:row>
 				<aui:col md="12">
 					<div id="theGrid4" style="display: none height: 200px"></div>
-					<div id="pager4" style="display: none margin = 10px 0"></div>
+
 				</aui:col>
 		</aui:row>
 		
