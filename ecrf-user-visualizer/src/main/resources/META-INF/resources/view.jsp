@@ -764,6 +764,7 @@ function setNoEMoCGridData(data, obj) {
 	                $('#enrollmentChart4, #enrollmentChart5, #theGrid2, #pager2').show();
 
 					//alert("선택된 항목: " + item.termNames);
+					const displayName = item.cohot + ' -> ' + item.g2 + ' -> ' + item.g1;
 				    const terms = item.termNames; // "BPA, BPF, BPS"
 				    const termNameSelected = item.termNames.split(',').map(term => term.trim());
 				    console.log("*******NoEMoC_selectedTermName******", terms);
@@ -772,8 +773,8 @@ function setNoEMoCGridData(data, obj) {
 				    
 				    // data는 서버에서 받아온 혹은 미리 준비된 차트 데이터 배열
 				    //const chartData = getChartDataForTerms(terms); // 실제 데이터를 만드는 함수 필요
-				    setGraphData4(average, terms);
-					setGraphData5(average2, terms); // 차트 데이터 설정
+				    setGraphData4(average, terms, displayName);
+					setGraphData5(average2, terms, displayName); // 차트 데이터 설정
 					setGridData2(average2, terms); // 그리드 데이터 설정	  
 				});
 			}
@@ -835,7 +836,7 @@ function setEDPSGridData(data, obj) {
 	                $('#enrollmentChart6, #enrollmentChart7, #theGrid3, #pager3').show();
 	                
 					//alert("선택된 항목: " + item.termNames);
-					const displayName = item.cohot + ' ' + item.g2 + ' ' + item.g1;
+					const displayName = item.cohot + ' -> ' + item.g2 + ' -> ' + item.g1;
 				    const terms = item.termNames; // "BPA, BPF, BPS"
 				    const termNameSelected = item.termNames.split(',').map(term => term.trim());
 				    
@@ -843,7 +844,7 @@ function setEDPSGridData(data, obj) {
 					let processedData = reverseTransformData(average);
 					
 					setGraphData6(processedData, terms, displayName); 
-					setGraphData7(average, terms);
+					setGraphData7(average, terms, displayName);
 					setGridData3(average, terms); // 그리드 데이터 설정	   
 				});
 			}
@@ -913,16 +914,16 @@ function setKATRIGridData(data, obj) {
 					//setGraphData7(average, terms);
 					//setGridData3(average, terms); // 그리드 데이터 설정	  
 					
-					
+					const displayName = item.cohot + ' -> ' + item.g2 + ' -> ' + item.g1;					
 					const terms = item.termNames;
 					const termNameSelected = item.termNames.split(',').map(term => term.trim());
 					let average = averageData4(obj, termNameSelected); 
 					let processedData = reverseTransformData(average);
 					
-					setGraphData8(processedData, terms); 
+					setGraphData8(processedData, terms, displayName); 
 					
 					
-					setGraphData9(average, terms);
+					setGraphData9(average, terms, displayName);
 					setGridData4(average, terms); // 그리드 데이터 설정	  
 				});
 			}
@@ -1004,7 +1005,7 @@ function processGridData(in_data) {
 }
 
 
-function setGraphData4(data, termNamesStr) {
+function setGraphData4(data, termNamesStr, displayName) {
 
 	
 	const terms = termNamesStr.split(',').map(t => t.trim()).filter(t => t);// 추가한 것
@@ -1018,7 +1019,7 @@ function setGraphData4(data, termNamesStr) {
 	
 	 // 1. 환자 등록 현황 차트
 new wijmo.chart.FlexChart('#enrollmentChart4', {
-    header: '임상시험(평균) 시계열 현황',
+    header: displayName,
     legendToggle: true,
     bindingX: 'trimester',
     itemsSource: data,
@@ -1036,7 +1037,7 @@ new wijmo.chart.FlexChart('#enrollmentChart4', {
 }
 
 
-function setGraphData5(data, termNamesStr) {
+function setGraphData5(data, termNamesStr, displayName) {
 	
 	const terms = termNamesStr
 	   .split(',')
@@ -1065,7 +1066,7 @@ function setGraphData5(data, termNamesStr) {
 	
 	 // 1. 환자 등록 현황 차트
   	new wijmo.chart.FlexChart('#enrollmentChart5', {
-      header: '임상시험(평균) 시계열 현황',
+      header: displayName,
       legendToggle: true,
       bindingX: 'termName',
       itemsSource: filledData,
@@ -1188,7 +1189,7 @@ new wijmo.chart.FlexChart('#enrollmentChart6', {
 	 
 }
 
-function setGraphData7(data, termNamesStr) {
+function setGraphData7(data, termNamesStr, displayName) {
 	
 	
 const terms = termNamesStr
@@ -1216,7 +1217,7 @@ const filledData = terms.map((term, index) => {
 });
 	 // 1. 환자 등록 현황 차트
 new wijmo.chart.FlexChart('#enrollmentChart7', {
-    header: 'EDPS 항목별 평균값(막대그래프)',
+    header: displayName,
     legendToggle: true,
     bindingX: 'termName',
     itemsSource: filledData,
@@ -1287,7 +1288,7 @@ function setGridData3(data, termNamesStr) {
 }
 
 
-function setGraphData8(data, termNamesStr) {
+function setGraphData8(data, termNamesStr, displayName) {
 	
 	const terms = termNamesStr.split(',').map(t => t.trim()).filter(t => t);// 추가한 것
     const seriesArray = terms.map(term => ({
@@ -1297,7 +1298,7 @@ function setGraphData8(data, termNamesStr) {
     }));	
 	 // 1. 환자 등록 현황 차트
 new wijmo.chart.FlexChart('#enrollmentChart8', {
-  header: 'KATRI 항목별 평균값(꺾은선그래프)',
+  header: displayName,
   legendToggle: true,
   bindingX: 'trimester',
   itemsSource: data,
@@ -1317,7 +1318,7 @@ new wijmo.chart.FlexChart('#enrollmentChart8', {
 	 
 }
 
-function setGraphData9(data, termNamesStr) {
+function setGraphData9(data, termNamesStr, displayName) {
 	
 	const terms = termNamesStr
 	   .split(',')
@@ -1344,7 +1345,7 @@ function setGraphData9(data, termNamesStr) {
 	});
 	 // 1. 환자 등록 현황 차트
 	new wijmo.chart.FlexChart('#enrollmentChart9', {
-   header: 'KATRI 항목별 평균값(막대그래프)',
+   header: displayName,
    legendToggle: true,
    bindingX: 'termName',
    itemsSource: filledData,

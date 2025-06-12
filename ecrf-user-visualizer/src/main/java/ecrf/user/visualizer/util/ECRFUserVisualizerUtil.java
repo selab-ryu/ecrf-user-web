@@ -102,27 +102,27 @@ public class ECRFUserVisualizerUtil {
 			,{"MIBP","phthalates","Urine","EDPS"}
 			,{"MDA","oxydative stress","Urine","EDPS"}
 			,{"OHdG8","oxydative stress","Urine","EDPS"}
-			,{"BPA_baby","bisphenols","Urine Baby","EDPS"}
-			,{"BPF_baby","bisphenols","Urine Baby","EDPS"}
-			,{"BPS_baby","bisphenols","Urine Baby","EDPS"}
-			,{"TCS_baby","phenols","Urine Baby","EDPS"}
-			,{"BP3_baby","phenols","Urine Baby","EDPS"}
-			,{"MP_baby","parabens","Urine Baby","EDPS"}
-			,{"EP_baby","parabens","Urine Baby","EDPS"}
-			,{"PP_baby","parabens","Urine Baby","EDPS"}
-			,{"BP_baby","parabens","Urine Baby","EDPS"}
-			,{"MNBP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MEP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MCPP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MBZP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MCOP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MMP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MEOHP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MEHHP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MECPP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MEHP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MIBP_baby","phthalates","Urine Baby","EDPS"}
-			,{"MINP_baby","phthalates","Urine Baby","EDPS"}
+			,{"BPA_baby","bisphenols","Infant Urine","EDPS"}
+			,{"BPF_baby","bisphenols","Infant Urine","EDPS"}
+			,{"BPS_baby","bisphenols","Infant Urine","EDPS"}
+			,{"TCS_baby","phenols","Infant Urine","EDPS"}
+			,{"BP3_baby","phenols","Infant Urine","EDPS"}
+			,{"MP_baby","parabens","Infant Urine","EDPS"}
+			,{"EP_baby","parabens","Infant Urine","EDPS"}
+			,{"PP_baby","parabens","Infant Urine","EDPS"}
+			,{"BP_baby","parabens","Infant Urine","EDPS"}
+			,{"MNBP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MEP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MCPP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MBZP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MCOP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MMP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MEOHP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MEHHP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MECPP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MEHP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MIBP_baby","phthalates","Infant Urine","EDPS"}
+			,{"MINP_baby","phthalates","Infant Urine","EDPS"}
 	};
 	
 	public static JSONArray getVisualGroup(String GroupName) {
@@ -140,7 +140,7 @@ public class ECRFUserVisualizerUtil {
 					obj.put("g2", groupData[i][2]);
 					obj.put("cohot", groupData[i][3]);
 				
-					_log.info(obj.toJSONString());
+					//_log.info(obj.toJSONString());
 					if( obj != null)
 					array.put(obj);
 			}
