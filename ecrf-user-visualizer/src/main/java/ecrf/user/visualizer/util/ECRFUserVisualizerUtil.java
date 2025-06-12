@@ -22,7 +22,7 @@ public class ECRFUserVisualizerUtil {
 			,{"EP","parabens","Urine","NoE_Moc"}
 			,{"PP","parabens","Urine","NoE_Moc"}
 			,{"BP","parabens","Urine","NoE_Moc"}
-			,{"PCS","phenols","Urine","NoE_Moc"}
+			,{"TCS","phenols","Urine","NoE_Moc"}
 			,{"BP3","phenols","Urine","NoE_Moc"}
 			,{"PBA3","phenols","Urine","NoE_Moc"}
 			,{"MNBP","phthalates","Urine","NoE_Moc"}
