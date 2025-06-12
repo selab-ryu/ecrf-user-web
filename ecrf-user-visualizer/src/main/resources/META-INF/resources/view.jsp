@@ -714,10 +714,10 @@ function setNoEMoCGridData(data, transposedAverage, average) {
 	const theGrid = new wijmo.grid.FlexGrid('#theNoEMoCGrid', {
 		autoGenerateColumns: false,
 		columns: [
-			{ binding: 'cohot', header: 'No', width: '1*' },
+			{ binding: 'cohot', header: 'cohot', width: '1*' },
+			{ binding: 'g2', header: '대분류', width: '*' },
+			{ binding: 'g1', header: '소분류', width: '*' },
 			{ binding: 'termNames', header: 'TermNames', width: '2*' },
-			{ binding: 'g2', header: 'g2', width: '*' },
-			{ binding: 'g1', header: 'g1', width: '*' },
 			{ // 선택 버튼 컬럼 추가
 				header: 'Action',
 				width: '*',
@@ -787,10 +787,10 @@ function setEDPSGridData(data, transposedAverage, average) {
 	const theGrid = new wijmo.grid.FlexGrid('#theEDPSGrid', {
 		autoGenerateColumns: false,
 		columns: [
-			{ binding: 'cohot', header: 'No', width: '1*' },
+			{ binding: 'cohot', header: 'cohot', width: '1*' },
+			{ binding: 'g2', header: '대분류', width: '*' },
+			{ binding: 'g1', header: '소분류', width: '*' },
 			{ binding: 'termNames', header: 'TermNames', width: '2*' },
-			{ binding: 'g2', header: 'g2', width: '*' },
-			{ binding: 'g1', header: 'g1', width: '*' },
 			{ // 선택 버튼 컬럼 추가
 				header: 'Action',
 				width: '*',
@@ -859,10 +859,10 @@ function setKATRIGridData(data, transposedAverage, average) {
 	const theGrid = new wijmo.grid.FlexGrid('#theKATRIGrid', {
 		autoGenerateColumns: false,
 		columns: [
-			{ binding: 'cohot', header: 'No', width: '1*' },
+			{ binding: 'cohot', header: 'cohot', width: '1*' },
+			{ binding: 'g2', header: '대분류', width: '*' },
+			{ binding: 'g1', header: '소분류', width: '*' },
 			{ binding: 'termNames', header: 'TermNames', width: '2*' },
-			{ binding: 'g2', header: 'g2', width: '*' },
-			{ binding: 'g1', header: 'g1', width: '*' },
 			{ // 선택 버튼 컬럼 추가
 				header: 'Action',
 				width: '*',
