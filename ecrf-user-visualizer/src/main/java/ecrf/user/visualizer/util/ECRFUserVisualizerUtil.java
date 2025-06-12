@@ -30,11 +30,11 @@ public class ECRFUserVisualizerUtil {
 			,{"MCPP","phthalates","Urine","NoE_Moc"}
 			,{"MEP","phthalates","Urine","NoE_Moc"}
 			,{"MCPP","phthalates","Urine","NoE_Moc"}
-			,{"MBZP","phthalates","Urine","NoE_Moc"}
+			,{"MBZP_urine","phthalates","Urine","NoE_Moc"}
 			,{"MMP","phthalates","Urine","NoE_Moc"}
 			,{"MEOHP","phthalates","Urine","NoE_Moc"}
 			,{"MEHHP","phthalates","Urine","NoE_Moc"}
-			,{"MECCP","phthalates","Urine","NoE_Moc"}
+			,{"MECPP","phthalates","Urine","NoE_Moc"}
 			,{"MIBP","phthalates","Urine","NoE_Moc"}
 			,{"t_t_MA","VOCs","Urine","NoE_Moc"}
 			,{"BMA","VOCs","Urine","NoE_Moc"}
