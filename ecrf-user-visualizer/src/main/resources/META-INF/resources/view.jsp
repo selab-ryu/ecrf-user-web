@@ -101,7 +101,7 @@ function getEDPSData(crfId) {
 			
 			$("#<portlet:namespace/>dataCount").text(100);
 			
-
+			console.log("*******EDPS******", obj.data);
 			let groupData = obj.group; //추가 한것
 			let mergedGroupData = getGroupData(groupData);
 			
@@ -163,15 +163,17 @@ function getGraphData(crfId) {
 
 			// set data to chart
 			$("#<portlet:namespace/>dataCount").text(100);
-			
+			console.log("*******NoEMoC_getGraphData******", obj.data);
 			let groupData = obj.group; //추가 한것
 			let mergedGroupData = getGroupData(groupData);
-
+			console.log("*******NoEMoC_mergedGroupData******", mergedGroupData);
+			
+			
 			renderGroupInfo(mergedGroupData);// 추가한것
 			
-			let average = averageData2(obj); // 데이터 전처리 함수 추가
-			let average2 = averageData(obj); // 데이터 전처리 함수 추가
-			setNoEMoCGridData(mergedGroupData, average, average2);// 추가한 것
+			//let average = averageData2(obj); // 데이터 전처리 함수 추가
+			//let average2 = averageData(obj); // 데이터 전처리 함수 추가
+			setNoEMoCGridData(mergedGroupData, obj);// 추가한 것
 			
 			
 
@@ -239,9 +241,9 @@ function renderGroupInfo(groupArr) {
 }
 
 
-function averageData(data) {
+function averageData(data, terms) {
 	 const dataArray = data.data;
-	  const termNames = ["BPA", "BPF", "BPS", "TCS", "BP3", "MP", "EP", "PP", "BP"];
+	 const termNames = terms;
 
 	  let processedData = [];
 	  const trimesterSums = {};
@@ -292,16 +294,16 @@ function averageData(data) {
 	    };
 	  });
 
-	  console.log("result :", result);
+	  console.log("*******NoEMoC_averageData******", result);
 	  return result;
 }
 
 
-function averageData2(data) {
+function averageData2(data, terms) {
 	 
-	  const result =averageData(data);
+	  const result =averageData(data, terms);
 	  processedData = reverseTransformData(result);
-	  console.log("transformed Data :", processedData);
+	  console.log("*******NoEMoC_TransposedAverageData******", processedData);
 
 	  return processedData;
 	}
@@ -415,8 +417,11 @@ function averageData4(data) {
 
 
 function reverseTransformData(transformedData) {
-	const result = [];
+	if (!Array.isArray(transformedData) || transformedData.length === 0) {
+		return null;
+	}
 
+	const result = [];
 	const trimesterKeys = Object.keys(transformedData[0]).filter(key => key !== 'termName');
 
 	trimesterKeys.forEach(trimester => {
@@ -433,6 +438,7 @@ function reverseTransformData(transformedData) {
 
 	return result;
 }
+
 
 function setGraphData(data) {
 	 // 1. 환자 등록 현황 차트
@@ -706,7 +712,7 @@ function processChartData3(in_data) {
 	return processedData;
 }
 
-function setNoEMoCGridData(data, transposedAverage, average) {
+function setNoEMoCGridData(data, obj) {
 	const view = new wijmo.collections.CollectionView(data, {
 		pageSize: 10
 	});
@@ -760,12 +766,16 @@ function setNoEMoCGridData(data, transposedAverage, average) {
 
 					//alert("선택된 항목: " + item.termNames);
 				    const terms = item.termNames; // "BPA, BPF, BPS"
+				    const termNameSelected = item.termNames.split(',').map(term => term.trim());
+				    console.log("*******NoEMoC_selectedTermName******", terms);
+					let average = averageData2(obj, termNameSelected); // 데이터 전처리 함수 추가
+					let average2 = averageData(obj, termNameSelected); // 데이터 전처리 함수 추가
 				    
 				    // data는 서버에서 받아온 혹은 미리 준비된 차트 데이터 배열
 				    //const chartData = getChartDataForTerms(terms); // 실제 데이터를 만드는 함수 필요
-				    setGraphData4(transposedAverage, terms);
-					setGraphData5(average, terms); // 차트 데이터 설정
-					setGridData2(average, terms); // 그리드 데이터 설정	  
+				    setGraphData4(average, terms);
+					setGraphData5(average2, terms); // 차트 데이터 설정
+					setGridData2(average2, terms); // 그리드 데이터 설정	  
 				});
 			}
 		}
