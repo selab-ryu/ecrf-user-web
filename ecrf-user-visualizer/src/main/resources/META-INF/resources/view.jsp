@@ -57,13 +57,13 @@
 
 <script>
 $(document).ready(function() {
-	console.log("graph data loading");
+	//console.log("graph data loading");
 		
 	let nmId = <%=nmCRFId%>;
 	let edpsId = <%=edpsCRFId%>;
 	let katriId = <%=katriCRFId%>;
 	
-	console.log(nmId, edpsId, katriId);
+	//console.log(nmId, edpsId, katriId);
 	
 	// NoE_MoC Data Graph
 	if(nmId > 0) {
@@ -86,7 +86,7 @@ $(document).ready(function() {
 
 
 function getEDPSData(crfId) {
-	console.log("edps cohort data loading");
+	//console.log("edps cohort data loading");
 	$.ajax({
 		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_EDPS %>"></portlet:resourceURL>',
 		type:'post',
@@ -96,12 +96,12 @@ function getEDPSData(crfId) {
 		},
 		success: function(obj){
 			
-			console.log("crfId : ", crfId);
-			console.log("data : ", obj);		
+			//console.log("crfId : ", crfId);
+			//console.log("data : ", obj);		
 			
 			$("#<portlet:namespace/>dataCount").text(100);
 			
-			console.log("*******EDPS******", obj.data);
+			//console.log("*******EDPS******", obj.data);
 			let groupData = obj.group; //추가 한것
 			let mergedGroupData = getGroupData(groupData);
 			
@@ -111,13 +111,13 @@ function getEDPSData(crfId) {
 			
 		},
 		error: function(jqXHR, a, b){
-			console.log('Fail to render trimester graph');
+			//console.log('Fail to render trimester graph');
 		}
 	});
 }
 
 function getKATRIData(crfId) {
-	console.log("katri cohort data loading");
+	//console.log("katri cohort data loading");
 	
 	$.ajax({
 		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_KATRI %>"></portlet:resourceURL>',
@@ -127,14 +127,14 @@ function getKATRIData(crfId) {
 			<portlet:namespace/>crfId: crfId,
 		},
 		success: function(obj){
-			console.log("crfId : ", crfId);
-			console.log("data : ", obj.data);		
+			//console.log("crfId : ", crfId);
+			//console.log("data : ", obj.data);		
 			
 			$("#<portlet:namespace/>dataCount").text(100);
 			
 			let groupData = obj.group; //추가 한것
 			
-			console.log("*******KATRI******", obj.data);
+			//console.log("*******KATRI******", obj.data);
 			let mergedGroupData = getGroupData(groupData);
 			
 
@@ -156,16 +156,16 @@ function getGraphData(crfId) {
 		},
 		success: function(obj){
 
-			console.log("crfId : ", crfId);
-			console.log("data : ", obj.data[0]);
-			console.log("group : ", obj.group);// 추가 한 것
+			//console.log("crfId : ", crfId);
+			//console.log("data : ", obj.data[0]);
+			//console.log("group : ", obj.group);// 추가 한 것
 
 			// set data to chart
 			$("#<portlet:namespace/>dataCount").text(100);
-			console.log("*******NoEMoC_getGraphData******", obj.data);
+			//console.log("*******NoEMoC_getGraphData******", obj.data);
 			let groupData = obj.group; //추가 한것
 			let mergedGroupData = getGroupData(groupData);
-			console.log("*******NoEMoC_mergedGroupData******", mergedGroupData);
+			//console.log("*******NoEMoC_mergedGroupData******", mergedGroupData);
 			
 			
 			renderGroupInfo(mergedGroupData);// 추가한것
@@ -218,7 +218,7 @@ function getGroupData(group) {
 
 function renderGroupInfo(groupArr) {
 	const container = $("#groupInfo");
-	console.log("groupArr", groupArr);
+	//console.log("groupArr", groupArr);
 	container.empty(); // 기존 내용 초기화
 
 	if (!groupArr || groupArr.length === 0) {
@@ -279,8 +279,8 @@ function averageData(data, terms) {
 	    });
 	  });
 
-	  console.log("=== Count by Term and Trimester ===");
-	  console.table(trimesterCounts);
+	  //console.log("=== Count by Term and Trimester ===");
+	  //console.table(trimesterCounts);
 	  
 	  const result = Object.entries(trimesterSums).map(([termName, { t1: sum1, t2: sum2, t3: sum3 }], index) => {
 	    const { t1: count1 = 0, t2: count2 = 0, t3: count3 = 0 } = trimesterCounts[termName] || {};
@@ -293,7 +293,7 @@ function averageData(data, terms) {
 	    };
 	  });
 
-	  console.log("*******NoEMoC_averageData******", result);
+	  //console.log("*******NoEMoC_averageData******", result);
 	  return result;
 }
 
@@ -302,7 +302,7 @@ function averageData2(data, terms) {
 	 
 	  const result =averageData(data, terms);
 	  processedData = reverseTransformData(result);
-	  console.log("*******NoEMoC_TransposedAverageData******", processedData);
+	 // console.log("*******NoEMoC_TransposedAverageData******", processedData);
 
 	  return processedData;
 	}
@@ -343,8 +343,8 @@ function averageData3(data, terms) {
 	    });
 	  });
 
-	  console.log("=== Count by Term and Trimester ===");
-	  console.table(trimesterCounts);
+	  //console.log("=== Count by Term and Trimester ===");
+	 // console.table(trimesterCounts);
 
 	  const result = Object.entries(trimesterSums).map(([termName, { other }], index) => {
 	    const { other: cOther = 0 } = trimesterCounts[termName] || {};
@@ -355,7 +355,7 @@ function averageData3(data, terms) {
 	    };
 	  });
 
-	  console.log("result :", result);
+	 // console.log("result :", result);
 	  return result;
 	}
 
@@ -397,8 +397,8 @@ function averageData4(data, terms) {
 	    });
 	  });
 
-	  console.log("=== Count by Term and Trimester ===");
-	  console.table(trimesterCounts);
+	 // console.log("=== Count by Term and Trimester ===");
+	 // console.table(trimesterCounts);
 
 	  const result = Object.entries(trimesterSums).map(([termName, { other }], index) => {
 	    const { other: cOther = 0 } = trimesterCounts[termName] || {};
@@ -409,7 +409,7 @@ function averageData4(data, terms) {
 	    };
 	  });
 
-	  console.log("result :", result);
+	  //console.log("result :", result);
 	  return result;
 	}
 
@@ -602,7 +602,7 @@ function processChartData2(in_data) {
 	} /* for i */
 	
 	processedData = transFormData(originalData)
-	console.log("BAR transformed Data :",processedData)
+//	console.log("BAR transformed Data :",processedData)
 	
 //	processedData = [
 //		{termName:'BPA','T-1':1,'T-2':2,'T-3':3},	    
@@ -687,8 +687,8 @@ function processChartData3(in_data) {
 
 	} /* for i */
 	
-	console.log("==================================")
-	console.log("f-data :",f_data)
+	//console.log("==================================")
+	//console.log("f-data :",f_data)
 	
 	
 	for( let key in f_data ) {
@@ -699,7 +699,7 @@ function processChartData3(in_data) {
 		processedData.push(edu_record);
 	};
 	
-	console.log("PIE processed Data :",processedData)
+//	console.log("PIE processed Data :",processedData)
 	
 //	processedData = [
 //		{education:'1-High School',count:3},	    
@@ -767,7 +767,7 @@ function setNoEMoCGridData(data, obj) {
 					const displayName = item.cohot + ' -> ' + item.g2 + ' -> ' + item.g1;
 				    const terms = item.termNames; // "BPA, BPF, BPS"
 				    const termNameSelected = item.termNames.split(',').map(term => term.trim());
-				    console.log("*******NoEMoC_selectedTermName******", terms);
+				   // console.log("*******NoEMoC_selectedTermName******", terms);
 					let average = averageData2(obj, termNameSelected); // 데이터 전처리 함수 추가
 					let average2 = averageData(obj, termNameSelected); // 데이터 전처리 함수 추가
 				    
@@ -982,8 +982,8 @@ function processGridData(in_data) {
 	} /* for - i */
 		
 	transformedData = transFormData(originalData)
-	console.log("GRID transformed Data :",transformedData)
-	console.log("==================================")
+	//console.log("GRID transformed Data :",transformedData)
+	//console.log("==================================")
 	
 
 	processedData = [];
@@ -994,7 +994,7 @@ function processGridData(in_data) {
 		processedData.push(term_record);
 	}
 
-	console.log("GRID processed Data :",processedData)
+	//console.log("GRID processed Data :",processedData)
 
 //	processedData = [
 //		{id:1 ,termName:'BPA', t1:0.22, t2:10.00, t3:300.04},	    
@@ -1094,7 +1094,7 @@ function setGraphData5(data, termNamesStr, displayName) {
 }
 
 function transFormData2(in_data) {
-	console.log("indata :", in_data);
+	//console.log("indata :", in_data);
 	let transformedData = [];
 	let termNames = Object.keys(in_data[0]).filter(key => key !== 'trimester')
 	
