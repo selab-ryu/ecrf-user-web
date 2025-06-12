@@ -105,9 +105,9 @@ function getEDPSData(crfId) {
 			let groupData = obj.group; //추가 한것
 			let mergedGroupData = getGroupData(groupData);
 			
-			let average = averageData3(obj); 
-			let processedData = reverseTransformData(average);
-			setEDPSGridData(mergedGroupData, processedData, average);
+			//let average = averageData3(obj); 
+			//let processedData = reverseTransformData(average);
+			setEDPSGridData(mergedGroupData, obj);
 			
 		},
 		error: function(jqXHR, a, b){
@@ -137,9 +137,8 @@ function getKATRIData(crfId) {
 			console.log("*******KATRI******", obj.data);
 			let mergedGroupData = getGroupData(groupData);
 			
-			let average = averageData4(obj); 
-			let processedData = reverseTransformData(average);
-			setKATRIGridData(mergedGroupData, processedData, average); 
+
+			setKATRIGridData(mergedGroupData, obj); 
 		},
 		error: function(jqXHR, a, b){
 			console.log('Fail to render trimester graph');
@@ -308,9 +307,9 @@ function averageData2(data, terms) {
 	  return processedData;
 	}
 	
-function averageData3(data) {
+function averageData3(data, terms) {
 	  const dataArray = data.data;
-	  const termNames = ["BPA", "EP", "MBZP", "MECPP"];
+	  const termNames = terms
 
 	  let processedData = [];
 	  const trimesterSums = {};
@@ -361,10 +360,10 @@ function averageData3(data) {
 	}
 
 
-function averageData4(data) {
+function averageData4(data, terms) {
 	  const dataArray = data.data;
 	  
-	  const termNames = ["age_months", "born_height", "born_weight", "current_height", "current_weight"];
+	  const termNames = terms;
 
 	  let processedData = [];
 	  const trimesterSums = {};
@@ -789,7 +788,7 @@ function setNoEMoCGridData(data, obj) {
 	});
 }
 
-function setEDPSGridData(data, transposedAverage, average) {
+function setEDPSGridData(data, obj) {
 	const view = new wijmo.collections.CollectionView(data, {
 		pageSize: 10
 	});
@@ -842,7 +841,12 @@ function setEDPSGridData(data, transposedAverage, average) {
 	                
 					//alert("선택된 항목: " + item.termNames);
 				    const terms = item.termNames; // "BPA, BPF, BPS"
-					setGraphData6(transposedAverage, terms); 
+				    const termNameSelected = item.termNames.split(',').map(term => term.trim());
+				    
+					let average = averageData3(obj, termNameSelected); 
+					let processedData = reverseTransformData(average);
+					
+					setGraphData6(processedData, terms); 
 					setGraphData7(average, terms);
 					setGridData3(average, terms); // 그리드 데이터 설정	   
 				});
@@ -860,7 +864,7 @@ function setEDPSGridData(data, transposedAverage, average) {
 
 
 
-function setKATRIGridData(data, transposedAverage, average) {
+function setKATRIGridData(data, obj) {
 	const view = new wijmo.collections.CollectionView(data, {
 		pageSize: 10
 	});
@@ -916,10 +920,17 @@ function setKATRIGridData(data, transposedAverage, average) {
 				    //const terms = item.termNames; // "BPA, BPF, BPS"
 					//setGraphData6(transposedAverage, terms); 
 					//setGraphData7(average, terms);
-					//setGridData3(average, terms); // 그리드 데이터 설정	   
+					//setGridData3(average, terms); // 그리드 데이터 설정	  
+					
+					
 					const terms = item.termNames;
-					setGraphData8(transposedAverage, terms); 
-			
+					const termNameSelected = item.termNames.split(',').map(term => term.trim());
+					let average = averageData4(obj, termNameSelected); 
+					let processedData = reverseTransformData(average);
+					
+					setGraphData8(processedData, terms); 
+					
+					
 					setGraphData9(average, terms);
 					setGridData4(average, terms); // 그리드 데이터 설정	  
 				});
