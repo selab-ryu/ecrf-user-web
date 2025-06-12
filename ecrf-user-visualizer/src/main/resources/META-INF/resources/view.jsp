@@ -719,12 +719,12 @@ function setNoEMoCGridData(data, obj) {
 	const theGrid = new wijmo.grid.FlexGrid('#theNoEMoCGrid', {
 		autoGenerateColumns: false,
 		columns: [
-			{ binding: 'cohot', header: 'cohot', width: '1*' },
-			{ binding: 'g2', header: '대분류', width: '*' },
-			{ binding: 'g1', header: '소분류', width: '*' },
-			{ binding: 'termNames', header: 'TermNames', width: '2*' },
+			{ binding: 'cohot', header: 'cohot', width: '1.5*' },
+			{ binding: 'g2', header: '대분류', width: '2*' },
+			{ binding: 'g1', header: '소분류', width: '2*' },
+			{ binding: 'termNames', header: 'TermNames', width: '6*' },
 			{ // 선택 버튼 컬럼 추가
-				header: 'Action',
+				header: 'Chart',
 				width: '*',
 				// binding 없이 Action 열만 출력
 			}
@@ -735,7 +735,7 @@ function setNoEMoCGridData(data, obj) {
 	theGrid.formatItem.addHandler(function (s, e) {
 		if (e.panel === s.cells) {
 			const col = s.columns[e.col];
-			if (col.header === 'Action') {
+			if (col.header === 'Chart') {
 				const item = s.rows[e.row].dataItem;
 
 				e.cell.innerHTML = '<button class="btn btn-primary btn-sm">선택</button>';
@@ -792,12 +792,12 @@ function setEDPSGridData(data, obj) {
 	const theGrid = new wijmo.grid.FlexGrid('#theEDPSGrid', {
 		autoGenerateColumns: false,
 		columns: [
-			{ binding: 'cohot', header: 'cohot', width: '1*' },
-			{ binding: 'g2', header: '대분류', width: '*' },
-			{ binding: 'g1', header: '소분류', width: '*' },
-			{ binding: 'termNames', header: 'TermNames', width: '2*' },
+			{ binding: 'cohot', header: 'cohot', width: '1.5*' },
+			{ binding: 'g2', header: '대분류', width: '2*' },
+			{ binding: 'g1', header: '소분류', width: '2*' },
+			{ binding: 'termNames', header: 'TermNames', width: '6*' },
 			{ // 선택 버튼 컬럼 추가
-				header: 'Action',
+				header: 'Chart',
 				width: '*',
 				// binding 없이 Action 열만 출력
 			}
@@ -808,7 +808,7 @@ function setEDPSGridData(data, obj) {
 	theGrid.formatItem.addHandler(function (s, e) {
 		if (e.panel === s.cells) {
 			const col = s.columns[e.col];
-			if (col.header === 'Action') {
+			if (col.header === 'Chart') {
 				const item = s.rows[e.row].dataItem;
 
 				e.cell.innerHTML = '<button class="btn btn-primary btn-sm">선택</button>';
@@ -865,12 +865,12 @@ function setKATRIGridData(data, obj) {
 	const theGrid = new wijmo.grid.FlexGrid('#theKATRIGrid', {
 		autoGenerateColumns: false,
 		columns: [
-			{ binding: 'cohot', header: 'cohot', width: '1*' },
-			{ binding: 'g2', header: '대분류', width: '*' },
-			{ binding: 'g1', header: '소분류', width: '*' },
-			{ binding: 'termNames', header: 'TermNames', width: '2*' },
+			{ binding: 'cohot', header: 'cohot', width: '1.5*' },
+			{ binding: 'g2', header: '대분류', width: '2*' },
+			{ binding: 'g1', header: '소분류', width: '2*' },
+			{ binding: 'termNames', header: 'TermNames', width: '6*' },
 			{ // 선택 버튼 컬럼 추가
-				header: 'Action',
+				header: 'Chart',
 				width: '*',
 				// binding 없이 Action 열만 출력
 			}
@@ -881,7 +881,7 @@ function setKATRIGridData(data, obj) {
 	theGrid.formatItem.addHandler(function (s, e) {
 		if (e.panel === s.cells) {
 			const col = s.columns[e.col];
-			if (col.header === 'Action') {
+			if (col.header === 'Chart') {
 				const item = s.rows[e.row].dataItem;
 
 				e.cell.innerHTML = '<button class="btn btn-primary btn-sm">선택</button>';
@@ -1135,7 +1135,10 @@ function setGridData2(data, termNamesStr) {
 	            other: null // 없으면 기본값으로 항목 구성
 	        };
 	    }
-	});
+	}).map((item, index) => ({
+	    ...item,
+	    id: index + 1 // 여기서 순차적으로 id 재할당
+	}));
 	
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(filledData,{
@@ -1265,7 +1268,10 @@ function setGridData3(data, termNamesStr) {
 	            other: null // 없으면 기본값으로 항목 구성
 	        };
 	    }
-	});
+	}).map((item, index) => ({
+	    ...item,
+	    id: index + 1 // 여기서 순차적으로 id 재할당
+	}));
 	
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(filledData,{
@@ -1392,7 +1398,10 @@ function setGridData4(data, termNamesStr) {
 	            other: null // 없으면 기본값으로 항목 구성
 	        };
 	    }
-	});
+	}).map((item, index) => ({
+	    ...item,
+	    id: index + 1 // 여기서 순차적으로 id 재할당
+	}));
 	
 	// Collection View로 페이징 데이터 소스 생성
 	var view = new wijmo.collections.CollectionView(filledData,{
