@@ -23,9 +23,18 @@
 %>
 
 <div class="ecrf-user ecrf-user-crf">
+
 	<%@ include file="sidebar.jspf" %>
 	
 	<div class="page-content">
+		
+		<div class="crf-header-title">
+			<%
+				DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+			%>
+			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
+		</div>
+			
 		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-form.title.manage-form" />
 		<aui:container cssClass="radius-shadow-container hide-embedded-portlet-header">
 			<!-- for check change of crf form -->

@@ -269,6 +269,12 @@
     .header-title-span { font-size:1.25rem; font-weight:bold; }
     .sub-title-span { font-size:1rem; font-weight:bold; color: #424242;  }
 
+	.crf-header-title {
+	    margin-bottom: 8px;
+    	font-size: 1.5rem;
+    	font-weight: 600;
+    }
+
     .panel-content p,
     .panel-content span
     { color: #424242; }
@@ -318,13 +324,13 @@
         align-items: center;
         justify-content: left;
         
-        gap: 8px;
+        gap: 12px;
         width: 96%;
-        padding: 0px 10px;
+        padding: 0px 10px 0 12px;
         border: none;
-        border-top-left-radius: 8px;
+        border-top-left: 12px solid transp;
         font-size: 15px;
-        font-weight: bold;
+        font-weight: 400;
         cursor: pointer;		      
         text-decoration: none!important;
         margin-bottom: 3px;
@@ -378,13 +384,13 @@
     .menu-1.inactive { background-color: rgb(100,170,255); }
     .menu-1.inactive:hover { background-color: rgb(80,150,240); }
 
-	.menu-2 { background-color: rgb(0,160,100); }
+	.menu-2 { background-color: rgb(0,160,100); clip-path: polygon(10% 0%, 70% 0%, 100% 0, 100% 100%, 70% 100%, 30% 100%, 1% 100%, 1% 20%); padding-left:14px; }
 	.menu-2:hover { background-color: rgb(0,140,90); }
     
     .menu-2.inactive { background-color: rgb(0,210,140); }
     .menu-2.inactive:hover { background-color: rgb(0,190,120); }
 
-	.menu-3 { background-color: rgb(110,80,255); }
+	.menu-3 { background-color: rgb(110,80,255); border-top-left-radius:12px; padding-left:12px; }
 	.menu-3:hover { background-color: rgb(90,60,240); }
 
     .menu-3.inactive { background-color: rgb(170,160,255); }
@@ -609,7 +615,7 @@
 	}
     .dh-icon-button span{
         color: white;
-        font-weight: bold;
+        font-weight: 400;
     }
 
     .dh-icon-button.submit-btn {

@@ -66,7 +66,7 @@ public class CustomAdminCreateAccountRenderCommnad implements MVCRenderCommand {
 			}
 			
 			// for deploy
-			requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
+			//requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
 			
 			try {
 				HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);

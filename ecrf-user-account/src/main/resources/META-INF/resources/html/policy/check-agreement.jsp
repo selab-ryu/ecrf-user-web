@@ -1,30 +1,24 @@
 <%@ include file="../init.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 
-<%! private static Log _log = LogFactoryUtil.getLog("html.researcher.privacy_agreement_jsp"); %>
+<%! private static Log _log = LogFactoryUtil.getLog("html.researcher.check_agreement_jsp"); %>
 
 <%
 
-String menu = ECRFUserMenuConstants.ADD_RESEARCHER;
+String menu = ECRFUserMenuConstants.LOGIN;
 
-// setting for admin user add menu / researcher module user add menu 
-String divClass = "ecrf-user ecrf-user-researcher"; 
-String headerTitle = "ecrf-user.researcher.title.add-researcher";
+_log.info("view agreement");
 
-// for control menu => admin add user at user and organization
-boolean isAdminMenu = ParamUtil.getBoolean(renderRequest, "isAdminMenu", false);
-_log.info("is admin menu : " + isAdminMenu);
+String login = ParamUtil.getString(request, "login");
+String password = ParamUtil.getString(request, "password");
 
+//_log.info("id / pw : " + login + " / " + password);
 %>
 
-<portlet:renderURL var="createAccountURL" copyCurrentRenderParameters="true">
-	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LOGIN_CREATE_ACCOUNT %>"/>
-	<portlet:param name="from" value="privacy"/>
-	<portlet:param name="agree" value="true"/>
-</portlet:renderURL>
 
-<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_ADD_RESEARCHER %>" var="addResearcherURL">
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_AGREEMENT %>" var="agreeURL">
 </portlet:actionURL>
+
 
 <style>
 	.policy-container h1, .policy-container h2 { color: #2c3e50; }
@@ -38,11 +32,11 @@ _log.info("is admin menu : " + isAdminMenu);
 
 </style>
 
-<div class="ecrf-user">
+<div class="ecrf-user mar1r">
 	
 	<liferay-ui:header title="ecrf-user.researcher.title.policy" />
 	
-	<aui:container cssClass="radius-shadow-container">		
+	<aui:container cssClass="radius-shadow-container">
 		<!-- Term of Use -->
 		<aui:row>
 			<aui:col>
@@ -1134,13 +1128,18 @@ _log.info("is admin menu : " + isAdminMenu);
 		<aui:row>
 			<aui:col>
 				<aui:button-row>
-					<a class="dh-icon-button submit-btn inactive w110 h36" id="<portlet:namespace/>move" name="<portlet:namespace/>move" href="javascript:void(0);">
-						<span><liferay-ui:message key="ecrf-user.button.next" /></span>
+					<a class="dh-icon-button submit-btn inactive w110 h36" id="<portlet:namespace/>move" name="<portlet:namespace/>move" onclick="agree()" href="javascript:void(0);">
+						<span><liferay-ui:message key="ecrf-user.button.agree" /></span>
 					</a>
 				</aui:button-row>
 			</aui:col>
 		</aui:row>
 	</aui:container>
+	
+	<aui:form type="post" name="loginForm" action="<%=agreeURL %>" >
+		<aui:input type="hidden" name="login" value="<%=login %>" />
+		<aui:input type="hidden" name="password" value="<%=password %>" />
+	</aui:form>
 </div>
 
 <script>
@@ -1164,18 +1163,22 @@ function agreeCheck() {
 	}
 	
 	let agreeBtn = document.getElementById("<portlet:namespace/>move");
-	let moveURL = "<%=createAccountURL%>";
 	
 	console.log("agree check result:", result);
 	
 	if(result) {
 		agreeBtn.classList.remove("inactive");
 		agreeBtn.classList.add("update-btn");
-		agreeBtn.href = moveURL;
 	} else {
 		agreeBtn.classList.remove("update-btn");
 		agreeBtn.classList.add("inactive");
-		agreeBtn.href = "javascript:void(0)";
 	}
 }
+
+function agree() {
+	let form = document.getElementById("<portlet:namespace/>loginForm");
+	
+	form.submit();
+}
+
 </script>
