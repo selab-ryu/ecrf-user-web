@@ -56,17 +56,8 @@ public class CustomAdminCreateAccountRenderCommnad implements MVCRenderCommand {
 		if(Validator.isNotNull(p_u_i_d)) {	// when click user name on user admin portlet
 			return mvcRenderCommand.render(renderRequest, renderResponse);
 		} else {	// when click add user at user admin portlet
-			RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_VIEW_PRIVACY_AGREEMENT);
-			
-			if(from.equals("privacy")) {
-				_log.info("from privacy page");
-				requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
-			} else {
-				_log.info("from login module");
-			}
-			
-			// for deploy
-			//requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
+			// do not proceed to agreement page, because admin create user not user him/herself
+			RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
 			
 			try {
 				HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);

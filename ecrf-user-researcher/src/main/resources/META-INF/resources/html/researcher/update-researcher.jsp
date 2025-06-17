@@ -124,6 +124,8 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 	<aui:form name="updateResearhcerFm" action="<%=isUpdate ? updateResearcherURL : addResearcherURL %>" method="post" autocomplete="off">
 	<aui:container cssClass="radius-shadow-container">	
 		<aui:input type="hidden" name="<%=Constants.CMD %>" value="<%=isUpdate ? Constants.UPDATE : Constants.ADD %>" />
+		<aui:input type="hidden" name="fromLiferay" value="<%=fromLiferay %>" />
+		<aui:input type="hidden" name="isAdminMenu" value="<%=isAdminMenu %>" />
 		
 		<!-- user info -->
 		<aui:row>

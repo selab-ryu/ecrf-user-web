@@ -89,8 +89,7 @@ public class AgreementActionCommand extends BaseMVCActionCommand {
 			actionResponse.sendRedirect(renderURL.toString());
 		}
 		
-		// TODO: update agreement status
-		// get researcher
+		// get researcher & update agreement status
 		Researcher researcher = null;
 		try {
 			researcher = _researcherLocalService.getResearcherByUserId(user.getUserId());
@@ -99,16 +98,16 @@ public class AgreementActionCommand extends BaseMVCActionCommand {
 			noResearcher.printStackTrace();
 		}
 		
-		// proceed login & redirect to Main Site
+		// proceed login 
 		if(Validator.isNotNull(user)) {
 			HttpServletRequest httpServletRequest = _portal.getOriginalServletRequest(_portal.getHttpServletRequest(actionRequest));
 			HttpServletResponse httpServletResponse = _portal.getHttpServletResponse(actionResponse);        
 			
 	        AuthenticatedSessionManagerUtil.login(httpServletRequest, httpServletResponse, login, password, false, CompanyConstants.AUTH_TYPE_EA);
-
-	        // set redirect, not agreement render page / main site page
-	        actionResponse.sendRedirect(renderURL.toString());
 		}
+		
+		// redirect to Main Site
+		actionResponse.sendRedirect(renderURL.toString());
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(AgreementActionCommand.class);
