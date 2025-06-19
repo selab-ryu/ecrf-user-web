@@ -88,6 +88,8 @@
 <%@ page import="ecrf.user.constants.ECRFUserPortletKeys"%>
 <%@ page import="ecrf.user.constants.ECRFUserPageFriendlyURL"%>
 <%@ page import="ecrf.user.constants.ECRFUserUtil"%>
+<%@ page import="ecrf.user.constants.TagAttrUtil"%>
+<%@ page import="ecrf.user.constants.ECRFUserMenuConstants"%>
 
 <%@ page import="ecrf.user.constants.type.CRFStatus"%>
 <%@ page import="ecrf.user.constants.type.ExperimentalGroupType"%>
@@ -138,6 +140,7 @@
 
 <%@ page import="com.sx.constant.StationXWebKeys"%>
 <%@ page import="com.sx.icecap.constant.*" %>
+
 
 <%@ page import="ecrf.user.crf.util.SearchUtil"%>
 

@@ -324,11 +324,10 @@
         align-items: center;
         justify-content: left;
         
-        gap: 12px;
-        width: 96%;
-        padding: 0px 10px 0 12px;
+        gap: 16px;
+        width: 100%;
+        padding: 0px 10px 0px 10px;
         border: none;
-        border-top-left: 12px solid transp;
         font-size: 15px;
         font-weight: 400;
         cursor: pointer;		      
@@ -337,14 +336,15 @@
         border-bottom: 1px solid #888;
         height: 3rem;
 	}
+
 	.sidebar-not-move {
     	cursor: not-allowed;
     	position: relative;
     } 
 	
 	.dh-sidebar img{
-		width: 30px;
-		height: 30px;
+		width: 28px;
+		height: 28px;
 		object-fit: contain;
 	}
     .dh-sidebar span{
@@ -375,8 +375,18 @@
     .menu-3.sidebar-not-move:hover span
     { color: rgb(150,150,150); }
 
-	.menu-main { background-color: rgb(40,60,160); }    
-    .menu-main:hover { background-color: rgb(50,70,180); }    
+	.menu-main { background: linear-gradient(to right, rgb(50,80,180) 48px, rgb(65,90,220) 48px); cursor: default; }    
+    //.menu-main:hover { background: linear-gradient(to right, rgb(70,100,200) 48px, rgb(85,110,240) 48px); }
+
+    .sub-menu { background: linear-gradient(to right, rgb(90,90,90) 48px, rgb(115,115,115) 48px); }
+    .sub-menu:hover { background: linear-gradient(to right, rgb(110,110,110) 48px, rgb(135,135,135) 48px); }
+    .sub-menu.active { background: linear-gradient(to right, rgb(80,140,255) 48px, rgb(80,160,255) 48px); }
+    .sub-menu.active:hover { background: linear-gradient(to right, rgb(100,160,255) 48px, rgb(100,180,255) 48px); }
+    .sub-menu.inactive { background: linear-gradient(to right, rgb(180,180,180) 48px, rgb(200,200,200) 48px); }
+
+    .sub-menu span { color:rgb(255,255,255); }
+    .sub-menu.active span { color: rgb(255,255,255); }
+    .sub-menu.inactive span { color: rgb(90,90,90); }
 
 	.menu-1 { background-color: rgb(60,90,200); }
 	.menu-1:hover { background-color: rgb(50,70,180); }
@@ -384,19 +394,21 @@
     .menu-1.inactive { background-color: rgb(100,170,255); }
     .menu-1.inactive:hover { background-color: rgb(80,150,240); }
 
-	.menu-2 { background-color: rgb(0,160,100); clip-path: polygon(10% 0%, 70% 0%, 100% 0, 100% 100%, 70% 100%, 30% 100%, 1% 100%, 1% 20%); padding-left:14px; }
+	.menu-2 { background-color: rgb(0,160,100); }
 	.menu-2:hover { background-color: rgb(0,140,90); }
     
     .menu-2.inactive { background-color: rgb(0,210,140); }
     .menu-2.inactive:hover { background-color: rgb(0,190,120); }
 
-	.menu-3 { background-color: rgb(110,80,255); border-top-left-radius:12px; padding-left:12px; }
+	.menu-3 { background-color: rgb(110,80,255); }
 	.menu-3:hover { background-color: rgb(90,60,240); }
 
     .menu-3.inactive { background-color: rgb(170,160,255); }
     .menu-3.inactive:hover { background-color: rgb(140,130,240); }
 
     //.side-menu div:nth-child(2)>a {margin-top:0px;}
+
+    .left-top-cut-border { clip-path: polygon(10% 0%, 70% 0%, 100% 0, 100% 100%, 70% 100%, 30% 100%, 1% 100%, 1% 20%); }
 
     .current-crf { 
     	width:96%;
@@ -413,6 +425,8 @@
     	color:white;
     }
     
+    .click-div { cursor:pointer; color:white; border-bottom: 1px solid lightgray; }
+
     /* side navigation style */
 
     
@@ -453,93 +467,73 @@
 
     .exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_icon.png); }
     .exp-group-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/exp_group_icon.png); }
-    .dh-sidebar.inactive:hover img.exp-group-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_icon.png); }
 
     .exp-group-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_list_icon.png); }
     .exp-group-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/exp_group_list_icon.png); }
-    .dh-sidebar.inactive:hover img.exp-group-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_list_icon.png); }
-
+    
     .add-exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_exp_group_icon.png); }
     .add-exp-group-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/add_exp_group_icon.png); }
-    .dh-sidebar.inactive:hover img.add-exp-group-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_exp_group_icon.png); }
+    
 	
     /* researcher menu */
     .researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_icon.png); }
 
     .researcher-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_list_icon.png); }
     .researcher-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/researcher_list_icon.png); }
-    .dh-sidebar.inactive:hover img.researcher-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_list_icon.png); }
-
+    
     .add-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_researcher_icon.png); }
     .add-researcher-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/add_researcher_icon.png); }
-    .dh-sidebar.inactive:hover img.add-researcher-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_researcher_icon.png); }
+    
 
     /* subject menu */
     .subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_icon.png); }
 
     .subject-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_list_icon.png); }
     .subject-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/subject_list_icon.png); }
-    .dh-sidebar.inactive:hover img.subject-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_list_icon.png); }
-
+    
     .add-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_subject_icon.png); }
     .add-subject-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/add_subject_icon.png); }
-    .dh-sidebar.inactive:hover img.add-subject-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_subject_icon.png); }
+    
 
     /* crf menu */
     .crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_icon.png); }
 
     .crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_list_icon.png); }
-    .crf-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_list_icon.png); }
-    .dh-sidebar.inactive:hover img.crf-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_list_icon.png); }
+    .crf-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_list_icon.png); } 
 
     .add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_crf_icon.png); }
-    .add-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/add_crf_icon.png); }
-    .dh-sidebar.inactive:hover img.add-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_crf_icon.png); }
+    .add-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/add_crf_icon.png); } 
 
     .update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_crf_icon.png); }
-    .update-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/update_crf_icon.png); }
-    .dh-sidebar.inactive:hover img.update-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_crf_icon.png); }
-    .dh-sidebar.sidebar-not-move:hover img.update-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/update_crf_icon.png); }
+    .update-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/update_crf_icon.png); }   
     
     .crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_form_icon.png); }
-    .crf-form-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_form_icon.png); }
-    .dh-sidebar.inactive:hover img.crf-form-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_form_icon.png); }
-    .dh-sidebar.sidebar-not-move:hover img.crf-form-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_form_icon.png); }
+    .crf-form-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_form_icon.png); }  
 
     .crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_icon.png); }
-    .crf-data-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_data_icon.png); }
-    .dh-sidebar.inactive:hover img.crf-data-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_icon.png); }
-    .dh-sidebar.sidebar-not-move:hover img.crf-data-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_data_icon.png); }
+    .crf-data-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_data_icon.png); }  
     
     .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
-    .crf-query-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_query_icon.png); }
-    .dh-sidebar.inactive:hover img.crf-query-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
-    .dh-sidebar.sidebar-not-move:hover img.crf-query-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_query_icon.png); }
+    .crf-query-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_query_icon.png); }    
 
     .data-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
-    .data-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_data_list_icon.png); }
-    .dh-sidebar.inactive:hover img.data-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
+    .data-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/crf_data_list_icon.png); }    
 
     .data-history-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/data_history_icon.png); }
-    .data-history-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/data_history_icon.png); }
-    .dh-sidebar.inactive:hover img.data-history-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/data_history_icon.png); }
+    .data-history-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/data_history_icon.png); }   
     
     .excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/excel_download_icon.png); }
     .excel-download-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/excel_download_icon.png); }
-    .dh-sidebar.inactive:hover img.excel-download-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/excel_download_icon.png); }
-
+    
     .search-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/search_crf_data_icon.png); }
     .search-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/search_crf_data_icon.png); }
-    .dh-sidebar.inactive:hover img.search-crf-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/search_crf_data_icon.png); }
 
     .query-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/query_list_icon.png); }
     .query-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/query_list_icon.png); }
-    .dh-sidebar.inactive:hover img.query-list-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/query_list_icon.png); }
-
+    
     .update-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_query_icon.png); }
     .update-query-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/update_query_icon.png); }
-    .dh-sidebar.inactive:hover img.update-query-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_query_icon.png); }
-    .dh-sidebar.sidebar-not-move:hover img.update-query-icon-inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/inactive/update_query_icon.png); }
+
 
     /* button icon */
     .view-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/view_icon.png); }
@@ -896,163 +890,7 @@
         display:inline-block;
         vertical-align:middle;
     }
-    /* vertical-index */
-    
-    
-    /* START TOOLTIP STYLES */
-	[tooltip] {
-	  position: relative; /* opinion 1 */
-	}
-	
-	/* Applies to all tooltips */
-	[tooltip]::before,
-	[tooltip]::after {
-	  text-transform: none; /* opinion 2 */
-	  font-size: .9em; /* opinion 3 */
-	  line-height: 1;
-	  user-select: none;
-	  pointer-events: none;
-	  position: absolute;
-	  display: none;
-	  opacity: 0;
-	}
-	[tooltip]::before {
-	  content: '';
-	  border: 5px solid transparent; /* opinion 4 */
-	  z-index: 1001; /* absurdity 1 */
-	}
-	[tooltip]::after {
-	  content: attr(tooltip); /* magic! */
-	  
-	  /* most of the rest of this is opinion */
-	  font-family: Helvetica, sans-serif;
-	  text-align: center;
-	  
-	  /* 
-	    Let the content set the size of the tooltips 
-	    but this will also keep them from being obnoxious
-	    */
-	  min-width: 3em;
-	  max-width: 30em;
-	  white-space: nowrap;
-	  overflow: hidden;
-	  text-overflow: ellipsis;
-	  padding: 1ch 1.5ch;
-	  border-radius: .3ch;
-	  box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35);
-	  background: #333;
-	  color: #fff;
-	  z-index: 1000; /* absurdity 2 */
-	}
-	
-	/* Make the tooltips respond to hover */
-	[tooltip]:hover::before,
-	[tooltip]:hover::after {
-	  display: block;
-	}
-	
-	/* don't show empty tooltips */
-	[tooltip='']::before,
-	[tooltip='']::after {
-	  display: none !important;
-	}
-	
-	/* FLOW: UP */
-	[tooltip]:not([flow])::before,
-	[tooltip][flow^="up"]::before {
-	  bottom: 100%;
-	  border-bottom-width: 0;
-	  border-top-color: #333;
-	}
-	[tooltip]:not([flow])::after,
-	[tooltip][flow^="up"]::after {
-	  bottom: calc(100% + 5px);
-	}
-	[tooltip]:not([flow])::before,
-	[tooltip]:not([flow])::after,
-	[tooltip][flow^="up"]::before,
-	[tooltip][flow^="up"]::after {
-	  left: 50%;
-	  transform: translate(-50%, -.5em);
-	}
-	
-	/* FLOW: DOWN */
-	[tooltip][flow^="down"]::before {
-	  top: 100%;
-	  border-top-width: 0;
-	  border-bottom-color: #333;
-	}
-	[tooltip][flow^="down"]::after {
-	  top: calc(100% + 5px);
-	}
-	[tooltip][flow^="down"]::before,
-	[tooltip][flow^="down"]::after {
-	  left: 50%;
-	  transform: translate(-50%, .5em);
-	}
-	
-	/* FLOW: LEFT */
-	[tooltip][flow^="left"]::before {
-	  top: 50%;
-	  border-right-width: 0;
-	  border-left-color: #333;
-	  left: calc(0em - 5px);
-	  transform: translate(-.5em, -50%);
-	}
-	[tooltip][flow^="left"]::after {
-	  top: 50%;
-	  right: calc(100% + 5px);
-	  transform: translate(-.5em, -50%);
-	}
-	
-	/* FLOW: RIGHT */
-	[tooltip][flow^="right"]::before {
-	  top: 50%;
-	  border-left-width: 0;
-	  border-right-color: #333;
-	  right: calc(0em - 5px);
-	  transform: translate(.5em, -50%);
-	}
-	[tooltip][flow^="right"]::after {
-	  top: 50%;
-	  left: calc(100% + 5px);
-	  transform: translate(.5em, -50%);
-	}
-	
-	/* KEYFRAMES */
-	@keyframes tooltips-vert {
-	  to {
-	    opacity: .9;
-	    transform: translate(-50%, 0);
-	  }
-	}
-	
-	@keyframes tooltips-horz {
-	  to {
-	    opacity: .9;
-	    transform: translate(0, -50%);
-	  }
-	}
-	
-	/* FX All The Things */ 
-	[tooltip]:not([flow]):hover::before,
-	[tooltip]:not([flow]):hover::after,
-	[tooltip][flow^="up"]:hover::before,
-	[tooltip][flow^="up"]:hover::after,
-	[tooltip][flow^="down"]:hover::before,
-	[tooltip][flow^="down"]:hover::after {
-	  animation: tooltips-vert 300ms ease-out forwards;
-	}
-	
-	[tooltip][flow^="left"]:hover::before,
-	[tooltip][flow^="left"]:hover::after,
-	[tooltip][flow^="right"]:hover::before,
-	[tooltip][flow^="right"]:hover::after {
-	  animation: tooltips-horz 300ms ease-out forwards;
-	}
-    
-    /* END TOOLTIP STYLES */
-  
+    /* vertical-index */  
     
 	/* DataTable pagination hover */
 	.dataTables_wrapper .dataTables_paginate .paginate_button:hover {

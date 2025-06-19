@@ -66,6 +66,15 @@
 	<%@include file="sidebar.jspf" %>
 	
 	<div class="page-content">
+
+		<c:if test="<%=dataTypeId>0 %>">		
+		<div class="crf-header-title">
+			<%
+				DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+			%>
+			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
+		</div>
+		</c:if>
 		
 		<liferay-ui:header backURL="<%=redirect %>" title="<%=isUpdate ? "ecrf-user.crf.title.update-crf" : "ecrf-user.crf.title.add-crf" %>" />
 		

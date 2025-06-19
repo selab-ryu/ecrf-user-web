@@ -9,7 +9,7 @@
 	_log.info("crf id : " + crfId);	
 	_log.info("dataType id : " + dataTypeId);
 		
-	String menu = ECRFUserMenuConstants.CRF_FORM;
+	String menu = ECRFUserMenuConstants.MANAGE_FORM;
 		
 	String queryString = "";
 	queryString += ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME + "=" + IcecapMVCCommands.RENDER_DEFINE_DATA_STRUCTURE;
