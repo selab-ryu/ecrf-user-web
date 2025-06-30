@@ -42,6 +42,11 @@
 	
 	<div class="page-content">
 		
+		<div class="crf-header-title">
+			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
+			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
+		</div>
+		
 		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-query.title.query-list" />
 		
 		<aui:form action="${searchURL}" name="searchOptionFm" autocomplete="off" cssClass="marBr">
@@ -95,11 +100,11 @@
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+							<button id="<portlet:namespace/>search" type="submit" class="br20 dh-icon-button submit-btn search-btn white-text w130 h40 marR8 active">
 								<img class="search-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+							<buton id="<portlet:namespace/>clear" type="button" class="br20 dh-icon-button submit-btn clear-btn white-text w130 h40 active" onclick="location.href='<%=clearSearchURL %>'">
 								<img class="clear-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
 							</a>
@@ -275,10 +280,19 @@
 					
 					boolean isDisabled = updateLock || !hasUpdateQueryPermission;
 					
-					_log.info("update lock / permission / disabled : " + updateLock + " / " + hasUpdateQueryPermission + " / " + isDisabled);
+					//_log.info("update lock / permission / disabled : " + updateLock + " / " + hasUpdateQueryPermission + " / " + isDisabled);
 					
+					String updateBtnClass = "dh-icon-button w130";
+					String updateOnClickStr = "location.href='"+updateQueryURL+"'";
 					String updateBtnKey = "ecrf-user.button.update";
-					if(isDisabled) updateBtnKey = "ecrf-user.button.lock";
+					
+					if(isDisabled) {
+						updateBtnClass += " inactive";
+						updateOnClickStr = "";
+						updateBtnKey = "ecrf-user.button.locked";
+					} else {
+						updateBtnClass += " update-btn";
+					}
 				%>
 				
 				<liferay-ui:search-container-column-text
@@ -286,10 +300,10 @@
 					cssClass="min-width-80"
 				>
 
-				<a class="<%= isDisabled ? "dh-icon-button dh-icon-button-deactivate" : "dh-icon-button dh-icon-button-update"%>" href="<%=isDisabled ? "javascript:void(0);" : updateQueryURL %>" id="updateCRF">
-					<img src="<%= isDisabled ?  renderRequest.getContextPath() + "/btn_img/update_icon_deactivate.png" : renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
+				<button id="updateQuery" class="<%=updateBtnClass %>" onclick="<%=updateOnClickStr %>">
+					<img class="update-icon<%=TagAttrUtil.inactive(isDisabled, TagAttrUtil.TYPE_ICON) %>" />
 					<span><liferay-ui:message key="<%=updateBtnKey %>"/></span>	
-				</a>
+				</button>
 
 				
 				</liferay-ui:search-container-column-text>
@@ -307,8 +321,8 @@
 		<aui:row>
 			<aui:col>
 				<aui:button-row cssClass="marL10">
-					<aui:button type="button" name="delete" value="ecrf-user.button.delete-all-query" style="" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteAllQueryURL%>"></aui:button>
-					<aui:button type="button" name="add" value="ecrf-user.button.add-all-query" style="" cssClass="add-btn medium-btn radius-btn" onClick="<%=addAllQueryURL%>"></aui:button>
+					<aui:button type="button" name="delete" value="ecrf-user.button.delete-all-query" cssClass="delete-btn medium-btn radius-btn" onClick="<%=deleteAllQueryURL%>"></aui:button>
+					<aui:button type="button" name="add" value="ecrf-user.button.add-all-query" cssClass="add-btn medium-btn radius-btn" onClick="<%=addAllQueryURL%>"></aui:button>
 				</aui:button-row>
 				
 			</aui:col>

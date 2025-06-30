@@ -52,7 +52,12 @@
 	<%@ include file="sidebar.jspf" %>
 	
 	<div class="page-content">
-	
+		
+		<div class="crf-header-title">
+			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
+			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
+		</div>
+		
 		<liferay-ui:header backURL="<%=redirect %>" title='ecrf-user.crf-data.title.audit-trail' />
 	
 		<aui:fieldset-group markupView="lexicon">

@@ -87,6 +87,12 @@ _log.info("url : " + baseURL.toString());
 	<%@ include file="../other/sidebar.jspf" %>
 	
 	<div class="page-content">
+		
+		<div class="crf-header-title">
+			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
+			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
+		</div>
+	
 		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-data.title.crf-data-list" />
 		
 		<aui:form action="${searchURL}" name="searchOptionFm" autocomplete="off" cssClass="marBr">
@@ -179,14 +185,14 @@ _log.info("url : " + baseURL.toString());
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+							<button id="<portlet:namespace/>search" type="button" class="br20 dh-icon-button submit-btn search-btn white-text w130 h40 marR8 active">
 								<img class="search-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+							<button id="<portlet:namespace/>clear" type="button" class="br20 dh-icon-button submit-btn clear-btn white-text w130 h40 active" onclick="location.href='<%=clearSearchURL %>'">
 								<img class="clear-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
-							</a>
+							</button>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -362,6 +368,8 @@ _log.info("url : " + baseURL.toString());
 					
 					if(isLockDisabled) {
 						lockClass += " inactive";
+						lockIcon += " inactive";
+						lockBtnKey = "ecrf-user.button.locked";
 						dblockOnClickStr = "";
 					} else {
 						lockClass += " db-lock-btn";
@@ -374,7 +382,7 @@ _log.info("url : " + baseURL.toString());
 					name="ecrf-user.list.db-lock"
 					cssClass="min-width-80"
 				>			 
-					<button class="<%=lockClass %>" onclick="<%=dblockOnClickStr %>" id="dblock" <%=isLockDisabled ? "disabled" : "" %>>
+					<button id="<portlet:namespace/>dblock" type="button" class="<%=lockClass %>" onclick="<%=dblockOnClickStr %>" <%=isLockDisabled ? "disabled" : "" %>>
 						<img class="<%=lockIcon %>" />
 						<span><liferay-ui:message key="<%=lockBtnKey %>"/></span>			
 					</button>
@@ -429,12 +437,12 @@ _log.info("url : " + baseURL.toString());
 				%>
 				
 				<liferay-ui:search-container-column-text 
-					name="ecrf-user.list.crf-data"
+					name="ecrf-user.list.insert"
 					cssClass="min-width-80"
 				>	
 				<c:if test="">
 				</c:if>
-					<button class="<%=CRFAddBtnClass%>" onclick="<%=addOnClickStr%>" id="addCRF" <%=isAddDisabled ? "disabled" : "" %>>
+					<button id="<portlet:namespace/>addCRF" type="button" class="<%=CRFAddBtnClass%>" onclick="<%=addOnClickStr%>" <%=isAddDisabled ? "disabled" : "" %>>
 	          			<img class="add-icon<%=TagAttrUtil.inactive(isAddDisabled, TagAttrUtil.TYPE_ICON) %>" />
 						<span><liferay-ui:message key="<%=addDataBtnKey %>"/></span>	
 					</button>
@@ -485,7 +493,6 @@ _log.info("url : " + baseURL.toString());
 					
 					// check update lock -> change button span label key, set disabled
 					if(updateLock) {
-						updateDataBtnKey = "ecrf-user.button.locked";
 						isUpdateDisabled = true;
 					}
 					
@@ -496,6 +503,7 @@ _log.info("url : " + baseURL.toString());
 					// change button class and onclick code
 					if(isUpdateDisabled) {
 						CRFUpdateBtnClass += " inactive";
+						updateDataBtnKey = "ecrf-user.button.locked";
 						updateOnClickStr = "";
 					} else {
 						CRFUpdateBtnClass += " update-btn";
@@ -503,10 +511,10 @@ _log.info("url : " + baseURL.toString());
 				%>
 				
 				<liferay-ui:search-container-column-text 
-					name="ecrf-user.list.crf-data"
+					name="ecrf-user.list.update"
 					cssClass="min-width-80"
 				>
-					<button class="<%=CRFUpdateBtnClass%>" onclick="<%=updateOnClickStr %>" id="updateCRF" <%=isUpdateDisabled ? "disabled" : "" %> >		
+					<button id="<portlet:namespace/>updateCRF" type="button" class="<%=CRFUpdateBtnClass%>" onclick="<%=updateOnClickStr %>" <%=isUpdateDisabled ? "disabled" : "" %> >		
 						<img class="update-icon<%=TagAttrUtil.inactive(isUpdateDisabled, TagAttrUtil.TYPE_ICON) %>" />
 						<span><liferay-ui:message key="<%=updateDataBtnKey %>"/></span>			
 					</button>
@@ -565,6 +573,7 @@ _log.info("url : " + baseURL.toString());
 					// check disable -> change btn class, onclick str
 					if(isAuditDisabled) {
 						auditBtnClass = "dh-icon-button w130 inactive";
+						auditBtnKey = "ecrf-user.button.locked";
 						auditOnClickStr = "";
 						auditBtnIconClass += TagAttrUtil.inactive(isAuditDisabled, TagAttrUtil.TYPE_ICON);
 					}
@@ -575,10 +584,10 @@ _log.info("url : " + baseURL.toString());
 					name="ecrf-user.list.audit-trail"
 					cssClass="min-width-80"
 				>
-					<button class="<%=auditBtnClass %>" onclick="<%=auditOnClickStr %>" id="auditCRF" <%=isAuditDisabled ? "disabled" : "" %>>
+					<button id="<portlet:namespace/>auditCRF" type="button" class="<%=auditBtnClass %>" onclick="<%=auditOnClickStr %>" <%=isAuditDisabled ? "disabled" : "" %>>
 						<img class="<%=auditBtnIconClass%>" />
-						<span><liferay-ui:message key="<%=auditBtnKey%>"/></span>				
-					</button>	
+						<span><liferay-ui:message key="<%=auditBtnKey%>"/></span>
+					</button>
 				</liferay-ui:search-container-column-text>
 				
 				<%
@@ -603,8 +612,7 @@ _log.info("url : " + baseURL.toString());
 					}
 					
 					// check update lock
-					if(updateLock) {
-						deleteBtnKey = "ecrf-user.button.locked";
+					if(updateLock) {						
 						isDeleteDisabled = true;
 					}
 					
@@ -615,6 +623,7 @@ _log.info("url : " + baseURL.toString());
 	
 					if(isDeleteDisabled) {
 						deleteBtnClass += " inactive";
+						deleteBtnKey = "ecrf-user.button.locked";
 						deleteOnClickStr = "";
 					} else {
 						deleteBtnClass += " delete-btn";
@@ -625,7 +634,7 @@ _log.info("url : " + baseURL.toString());
 					name="ecrf-user.list.delete"
 					cssClass="min-width-80"
 				>
-					<button class="<%=deleteBtnClass%>" onclick="<%=deleteOnClickStr%>" id="deleteCRF" <%=isDeleteDisabled ? "disabled" : "" %>>
+					<button id="<portlet:namespace/>deleteCRF" type="button" class="<%=deleteBtnClass%>" onclick="<%=deleteOnClickStr%>" <%=isDeleteDisabled ? "disabled" : "" %>>
 	           			<img class="delete-icon<%=TagAttrUtil.inactive(isDeleteDisabled, TagAttrUtil.TYPE_ICON)%>"/>
 						<span><liferay-ui:message key="<%=deleteBtnKey%>"/></span>
 					</button>				
@@ -647,7 +656,7 @@ _log.info("url : " + baseURL.toString());
 				<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 			</liferay-portlet:actionURL>
 			
-			<button class="dh-icon-button delete-btn marTr w200" id="deleteCRF" onclick="location.href='<%=deleteAllCRFDataURL%>'">
+			<button id="<portlet:namespace/>deleteAllCRF" type="button" class="dh-icon-button delete-btn marTr w200" onclick="location.href='<%=deleteAllCRFDataURL%>'">
       			<img class="delete-icon"/>
 				<span><liferay-ui:message key="ecrf-user.button.delete-all-crf-data"/></span>
 			</button>

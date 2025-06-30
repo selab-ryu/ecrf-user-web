@@ -50,6 +50,7 @@ import org.osgi.service.component.annotations.Reference;
 import ecrf.user.constants.ECRFUserJspPaths;
 import ecrf.user.constants.ECRFUserMVCCommand;
 import ecrf.user.constants.ECRFUserPortletKeys;
+import ecrf.user.constants.ECRFUserUtil;
 import ecrf.user.constants.ECRFUserWebKeys;
 import ecrf.user.constants.attribute.ECRFUserResearcherAttributes;
 import ecrf.user.constants.type.ResearcherPosition;
@@ -188,6 +189,8 @@ public class UpdateResearcherActionCommand extends BaseMVCActionCommand {
 		} else {
 			_log.info("researcher is null");
 		}
+		
+		// NOTICE: when create researcher by researcher module, do not process agreement process
 		
 		if(Validator.isNotNull(researcherUser)) {
 			_log.info("user is added / " + researcherUser.getEmailAddress());

@@ -34,6 +34,8 @@ import ecrf.user.service.CRFLocalService;
 import ecrf.user.service.LinkCRFLocalService;
 import ecrf.user.visualizer.constants.ECRFVisualizerMVCCommand;
 import ecrf.user.visualizer.constants.ECRFVisualizerPortletKeys;
+import ecrf.user.visualizer.util.ECRFUserVisualizerUtil;
+
 
 /**
  * @author dev-ryu
@@ -104,9 +106,16 @@ public class GetKATRIDataResourceCommand extends BaseMVCResourceCommand {
 			}
 		}
 		
+		JSONArray groupArr = null;
+		try {
+			groupArr = ECRFUserVisualizerUtil.getVisualGroup("KATRI");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		// add count arr and sd arr to data obj
 		dataObj.put("data", sdArr);
-		
+		dataObj.put("group", groupArr);
 		// write data obj to response
 		PrintWriter pw = resourceResponse.getWriter();
 		pw.write(dataObj.toString());

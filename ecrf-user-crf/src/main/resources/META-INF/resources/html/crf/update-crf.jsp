@@ -66,6 +66,15 @@
 	<%@include file="sidebar.jspf" %>
 	
 	<div class="page-content">
+
+		<c:if test="<%=dataTypeId>0 %>">		
+		<div class="crf-header-title">
+			<%
+				DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+			%>
+			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
+		</div>
+		</c:if>
 		
 		<liferay-ui:header backURL="<%=redirect %>" title="<%=isUpdate ? "ecrf-user.crf.title.update-crf" : "ecrf-user.crf.title.add-crf" %>" />
 		
@@ -248,11 +257,11 @@
 					<portlet:param name="<%=ECRFUserCRFAttributes.DATATYPE_ID %>" value="<%=String.valueOf(dataTypeId) %>" />
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
-									
-				<a class="dh-icon-button submit-btn crf-form-btn w130 h36 marR8" href="<%=moveCRFFormURL %>" id="<portlet:namespace/>moveForm">
+				
+				<button id="<portlet:namespace/>moveForm" type="button" class="dh-icon-button submit-btn crf-form-btn w140 h36 marR8" onclick="location.href='<%=moveCRFFormURL %>'">
 					<img class="crf-form-icon" />					
-					<span><liferay-ui:message key="ecrf-user.menu.crf-builder" /></span>
-				</a>
+					<span><liferay-ui:message key="ecrf-user.menu.crf-form" /></span>
+				</button>
 				</c:if>
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA_LIST) %>">
@@ -264,10 +273,10 @@
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 				
-				<a class="dh-icon-button submit-btn crf-data-btn w130 h36 marR8" href="<%=moveCRFDataURL%>" id="<portlet:namespace/>moveData">
+				<button id="<portlet:namespace/>moveData" type="button" class="dh-icon-button submit-btn crf-data-btn w140 h36 marR8" onclick="location.href='<%=moveCRFDataURL%>'">
 					<img class="crf-data-icon" />					
 					<span><liferay-ui:message key="ecrf-user.menu.crf-data" /></span>
-				</a>
+				</button>
 				</c:if>
 				
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY_LIST) %>">
@@ -278,17 +287,17 @@
 					<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 				</portlet:renderURL>
 				
-				<a class="dh-icon-button submit-btn crf-query-btn w130 h36 marR8" href="<%=moveCRFQueryURL %>" id="<portlet:namespace/>moveQuery">
+				<button id="<portlet:namespace/>moveQuery" type="button" class="dh-icon-button submit-btn crf-query-btn w140 h36 marR8" onclick="location.href='<%=moveCRFQueryURL %>'">
 					<img class="crf-query-icon" />					
 					<span><liferay-ui:message key="ecrf-user.menu.crf-query" /></span>
-				</a>
+				</button>
 				</c:if>
 			</aui:button-row>
 			</c:if>
 			 
-			<c:if test="<%=isUpdate %>">
+			<c:if test="<%=isAdmin %>">
+				<c:if test="<%=isUpdate %>">
 				<aui:button-row>
-					<c:if test="<%=isAdmin %>">
 					<portlet:renderURL var="moveImportSubjectsURL">
 						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_IMPORT_SUBJECTS %>" />
 						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
@@ -296,13 +305,11 @@
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a class="dh-icon-button submit-btn import-subject-btn w180 h36 marR8" href="<%=moveImportSubjectsURL %>" id="<portlet:namespace/>ImportSubject">
+					<button id="<portlet:namespace/>importSubject" type="button" class="dh-icon-button submit-btn import-subject-btn w180 h36 marR8" onclick="location.href='<%=moveImportSubjectsURL %>'">
 						<img class="import-subject-icon" />		
 						<span><liferay-ui:message key="ecrf-user.button.crf.import-subject" /></span>
-					</a>
-					</c:if>
-					
-					<c:if test="<%=isAdmin %>">
+					</button>
+			
 					<portlet:renderURL var="moveImportDatasURL">
 						<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_IMPORT_DATAS %>" />
 						<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
@@ -310,12 +317,12 @@
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a class="dh-icon-button submit-btn import-data-btn w180 h36 marR8" href="<%=moveImportDatasURL %>" id="<portlet:namespace/>ImportData">
+					<button id="<portlet:namespace/>importData" type="button" class="dh-icon-button submit-btn import-data-btn w180 h36 marR8" onclick="location.href='<%=moveImportDatasURL %>'">
 						<img class="import-data-icon" />					
 						<span><liferay-ui:message key="ecrf-user.button.crf.import-data" /></span>
-					</a>
-					</c:if>
+					</button>
 				</aui:button-row>
+				</c:if>
 			</c:if>
 			
 			<aui:button-row>
@@ -331,32 +338,32 @@
 		
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_CRF) %>">
 					<%
-						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
-						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-crf.title");
+						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-crf.content");
 						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteCRFURL.toString());
 					%>
-					<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="btnDelete">
+					<button id="<portlet:namespace/>deleteBtn" type="button" class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onclick="<%=deleteFunctionCall %>">
 						<img class="delete-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
-					</a>
+					</button>
 				</c:if>
-								
+				
 				</c:when>
 				<c:otherwise>
 								
 				<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
-					<button type="button" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="saveBtn">
-						<img class="save-icon" />
+					<button id="saveBtn" type="button" class="dh-icon-button submit-btn add-btn w110 h36 marR8">
+						<img class="add-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 					</button>
 				</c:if>	
 				
 				</c:otherwise>
 				</c:choose>
-				<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=listCRFURL %>" id="<portlet:namespace/>cancel">
-					<img class="cancel-icon" />			
-					<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
-				</a>
+				<button id="<portlet:namespace/>back" type="button" class="dh-icon-button submit-btn back-btn w110 h36 marR8" onclick="location.href='<%=listCRFURL %>'">
+					<img class="back-icon" />			
+					<span><liferay-ui:message key="ecrf-user.button.back" /></span>
+				</button>
 			</aui:button-row>
 			
 		</aui:container>

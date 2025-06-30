@@ -1,5 +1,3 @@
-<%@page import="ecrf.user.constants.ECRFUserMenuConstants"%>
-<%@page import="ecrf.user.constants.TagAttrUtil"%>
 <portlet:renderURL var="moveCRFListURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF %>" />
 	<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF%>" />
@@ -21,11 +19,34 @@
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
 
+<portlet:renderURL var="movePDFDownloadURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_CRF_FORM_PDF_DOWNLOAD %>" />
+	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
+</portlet:renderURL>
+
+
 <portlet:renderURL var="moveCRFDataListURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA %>" />
 	<portlet:param name="<%=ECRFUserWebKeys.LIST_PATH %>" value="<%=ECRFUserJspPaths.JSP_LIST_CRF_DATA_UPDATE%>" />
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
+
+<portlet:renderURL var="moveCRFDataHistoryListURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_DATA_HISTORY %>" />
+	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+</portlet:renderURL>
+
+<portlet:renderURL var="moveExcelDownloadURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_CRF_DATA_EXCEL_DOWNLOAD %>" />
+	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+</portlet:renderURL>
+
+<portlet:renderURL var="moveSearchCRFDataURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_SEARCH_CRF_DATA %>" />
+	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+</portlet:renderURL>
+
 
 <portlet:renderURL var="moveCRFQueryListURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_QUERY %>" />
@@ -37,96 +58,165 @@
 <div class="side-menu radius-shadow-container" style="text-align:center;">		
 	<!-- CRF Management -->
 	<div>
-		<a class="dh-sidebar menu-main" href="<%=moveCRFListURL %>" name="CRFMain">
+		<a class="dh-sidebar menu-main active" href="javascript:void(0);" name="CRFInfo">
 			<img class="crf-icon" />
-			<span><liferay-ui:message key="ecrf-user.menu.crf" /></span>
-		</a>		
+			<span><liferay-ui:message key="ecrf-user.menu.crf-info" /></span>
+		</a>
 	</div>
 	
 	<div>
-		<a class="dh-sidebar menu-1 inactive" href="<%=moveCRFListURL %>" name="CRFList">
-       		<img class="crf-list-icon-inactive" />
+		<a id="crfListMenu" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveCRFListURL %>">
+      		 <img class="crf-list-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf.list" /></span>
-		</a>	
+		</a>
 	</div>
 	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 	<div>
-		<a class="dh-sidebar menu-1 inactive" href="<%=moveAddCRFURL %>" name="CRFList">
-      		<img class="add-crf-icon-inactive" />
+		<a id="crfCreateMenu" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveAddCRFURL %>">
+      		<img class="create-crf-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf.create" /></span>
 		</a>
 	</div>
 	</c:if>
 	
+	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF) %>">
 	<div>
-		<a class="dh-sidebar menu-1" href="<%=moveUpdateCRFURL %>" name="CRFUpdate">
+		<a id="crfUpdateMenu"class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveUpdateCRFURL %>">
        		<img class="update-crf-icon" />
-			<span><liferay-ui:message key="ecrf-user.menu.crf.update-info" /></span>
+			<span><liferay-ui:message key="ecrf-user.menu.crf.update" /></span>
+		</a>
+	</div>
+	</c:if>
+	
+	
+	<div>
+		<a class="dh-sidebar menu-main active" name="CRFForm" href="javascript:void(0);">
+			<img class="crf-form-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-form" /></span>
 		</a>
 	</div>
 	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_FORM) %>">
 	<div>
-		<a class="dh-sidebar menu-2 inactive" href="<%=moveManageFormURL %>" name="CRFForm">
-        	<img class="crf-form-icon-inactive" />
-			<span><liferay-ui:message key="ecrf-user.menu.crf-builder" /></span>
+		<a id="crfBuilderMenu" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveManageFormURL%>">
+       		<img class="crf-builder-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-form.builder" /></span>
 		</a>
 	</div>
 	</c:if>
+	
+	
+	<div>
+		<a class="dh-sidebar menu-main active" name="CRFData" href="javascript:void(0);">
+			<img class="crf-data-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-data" /></span>
+		</a>
+	</div>
 	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA_LIST) %>">
 	<div>
-		<a class="dh-sidebar menu-2 inactive" href="<%=moveCRFDataListURL %>" name="CRFData">
-			<img class="crf-data-icon-inactive" />
-			<span><liferay-ui:message key="ecrf-user.menu.crf-data" /></span>
-		</a>	
+		<a id="dataListMenu" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveCRFDataListURL%>">
+       		<img class="data-list-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-data.list" /></span>
+		</a>
 	</div>
 	</c:if>
 	
+	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY_LIST) %>">
 	<div>
-		<a class="dh-sidebar menu-2" href="<%=moveCRFQueryListURL %>" name="CRFQuery">
-   			<img class="crf-query-icon" />
-			<span><liferay-ui:message key="ecrf-user.menu.crf-query" /></span>
-		</a>	
+		<a id="historyListMenu" name="menuTooltip" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveCRFDataHistoryListURL%>">
+       		<img class="data-history-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-data.history" /></span>
+		</a>
 	</div>
+	</c:if>
+	
+	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_EXCEL_DOWNLOAD) %>">
+	<div>
+		<a id="excelMenu" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveExcelDownloadURL%>">
+       		<img class="excel-download-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-data.excel" /></span>
+		</a>
+	</div>
+	</c:if>
+	
+	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_ADVANCED_SEARCH) %>">
+	<div>
+		<a id="searchDataMenu" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveSearchCRFDataURL%>">
+       		<img class="search-crf-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-data.search-data" /></span>
+		</a>
+	</div>
+	</c:if>
+	
 	
 	<div>
-		<a class="dh-sidebar menu-3<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.LIST_QUERY)%>" href="<%=moveCRFQueryListURL %>" name="CRFQuery">
-         	<img class="query-list-icon<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_ICON, ECRFUserMenuConstants.LIST_QUERY)%>" />
+		<a class="dh-sidebar menu-main active" name="CRFQuery" href="javascript:void(0);">
+			<img class="crf-query-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-query" /></span>
+		</a>
+	</div>
+	
+	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY_LIST) %>">
+	<div>
+		<a id="queryListMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, ECRFUserMenuConstants.LIST_QUERY, TagAttrUtil.TYPE_MENU)%>" href="<%=moveCRFQueryListURL%>">
+       		<img class="query-list-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query.list" /></span>
 		</a>
 	</div>
+	</c:if>
 	
-	<%
-	boolean isUpdateQuery = menu.equals(ECRFUserMenuConstants.VALIDATE_QUERY);	
-	String updateQueryMenuTooltip = isUpdateQuery ? "" : LanguageUtil.get(request.getLocale(), "ecrf-user.menu.tooltip.update-query");
-	%>
-	
+	<% boolean isUpdateQuery = menu.equals(ECRFUserMenuConstants.VALIDATE_QUERY); %>
+	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_QUERY) %>">
 	<div>
-		<a class="dh-sidebar menu-3<%=TagAttrUtil.inactive_notMove(menu, ECRFUserMenuConstants.VALIDATE_QUERY)%>" href="<%=isUpdateQuery ? "" : "javascript:void(0);" %>" tooltip="<%=updateQueryMenuTooltip%>" flow="right" name="CRFQuery">
-      		<img class="update-query-icon<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_ICON, ECRFUserMenuConstants.VALIDATE_QUERY)%>" />
+		<a id="queryUpdateMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.checkMenuState(menu, ECRFUserMenuConstants.VALIDATE_QUERY, !isUpdateQuery) %>" href="javascript:void(0);">
+       		<img class="update-query-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query.update" /></span>
 		</a>
 	</div>
+	</c:if>
 
 	<%
-	String crfName = "";
+	List<CRF> allCRFList = CRFLocalServiceUtil.getCRFByGroupId(scopeGroupId);
 	
-	if(crfId > 0) {
-		CRF curCRF = CRFLocalServiceUtil.getCRF(crfId);
-		DataType curDataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
-		crfName = curDataType.getDisplayName();
-	} else {
-		crfName = "CRF is Not Selected";
-	}
+	_log.info("check portlet id : " + themeDisplay.getPortletDisplay().getId());
+	
+	// set command by current page?
+	_log.info("current menu : " + menu);
+	String movePageCommand = "";
+	movePageCommand = ECRFUserMVCCommand.getRenderCommandByMenu(menu);
+	_log.info("command by menu : " + movePageCommand);
+	if(Validator.isNull(movePageCommand)) movePageCommand = ECRFUserMVCCommand.RENDER_UPDATE_CRF;
 	%>
+
+	<portlet:renderURL var="movePageURL">
+		<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=movePageCommand %>" />
+	</portlet:renderURL>
+	
+	<!-- crf list on side menu => move to that crf -->
 	<div>
 		<div class="current-crf">
-			<strong><liferay-ui:message key="ecrf-user.menu.current-crf-x" arguments="<%=crfName %>" /></strong>
+			<strong><liferay-ui:message key="ecrf-user.menu.all-crf" /></strong>
+			<%for(int i=0; i<allCRFList.size(); i++) { %>
+			<%
+				CRF tempCRF = allCRFList.get(i);
+				DataType dt = DataTypeLocalServiceUtil.getDataType(tempCRF.getDatatypeId());				 
+				String onClickStr = String.format("moveUpdateCRF('%s', '%s', %d)", movePageURL.toString(), themeDisplay.getPortletDisplay().getId(), tempCRF.getCrfId());
+			%>
+				<div class="click-div" onclick="<%=onClickStr%>;"><span><%=dt.getDisplayName(themeDisplay.getLocale()) %></span></div>
+			<%} %>
 		</div>
 	</div>
 	
 	<!-- CRF Management -->
 	
 </div>
+
+<script>
+if(<%=!isUpdateQuery%>) {
+	tippy('#queryUpdateMenu', {
+		content: Liferay.Language.get('ecrf-user.menu.tooltip.update-query'), placement: 'right', animation: 'fade', duration: [100, 200]
+	});
+}
+</script>

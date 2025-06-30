@@ -186,10 +186,10 @@ backURL = redirect;
 		<aui:row>
 			<aui:col md="12">
 				<aui:button-row>
-					<a class="dh-icon-button submit-btn cancel-btn w110 h36" href="<%=backURL %>" name="<portlet:namespace/>cancel">
-						<img class="cancel-icon" />					
-						<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
-					</a>
+					<button name="<portlet:namespace/>back" type="button" class="dh-icon-button submit-btn cancel-btn w110 h36" onclick="location.href='<%=backURL %>'">
+						<img class="back-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.back" /></span>
+					</button>
 				</aui:button-row>
 				
 			</aui:col>
