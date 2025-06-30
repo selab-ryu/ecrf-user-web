@@ -65,10 +65,10 @@
 						<thead>
 							<tr>
 								<th><input type="checkbox" name="subject_select_all"></th>
-								<th><liferay-ui:message key="ecrf-user.list.name"/></th>
-								<th><liferay-ui:message key="ecrf-user.list.serial-id"/></th>
-								<th><liferay-ui:message key="ecrf-user.list.birth"/></th>
-								<th><liferay-ui:message key="ecrf-user.list.gender"/></th>
+								<th>Name</th>
+								<th>Serial ID</th>
+								<th>Birth</th>
+								<th>Gender</th>
 							</tr>
 						</thead>
 					</table>
@@ -99,10 +99,10 @@
 						<thead>
 							<tr>
 								<th><input type="checkbox" name="subject_select_all"></th>
-								<th><liferay-ui:message key="ecrf-user.list.name"/></th>
-								<th><liferay-ui:message key="ecrf-user.list.serial-id"/></th>
-								<th><liferay-ui:message key="ecrf-user.list.birth"/></th>
-								<th><liferay-ui:message key="ecrf-user.list.gender"/></th>
+								<th>Name</th>
+								<th>Serial ID</th>
+								<th>Birth</th>
+								<th>Gender</th>
 							</tr>
 						</thead>
 					</table>
@@ -114,9 +114,9 @@
 					<img class="save-icon" />
 					<span><liferay-ui:message key="ecrf-user.button.save"/></span>
 				</button>
-				<button id="<portlet:namespace/>closeDialog" class="dh-icon-button submit-btn close-btn w120 h36" >
-					<img class="close-icon" />
-					<span><liferay-ui:message key="ecrf-user.button.close"/></span>
+				<button id="<portlet:namespace/>closeDialog" class="dh-icon-button submit-btn cancel-btn w120 h36" >
+					<img class="cancel-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.cancel"/></span>
 				</button>
 			</aui:button-row>
 			

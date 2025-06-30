@@ -65,6 +65,8 @@ if(isSearch) {
 	<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 </portlet:renderURL>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
 <div class="ecrf-user ecrf-user-researcher">
 
 	<%@ include file="sidebar.jspf" %>
@@ -176,14 +178,14 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button id="<portlet:namespace/>search" type="button" class="br20 dh-icon-button submit-btn search-btn white-text w130 h40 marR8 active">
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
 								<img class="search-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<button id="<portlet:namespace/>clear" type="button" class="br20 dh-icon-button submit-btn clear-btn white-text w130 h40 active" onclick=".location.href='<%=clearSearchURL%>'">
+							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
 								<img class="clear-icon" />							
 								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
-							</button>
+							</a>
 						</aui:button-row>
 					</aui:col>
 				</aui:row>
@@ -221,10 +223,7 @@ if(isSearch) {
 					<portlet:param name="menu" value="<%=menu %>" />
 				</portlet:renderURL>
 				
-				<% boolean hasViewPermission = ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_RESEARCHER); %>
-				
 				<liferay-ui:search-container-column-text
-					href="<%=hasViewPermission ? rowURL : "javascript:void(0);" %>"
 					name="ecrf-user.list.no"
 					value="<%=String.valueOf(++count) %>"
 				/>
@@ -238,8 +237,13 @@ if(isSearch) {
 					name="ecrf-user.list.screen-name"
 					value="<%=Validator.isNull(researcherUser.getScreenName()) ? "-" : researcherUser.getScreenName() %>"
 				/>
-
+				
+				<%
+				boolean hasViewPermission = ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_RESEARCHER);
+				%>
+				
 				<liferay-ui:search-container-column-text
+					href="<%=hasViewPermission ? rowURL.toString() : StringPool.BLANK %>"
 					name="ecrf-user.list.name"
 					value="<%=Validator.isNull(researcher.getName()) ? "-" : researcher.getName() %>"
 				/>
@@ -275,25 +279,16 @@ if(isSearch) {
 						<portlet:param name="<%=ECRFUserResearcherAttributes.RESEARCHER_ID %>" value="<%=String.valueOf(researcher.getResearcherId()) %>" />
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />						
 					</portlet:renderURL>
-					
-					<%
-					String updateBtnClass = "dh-icon-button w130";
-					String updateOnClickStr = "location.href='"+updateResearcherURL+"'";
-					String updateBtnKey = "ecrf-user.button.update-data";
-					
-					if(!hasUpdatePermission) {
-						updateBtnClass += " inactive";
-						updateOnClickStr = "";
-						updateBtnKey = "ecrf-user.button.locked";
-					} else {
-						updateBtnClass += " update-btn";
-					}
-					%>
-					
-					<button name="<portlet:namespace/>updateCRF" type="button" class="<%=updateBtnClass%>" onclick="<%=updateOnClickStr%>" <%=!hasUpdatePermission ? "disabled" : "" %>>
-						<img class="update-icon<%=TagAttrUtil.inactive(!hasUpdatePermission, TagAttrUtil.TYPE_ICON) %>" />
-						<span><liferay-ui:message key="<%=updateBtnKey %>" /></span>
-					</button>
+					<a class="<%= !hasUpdatePermission ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" href="<%=updateResearcherURL %>" name="updateCRF" disabled="<%=!hasUpdatePermission ? true : false %>">
+						<img class="update-icon<%=TagAttrUtil.inactive(hasUpdatePermission) %>" />
+						
+						<c:if test="<%=!hasUpdatePermission %>">
+							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
+						</c:if>
+						<c:if test="<%=hasUpdatePermission %>">
+							<span><liferay-ui:message key="ecrf-user.button.update-data" /></span>
+						</c:if>			
+					</a>
 				</liferay-ui:search-container-column-text>
 			</liferay-ui:search-container-row>
 			

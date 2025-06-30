@@ -125,19 +125,13 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 							label=""
 						>
 							<%
-							ExperimentalGroupType[] expGroups = ExperimentalGroupType.values();
-							for(int i=0; i<expGroups.length; i++) {
-								ExperimentalGroupType rowExpGroup = expGroups[i];
-								boolean isSelected = false;
-								if(Validator.isNull(expGroup)) {
-									isSelected = true;
-								} else {
-									if(expGroup.getType() == rowExpGroup.getNum()) isSelected = true;
-								}
+								ExperimentalGroupType[] expGroups = ExperimentalGroupType.values();
+								for(int i=0; i<expGroups.length; i++) {
+									ExperimentalGroupType rowExpGroup = expGroups[i];
 							%>
-								<aui:option selected="<%=isSelected %>" value="<%=rowExpGroup.getNum() %>"><%=rowExpGroup.getFullString() %></aui:option>
+							<aui:option selected="true" value="<%=rowExpGroup.getNum() %>"><%=rowExpGroup.getFullString() %></aui:option>
 							<%
-							}
+								}
 							%>
 						</aui:select>
 					</aui:col>
@@ -146,39 +140,40 @@ boolean hasDeletePermission = ProjectPermission.contains(permissionChecker, scop
 			
 			<aui:button-row>
 				<c:if test="<%=!isUpdate %>">
-					<c:if test="<%=hasAddPermission %>">
-					<button id="<portlet:namespace/>add" type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8">
-						<img class="add-icon" />
-						<span><liferay-ui:message key="ecrf-user.button.add" /></span>
-					</button>
-					</c:if>
+				<c:if test="<%=hasAddPermission %>">
+				<button type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8" id="<portlet:namespace/>add">
+					<img class="add-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.add" /></span>
+				</button>
+				</c:if>
 				</c:if>
 				
 				<c:if test="<%=isUpdate %>">
-					<c:if test="<%=hasUpdatePermission %>">
-					<button id="<portlet:namespace/>update" type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8">
-						<img class="update-icon" />
-						<span><liferay-ui:message key="ecrf-user.button.update" /></span>
-					</button>
-					</c:if>
-				
-					<c:if test="<%=hasDeletePermission %>">
-					<%
-						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
-						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
-						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
-					%>
-					<button id="<portlet:namespace/>delete" type="button" class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onclick="<%=deleteFunctionCall %>">
-						<img class="delete-icon" />
-						<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
-					</button>
-					</c:if>
-				</c:if>
-				<button id="<portlet:namespace/>back" type="button" class="dh-icon-button submit-btn back-btn w110 h36 marR8" onclick="location.href='<%=listExpGroupURL%>'">
-					<img class="back-icon" />
-					<span><liferay-ui:message key="ecrf-user.button.back" /></span>
+				<c:if test="<%=hasUpdatePermission %>">
+				<button type="submit" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>update">
+					<img class="update-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.update" /></span>
 				</button>
+				</c:if>
+				
+				<c:if test="<%=hasDeletePermission %>">
+				<%
+					String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
+					String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+					String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteExpGroupURL.toString());
+				%>
+				<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="btnDelete">
+					<img class="delete-icon" />
+					<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
+				</a>
+				</c:if>
+				</c:if>
+				<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=listExpGroupURL %>" id="<portlet:namespace/>cancel">
+					<img class="cancel-icon" />					
+					<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
+				</a>
 			</aui:button-row>
 		</aui:form>
+		
 	</div>
 </div>

@@ -20,7 +20,7 @@
 		
 	<%-- Project Management --%>
 	<div>
-		<a class="dh-sidebar menu-main active" href="javascript:void(0);" name="ProjectMain">
+		<a class="dh-sidebar menu-main" href="<%=moveViewProjectURL %>" name="ProjectMain">
 			<img class="project-icon"/>
 			<span><liferay-ui:message key="ecrf-user.menu.project" /></span>
 		</a>				
@@ -33,22 +33,29 @@
 		projectMenu.add(ECRFUserMenuConstants.UPDATE_PROJECT);
 	%>
 	<div>
-		<a name="ProjectInfo" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, TagAttrUtil.TYPE_MENU, projectMenu.toArray(new String[0]))%>" href="<%=moveViewProjectURL %>" >
-			<img class="project-info-icon"/>
+		<a class="dh-sidebar menu-1<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_MENU, projectMenu.toArray(new String[0]))%>" href="<%=moveViewProjectURL %>" name="ProjectInfo">
+			<img class="project-info-icon<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_ICON, projectMenu.toArray(new String[0]))%>"/>
 			<span><liferay-ui:message key="ecrf-user.menu.project.info"/></span>
 		</a>
 	</div>
 	
-	<div>
-		<a class="dh-sidebar menu-main active" href="javascript:void(0);" name="ExpGroup">
-			<img class="exp-group-icon"/>
-			<span><liferay-ui:message key="ecrf-user.menu.project.experimental-group" /></span>
-		</a>				
-	</div>
+	<%
+		List<String> expMenu = new ArrayList<>();
+		expMenu.add(ECRFUserMenuConstants.LIST_EXP_GROUP);
+		expMenu.add(ECRFUserMenuConstants.ADD_EXP_GROUP);
+		expMenu.add(ECRFUserMenuConstants.UPDATE_EXP_GROUP);
+	%>
+	
 	
 	<div>
-		<a name="ExpGroupList" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.LIST_EXP_GROUP)%>" href="<%=moveExpGroupURL %>">
-			<img class="exp-group-list-icon" />
+		<a class="dh-sidebar menu-1<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_MENU, expMenu.toArray(new String[0]))%>" href="<%=moveExpGroupURL %>" name="ExpGroup">
+			<img class="exp-group-icon<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_ICON, expMenu.toArray(new String[0])) %>" />
+			<span><liferay-ui:message key="ecrf-user.menu.project.experimental-group" /></span>
+		</a>	
+	</div>
+	<div>
+		<a class="dh-sidebar menu-2<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.LIST_EXP_GROUP)%>" href="<%=moveExpGroupURL %>" name="ExpGroupList">
+			<img class="exp-group-list-icon<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_ICON, ECRFUserMenuConstants.LIST_EXP_GROUP)%>" />
 			<span><liferay-ui:message key="ecrf-user.menu.project.experimental-group.list" /></span>
 		</a>	
 	</div>
@@ -61,8 +68,8 @@
 	
 	<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_EXP_GROUP) %>">
 	<div>
-		<a name="AddExpGroup" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, TagAttrUtil.TYPE_MENU, expAddMenu.toArray(new String[0]))%>" href="<%=moveAddExpGroupURL %>" >
-			<img class="add-exp-group-icon" />
+		<a class="dh-sidebar menu-2<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_MENU, expAddMenu.toArray(new String[0]))%>" href="<%=moveAddExpGroupURL %>" name="AddExpGroup">
+			<img class="add-exp-group-icon<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_ICON, expAddMenu.toArray(new String[0]))%>" />
 			<span><liferay-ui:message key="ecrf-user.menu.project.experimental-group.add" /></span>
 		</a>
 	</div>

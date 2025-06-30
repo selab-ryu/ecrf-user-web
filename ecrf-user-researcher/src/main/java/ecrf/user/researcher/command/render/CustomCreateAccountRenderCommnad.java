@@ -52,9 +52,6 @@ public class CustomCreateAccountRenderCommnad implements MVCRenderCommand {
 		String from = ParamUtil.getString(renderRequest, "from", "login");
 		_log.info("from : " + from);
 		
-		boolean agree = ParamUtil.getBoolean(renderRequest, "agree");
-		_log.info("agree : " + agree);
-		
 		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_VIEW_PRIVACY_AGREEMENT);
 		
 		if(from.equals("privacy")) {
@@ -65,7 +62,7 @@ public class CustomCreateAccountRenderCommnad implements MVCRenderCommand {
 		}
 		
 		// for deploy
-		//requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
+		requestDispatcher = servletContext.getRequestDispatcher(ECRFUserJspPaths.JSP_UPDATE_RESEARCHER);
 		
 		try {
 			HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);

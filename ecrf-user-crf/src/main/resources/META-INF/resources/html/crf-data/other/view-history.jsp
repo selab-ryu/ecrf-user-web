@@ -25,11 +25,6 @@
 	
 	<div class="page-content">
 		
-		<div class="crf-header-title">
-			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
-			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
-		</div>
-		
 		<liferay-ui:header backURL="<%=redirect %>" title='ecrf-user.crf-data.title.view-history' />
 		
 		<aui:container cssClass="radius-shadow-container">
@@ -116,10 +111,10 @@
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="marL10">
-						<button id="<portlet:namespace/>back" type="button" class="dh-icon-button back-btn w130" onclick="location.href='"<%=listHistoryURL %>'">
-							<img class="back-icon" />					
-							<span><liferay-ui:message key="ecrf-user.button.back"/></span>
-						</button>
+						<a class="dh-icon-button cancel-btn w130" href="<%=listHistoryURL %>" id="<portlet:namespace/>cancel">
+							<img class="cancel-icon" />					
+							<span><liferay-ui:message key="ecrf-user.button.cancel"/></span>
+						</a>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>				

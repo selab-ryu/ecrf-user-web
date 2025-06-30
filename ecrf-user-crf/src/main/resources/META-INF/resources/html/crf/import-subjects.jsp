@@ -2,10 +2,6 @@
 <%@page import="ecrf.user.constants.ECRFUserActionKeys"%>
 <%@ include file="../init.jsp" %>
 
-<%!
-    private static Log _log = LogFactoryUtil.getLog("html.crf.import_subjects_jsp");
-%>
-
 <%
 	String menu = ECRFUserMenuConstants.UPDATE_CRF;
 	
@@ -42,12 +38,6 @@
 	<%@include file="sidebar.jspf" %>
 	
 	<div class="page-content">
-
-		<div class="crf-header-title">
-			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
-			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
-		</div>
-	
 		<liferay-ui:header backURL="<%=redirect %>" title="Import Subjects" />
 		
 		<aui:form action="<%=importSubjectJsonURL %>" name="importJson" autocomplete="off" method="post" enctype="multipart/form-data">
