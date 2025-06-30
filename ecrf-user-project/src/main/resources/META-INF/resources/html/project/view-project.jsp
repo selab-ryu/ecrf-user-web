@@ -121,30 +121,19 @@ if(!isPrivate) pageClass = "mar16px";
 			<aui:button-row>
 				<c:choose>
 				<c:when test="<%=(projectId > 0) %>">
-					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">			
-						<a href="<%=updateProjectURL %>" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>update">
+					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_PROJECT) %>">
+						<button id="<portlet:namespace/>update" type="button" class="dh-icon-button submit-btn update-btn w110 h36 marR8" onclick="location.href='<%=updateProjectURL %>'">
 							<img class="update-icon" />
 							<span><liferay-ui:message key="ecrf-user.button.update" /></span>
-						</a>					
-					</c:if>
-					<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_PROJECT) %>">
-						<%
-							String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
-							String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
-							String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteProjectURL.toString());
-						%>
-						<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="btnDelete">
-							<img class="delete-icon" />
-							<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
-						</a>
+						</button>
 					</c:if>
 			 	</c:when>
 			 	<c:otherwise>
 			 		<c:if test="<%=ProjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_PROJECT) %>">
-						<a href="<%=addProjectURL %>" class="dh-icon-button submit-btn add-btn w110 h36 marR8" id="<portlet:namespace/>add">
+						<button id="<portlet:namespace/>add" type="button" class="dh-icon-button submit-btn add-btn w110 h36 marR8" onclick="location.href='<%=addProjectURL %>'">
 							<img class="add-icon" />
 							<span><liferay-ui:message key="ecrf-user.button.add" /></span>
-						</a>	
+						</button>
 			 		</c:if>
 			 	</c:otherwise>
 			 	</c:choose>		

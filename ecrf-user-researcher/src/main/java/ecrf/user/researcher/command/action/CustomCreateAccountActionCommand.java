@@ -38,8 +38,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import ecrf.user.constants.ECRFUserMVCCommand;
+import ecrf.user.constants.ECRFUserUtil;
 import ecrf.user.constants.ECRFUserWebKeys;
 import ecrf.user.constants.attribute.ECRFUserResearcherAttributes;
+import ecrf.user.exception.NoSuchResearcherException;
 import ecrf.user.model.Researcher;
 import ecrf.user.service.ResearcherLocalService;
 
@@ -142,6 +144,20 @@ public class CustomCreateAccountActionCommand extends BaseMVCActionCommand {
 			user = _userLocalService.getUser(researcher.getResearcherUserId());
 		} else {
 			_log.info("researcher is null");
+		}
+		
+		// update researcher's agreement status when user is added from Login module(from liferay[true]) not Users module(User admin menu[false])
+		boolean fromLiferay = ParamUtil.getBoolean(actionRequest, "fromLiferay");
+		boolean isAdminMenu = ParamUtil.getBoolean(actionRequest, "isAdminMenu");
+		
+		_log.info(ECRFUserUtil.getLogMsg("from liferay / is admin menu : ", " / " , fromLiferay, isAdminMenu));
+		
+		if(fromLiferay && !isAdminMenu) {
+			try {
+				_researcherLocalService.updateAgreemnt(researcher.getResearcherId(), true);
+			} catch(NoSuchResearcherException noResearcher) {
+				noResearcher.printStackTrace();
+			}
 		}
 		
 		/*

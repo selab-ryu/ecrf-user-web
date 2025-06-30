@@ -19,27 +19,26 @@
 	<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.DELETE%>" />
 </portlet:renderURL>
 
-
 	<div class="side-menu radius-shadow-container" style="text-align:center;">
 				
 		<!-- Researcher Management -->
 		<div>
-			<a class="dh-sidebar menu-main" href="<%=researcherListURL %>" name="ResearcherMain">
+			<a name="ResearcherMain" class="dh-sidebar menu-main active" href="javascript:void(0);">
 				<img class="researcher-icon" />
 				<span><liferay-ui:message key="ecrf-user.menu.researcher" /></span>
 			</a>
 		</div>
 		<div>
-			<a class="dh-sidebar menu-1<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.LIST_RESEARCHER)%>" href="<%=researcherListURL %>" name="ResearcherList">
-				<img class="researcher-list-icon<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_ICON, ECRFUserMenuConstants.LIST_RESEARCHER)%>" />
+			<a name="ResearcherList" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.LIST_RESEARCHER)%>" href="<%=researcherListURL %>">
+				<img class="researcher-list-icon" />
 				<span><liferay-ui:message key="ecrf-user.menu.researcher.list" /></span>
 			</a>
 		</div>
 		
 		<c:if test="<%=ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_RESEARCHER) %>">
 		<div>
-			<a class="dh-sidebar menu-1<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.ADD_RESEARCHER, ECRFUserMenuConstants.UPDATE_RESEARCHER)%>" href="<%=moveAddResearcherURL %>" name="AddResearcher">
-				<img class="add-researcher-icon<%=TagAttrUtil.inactive(menu, TagAttrUtil.TYPE_ICON, ECRFUserMenuConstants.ADD_RESEARCHER, ECRFUserMenuConstants.UPDATE_RESEARCHER)%>" />
+			<a name="AddResearcher" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.ADD_RESEARCHER, ECRFUserMenuConstants.UPDATE_RESEARCHER)%>" href="<%=moveAddResearcherURL %>">
+				<img class="add-researcher-icon" />
 				<span><liferay-ui:message key="ecrf-user.menu.researcher.add" /></span>
 			</a>
 		</div>

@@ -23,7 +23,11 @@ public class ECRFUserTopHeadDynamicInclude extends BaseDynamicInclude {
 		PrintWriter printWriter = response.getWriter();
 		
 		String content = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/o/ecrf.user.dynamic.include/css/ecrf-user.css\" >";
-				
+		
+		// for tooltip
+		content += "<script src=\"https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js\"></script>";
+		content += "<script src=\"https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js\"></script>";
+		
 		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/DataTables/datatables.min.js\"></script>";
 		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/ecrf-user.js\"></script>";
 		content += "<script charset=\"utf-8\" src=\"/o/ecrf.user.dynamic.include/js/ecrf-viewer.js\"></script>";
