@@ -1,6 +1,6 @@
 let ECRFViewer = function(StationX){
 
-	// console.log(StationX);
+	//console.log(StationX);
 
 	let SX = {
 		StationX: StationX,
@@ -9,7 +9,7 @@ let ECRFViewer = function(StationX){
 
 	class Viewer{
 		/*
-		 * Here for launch viewer
+		 * Here for launch viewer 
 		 * 
 		 */
 
@@ -53,7 +53,7 @@ let ECRFViewer = function(StationX){
 				});
 					
 				DataStructure.renderSmartCRF = function(){
-					// console.log("is for render smartCRF");
+					//console.log("is for render smartCRF");
 					if( $.isEmptyObject( this.terms ) ){
 						return;
 					}
@@ -62,8 +62,7 @@ let ECRFViewer = function(StationX){
 					
 					this.terms.forEach(term=>{
 						if( term.termType === 'List' || term.termType === 'boolean' ){
-							// console.log("List/Boolean Term slave term check :
-							// ", term, term.termName, term.hasSlaves());
+							//console.log("List/Boolean Term slave term check : ", term, term.termName, term.hasSlaves());
 							if( term.hasSlaves() ){
 								renderUtil.activateTerms(term);
 							}
@@ -111,13 +110,13 @@ let ECRFViewer = function(StationX){
 			this.gender = subjectInfo["subjectGender"];
 			this.age = autoCalUtil.calcAge(subjectInfo["subjectBirth"], new Date());
 			
-			// for er crf cogas score
+			//for er crf cogas score
 			this.cogasScore = 0;
 			if(this.age >= 50){
 				this.cogasScore++;
 			}
 			
-			// for exercise crf risk, metabolic measurement
+			//for exercise crf risk, metabolic measurement
 			this.riskCount = 0;
 			this.metabolicCount = 0;
 			
@@ -125,11 +124,8 @@ let ECRFViewer = function(StationX){
 		
 		/**
 		 * calculate age at targetDate (in korean way)
-		 * 
-		 * @param {Date}
-		 *            birthDate
-		 * @param {Date}
-		 *            targetDate
+		 * @param {Date} birthDate
+		 * @param {Date} targetDate
 		 * @returns {int} age
 		 */
 		calcAge: function (birthDate, targetDate) {
@@ -155,19 +151,14 @@ let ECRFViewer = function(StationX){
 		},
 
 		/**
-		 * Calculate smoke period day by year, month, day get value from each
-		 * year, month, day input divide total day by option
-		 * 
-		 * @param {String}
-		 *            targetNamespace
-		 * @param {String}
-		 *            yearId
-		 * @param {String}
-		 *            monthId
-		 * @param {String}
-		 *            dayId
-		 * @param {String}
-		 *            option
+		 * Calculate smoke period day by year, month, day
+		 * get value from each year, month, day input
+		 * divide total day by option
+		 * @param {String} targetNamespace 
+		 * @param {String} yearId 
+		 * @param {String} monthId 
+		 * @param {String} dayId 
+		 * @param {String} option 
 		 * @returns fixed(4) float smoke period
 		 */
 		calcSmokePeriod: function(targetNamespace, yearId, monthId, dayId, option) {
@@ -199,17 +190,12 @@ let ECRFViewer = function(StationX){
 		},
 		
 		/**
-		 * Calculate bmi by height, weight get fixed param and return fixed
-		 * float
-		 * 
-		 * @param {String}
-		 *            targetNamespace
-		 * @param {String}
-		 *            weightId
-		 * @param {String}
-		 *            heightId
-		 * @param {number}
-		 *            fixed
+		 * Calculate bmi by height, weight
+		 * get fixed param and return fixed float
+		 * @param {String} targetNamespace 
+		 * @param {String} weightId 
+		 * @param {String} heightId 
+		 * @param {number} fixed 
 		 * @returns fixed(x) float bmi
 		 */
 		calcBMI: function(targetNamespace, weightId, heightId, fixed=1) {
@@ -227,17 +213,12 @@ let ECRFViewer = function(StationX){
 		},
 
 		/**
-		 * Calculate fev1_fvc by fev1, fvc measurement get fixed param and
-		 * return fixed float
-		 * 
-		 * @param {String}
-		 *            targetNamespace
-		 * @param {String}
-		 *            fev1Id
-		 * @param {String}
-		 *            fvcId
-		 * @param {number}
-		 *            fixed
+		 * Calculate fev1_fvc by fev1, fvc measurement
+		 * get fixed param and return fixed float
+		 * @param {String} targetNamespace 
+		 * @param {String} fev1Id 
+		 * @param {String} fvcId 
+		 * @param {number} fixed
 		 * @returns fixed(x) float fev1_fvc
 		 */
 		calcFEV1_FVC: function(targetNamespace, fev1Id, fvcId, fixed) {
@@ -277,8 +258,7 @@ let ECRFViewer = function(StationX){
 
 		tnmStage8: function(_t, _n, _m) {
 			// Stage Matrix (1-based index)
-			// [TX(1), T0(2), Tis(3), T1mi(4), T1(5), T1a(6), T1b(7), T1c(8),
-			// T2(9), T2a(10), T2b(11), T3(12), T4(13)]
+			// [TX(1), T0(2), Tis(3), T1mi(4), T1(5), T1a(6), T1b(7), T1c(8), T2(9), T2a(10), T2b(11), T3(12), T4(13)]
 			// [NX(1), N0(2), N1(3), N2(4), N3(5)]
 			const stageMatrixTN = [
 				['', '', '',  '', ''],  // TX (1)
@@ -296,9 +276,9 @@ let ECRFViewer = function(StationX){
 				['', 'IB',  'IIB',  'IIIA', 'IIIB'],  // T2a (10)
 				['', 'IIA', 'IIB',  'IIIA', 'IIIB'],  // T2b (11)
 
-				['', 'IIB', 'IIIA', 'IIIB', 'IIIC'],  // T3 (12)
+				['', 'IIB', 'IIIA', 'IIIB', 'IIIC'],  // T3  (12)
 				
-				['', 'IIIA','IIIA', 'IIIB', 'IIIC']   // T4 (13)
+				['', 'IIIA','IIIA', 'IIIB', 'IIIC']   // T4  (13)
 			];
 
 			let stageCal = '';
@@ -315,7 +295,7 @@ let ECRFViewer = function(StationX){
 			// check M value
 			// has high priority
 			if(_m) {
-				// console.log("post / m value : ", _m, typeof _m);
+				//console.log("post / m value : ", _m, typeof _m);
 				switch(_m) {
 					case 1:	// M0
 						break;
@@ -330,16 +310,15 @@ let ECRFViewer = function(StationX){
 				}
 			}
 
-			// console.log("T / N / M", _t, _n, _m);
-			// console.log("stage : ", stageCal);
+			//console.log("T / N / M", _t, _n, _m);
+			//console.log("stage : ", stageCal);
 
 			return stageCal;
 		},
 
 		tnmStage9: function(_t, _n, _m) {
 			// Stage Matrix (1-based index)
-			// [TX(1), T0(2), Tis(3), T1mi(4), T1a(5), T1b(6), T1c(7), T2a(8),
-			// T2b(9), T3(10), T4(11)]
+			// [TX(1), T0(2), Tis(3), T1mi(4), T1a(5), T1b(6), T1c(7), T2a(8), T2b(9), T3(10), T4(11)]
 			// [NX(1), N0(2), N1(3), N2a(4), N2b(5), N3(6)]
 			const stageMatrixTN = [
 				['', '', '',  '', '', ''],  // TX (1)
@@ -355,9 +334,9 @@ let ECRFViewer = function(StationX){
 				['', 'IB',  'IIB',  'IIIA', 'IIIB', 'IIIB'],  // T2a (8)
 				['', 'IIA', 'IIB',  'IIIA', 'IIIB', 'IIIB'],  // T2b (9)
 
-				['', 'IIB', 'IIIA', 'IIIB', 'IIIC', 'IIIC'],  // T3 (10)
+				['', 'IIB', 'IIIA', 'IIIB', 'IIIC', 'IIIC'],  // T3  (10)
 				
-				['', 'IIIA','IIIA', 'IIIB', 'IIIC', 'IIIC']   // T4 (11)
+				['', 'IIIA','IIIA', 'IIIB', 'IIIC', 'IIIC']   // T4  (11)
 			];
 
 			let stageCal = "";
@@ -374,7 +353,7 @@ let ECRFViewer = function(StationX){
 			// check M value
 			// has high priority
 			if(_m) {
-				// console.log("post / m value : ", _m, typeof _m);
+				//console.log("post / m value : ", _m, typeof _m);
 				switch(_m) {
 					case 1:	// M0
 						break;
@@ -389,8 +368,8 @@ let ECRFViewer = function(StationX){
 				}
 			}
 
-			// console.log("T / N / M", _t, _n, _m);
-			// console.log("stage : ", stageCal);
+			//console.log("T / N / M", _t, _n, _m);
+			//console.log("stage : ", stageCal);
 
 			return stageCal;
 		},
@@ -424,22 +403,17 @@ let ECRFViewer = function(StationX){
 				let keyName = targetNamespace+key;
 				let elem = $("input[name='"+keyName+"']:checked");
 				let value = null;
-				value = parseInt(elem.val(), 10);	// parse to int for null
-													// check validation
-				// console.log("key / value / value type : ", key, value, typeof
-				// value);
+				value = parseInt(elem.val(), 10);	// parse to int for null check validation
+				//console.log("key / value / value type : ", key, value, typeof value);
 
 				if(value) {	// elem value is not null
-					let weight = itemWeight[key][value];	// search by
-															// string(value)
+					let weight = itemWeight[key][value];	// search by string(value)
 
 					if(weight) {	// item weight is exist
-						// console.log("key / value / weight : ", key, value,
-						// weight)
+						//console.log("key / value / weight : ", key, value, weight)
 						score += weight;
 					} else {
-						// console.log("weight is not defined / ", weight,
-						// itemWeight[key]);
+						//console.log("weight is not defined / ", weight, itemWeight[key]);
 					}
 				}
 			}
@@ -451,13 +425,13 @@ let ECRFViewer = function(StationX){
 		 * Auto calculation part .. for find case each crf id
 		 */
 		checkAutoCal : function(packet){
-			// console.log(packet);
+			//console.log(packet);
 			let term = packet.payload.after;
 			let namespace = packet.sourcePortlet;
 			let dataTypeName = packet.payload.dataTypeName;
 
 			if(this.crf){
-				// console.log("crf : ", this.crf);
+				//console.log("crf : ", this.crf);
 
 				if(term.termName === "testBool") {
 					let testNumId = "#"+namespace+"testNum";
@@ -469,7 +443,7 @@ let ECRFViewer = function(StationX){
 				switch(dataTypeName){
 					case "lung_cancer":
 					case "lung_cancer_opt":
-						// console.log("lung cancer crf auto calculate");
+						//console.log("lung cancer crf auto calculate");
 						this.cal_CNU_TS_Lung_Caner(term, namespace);
 						break;
 					case "er_crf":
@@ -485,14 +459,11 @@ let ECRFViewer = function(StationX){
 		/**
 		 * auto calculdate for Chungbuk University Hospital - Thoracic Surgery
 		 * Lung Cancer CRF
-		 * 
-		 * @param {object}
-		 *            term
-		 * @param {string}
-		 *            namespace
+		 * @param {object} term 
+		 * @param {string} namespace 
 		 */
 		cal_CNU_TS_Lung_Caner: function(term, namespace) {
-			// console.log(term);
+			//console.log(term);
 			switch(term.termName) {
 				case "gi_ad_addmission_date":	// subject age at admission date
 					let birth = this.subjectInfo["subjectBirth"];
@@ -559,10 +530,10 @@ let ECRFViewer = function(StationX){
 					const cciName = namespace + 'comorbidity_adv';
 					const cciAdv = $("input[name='"+cciName+"']:checked");
 					const cciAdvVal = (cciAdv.val() === 'true');
-					// console.log("cci adv : ", cciAdv, cciAdvVal);
+					//console.log("cci adv : ", cciAdv, cciAdvVal);
 					if(cciAdvVal) {	
 						let score = this.calcCCI(namespace);
-						// console.log("score : ", score);
+						//console.log("score : ", score);
 
 						if(score > 0) this.updateTerm(namespace, "pd_com_cci", score);
 						else this.updateTerm(namespace, "pd_com_cci");
@@ -765,13 +736,13 @@ let ECRFViewer = function(StationX){
 
 		// need to refactoring
 		calYM_ER_CRF : function(term) {
-			// console.log("ER CRF Auto Calculation Running");
-			// console.log(term.termName);
-			// console.log(term.value);
+			//console.log("ER CRF Auto Calculation Running");
+			//console.log(term.termName);
+			//console.log(term.value);
 			if(term.termName === "conciousness") {
 				this.crf.terms.forEach(compareTerm=>{
 					if(compareTerm.termName === "gcs"){
-						// console.log("find", compareTerm.value);
+						//console.log("find", compareTerm.value);
 						let selectedValue = term.value[0];
 						var beforeValue = compareTerm.termName + "_before_value";
 						switch(selectedValue) {
@@ -934,7 +905,7 @@ let ECRFViewer = function(StationX){
 			}
 			
 			if(this.cogasScore > 0){
-				// console.log(this.cogasScore);
+				//console.log(this.cogasScore);
 				$("#cogas_score").val(this.cogasScore).trigger('change');
 			}
 			
@@ -1061,7 +1032,7 @@ let ECRFViewer = function(StationX){
 		
 		// need to refactoring
 		calYM_EX_CRF: function(term) {
-			// console.log("Exercise CRF Auto Calculation Running");
+			//console.log("Exercise CRF Auto Calculation Running");
 			var beforeValue = term.termName + "_before_value";
 	
 			switch(term.termName){
@@ -1089,17 +1060,14 @@ let ECRFViewer = function(StationX){
 								$("#" + compareTerm.termName).val(compareTerm.value).trigger('change');							
 							}
 							if(compareTerm.termName === "drug_thyroid" || compareTerm.termName === "drug_cv" || compareTerm.termName === "drug_a_c" || compareTerm.termName === "drug_lung" || compareTerm.termName === "drug_respiratory" || compareTerm.termName === "drug_liver"){
-								// console.log("comparing
-								// term",compareTerm.value);
+								//console.log("comparing term",compareTerm.value);
 								highriskContentArr.push(compareTerm.value);												
 							}
 							
 						});
 						for(const index in highriskContentArr){
-							// console.log("highriskContentArr",
-							// highriskContentArr);
-							// console.log("highriskContentArr",
-							// highriskContentArr[index][0]);
+							//console.log("highriskContentArr", highriskContentArr);
+							//console.log("highriskContentArr", highriskContentArr[index][0]);
 							if(highriskContentArr[index][0] !== "0"){
 								$("#is_high_risk").val("0").trigger('change');
 								break;
@@ -1126,7 +1094,7 @@ let ECRFViewer = function(StationX){
 								this[beforeValue] = term.value;
 							}
 						}else{
-							// console.log("dont have beforeValue");
+							//console.log("dont have beforeValue");
 							if(term.value >= 85) {
 								if(this.metabolicCount < 5){
 									this.metabolicCount++;
@@ -1152,7 +1120,7 @@ let ECRFViewer = function(StationX){
 								this[beforeValue] = term.value;
 							}
 						}else{
-							// console.log("dont have beforeValue");
+							//console.log("dont have beforeValue");
 							if(term.value >= 85) {
 								if(this.metabolicCount < 5){
 									this.metabolicCount++;
@@ -1256,7 +1224,7 @@ let ECRFViewer = function(StationX){
 								this[beforeValue] = term.value;
 							}
 						}else{
-							// console.log("dont have beforeValue");
+							//console.log("dont have beforeValue");
 							if(term.value >= 90) {
 								if(this.riskCount < 10){
 									this.riskCount++;
@@ -1282,7 +1250,7 @@ let ECRFViewer = function(StationX){
 								this[beforeValue] = term.value;
 							}
 						}else{
-							// console.log("dont have beforeValue");
+							//console.log("dont have beforeValue");
 							if(term.value >= 80) {
 								if(this.riskCount < 10){
 									this.riskCount++;
@@ -1322,7 +1290,7 @@ let ECRFViewer = function(StationX){
 							this[beforeValue] = term.value;
 						}
 					}else{
-						// console.log("dont have beforeValue");
+						//console.log("dont have beforeValue");
 						if(term.value >= 140) {
 							if(this.riskCount < 10){
 								this.riskCount++;
@@ -1358,7 +1326,7 @@ let ECRFViewer = function(StationX){
 							this[beforeValue] = term.value;
 						}
 					}else{
-						// console.log("dont have beforeValue");
+						//console.log("dont have beforeValue");
 						if(term.value >= 90) {
 							if(this.riskCount < 10){
 								this.riskCount++;
@@ -1385,7 +1353,7 @@ let ECRFViewer = function(StationX){
 							this[beforeValue] = term.value;
 						}
 					}else{
-						// console.log("dont have beforeValue");
+						//console.log("dont have beforeValue");
 						if(term.value >= 200) {
 							if(this.riskCount < 10){
 								this.riskCount++;
@@ -1414,7 +1382,7 @@ let ECRFViewer = function(StationX){
 							this[beforeValue] = term.value;
 						}
 					}else{
-						// console.log("dont have beforeValue");
+						//console.log("dont have beforeValue");
 						if(term.value >= 100) {
 							if(this.riskCount < 10){
 								this.riskCount++;
@@ -1444,7 +1412,7 @@ let ECRFViewer = function(StationX){
 							this[beforeValue] = term.value;
 						}
 					}else{
-						// console.log("dont have beforeValue");
+						//console.log("dont have beforeValue");
 						if(term.value >= 140) {
 							if(this.riskCount < 10){
 								this.riskCount++;
@@ -1473,7 +1441,7 @@ let ECRFViewer = function(StationX){
 								this[beforeValue] = term.value;
 							}
 						}else{
-							// console.log("dont have beforeValue");
+							//console.log("dont have beforeValue");
 							if(term.value < 40) {
 								if(this.metabolicCount < 5){
 									this.metabolicCount++;
@@ -1499,7 +1467,7 @@ let ECRFViewer = function(StationX){
 								this[beforeValue] = term.value;
 							}
 						}else{
-							// console.log("dont have beforeValue");
+							//console.log("dont have beforeValue");
 							if(term.value < 50) {
 								if(this.metabolicCount < 5){
 									this.metabolicCount++;
@@ -1529,17 +1497,14 @@ let ECRFViewer = function(StationX){
 						let highriskContentArr = new Array();
 						this.crf.terms.forEach(compareTerm=>{
 							if(compareTerm.termName === "drug_thyroid" || compareTerm.termName === "drug_cv" || compareTerm.termName === "drug_a_c" || compareTerm.termName === "drug_lung" || compareTerm.termName === "drug_respiratory" || compareTerm.termName === "drug_liver" || compareTerm.termName === "diabetes"){
-								// console.log("comparing term",
-								// compareTerm.value);
+								//console.log("comparing term", compareTerm.value);
 								highriskContentArr.push(compareTerm.value);												
 							}
 							
 						});
 						for(const index in highriskContentArr){
-							// console.log("highriskContentArr",
-							// highriskContentArr);
-							// console.log("highriskContentArr",
-							// highriskContentArr[index][0]);
+							//console.log("highriskContentArr", highriskContentArr);
+							//console.log("highriskContentArr", highriskContentArr[index][0]);
 							if(highriskContentArr[index][0] !== "0"){
 								$("#is_high_risk").val("0").trigger('change');
 								break;
@@ -1598,7 +1563,7 @@ let ECRFViewer = function(StationX){
 					let bmi = weight / (height*height);
 					let alm_height = alm_val / (height*height);
 					let alm_bmi = alm_val / bmi;
-					// TODO: exception control
+					//TODO: exception control
 					$("#alm_ht_div").val(alm_height).trigger('change');
 					$("#alm_bmi_div").val(alm_bmi).trigger('change');
 					if(this.gender == 0){
@@ -1624,7 +1589,7 @@ let ECRFViewer = function(StationX){
 					}
 					break;
 				case "bone_density_num":
-					// console.log(term.value, typeof term.value);
+					//console.log(term.value, typeof term.value);
 					if(term.value >= -1){
 						$("#is_osteoporosis").val("0").trigger('change');
 					}else if(term.value <= -2.5){
@@ -1660,23 +1625,22 @@ let ECRFViewer = function(StationX){
 					break;
 			}
 		
-			// console.log("metabolic : " , this.metabolicCount, "risk : ",
-			// this.riskCount);
+			//console.log("metabolic : " , this.metabolicCount, "risk : ", this.riskCount);		
 			if(this.metabolicCount >= 3){
-				// console.log("metaBolic ON");
+				//console.log("metaBolic ON");
 				$("#is_high_risk_metabolic").val("0").trigger('change');
 			}else{
 				$("#is_high_risk_metabolic").val("1").trigger('change');
 			}
 			
 			if(this.riskCount == 1){
-				// console.log("lowRisk ON");
+				//console.log("lowRisk ON");
 				$("#is_low_risk").val("0").trigger('change');
 			}else if(this.riskCount > 1){
 				$("#is_low_risk").val("0").trigger('change');
 				$("#is_mid_risk").val("0").trigger('change');
-				// console.log("lowRisk ON");
-				// console.log("midRisk ON");
+				//console.log("lowRisk ON");
+				//console.log("midRisk ON");
 			}else{
 				$("#is_low_risk").val("1").trigger('change');
 				$("#is_mid_risk").val("1").trigger('change');
@@ -1841,12 +1805,9 @@ let ECRFViewer = function(StationX){
 
 		/**
 		 * 
-		 * @param {string}
-		 *            termId
-		 * @param {*}
-		 *            value //TODO: need to consider term type
-		 * @param {string}
-		 *            namespace
+		 * @param {string} termId 
+		 * @param {*} value //TODO: need to consider term type
+		 * @param {string} namespace 
 		 */
 		updateTerm: function(namespace, termId, value="") {
 			let targetTerm = $('#'+namespace+termId);
@@ -1988,7 +1949,7 @@ let ECRFViewer = function(StationX){
 			$container.append($section);
 			let $inputLabel = $('<div>');
 			if(term.termType === "Grid"){
-				// console.log("is Grid", term);
+				//console.log("is Grid", term);
 				
 				let $gridTable = $('<table class="crf-grid-table">');
 				$gridTable.prop({
@@ -2036,11 +1997,11 @@ let ECRFViewer = function(StationX){
 				$addBtn.append("add");
 				
 				$addBtn.on("click", function(event){
-					// console.log("add btn clicked");
-					// console.log(term.termName);
+					//console.log("add btn clicked");
+					//console.log(term.termName);
 					let gridTable = document.getElementById(term.termName);
 					term.rowIndex = gridTable.childNodes[1].childNodes.length + 1;
-					// console.log(term.rowIndex);
+					//console.log(term.rowIndex);
 					var newRow = gridTable.insertRow();
 					let keys = Object.keys(term.columnDefs);
 					keys.forEach((key) =>{
@@ -2067,7 +2028,7 @@ let ECRFViewer = function(StationX){
 						delete term.value[tempIndex];
 						let dataPacket = new EventDataPacket();
 						dataPacket.term = term;
-						// console.log(dataPacket);
+						//console.log(dataPacket);
 						const eventData = {
 							dataPacket: dataPacket
 						};
@@ -2107,7 +2068,7 @@ let ECRFViewer = function(StationX){
 				});
 			}else if(term.termType === "Date"){
 				var temp = new Date(term.value);
-				// console.log("Date", temp);
+				//console.log("Date", temp);
 				if(term.value) termValue = temp.getFullYear() + "/" + temp.getMonth() + "/" + temp.getDay();
 			}else if(term.termType === "File"){
 				
@@ -2140,7 +2101,7 @@ let ECRFViewer = function(StationX){
 							event.stopPropagation();
 
 							term.value = $('#'+term.termName).val();
-							// console.log( 'get value: ', term.value);
+							//console.log( 'get value: ', term.value);
 							let dataPacket = new EventDataPacket();
 							dataPacket.term = term;
 							const eventData = {
@@ -2173,7 +2134,7 @@ let ECRFViewer = function(StationX){
 							const eventData = {
 								dataPacket: dataPacket
 							};
-							// Liferay.fire( 'value_changed', eventData );
+							//Liferay.fire( 'value_changed', eventData );					
 						}
 					}
 				};
@@ -2231,8 +2192,7 @@ let ECRFViewer = function(StationX){
 				if(term.displayStyle === "select"){
 					$inputTag = $( '<select class="form-control">' );
 					if(term.placeHolder){
-						// console.log("has placeHolder",
-						// term.placeHolder.localizedMap.en_US);
+						//console.log("has placeHolder", term.placeHolder.localizedMap.en_US);
 						let $nonExecutionTag = $('<option>');
 						$nonExecutionTag.prop({
 							disabled: true,
@@ -2259,7 +2219,7 @@ let ECRFViewer = function(StationX){
 							event.stopPropagation();
 	
 							term.value = $('#'+term.termName).val();
-							// console.log( 'get value: ', term.value);
+							//console.log( 'get value: ', term.value);
 							let dataPacket = new EventDataPacket();
 							dataPacket.term = term;
 							const eventData = {
@@ -2307,7 +2267,7 @@ let ECRFViewer = function(StationX){
 
 						term.value = changedVal;
 
-						// console.log( 'get value: ', term.value);
+						//console.log( 'get value: ', term.value);
 						let dataPacket = new EventDataPacket();
 						dataPacket.term = term;
 						const eventData = {
@@ -2317,7 +2277,7 @@ let ECRFViewer = function(StationX){
 						Liferay.fire( 'value_changed', eventData );		
 					});
 				}else {	// for Checkbox
-					// console.log(term);
+					//console.log(term);
 					let controlName = term.termName;
 					
 					$inputTag = $('<fieldset style="width:fit-content;max-width:100%;border: 1px solid #aaa; box-shadow: 2px 2px #ccc;">').prop({
@@ -2329,13 +2289,7 @@ let ECRFViewer = function(StationX){
 					term.options.forEach((option, index)=> {
 						let controlId = controlName+'_'+(index+1);
 						let value = option.value;
-						let labelText = option.label.localizedMap.en_US;	// TODO:
-																			// need
-																			// to
-																			// change
-																			// depend
-																			// on
-																			// language
+						let labelText = option.label.localizedMap.en_US;	// TODO: need to change depend on language
 						let selected = term.hasValue() ? term.value.includes(option.value) : false;
 
 						let $checkbox = $( '<div class="checkbox" style="display:inline-block;margin-left:10px;margin-right:20px;">' );
@@ -2356,7 +2310,7 @@ let ECRFViewer = function(StationX){
 					});
 					
 					let stationX = SX.StationX;
-					// console.log(stationX);
+					//console.log(stationX);
 
 					// event handling when checkbox changed
 					$inputTag.change(function(event) {
@@ -2368,7 +2322,7 @@ let ECRFViewer = function(StationX){
 							checkedValues.push($(this).val() );
 						});
 
-						// console.log("list checkbox changed ", checkedValues);
+						//console.log("list checkbox changed ", checkedValues);
 						
 						term.value = checkedValues;
 
@@ -2381,7 +2335,7 @@ let ECRFViewer = function(StationX){
 							dataPacket: dataPacket
 						};
 						
-						// console.log(eventData);
+						//console.log(eventData);
 
 						Liferay.fire( 'value_changed', eventData );
 					});
@@ -2391,8 +2345,7 @@ let ECRFViewer = function(StationX){
 				if(term.displayStyle === "select"){
 					$inputTag = $( '<select class="form-control">' );
 					if(term.placeHolder){
-						// console.log("has placeHolder",
-						// term.placeHolder.localizedMap.en_US);
+						//console.log("has placeHolder", term.placeHolder.localizedMap.en_US);
 						let $nonExecutionTag = $('<option>');
 						$nonExecutionTag.prop({
 							disabled: true,
@@ -2419,7 +2372,7 @@ let ECRFViewer = function(StationX){
 							event.stopPropagation();
 	
 							term.value = $('#'+term.termName).val();
-							// console.log( 'get value: ', term.value);
+							//console.log( 'get value: ', term.value);
 							let dataPacket = new EventDataPacket();
 							dataPacket.term = term;
 							const eventData = {
@@ -2467,7 +2420,7 @@ let ECRFViewer = function(StationX){
 
 						term.value = changedVal;
 
-						// console.log( 'get value: ', term.value);
+						//console.log( 'get value: ', term.value);
 						let dataPacket = new EventDataPacket();
 						dataPacket.term = term;
 						const eventData = {
@@ -2489,15 +2442,15 @@ let ECRFViewer = function(StationX){
 				});
 				
 				const dataTransfer = new DataTransfer();
-				// TODO: make table to config file items below
+				//TODO: make table to config file items below
 				
 				let $fileProfileTag = $('<tr>');
-				// console.log("has termvalue?", term.value);
+				//console.log("has termvalue?", term.value);
 				
 				if(term.value){
 					for(const key in term.value){
 						$fileProfile = $('<td>');
-						// console.log("has termvalue 1?", key);
+						//console.log("has termvalue 1?", key);
 						$fileProfile.append(key);
 						$fileProfileTag.append($fileProfile);
 					}
@@ -2512,11 +2465,11 @@ let ECRFViewer = function(StationX){
 			                dataTransfer.items.add(files[i])
 			            }
 			            $(this)[0].files = dataTransfer.files;
-			            // console.log("dataTransfer =>", dataTransfer.files);
-			            // console.log("input FIles =>", $(this)[0].files);
+			            //console.log("dataTransfer =>", dataTransfer.files);
+			            //console.log("input FIles =>", $(this)[0].files);
 				 	}
 					
-					// console.log( 'get value: ', $(this)[0].files);
+					//console.log( 'get value: ', $(this)[0].files);
 					
 					let $form = $('#crfViewerForm');
 
@@ -2535,7 +2488,7 @@ let ECRFViewer = function(StationX){
 					
 					let fileTermValue = new Object();
 					
-					// console.log(term.value);
+					//console.log(term.value);
 					if(term.value.constructor.length > 0){
 						fileTermValue = term.value;
 					}
@@ -2543,7 +2496,7 @@ let ECRFViewer = function(StationX){
 				
 					for(var i = 0; i < dataTransfer.files.length; i++){
 						let data = dataTransfer.files[i];
-						// console.log(data);
+						//console.log(data);
 						toObj["size"] = data.size;
 						toObj["parentFolderId"] = 0;
 						toObj["name"] = data.name;
@@ -2552,7 +2505,7 @@ let ECRFViewer = function(StationX){
 					}
 					
 					fileTermValue[toObj["name"]] = toObj;
-					// console.log(fileTermValue);
+					//console.log(fileTermValue);
 					
 					term.value = fileTermValue;
 					
@@ -2595,7 +2548,7 @@ let ECRFViewer = function(StationX){
 							event.stopPropagation();
 
 							let termValue = $('#' + term.termName + "_" + rowIndex).val();
-							// console.log( 'get value: ', termValue);
+							//console.log( 'get value: ', termValue);
 							let gridTermFormat = new Object();
 							let rowDataFormat = new Object();
 							if(gridTerm.value){
@@ -2609,10 +2562,10 @@ let ECRFViewer = function(StationX){
 							rowDataFormat[term.termName] = termValue;
 							gridTermFormat[rowIndex.toString()] = rowDataFormat;
 							gridTerm.value = JSON.stringify(gridTermFormat);
-							// console.log(gridTermFormat);
+							//console.log(gridTermFormat);
 							let dataPacket = new EventDataPacket();
 							dataPacket.term = gridTerm;
-							// console.log(dataPacket);
+							//console.log(dataPacket);
 							const eventData = {
 								dataPacket: dataPacket
 							};
@@ -2677,7 +2630,7 @@ let ECRFViewer = function(StationX){
 						rowDataFormat[term.termName] = termValue;
 						gridTermFormat[rowIndex.toString()] = rowDataFormat;
 						gridTerm.value = JSON.stringify(gridTermFormat);
-						// console.log(gridTermFormat);
+						//console.log(gridTermFormat);
 						
 						let dataPacket = new EventDataPacket();
 						dataPacket.term = gridTerm;
@@ -2723,7 +2676,7 @@ let ECRFViewer = function(StationX){
 							event.stopPropagation();
 	
 							let termValue = $('#'+term.termName + "_" + rowIndex).val();
-							// console.log( 'get value: ', termValue);
+							//console.log( 'get value: ', termValue);
 							let gridTermFormat = new Object();
 							let rowDataFormat = new Object();
 							var listArr = new Array();
@@ -2738,7 +2691,7 @@ let ECRFViewer = function(StationX){
 							rowDataFormat[term.termName] = listArr;
 							gridTermFormat[rowIndex.toString()] = rowDataFormat;
 							gridTerm.value = JSON.stringify(gridTermFormat);
-							// console.log(gridTermFormat);
+							//console.log(gridTermFormat);
 							let dataPacket = new EventDataPacket();
 							dataPacket.term = gridTerm;
 							const eventData = {
@@ -2817,7 +2770,7 @@ let ECRFViewer = function(StationX){
 			}
 			
 			options.forEach( option => {
-				// console.log(option)
+				//console.log(option)
 				if( values.includes( option.value ) ){
 					if( option.slaveTerms ){
 						let slaveTermNames = option.slaveTerms;
@@ -2833,14 +2786,14 @@ let ECRFViewer = function(StationX){
 			});
         },
         showAndHide: function(termName, activeFlag){
-        	// console.log("isSlaveTerm query", $("#"+termName+"_outerDiv"));
+        	//console.log("isSlaveTerm query", $("#"+termName+"_outerDiv"));
         	if( activeFlag ){
         		$("#"+termName+"_outerDiv").show();
 			}
 			else{
 				$("#"+termName+"_outerDiv").hide();
-	        	// console.log("hided", $("#"+termName));
-				// term.value = undefined;
+	        	//console.log("hided", $("#"+termName));
+				//term.value = undefined;
 			}
         },
 		toDateTimeString : function(value){
