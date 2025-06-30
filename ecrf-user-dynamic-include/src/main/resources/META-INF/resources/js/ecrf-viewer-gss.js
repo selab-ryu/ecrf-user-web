@@ -17,9 +17,13 @@ let ECRFViewer = function(StationX){
 			var result = new Object();
 			
 			if(SX.StationX) {
-				console.log("log SX", SX);
+				console.log("***************************************************************************");
+				console.log("** log SX", SX);
+				console.log("***************************************************************************");
 			} else {.0.
-				console.log("SX is Empty or Null");
+				console.log("***************************************************************************");
+				console.log("** SX is Empty or Null");
+				console.log("***************************************************************************");
 			}
 
 			autoCalUtil.initCalculatevalue(DataStructure, subjectInfo);
@@ -78,9 +82,7 @@ let ECRFViewer = function(StationX){
 				 */
 				Liferay.on('value_changed', function(event){
 					let packet = event.dataPacket;
-					
-					console.log(packet);
-
+	
 					if(packet.term){
 						let eventTerm = packet.term;
 						console.log(eventTerm);
@@ -92,7 +94,7 @@ let ECRFViewer = function(StationX){
 						event.dataPacket.result = result;
 						if(isProcessing) return;
 						isProcessing = true;
-						autoCalUtil.checkAutoCal(packet);
+						autoCalUtil.checkAutoCal(eventTerm);
 					}
 					isProcessing = false;
 				});

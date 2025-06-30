@@ -15,10 +15,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.sx.icecap.service.DataTypeLocalService;
-import com.sx.icecap.service.StructuredDataLocalService;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ResourceRequest;
@@ -34,6 +32,7 @@ import ecrf.user.service.CRFLocalService;
 import ecrf.user.service.LinkCRFLocalService;
 import ecrf.user.visualizer.constants.ECRFVisualizerMVCCommand;
 import ecrf.user.visualizer.constants.ECRFVisualizerPortletKeys;
+import ecrf.user.visualizer.util.ECRFUserVisualizerUtil;
 
 /**
  * @author dev-ryu
@@ -129,11 +128,21 @@ public class GetNoeMocDataResourceCommand extends BaseMVCResourceCommand {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+
+		// add group to data obj
 		
+		JSONArray groupArr = null;
+		try {
+			groupArr = ECRFUserVisualizerUtil.getVisualGroup("NoE_Moc");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+				
 		// add count arr and sd arr to data obj
 		dataObj.put("count", countArr);
 		dataObj.put("data", sdArr);
-		
+		dataObj.put("group", groupArr);
+
 		// write data obj to response
 		PrintWriter pw = resourceResponse.getWriter();
 		pw.write(dataObj.toString());
