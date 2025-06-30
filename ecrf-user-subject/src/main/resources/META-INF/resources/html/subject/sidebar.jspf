@@ -21,7 +21,7 @@
 	<div class="side-menu radius-shadow-container" style="text-align:center;">
 		<!-- Subject Management -->
 		<div>
-			<a class="dh-sidebar menu-main" href="<%=updateListURL %>" name="SubjectMain">
+			<a name="SubjectMain" class="dh-sidebar menu-main active" href="javascript:void(0);">
 				<img class="subject-icon"/>
 				<span><liferay-ui:message key="ecrf-user.menu.subject" /></span>
 			</a>	
@@ -34,16 +34,16 @@
 		%>
 		
 		<div>
-			<a class="dh-sidebar menu-1<%=TagAttrUtil.inactive(menu,  TagAttrUtil.TYPE_MENU, subjectMenu.toArray(new String[0]))%>" href="<%=updateListURL %>" name="SubjectList">
-				<img class="subject-list-icon<%=TagAttrUtil.inactive(menu,  TagAttrUtil.TYPE_ICON, subjectMenu.toArray(new String[0]))%>" />
+			<a name="SubjectList" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu,  TagAttrUtil.TYPE_MENU, subjectMenu.toArray(new String[0]))%>" href="<%=updateListURL %>">
+				<img class="subject-list-icon" />
 				<span><liferay-ui:message key="ecrf-user.menu.subject.list" /></span>
 			</a>
 		</div>
 		
 		<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
 		<div>
-			<a class="dh-sidebar menu-1<%=TagAttrUtil.inactive(menu,  TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.ADD_SUBJECT)%>" href="<%=addSubjectRenderURL %>" name="SubjectList">
-				<img class="add-subject-icon<%=TagAttrUtil.inactive(menu,  TagAttrUtil.TYPE_ICON, ECRFUserMenuConstants.ADD_SUBJECT)%>" />
+			<a name="SubjectList" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu,  TagAttrUtil.TYPE_MENU, ECRFUserMenuConstants.ADD_SUBJECT)%>" href="<%=addSubjectRenderURL %>">
+				<img class="add-subject-icon" />
 				<span><liferay-ui:message key="ecrf-user.menu.subject.add" /></span>
 			</a>
 		</div>

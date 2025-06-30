@@ -35,11 +35,9 @@
 			_log.info("dataType id : " + dataTypeId);
 			dataType = DataTypeLocalServiceUtil.getDataType(dataTypeId);
 		}
-	}	
+	}
 	
 	//_log.info("jsp : " + sd + " / " + subject + " / " + query);
-	
-	boolean hasValidateQueryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VALIDATE_CRF_QUERY);
 %>
 <liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_COMFIRM_CRF_QUERY%>" var="updateQueryURL">
 	<portlet:param name="sId" value="<%=String.valueOf(sId) %>" />
@@ -66,6 +64,11 @@
 	<%@ include file="sidebar.jspf" %>
 	
 	<div class="page-content">
+
+		<div class="crf-header-title">
+			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
+			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
+		</div>
 		
 		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-query.title.update-query" />
 		
@@ -359,36 +362,37 @@
 								</aui:col>
 							</aui:row>
 							
+							<%
+							boolean hasAddPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF_QUERY);
+							boolean hasValidateQueryPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VALIDATE_CRF_QUERY);							 
+							%>
 							
 							<aui:row>
 								<aui:col md="12">
 									<aui:button-row cssClass="marL10">
 										<c:choose>
-										<c:when test="<%=isUpdate %>">
-										
-										<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VALIDATE_CRF_QUERY)%>">
-											<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
-												<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-												<span>Update</span>
-											</button>
-										</c:if>
-										
+										<c:when test="<%=isUpdate%>">
+											<c:if test="<%=hasValidateQueryPermission%>">
+												<button name="<portlet:namespace/>save" type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8">
+													<img class="save-icon" />
+													<span><liferay-ui:message key="ecrf-user.button.save"/></span>
+												</button>
+											</c:if>
 										</c:when>
-										<c:otherwise>
-										
-										<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF_QUERY)%>">
-											<button type="submit" class="dh-icon-button-submit dh-icon-button-submit-update" name="<portlet:namespace/>update">
-												<img src="<%= renderRequest.getContextPath() + "/btn_img/update_icon.png"%>"/>
-												<span>Update</span>
-											</button>					
-										</c:if>
+										<c:otherwise>	
+											<c:if test="<%=hasAddPermission%>">
+												<button name="<portlet:namespace/>add" type="submit" class="dh-icon-button submit-btn add-btn w110 h36 marR8">
+													<img class="add-icon"/>
+													<span><liferay-ui:message key="ecrf-user.button.add"/></span>
+												</button>					
+											</c:if>
 										</c:otherwise>
 										</c:choose>
 										
-										<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=listCRFQueryURL %>" name="<portlet:namespace/>cancel">
-											<img src="<%= renderRequest.getContextPath() + "/btn_img/cancel_icon.png"%>"/>					
-											<span style="color:black;">Cancel</span>
-										</a>
+										<button name="<portlet:namespace/>back" class="dh-icon-button submit-btn back-btn w110 h36 marR8" onclick="location.href='<%=listCRFQueryURL%>'">
+											<img class="back-icon" />
+											<span><liferay-ui:message key="ecrf-user.button.back"/></span>
+										</button>
 									</aui:button-row>
 								</aui:col>
 							</aui:row>	
@@ -399,10 +403,3 @@
 		</aui:container>
 	</div>
 </div>
-
-<aui:script use="aui-base">
-A.one("#<portlet:namespace/>save").on("click", function(event) {	
-	var form = A.one('#<portlet:namespace/>updateQueryFm');
-	form.submit();
-});
-</aui:script>

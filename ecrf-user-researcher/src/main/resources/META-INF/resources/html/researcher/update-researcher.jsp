@@ -124,6 +124,8 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 	<aui:form name="updateResearhcerFm" action="<%=isUpdate ? updateResearcherURL : addResearcherURL %>" method="post" autocomplete="off">
 	<aui:container cssClass="radius-shadow-container">	
 		<aui:input type="hidden" name="<%=Constants.CMD %>" value="<%=isUpdate ? Constants.UPDATE : Constants.ADD %>" />
+		<aui:input type="hidden" name="fromLiferay" value="<%=fromLiferay %>" />
+		<aui:input type="hidden" name="isAdminMenu" value="<%=isAdminMenu %>" />
 		
 		<!-- user info -->
 		<aui:row>
@@ -388,42 +390,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 				</aui:input>
 			</aui:col>
 		</aui:row>
-		
-		<c:if test="false">
-		<aui:row>
-			<aui:col md="3">
-				<aui:field-wrapper
-					name="<%=ECRFUserResearcherAttributes.POSITION %>"
-					label="ecrf-user.researcher.position"
-					>
-				</aui:field-wrapper>
-			</aui:col>
-			<aui:col md="6">
-				<aui:select 
-					name="<%=ECRFUserResearcherAttributes.POSITION %>"
-					label=""
-				>
-					<%
-						ResearcherPosition[] positions = ResearcherPosition.values();
-						for(int i=0; i<positions.length; i++) {
-							ResearcherPosition position = positions[i];
-							
-							boolean isSelect = false;
-							if(Validator.isNotNull(researcher)) {
-								if(researcher.getPosition().equals(position.getLower()))
-									isSelect = true;
-							}
-					%>
 				
-					<aui:option selected="<%=isSelect %>" value="<%=position.getLower() %>"><%=position.getFull() %></aui:option>
-					<%
-						}
-					%>
-				</aui:select>
-			</aui:col>
-		</aui:row>
-		</c:if>
-		
 		<aui:row>
 			<aui:col md="12">
 				<aui:button-row>
@@ -437,7 +404,7 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					%>
 					
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_RESEARCHER) || hasOwnPermission ) %>">
-					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="<portlet:namespace/>save">
+					<button id="<portlet:namespace/>save" type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8">
 						<img class="save-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 					</button>
@@ -445,20 +412,21 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					
 					<c:if test="<%=( ResearcherPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_RESEARCHER) || hasOwnPermission )%>">
 					<%
-						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.title");
-						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
+						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-researcher.title");
+						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-researcher.content");
 						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteResearcherURL.toString());
 					%>
-					<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="delete">
+					<button id="<portlet:namespace/>delete" class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>">
 						<img class="delete-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
-					</a>
+					</button>
 					</c:if>
 					
 					</c:when>
 					<c:otherwise>
-										
-					<button type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8" id="<portlet:namespace/>save">
+					
+					<!-- is this button need? -->
+					<button id="<portlet:namespace/>save" type="submit" class="dh-icon-button submit-btn save-btn w110 h36 marR8">
 						<img class="save-icon" />
 						<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 					</button>
@@ -466,10 +434,10 @@ boolean fromLiferay = ParamUtil.getBoolean(renderRequest, "fromLiferay", false);
 					</c:otherwise>
 					</c:choose>
 										 
-					<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=backURL %>" id="<portlet:namespace/>cancel">
-						<img class="cancel-icon" />
-						<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
-					</a>
+					<button id="<portlet:namespace/>back" type="button" class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" onclick="location.href='<%=backURL %>'">
+						<img class="back-icon" />
+						<span><liferay-ui:message key="ecrf-user.button.back" /></span>
+					</button>
 				</aui:button-row>
 			</aui:col>
 		</aui:row>
