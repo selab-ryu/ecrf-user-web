@@ -50,10 +50,6 @@
 		rootURL = result[0];
 	}
 	
-	if(Validator.isNull(redirect)) {
-		// set redirect for update crf data page when direct by selector dialog
-	}
-	
 	String queryString = "subjectId="+ subjectId + "&structuredDataId="+ sdId + "&dataTypeId="+ dataTypeId + "&mvcRenderCommandName=/html/StructuredData/edit-structured-data" + "&baseURL=" + rootURL;
 	
 	_log.info(queryString);
@@ -61,13 +57,6 @@
 <div class="ecrf-user-crf-data ecrf-user">
 	<%@ include file="../other/sidebar.jspf" %>
 	<div class="page-content">
-		<div class="crf-header-title">
-			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
-			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
-		</div>
-		
-		<liferay-ui:header backURL="<%=redirect %>" title="<%=isUpdate ? "ecrf-user.crf-data.title.update-crf-data" : "ecrf-user.crf-data.title.add-crf-data"%>" /> 
-		
 		<aui:fieldset-group markupView="lexicon">
 			<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.subject.title.subject-info">
 				<aui:container>
@@ -110,7 +99,7 @@
 				</aui:container>
 			</aui:fieldset>
 					
-			<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="ecrf-user.crf-data.title.data-editor">
+			<aui:fieldset cssClass="search-option radius-shadow-container" collapsed="<%=false %>" collapsible="<%=true %>" label="<%=isUpdate ? "ecrf-user.crf-data.title.update-crf-data" : "ecrf-user.crf-data.title.add-crf-data"%>">
 				<liferay-portlet:runtime portletName="<%=sdPortlet %>" queryString="<%=queryString %>">
 				</liferay-portlet:runtime>
 			</aui:fieldset>
@@ -123,8 +112,6 @@
 $(document).ready(function(){
 	let sdPortletKey = "_<%=sdPortlet %>_";
 	//console.log(sdPortletKey); 
-	
-	// add back button at button-holder
 	
 	var btn = $("#"+sdPortletKey+"btnSave");
 	btn.attr("class", "dh-icon-button save-btn w80");

@@ -34,12 +34,6 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 	<%@ include file="../other/sidebar.jspf" %>
 	
 	<div class="page-content">
-	
-		<div class="crf-header-title">
-			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
-			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
-		</div>
-	
 		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-data.title.search-crf-data" />
 		<aui:container>
 			<aui:row cssClass="radius-shadow-container">
@@ -56,7 +50,7 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 							<aui:input type="hidden" name="excelParam"></aui:input>
 							
 							<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DOWNLOAD_EXCEL) %>">
-							<button id="excelDownload" type="button" class="dh-icon-button update-btn w220">
+							<button type="button" class="dh-icon-button update-btn w220" id="excelDownload" >
 								<img class="excel-download-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.download-search-result"/></span>
 							</button>

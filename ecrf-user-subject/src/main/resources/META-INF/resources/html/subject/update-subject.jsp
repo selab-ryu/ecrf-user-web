@@ -331,7 +331,7 @@ if(isUpdate) {
 						<c:when test="<%=isUpdate %>">
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_SUBJECT) %>">
-							<button id="<portlet:namespace/>save" type="button" class="dh-icon-button submit-btn save-btn w110 h36 marR8">
+							<button type="button" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>save">
 								<img class="save-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.save" /></span>
 							</button>
@@ -343,17 +343,17 @@ if(isUpdate) {
 								String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-exp-group.content");
 								String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s' )", title, content, deleteSubjectURL.toString());
 							%>
-							<button id="<portlet:namespace/>delete" type="button" class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onclick="<%=deleteFunctionCall %>">
+							<a class="dh-icon-button submit-btn delete-btn w110 h36 marR8" onClick="<%=deleteFunctionCall %>" id="<portlet:namespace/>delete">
 								<img class="delete-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.delete" /></span>
-							</button>
+							</a>
 						</c:if>
 						
 						</c:when>
 						<c:otherwise>
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
-							<button id="<portlet:namespace/>add" type="button" class="dh-icon-button submit-btn add-btn w110 h36 marR8">
+							<button type="button" class="dh-icon-button submit-btn update-btn w110 h36 marR8" id="<portlet:namespace/>save">
 								<img class="add-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 							</button>
@@ -362,10 +362,10 @@ if(isUpdate) {
 						</c:otherwise>
 						</c:choose>
 								
-						<button id="<portlet:namespace/>back" type="button" class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" onclick="location.href='<%=updateListURL %>'">
-							<img class="back-icon" />					
-							<span><liferay-ui:message key="ecrf-user.button.back" /></span>
-						</button>
+						<a class="dh-icon-button submit-btn cancel-btn w110 h36 marR8" href="<%=updateListURL %>" id="<portlet:namespace/>cancel">
+							<img class="cancel-icon" />					
+							<span><liferay-ui:message key="ecrf-user.button.cancel" /></span>
+						</a>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>

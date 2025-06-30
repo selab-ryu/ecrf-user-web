@@ -147,12 +147,7 @@
 	<%@ include file="sidebar.jspf" %>
 	
 	<div class="page-content">
-		
-		<div class="crf-header-title">
-			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
-			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
-		</div>
-		
+	
 		<liferay-ui:header backURL="<%=redirect %>" title='ecrf-user.crf-data.title.excel-download' />
 		<!-- CRF Info Header -->
 		<aui:fieldset-group markupView="lexicon">
@@ -227,7 +222,7 @@
 		    		<input id="xlsx_name" class="h2_4r" placeholder="FileName"></input>
 		    		<span class="lh2_4r marR16"><liferay-ui:message key="ecrf-user.general.xlsx-ext"/></span>
 		    		
-		    		<button id="btn_1" class="dh-icon-button update-btn h2_4r" <%=hasDownloadExcelPermission ? "" : "disabled"%>>
+		    		<button id="btn_1" class="dh-icon-button save-btn h2_4r" <%=hasDownloadExcelPermission ? "" : "disabled"%>>
 				    	<img class="excel-download-icon"/>
 				    	<span><liferay-ui:message key="ecrf-user.button.download-excel"/></span>
 				    </button>
