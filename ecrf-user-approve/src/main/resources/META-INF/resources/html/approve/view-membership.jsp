@@ -155,7 +155,13 @@ if(membershipRequestCount <= 0) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 				
-					<aui:button name="siteRole" type="button" value="ecrf-user.button.update-site-role" cssClass="small-btn none-btn" onClick="<%=updateSiteRoleURL %>" ></aui:button>
+					<aui:button
+						name="siteRole" 
+						type="button" 
+						value="ecrf-user.button.update-site-role" 
+						cssClass="small-btn none-btn" 
+						onClick="<%=updateSiteRoleURL %>" >
+					</aui:button>
 					
 					<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_DELETE_MEMBERSHIP %>" var="deleteMembershipURL">
 						<portlet:param name="<%=ECRFUserAttributes.USER_ID %>" value="<%=String.valueOf(researcher.getResearcherUserId()) %>" />
@@ -228,12 +234,12 @@ if(membershipRequestCount <= 0) {
 				
 				<liferay-ui:search-container-column-text
 					cssClass="table-cell-expand"
-					name="user-comments"
+					name="ecrf-user.list.user-comments"
 					value="<%= HtmlUtil.escape(membershipRequest.getComments()) %>"
 				/>
 				
 				<liferay-ui:search-container-column-date
-					name="create-date"
+					name="ecrf-user.list.create-date"
 					value="<%=membershipRequest.getCreateDate() %>"
 				/>
 				
@@ -245,7 +251,7 @@ if(membershipRequestCount <= 0) {
 				
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.review">
-					<a class="dh-icon-button review-btn w130" href="<%=approveURL %>" name="<portlet:namespace/>review">
+					<a name="<portlet:namespace/>review" class="dh-icon-button review-btn w130" href="<%=approveURL %>">
 						<img class="review-icon" />					
 						<span><liferay-ui:message key="ecrf-user.button.review" /></span>
 					</a>

@@ -150,11 +150,11 @@ if(isSearch) {
 				<aui:row>
 					<aui:col md="12">
 						<aui:button-row cssClass="right marVr">
-							<button type="submit" class="br20 dh-icon-button submit-btn search-btn w130 h40 marR8" id="<portlet:namespace/>search">
+							<button type="submit" class="br20 dh-icon-button submit-btn search-btn white-text w130 h40 marR8 active" id="<portlet:namespace/>search">
 								<img class="search-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<a class="br20 dh-icon-button submit-btn clear-btn w130 h40" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
+							<a class="br20 dh-icon-button submit-btn clear-btn white-text w130 h40 active" href="<%=clearSearchURL %>" id="<portlet:namespace/>clear">
 								<img class="clear-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
 							</a>
@@ -237,6 +237,9 @@ if(isSearch) {
 					if(CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ALL_UPDATE_CRF)) hasCRFPermission = true;
 					
 					boolean hasUpdatePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF);
+					boolean hasUpdateFormPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_FORM);
+					boolean hasViewDataListPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA_LIST);
+					boolean hasViewQueryListPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY_LIST);
 					boolean hasDeletePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.DELETE_CRF);
 				%>
 				
@@ -249,20 +252,29 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a 
-						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button update-btn w130"%>" 
-						href="<%= !(hasCRFPermission && hasUpdatePermission) ? "" : updateCRFURL %>" 
-						id="updateCRF" 
-						disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>"
+					<%
+					String updateBtnClass = "dh-icon-button w130";
+					String updateOnClickStr = "location.href='"+updateCRFURL+"'";
+					String updateBtnKey = "ecrf-user.button.crf-info";
+					
+					if(!(hasCRFPermission && hasUpdatePermission)) {
+						updateBtnClass += " inactive";
+						updateOnClickStr = "";
+						updateBtnKey = "ecrf-user.button.locked";
+					} else {
+						updateBtnClass += " crf-info-btn";
+					}
+					%>
+					
+					<button 
+						id="<portlet:namespace/>updateCRF"
+						class="<%=updateBtnClass%>" 
+						onclick="<%=updateOnClickStr%>"
+						<%=!(hasCRFPermission && hasUpdatePermission) ? "disabled" : "" %>
 					>
-						<img class="update-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />
-						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
-						</c:if>
-						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.crf-info" /></span>
-						</c:if>			
-					</a>
+						<img class="crf-icon<%=TagAttrUtil.inactive(!(hasCRFPermission && hasUpdatePermission), TagAttrUtil.TYPE_ICON) %>" />
+						<span><liferay-ui:message key="<%=updateBtnKey %>" /></span>			
+					</button>
  				</liferay-ui:search-container-column-text>
 				
 				
@@ -275,20 +287,29 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a 
-						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button crf-form-btn w130"%>" 
-						href="<%=!(hasCRFPermission && hasUpdatePermission) ? "" : updateCRFFormURL %>" 
-						id="crfForm" 
-						disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>"
+					<%
+					String formBtnClass = "dh-icon-button w130";
+					String formOnClickStr = "location.href='"+updateCRFFormURL+"'";
+					String formBtnKey = "ecrf-user.button.crf-builder";
+					
+					if(!(hasCRFPermission && hasUpdateFormPermission)) {
+						formBtnClass += " inactive";
+						formOnClickStr = "";
+						formBtnKey = "ecrf-user.button.locked";
+					} else {
+						formBtnClass += " crf-form-btn";
+					}
+					%>					
+					
+					<button
+						id="<portlet:namespace/>crfForm"
+						class="<%=formBtnClass%>" 
+						onclick="<%=formOnClickStr%>" 	 
+						<%=!(hasCRFPermission && hasUpdateFormPermission) ? "disabled" : "" %>
 					>
-						<img class="crf-form-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />
-						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
-						</c:if>
-						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.crf-builder" /></span>
-						</c:if>			
-					</a>
+						<img class="crf-form-icon<%=TagAttrUtil.inactive(!(hasCRFPermission && hasUpdateFormPermission), TagAttrUtil.TYPE_ICON) %>" />
+						<span><liferay-ui:message key="<%=formBtnKey %>" /></span>
+					</button>
  				</liferay-ui:search-container-column-text>
 				
 				<liferay-ui:search-container-column-text
@@ -300,20 +321,29 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a 
-						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button crf-data-btn w130"%>" 
-						href="<%=!(hasCRFPermission && hasUpdatePermission) ? "" : updateCRFDataURL %>" 
-						id="crfData" 
-						<%=(hasCRFPermission && hasUpdatePermission) ? "" : "disabled" %> 
+					<%
+					String dataBtnClass = "dh-icon-button w130";
+					String dataOnClickStr = "location.href='"+updateCRFDataURL+"'";
+					String dataBtnKey = "ecrf-user.button.crf-data";
+					
+					if(!(hasCRFPermission && hasViewDataListPermission)) {
+						dataBtnClass += " inactive";
+						dataOnClickStr = "";
+						dataBtnKey = "ecrf-user.button.locked";
+					} else {
+						dataBtnClass += " crf-data-btn";
+					}
+					%>
+					
+					<button
+						id="<portlet:namespace/>crfData"
+						class="<%=dataBtnClass%>" 
+						onclick="<%=dataOnClickStr%>" 
+						<%=!(hasCRFPermission && hasViewDataListPermission) ? "disabled" : "" %> 
 					>
-						<img class="crf-data-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />
-						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
-						</c:if>
-						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.crf-data" /></span>
-						</c:if>			
-					</a>
+						<img class="crf-data-icon<%=TagAttrUtil.inactive(!(hasCRFPermission && hasViewDataListPermission), TagAttrUtil.TYPE_ICON) %>" />
+						<span><liferay-ui:message key="<%=dataBtnKey %>" /></span>			
+					</button>
  				</liferay-ui:search-container-column-text>
  				
 				<liferay-ui:search-container-column-text
@@ -325,21 +355,29 @@ if(isSearch) {
 						<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 					</portlet:renderURL>
 					
-					<a 
-						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button crf-query-btn w130"%>" 
-						href="<%=!(hasCRFPermission && hasUpdatePermission) ? "" : updateCRFQueryURL %>" 
-						id="crfQuery" 
-						<%=(hasCRFPermission && hasUpdatePermission) ? "" : "disabled" %> 
-					>
+					<%
+					String queryBtnClass = "dh-icon-button w130";
+					String queryOnClickStr = "location.href='"+updateCRFQueryURL+"'";
+					String queryBtnKey = "ecrf-user.button.crf-query";
 					
-						<img class="crf-query-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />
-						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
-						</c:if>
-						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.crf-query" /></span>
-						</c:if>			
-					</a>
+					if(!(hasCRFPermission && hasViewQueryListPermission)) {
+						queryBtnClass += " inactive";
+						queryOnClickStr = "";
+						queryBtnKey = "ecrf-user.button.locked";
+					} else {
+						queryBtnClass += " crf-query-btn";
+					}
+					%>
+					
+					<button
+						id="<portlet:namespace/>crfQuery"
+						class="<%=queryBtnClass%>" 
+						onclick="<%=queryOnClickStr%>" 
+						<%=!(hasCRFPermission && hasViewQueryListPermission) ? "disabled" : "" %> 
+					>
+						<img class="crf-query-icon<%=TagAttrUtil.inactive(!(hasCRFPermission && hasViewQueryListPermission), TagAttrUtil.TYPE_ICON) %>" />
+						<span><liferay-ui:message key="<%=queryBtnKey %>" /></span>			
+					</button>
  				</liferay-ui:search-container-column-text>
 				
 				<liferay-ui:search-container-column-text
@@ -353,23 +391,29 @@ if(isSearch) {
 						String title = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-crf.title");
 						String content = LanguageUtil.get(locale, "ecrf-user.message.confirm-delete-crf.content");
 						String deleteFunctionCall = String.format("deleteConfirm('%s', '%s', '%s', 'large')", title, content, deleteCRFURL.toString());
+						
+						String deleteBtnClass = "dh-icon-button w130";
+						String deleteBtnKey = "ecrf-user.button.crf-delete";
+						
+						if(!(hasCRFPermission && hasDeletePermission)) {
+							deleteBtnClass += " inactive";
+							deleteFunctionCall = "";
+							deleteBtnKey = "ecrf-user.button.locked";
+						} else {
+							deleteBtnClass += " delete-btn";
+						}
 					%>
 					
 					
-					<a 
-						class="<%= !(hasCRFPermission && hasUpdatePermission) ? "dh-icon-button inactive w130" : "dh-icon-button delete-btn w130"%>" 
-						onClick="<%=!(hasCRFPermission && hasUpdatePermission) ? "" : deleteFunctionCall %>" 
-						id="delete" 
-						disabled="<%=(hasCRFPermission && hasUpdatePermission) ? false : true %>"
+					<button
+						id="<portlet:namespace/>crfDelete"
+						class="<%=deleteBtnClass%>" 
+						onclick="<%=deleteFunctionCall%>" 
+						<%=!(hasCRFPermission && hasDeletePermission) ? "disabled" : "" %>
 					>
-						<img class="delete-icon<%=TagAttrUtil.inactive(hasCRFPermission && hasUpdatePermission) %>" />
-						<c:if test="<%=!(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.locked" /></span>
-						</c:if>
-						<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
-							<span><liferay-ui:message key="ecrf-user.button.crf-delete" /></span>
-						</c:if>			
-					</a>
+						<img class="delete-icon<%=TagAttrUtil.inactive(!(hasCRFPermission && hasDeletePermission), TagAttrUtil.TYPE_ICON) %>" />
+						<span><liferay-ui:message key="<%=deleteBtnKey %>" /></span>			
+					</button>
  				</liferay-ui:search-container-column-text>
 								
 			</liferay-ui:search-container-row>

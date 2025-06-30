@@ -61,6 +61,7 @@ $(document).ready(function() {
 	let instanceId = "<%=instanceId%>";
 	let dtPortletNamespace = "_" + dtPortletName + "_" + "INSTANCE" +"_" + instanceId + "_";
 	//console.log(dtPortletNamespace);
+	//$('#' + dtPortletNamespace + 'infoSection').css('display', 'none');
 	$('#' + dtPortletNamespace + 'naviCol').css('display', 'none');
 	$('#' + dtPortletNamespace + 'btnSaveAndViewDataTypeList').css('display', 'none');
 	

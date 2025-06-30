@@ -93,18 +93,18 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			<aui:row>
 				<aui:col>
 					<aui:button-row>
-						<a class="dh-icon-button-submit dh-icon-button-submit-add" onClick="<%= liferayPortletResponse.getNamespace() + "approveRequest();" %>" name="<portlet:namespace/>approve">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/approve_icon.png"%>"/>					
-							<span>Approve</span>
-						</a>
-						<a class="dh-icon-button-submit dh-icon-button-submit-delete" onClick="<%= liferayPortletResponse.getNamespace() + "rejectRequest();" %>" name="<portlet:namespace/>reject">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/reject_icon.png"%>"/>					
-							<span>Reject</span>
-						</a>
-						<a class="dh-icon-button-submit dh-icon-button-submit-cancel" href="<%=redirect %>" name="<portlet:namespace/>cancel">
-							<img src="<%= renderRequest.getContextPath() + "/btn_img/back_icon.png"%>"/>					
-							<span style="color:black;">Back</span>
-						</a>
+						<button id="<portlet:namespace/>approve" type="button" class="dh-icon-button submit-btn approve-btn w110 h36 marR8" onclick="<%=liferayPortletResponse.getNamespace() + "approveRequest();" %>">
+							<img class="approve-icon" />					
+							<span><liferay-ui:message key="ecrf-user.button.approve"/></span>
+						</button>
+						<button name="<portlet:namespace/>reject" type="button" class="dh-icon-button submit-btn reject-btn w110 h36 marR8" onClick="<%=liferayPortletResponse.getNamespace() + "rejectRequest();" %>">
+							<img class="reject-icon" />					
+							<span><liferay-ui:message key="ecrf-user.button.reject"/></span>
+						</button>
+						<button id="<portlet:namespace/>back" type="button" class="dh-icon-button submit-btn back-btn w110 h36 marR8" onclick="location.href='<%=redirect %>'">
+							<img class="back-icon" />					
+							<span><liferay-ui:message key="ecrf-user.button.back"/></span>
+						</button>
 					</aui:button-row>
 				</aui:col>
 			</aui:row>

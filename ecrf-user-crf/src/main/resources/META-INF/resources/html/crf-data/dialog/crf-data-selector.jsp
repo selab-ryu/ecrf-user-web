@@ -134,7 +134,7 @@ _log.info("base url : " + baseURL);
 						<c:if test="<%=isUpdate %>">
 							<% String updateFncCall = String.format("toEachCRF(%d, %d)", link.getStructuredDataId(), 0); %>
 							<td>
-								<button id="updateCRF" class="dh-icon-button update-btn w130" onclick="<%=updateFncCall %>" >		
+								<button id="updateCRF" type="type" class="dh-icon-button update-btn w130" onclick="<%=updateFncCall %>" >		
 									<img class="update-icon" />
 									<span><liferay-ui:message key="ecrf-user.button.update-crf-data"/></span>			
 								</button>							
@@ -148,7 +148,7 @@ _log.info("base url : " + baseURL);
 								if(updateLock) auditBtnKey = "ecrf-user.button.view-crf-data";
 							%>
 							<td>
-								<button id="auditCRF" class="dh-icon-button audit-trail-btn w180" onclick="<%=auditFncCall %>" >		
+								<button id="auditCRF" type="button" class="dh-icon-button audit-trail-btn w180" onclick="<%=auditFncCall %>" >		
 									<img class="audit-icon" />
 									<span><liferay-ui:message key="<%=auditBtnKey %>"/></span>			
 								</button>							
@@ -158,7 +158,7 @@ _log.info("base url : " + baseURL);
 						<c:if test="<%=isDelete %>">
 							<% String deleteFncCall = "deleteEachCRF("+link.getLinkId()+")"; %>	
 							<td>
-								<button id="deleteCRF" class="dh-icon-button delete-btn w130" onclick="<%=deleteFncCall %>" >		
+								<button id="deleteCRF" type="button" class="dh-icon-button delete-btn w130" onclick="<%=deleteFncCall %>" >		
 									<img class="delete-icon" />
 									<span><liferay-ui:message key="ecrf-user.button.delete-crf-data"/></span>			
 								</button>							

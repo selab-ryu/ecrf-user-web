@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.ActionRequest;
@@ -70,11 +71,18 @@ public class CheckAgreementActionCommand extends BaseMVCActionCommand {
 			user = _userLocalService.getUserByEmailAddress(companyId, login);
 		} catch (Exception e) {	// none, process login
 			mvcActionCommand.processAction(actionRequest, actionResponse);
+			return;
 		}
 		
 		// check password validation
 		boolean isValidLogin = false;
-
+		
+		// null check
+		if(Validator.isNull(user)) {
+			mvcActionCommand.processAction(actionRequest, actionResponse);
+			return;
+		}
+		
 		String userPassword = user.getPassword();
 
 		if (!user.isPasswordEncrypted()) { userPassword = PasswordEncryptorUtil.encrypt(userPassword); }
@@ -87,6 +95,7 @@ public class CheckAgreementActionCommand extends BaseMVCActionCommand {
 		// failed, process login
 		if(!isValidLogin) {
 			mvcActionCommand.processAction(actionRequest, actionResponse);
+			return;
 		} else {
 			// check admin?
 			Role adminRole = RoleLocalServiceUtil.getRole(companyId, "Administrator");
@@ -95,7 +104,8 @@ public class CheckAgreementActionCommand extends BaseMVCActionCommand {
 			
 			// if admin, pass agreement
 			if(hasAdminRole) {
-				mvcActionCommand.processAction(actionRequest, actionResponse);			
+				mvcActionCommand.processAction(actionRequest, actionResponse);
+				return;
 			} else {
 				// get researcher
 				Researcher researcher = null;
@@ -110,6 +120,7 @@ public class CheckAgreementActionCommand extends BaseMVCActionCommand {
 				
 				if(isAgree) {	// process login
 					mvcActionCommand.processAction(actionRequest, actionResponse);
+					return;
 				} else {	// proceed to agreement page
 					Group rootGroup = GroupLocalServiceUtil.fetchFriendlyURLGroup(companyId, "/guest");
 					Layout layout = LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(rootGroup.getGroupId(), false, "/agreement");

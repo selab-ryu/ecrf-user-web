@@ -58,7 +58,7 @@
 <div class="side-menu radius-shadow-container" style="text-align:center;">
 	<!-- CRF Management -->
 	<div>
-		<a class="dh-sidebar menu-main" href="javascript:void(0);" name="CRFInfo">
+		<a class="dh-sidebar menu-main active" href="javascript:void(0);" name="CRFInfo">
 			<img class="crf-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-info" /></span>
 		</a>
@@ -74,7 +74,7 @@
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_CRF) %>">
 	<div>
 		<a id="crfCreateMenu" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveAddCRFURL %>">
-      		<img class="add-crf-icon" />
+      		<img class="create-crf-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf.create" /></span>
 		</a>
 	</div>
@@ -84,14 +84,14 @@
 	<div>
 		<a id="crfUpdateMenu"class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveUpdateCRFURL %>">
        		<img class="update-crf-icon" />
-			<span><liferay-ui:message key="ecrf-user.menu.crf.update-info" /></span>
+			<span><liferay-ui:message key="ecrf-user.menu.crf.update" /></span>
 		</a>
 	</div>
 	</c:if>
 	
 	<div>
-		<a class="dh-sidebar menu-main" name="CRFForm" href="javascript:void(0);">
-			<img class="crf-icon" />
+		<a class="dh-sidebar menu-main active" name="CRFForm" href="javascript:void(0);">
+			<img class="crf-form-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-form" /></span>
 		</a>
 	</div>
@@ -99,7 +99,7 @@
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_FORM) %>">
 	<div>
 		<a id="crfBuilderMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, ECRFUserMenuConstants.MANAGE_FORM, TagAttrUtil.TYPE_MENU)%>" href="<%=moveManageFormURL %>">
-       		<img class="crf-form-icon" />
+       		<img class="crf-builder-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-form.builder" /></span>
 		</a>
 	</div>
@@ -118,7 +118,7 @@
 	-->
 	
  	<div>
-		<a class="dh-sidebar menu-main" name="CRFData" href="javascript:void(0);">
+		<a class="dh-sidebar menu-main active" name="CRFData" href="javascript:void(0);">
 			<img class="crf-data-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-data" /></span>
 		</a>
@@ -127,7 +127,7 @@
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA_LIST) %>">
 	<div>
 		<a id="dataListMenu" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveCRFDataListURL%>">
-       		<img class="crf-data-icon" />
+       		<img class="data-list-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-data.list" /></span>
 		</a>
 	</div>
@@ -162,7 +162,7 @@
 	
 	
 	<div>
-		<a class="dh-sidebar menu-main" name="CRFQuery" href="javascript:void(0);">
+		<a class="dh-sidebar menu-main active" name="CRFQuery" href="javascript:void(0);">
 			<img class="crf-query-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query" /></span>
 		</a>
@@ -171,7 +171,7 @@
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_QUERY_LIST) %>">
 	<div>
 		<a id="queryListMenu" name="menuTooltip" class="dh-sidebar left-top-cut-border sub-menu" href="<%=moveCRFQueryListURL%>">
-       		<img class="crf-query-icon" />
+       		<img class="query-list-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query.list" /></span>
 		</a>
 	</div>
@@ -180,7 +180,7 @@
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF_QUERY) %>">
 	<div>
 		<a id="queryUpdateMenu" name="menuTooltip" class="dh-sidebar left-top-cut-border sub-menu inactive sidebar-not-move" href="javascript:void(0);">
-       		<img class="update-query-icon-inactive" />
+       		<img class="update-query-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-query.update" /></span>
 		</a>
 	</div>
@@ -206,7 +206,7 @@
 	<!-- crf list on side menu => move to that crf -->
 	<div>
 		<div class="current-crf">
-			<strong><liferay-ui:message key="ecrf-user.menu.all-crf" /></strong>
+			<span><liferay-ui:message key="ecrf-user.menu.all-crf" /></span>
 			<%for(int i=0; i<allCRFList.size(); i++) { %>
 			<%
 				CRF tempCRF = allCRFList.get(i);

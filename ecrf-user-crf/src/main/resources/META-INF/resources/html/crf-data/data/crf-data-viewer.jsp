@@ -62,6 +62,12 @@ _log.info("is audit : " + isAudit);
 <div class="ecrf-user ecrf-user-crf-data">
 	<%@ include file="../other/sidebar.jspf" %>	
 	<div class="page-content">
+	
+		<div class="crf-header-title">
+			<% DataType titleDT = DataTypeLocalServiceUtil.getDataType(dataTypeId); %>
+			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
+		</div>
+	
 		<liferay-ui:header backURL="<%=redirect %>" title='<%=isUpdate ? "Update CRF" : "ADD CRF" %>' />
 		
 		<div id="floating-map-button">

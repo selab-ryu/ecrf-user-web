@@ -48,7 +48,7 @@ String password = ParamUtil.getString(request, "password");
 		
 		<aui:row>
 			<aui:col>
-				<%@ include file="./term-of-use.jspf" %>
+				<liferay-ui:message key="ecrf-user.policy.text.term-of-use"></liferay-ui:message>
 			</aui:col>
 		</aui:row>
 		
@@ -71,7 +71,7 @@ String password = ParamUtil.getString(request, "password");
 		
 		<aui:row>
 			<aui:col>
-				<%@ include file="./privacy.jspf" %>
+				<liferay-ui:message key="ecrf-user.policy.text.privacy"></liferay-ui:message>
 			</aui:col>
 		</aui:row>
 		
@@ -86,7 +86,7 @@ String password = ParamUtil.getString(request, "password");
 		<aui:row>
 			<aui:col>
 				<aui:button-row>
-					<a class="dh-icon-button submit-btn inactive w110 h36" id="<portlet:namespace/>move" name="<portlet:namespace/>move" onclick="agree()" href="javascript:void(0);">
+					<a id="<portlet:namespace/>move" name="<portlet:namespace/>move" class="dh-icon-button submit-btn inactive w110 h36" href="javascript:void(0);">
 						<span><liferay-ui:message key="ecrf-user.button.agree" /></span>
 					</a>
 				</aui:button-row>
@@ -127,9 +127,11 @@ function agreeCheck() {
 	if(result) {
 		agreeBtn.classList.remove("inactive");
 		agreeBtn.classList.add("update-btn");
+		agreeBtn.href="javascript:agree();";
 	} else {
 		agreeBtn.classList.remove("update-btn");
 		agreeBtn.classList.add("inactive");
+		agreeBtn.onclick="javascript:void(0);";
 	}
 }
 

@@ -54,7 +54,7 @@ _log.info("is admin menu : " + isAdminMenu);
 		
 		<aui:row>
 			<aui:col>
-				<%@ include file="./policy/term-of-use.jspf" %>
+				<liferay-ui:message key="ecrf-user.policy.text.term-of-use"></liferay-ui:message>
 			</aui:col>
 		</aui:row>
 		
@@ -77,7 +77,7 @@ _log.info("is admin menu : " + isAdminMenu);
 		
 		<aui:row>
 			<aui:col>
-				<%@ include file="./policy/privacy.jspf" %>
+				<liferay-ui:message key="ecrf-user.policy.text.privacy"></liferay-ui:message>
 			</aui:col>
 		</aui:row>
 		
@@ -92,7 +92,7 @@ _log.info("is admin menu : " + isAdminMenu);
 		<aui:row>
 			<aui:col>
 				<aui:button-row>
-					<a class="dh-icon-button submit-btn inactive w110 h36" id="<portlet:namespace/>move" name="<portlet:namespace/>move" href="javascript:void(0);">
+					<a id="<portlet:namespace/>move" name="<portlet:namespace/>move" class="dh-icon-button submit-btn inactive w110 h36" href="javascript:void(0);">
 						<span><liferay-ui:message key="ecrf-user.button.next" /></span>
 					</a>
 				</aui:button-row>
@@ -129,11 +129,11 @@ function agreeCheck() {
 	if(result) {
 		agreeBtn.classList.remove("inactive");
 		agreeBtn.classList.add("update-btn");
-		agreeBtn.href = moveURL;
+		agreeBtn.href = +moveURL;
 	} else {
 		agreeBtn.classList.remove("update-btn");
 		agreeBtn.classList.add("inactive");
-		agreeBtn.href = "javascript:void(0)";
+		agreeBtn.href = "javascript:void(0);";
 	}
 }
 </script>

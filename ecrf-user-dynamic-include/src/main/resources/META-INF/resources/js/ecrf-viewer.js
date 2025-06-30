@@ -77,7 +77,9 @@ let ECRFViewer = function(StationX){
 				 */
 				Liferay.on('value_changed', function(event){
 					let packet = event.dataPacket;
-	
+					
+					console.log(packet);
+
 					if(packet.term){
 						let eventTerm = packet.term;
 						console.log(eventTerm);
@@ -89,7 +91,7 @@ let ECRFViewer = function(StationX){
 						event.dataPacket.result = result;
 						if(isProcessing) return;
 						isProcessing = true;
-						autoCalUtil.checkAutoCal(eventTerm);
+						autoCalUtil.checkAutoCal(packet);
 					}
 					isProcessing = false;
 				});

@@ -109,6 +109,8 @@ boolean isNoemoc = false;
 										if(CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ALL_UPDATE_CRF)) hasCRFPermission = true;
 										
 										boolean hasUpdatePermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.UPDATE_CRF);
+										boolean hasViewFormPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_FORM);
+										boolean hasViewDataListPermission = CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_DATA_LIST);
 										%>
 										
 										<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_REDIRECT_UPDATE_CRF %>" var="moveCRFInfoURL" >
@@ -118,8 +120,8 @@ boolean isNoemoc = false;
 										</portlet:actionURL>
 										
 										<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
-										<a class="dh-icon-button submit-btn update-btn w120 h32 marR8" href="<%=moveCRFInfoURL%>" name="<portlet:namespace/>moveCRFInfo">
-											<img class="update-icon h20" />
+										<a class="dh-icon-button submit-btn crf-info-btn w130 h36 marR8" href="<%=moveCRFInfoURL%>" name="<portlet:namespace/>moveCRFInfo">
+											<img class="crf-icon h20" />
 											<span><liferay-ui:message key="ecrf-user.button.crf-info" /></span>
 										</a>
 										</c:if>
@@ -130,9 +132,9 @@ boolean isNoemoc = false;
 											<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 										</portlet:actionURL>
 										
-										<c:if test="<%=(hasCRFPermission && hasUpdatePermission) %>">
-										<a class="dh-icon-button submit-btn crf-form-btn w120 h32 marR8" href="<%=moveCRFFormURL%>" name="<portlet:namespace/>moveCRFForm">
-											<img class="crf-form-icon h20" />					
+										<c:if test="<%=(hasCRFPermission && hasViewFormPermission) %>">
+										<a class="dh-icon-button submit-btn crf-form-btn w130 h36 marR8" href="<%=moveCRFFormURL%>" name="<portlet:namespace/>moveCRFForm">
+											<img class="crf-form-icon h20" />
 											<span><liferay-ui:message key="ecrf-user.button.crf-builder" /></span>
 										</a>
 										</c:if>
@@ -143,10 +145,12 @@ boolean isNoemoc = false;
 											<portlet:param name="<%=WebKeys.REDIRECT %>" value="<%=currentURL %>" />
 										</portlet:actionURL>
 										
-										<a class="dh-icon-button submit-btn crf-data-btn w120 h32 marR8" href="<%=moveCRFDataURL%>" name="<portlet:namespace/>moveCRFData">
-											<img class="crf-data-icon h20" />					
+										<c:if test="<%=(hasCRFPermission && hasViewDataListPermission) %>">
+										<a class="dh-icon-button submit-btn crf-data-btn w130 h36 marR8" href="<%=moveCRFDataURL%>" name="<portlet:namespace/>moveCRFData">
+											<img class="crf-data-icon h20" />
 											<span><liferay-ui:message key="ecrf-user.button.crf-data" /></span>
 										</a>
+										</c:if>
 
 									</aui:col>
 								</aui:row>
