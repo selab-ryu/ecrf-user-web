@@ -129,7 +129,7 @@ function agreeCheck() {
 	if(result) {
 		agreeBtn.classList.remove("inactive");
 		agreeBtn.classList.add("update-btn");
-		agreeBtn.href = +moveURL;
+		agreeBtn.href = moveURL;
 	} else {
 		agreeBtn.classList.remove("update-btn");
 		agreeBtn.classList.add("inactive");
