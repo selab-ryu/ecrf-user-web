@@ -116,7 +116,7 @@
 			<aui:row>
 				<aui:col md="12">
 					<aui:button-row cssClass="marL10">
-						<button id="<portlet:namespace/>back" type="button" class="dh-icon-button back-btn w130" onclick="location.href='"<%=listHistoryURL %>'">
+						<button id="<portlet:namespace/>back" type="button" class="dh-icon-button back-btn w130" onclick="location.href='<%=listHistoryURL %>'">
 							<img class="back-icon" />					
 							<span><liferay-ui:message key="ecrf-user.button.back"/></span>
 						</button>

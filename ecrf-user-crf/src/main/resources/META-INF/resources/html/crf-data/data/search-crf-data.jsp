@@ -70,6 +70,51 @@ String sdPortlet = IcecapWebPortletKeys.STRUCTURED_DATA;
 	</div>
 </div>
 
+<script>
+// event handler for search option dialog close
+// as-is: when move to other page, search option dialog is not closed
+// to-be: when move to other page, search option dialog is closed 
+
+// add urlchange event when url has changed
+//pushState / replaceState
+(function(history) {
+  const pushState = history.pushState;
+  const replaceState = history.replaceState;
+
+  history.pushState = function(...args) {
+    const result = pushState.apply(this, args);
+    window.dispatchEvent(new Event("urlchange"));
+    return result;
+  };
+
+  history.replaceState = function(...args) {
+    const result = replaceState.apply(this, args);
+    window.dispatchEvent(new Event("urlchange"));
+    return result;
+  };
+})(window.history);
+
+// add event handler on urlchange, when enter the advanced crf search page
+window.addEventListener("urlchange", () => {
+  //console.log("Custom urlchange event:", window.location.href);
+  
+  let curUrl = window.location.href;
+  let searchStr = "search-crf-data"
+  let searchOption = $('#_com_sx_icecap_web_portlet_sd_StructuredDataPortlet_selectSearchTerm');
+  
+  // check crf-advanced-search menu
+  let isCRFSearch = curUrl.includes(searchStr);
+  // check searchOption div is exist
+  if(!isCRFSearch && searchOption) {
+	  // check dialog has initialized & dialog is opend
+	  if(searchOption.hasClass("ui-dialog-content") && searchOption.dialog("isOpen")) {
+	  	console.log("search option dialog close");
+	  	searchOption.dialog('destroy');
+	  }
+  }
+});
+</script>
+
 <aui:script use="liferay-portlet-url">
 $("#excelDownload").on("click", function(event) {
 		var form = $("#<portlet:namespace/>fm");

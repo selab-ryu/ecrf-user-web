@@ -353,7 +353,7 @@ if(isUpdate) {
 						<c:otherwise>
 						
 						<c:if test="<%=SubjectPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.ADD_SUBJECT) %>">
-							<button id="<portlet:namespace/>add" type="button" class="dh-icon-button submit-btn add-btn w110 h36 marR8">
+							<button id="<portlet:namespace/>save" type="button" class="dh-icon-button submit-btn add-btn w110 h36 marR8">
 								<img class="add-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.add" /></span>
 							</button>
