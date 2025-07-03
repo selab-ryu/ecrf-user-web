@@ -206,7 +206,7 @@
 	<!-- crf list on side menu => move to that crf -->
 	<div>
 		<div class="current-crf">
-			<span><liferay-ui:message key="ecrf-user.menu.all-crf" /></span>
+			<span><liferay-ui:message key="ecrf-user.menu.crf-list" /></span>
 			<%for(int i=0; i<allCRFList.size(); i++) { %>
 			<%
 				CRF tempCRF = allCRFList.get(i);
