@@ -1983,7 +1983,8 @@ let ECRFViewer = function(StationX){
 			}	
 			let $section = $('<div class="string-term">');
 			let $label = $('<div class="label-controller">');
-			$label.append($('<p>' + label + '</p>'));
+			let $labelContent = '<p class="one-line-ellipsis" data-tippy-content="'+label+'">' + label + '</p>';
+			$label.append($($labelContent));
 			$section.append($label);
 			$container.append($section);
 			let $inputLabel = $('<div>');
@@ -2092,7 +2093,7 @@ let ECRFViewer = function(StationX){
 			return $container;
         },
         buildTermAuditValue : function(term){
-			let $inputTag = $('<p class="field form-control">');
+			let $inputTag = $('<p class="field form-control one-line-ellipsis">');
 			$inputTag.prop({
 				id: term.termName,
 				name: term.termName
@@ -2116,6 +2117,7 @@ let ECRFViewer = function(StationX){
 				if(term.value) termValue = term.value;
 			}
 			let $outerDiv = $('<div>'); 
+			$inputTag.attr('data-tippy-content', termValue);
 			$inputTag.append(termValue);
 			if(termValue !== "non-execution"){
 				$inputTag.attr('onclick', 'openHistoryDialog("'+ term.termName + '", "' + term.displayName.localizedMap.en_US + '")');

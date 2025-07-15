@@ -123,6 +123,13 @@
     
     .fs-1-r { font-size:1rem; }
 
+    .one-line-ellipsis {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+    }
+    
 	.vertical-middle { vertical-align:middle; }
 	
 	.policy-container {

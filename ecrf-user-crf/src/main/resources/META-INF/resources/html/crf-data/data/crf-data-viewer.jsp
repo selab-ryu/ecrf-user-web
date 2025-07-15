@@ -29,12 +29,14 @@ boolean isUpdate = false;
 JSONObject answerObj = JSONFactoryUtil.createJSONObject();
 
 String none = ParamUtil.getString(renderRequest, "none");
-String menu = "add-crf-data";
+String menu = ECRFUserMenuConstants.ADD_CRF_DATA;
+String headerStr = "ecrf-user.crf-data.title.add-crf-data";
 
 String answerForm = null;
 if(sdId > 0) {
-	menu = "update-crf-data";
-	isUpdate = true;	
+	menu = ECRFUserMenuConstants.UPDATE_CRF_DATA;
+	isUpdate = true;
+	headerStr = "ecrf-user.crf-data.title.update-crf-data";
 	answerForm = (String)renderRequest.getAttribute(ECRFUserCRFDataAttributes.ANSWER_FORM);
 	answerObj = JSONFactoryUtil.createJSONObject(answerForm);
 }
@@ -45,6 +47,11 @@ JSONArray groupTermList = progressApi.getGroupTermList();
 
 _log.info("is update : " + isUpdate);
 _log.info("is audit : " + isAudit);
+
+if(isAudit) {
+	menu = ECRFUserMenuConstants.VIEW_CRF_DATA;
+	headerStr = "ecrf-user.crf-data.title.audit-trail";
+}
 
 %>
 
@@ -68,7 +75,7 @@ _log.info("is audit : " + isAudit);
 			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
 		</div>
 	
-		<liferay-ui:header backURL="<%=redirect %>" title='<%=isUpdate ? "Update CRF" : "ADD CRF" %>' />
+		<liferay-ui:header backURL="<%=redirect %>" title='<%=headerStr %>' />
 		
 		<div id="floating-map-button">
 		<%for(int count = 0; count < groupTermList.length(); count++){
@@ -223,6 +230,11 @@ subjectInfo["subjectBirth"] = subjectBirth;
 let viewer = new ev.Viewer(dataStructure, align, <%=answerForm%>, subjectInfo, <%=isAudit%>);
 //console.log($('#<portlet:namespace/>dataContent').val());
 dataStructure.renderSmartCRF();
+
+// add tooltip
+tippy('[data-tippy-content]', {
+	placement: 'right', animation: 'fade', duration: [100, 200]
+});
 
 Liferay.on( 'value_changed', function(evt){
 	if(isLoaded){
