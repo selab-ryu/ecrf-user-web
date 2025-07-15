@@ -302,6 +302,24 @@
         return list_ordered;
 	}
 	
+	function checkTermType(name) {
+		let type = "";
+		let term = null;
+		let inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
+		
+		for(var i = 0; i < inspectionData.length; i++){
+			if(inspectionData[i].termName === name){
+				term = inspectionData[i];
+			}
+		}
+		
+		if(term) {
+			type = term.termType;
+		}
+			
+		return type;
+	}
+	
 	// Graph Part
 	function renderGraph(elem){
 		console.log("Render Graph");
@@ -391,19 +409,29 @@
     			+ termFunc
     			+ '"/>';
 		}
-        			
-        contentText += '<label class="'
-        			+ classLabel
-        			+'" onClick="renderGraph(this);" for ="'
-        			+ termLabel
-        			+ '" name = "' 
-        			+ termName
-        			+ '">' 
+        
+		let type = checkTermType(termName);
+		let labelStyle = "";
+
+		// Paint the element(Term); List => Red / Numeric => Blue
+		if(type === "List") { labelStyle = "color: red!important;"; }
+		
+		if(type === "Numeric") { labelStyle = "color: blue!important;"; }
+
+        contentText += '<label class="'+ classLabel + '" '
+        			+' for ="'+ termLabel + '" '
+        			+ 'name = "'+ termName + '" '
+        			+ 'style="'+labelStyle + '" '
+        			+ '">'
         			+ displayName
-        			+ '<span class = "tooltip">'
-        			+ displayName
-        			+ '</span></label>';
-        			
+        			+ '<span class = "tooltip">' + displayName + '</span>'
+        			+ '</label>';
+        
+        // check term type
+        if(type === "List" || type === "Numeric"){
+        	contentText += '<img name="'+termName+'" class="clickable-icon bar-graph-icon marL4 marR4" width="14" height="14" onclick="renderGraph(this);"/>';
+        }
+        
         return contentText;
 	}
 
@@ -582,18 +610,6 @@
 		}
     }
     document.getElementById("searchText").innerHTML = contentText;
-    
-    // Paint the element(Term); List => Red / Numeric => Blue
-    for(var i = 0; i < inspectionData.length; i++){
-		if(inspectionData[i].termType === "List"){
-			var eleTerm = document.getElementsByName(inspectionData[i].termName);
-			eleTerm[0].setAttribute("style", "color: red!important;");
-		}
-		else if(inspectionData[i].termType === "Numeric"){
-			var eleTerm = document.getElementsByName(inspectionData[i].termName);
-			eleTerm[0].setAttribute("style", "color: blue!important;");
-		}
-	}
 </script>
 
 <script>

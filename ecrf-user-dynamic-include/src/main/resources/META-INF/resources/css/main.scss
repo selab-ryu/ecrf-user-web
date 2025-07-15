@@ -79,9 +79,11 @@
     .marT30 { margin-top:30px; }
     .marB10 { margin-bottom:10px; }
     .marB20 { margin-bottom: 20px; }
+    .marR4 { margin-right:4px; }
     .marR8 { margin-right:8px; }
     .marR10 { margin-right:10px; }
     .marR16 { margin-right:16px; }
+    .marL4 { margin-left:4px; }
     .marL8 { margin-left:8px; }
     .marL10 { margin-left:10px; }
     
@@ -714,6 +716,13 @@
 
     .close-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/close_icon.png); }
     .dh-icon-button:hover .close-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/close_icon.png); }
+
+
+    .bar-graph-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/graph/bar_graph_icon.png); }
+    .bar-graph-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/graph/line_graph_icon.png); }
+
+    .clickable-icon { cursor:pointer; }
+
 	/** icon class **/
 	
 
