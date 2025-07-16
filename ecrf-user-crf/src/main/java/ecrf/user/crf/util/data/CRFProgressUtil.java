@@ -40,9 +40,12 @@ public class CRFProgressUtil {
 		int progressPercent = 0;
 		JSONArray crfForm = getCRFForm();
 		if(Validator.isNotNull(crfForm)) {
-			int totalLength = crfForm.length();
-			JSONObject activeTermsPackage = getActiveTermPackage(crfForm);
-			totalLength = calculateActiveTermsNum(activeTermsPackage, totalLength);
+			int totalLength = crfForm.length();	// 전체 term 개수
+			JSONObject activeTermsPackage = getActiveTermPackage(crfForm);	// ative term 개수 계산
+			
+			// 임시 제거
+			// totalLength = calculateActiveTermsNum(activeTermsPackage, totalLength); // 전체 term 개수에서 active term 개수 정리
+			// 답변 개수 / 전체 개수
 			progressPercent = answerForm.length() * 100 / totalLength ;
 		}
 		
@@ -227,24 +230,25 @@ public class CRFProgressUtil {
 	}
 	
 	private int calculateActiveTermsNum(JSONObject activeTermsPackage, int totalLength) {
-		int calculatedLength = totalLength;
+		int calculatedLength = totalLength;	// 전체 개수
 		Iterator<String> activeTermIter = activeTermsPackage.keys();
 		Iterator<String> answerTermIter = answerForm.keys();
 		List<String> activeTermNames = new ArrayList<String>();
 		List<String> answerTermNames = new ArrayList<String>();
-		while(activeTermIter.hasNext()) {
+		while(activeTermIter.hasNext()) {	// active term key List 생성
 			String activeTermKey = activeTermIter.next();
 			activeTermNames.add(activeTermKey);
 		}
 		
-		while(answerTermIter.hasNext()) {
+		while(answerTermIter.hasNext()) {	// 답변 데이터 term key List 생성
 			String answerTermKey = answerTermIter.next();
 			answerTermNames.add(answerTermKey);
 		}
-		for(String activeTermName : activeTermNames) {
-			for(String answerTermName: answerTermNames) {
-				if(activeTermName.equals(answerTermName)){
-					calculatedLength -= activeTermsPackage.getJSONObject(activeTermName).getInt("length");
+		
+		for(String activeTermName : activeTermNames) {			// active term 개수 만큼 반복
+			for(String answerTermName: answerTermNames) {	// 답변 term 개수 만큼 반복
+				if(activeTermName.equals(answerTermName)){	// active term 과 답변 term이 동일하면
+					calculatedLength -= activeTermsPackage.getJSONObject(activeTermName).getInt("length");	// 전체 개수에서 해당 active term의 자식만큼 제거
 				}
 			}
 		}
