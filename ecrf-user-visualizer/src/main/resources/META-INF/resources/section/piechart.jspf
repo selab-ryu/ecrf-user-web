@@ -1,0 +1,17 @@
+<div class="pad1r">
+	<liferay-ui:header title="ecrf-user.visualizer.title.piechart" />
+
+	<aui:container>
+		
+			
+			<aui:row  id="piechartrow">
+				<aui:col md="12">
+					<div id="piechart" style="height: 330px display: none"></div>
+				</aui:col>
+			</aui:row>
+					
+		
+	</aui:container>
+</div>
+
+
