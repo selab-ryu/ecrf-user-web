@@ -36,7 +36,7 @@
 		<liferay-ui:header title="ecrf-user.visualizer.title.view-visualizer"/>
 		
 		<!-- Display each cohort data chart by Tab -->
-		<liferay-ui:tabs names="NoE_MoC, EDPS, KATRI" refresh="false" value="${param.tab}">
+		<liferay-ui:tabs names="NoE_MoC, EDPS, KATRI, piechart" refresh="false" value="${param.tab}">
 		
 		
 			<liferay-ui:section>
@@ -49,6 +49,10 @@
 			
 			<liferay-ui:section>
 				<%@ include file="/section/katri.jspf"  %>
+			</liferay-ui:section>
+			
+			<liferay-ui:section>
+				<%@ include file="/section/piechart.jspf"  %>
 			</liferay-ui:section>
 			
 		</liferay-ui:tabs>
@@ -78,8 +82,44 @@ $(document).ready(function() {
 		getKATRIData(katriId);
 	}
 	
+	let crfId = 38203;
+	
+	getPieGraphData(crfId);
+	
 
 });
+
+
+
+//추가된 함수
+function getPieGraphData(crfId) {
+	$.ajax({
+		url: '<portlet:resourceURL id="<%=ECRFVisualizerMVCCommand.RESOURCE_GET_NOE_MOC %>"></portlet:resourceURL>',
+		type:'post',
+		dataType: 'json',
+		data:{
+			<portlet:namespace/>crfId: crfId,
+		},
+		success: function(data){
+
+			console.log("crfId : ", crfId);
+			console.log("data : ", data.data[0]);
+
+			// set data to chart
+			$("#<portlet:namespace/>dataCount").text(100);
+			
+
+			let chartData3 = processChartData3(data); // 데이터 전처리 함수 추가
+	        setGraphData3(chartData3); // 차트 데이터 설정
+		
+
+		
+		},
+		error: function(jqXHR, a, b){
+			console.log('Fail to render trimester graph');
+		}
+	});
+}
 
 
 
@@ -97,7 +137,7 @@ function getEDPSData(crfId) {
 		success: function(obj){
 			
 			//console.log("crfId : ", crfId);
-			//console.log("data : ", obj);		
+			//console.log("data: ", obj);		
 			
 			$("#<portlet:namespace/>dataCount").text(100);
 			
@@ -174,7 +214,7 @@ function getGraphData(crfId) {
 			//let average2 = averageData(obj); // 데이터 전처리 함수 추가
 			setNoEMoCGridData(mergedGroupData, obj);// 추가한 것
 			
-			
+
 
 		},
 		error: function(jqXHR, a, b){
@@ -635,7 +675,7 @@ function transFormData(in_data) {
 
 function setGraphData3(data) {
 	 // 1. 환자 현황 차트
-  new wijmo.chart.FlexPie('#enrollmentChart3', {
+  new wijmo.chart.FlexPie('#piechart', {
       header: '임상 산모학력 현황',
       bindingName: 'education',
       binding: 'count',
