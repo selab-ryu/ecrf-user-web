@@ -63,6 +63,7 @@
 
 <%@ page import="ecrf.user.constants.attribute.ECRFUserAttributes"%>
 <%@ page import="ecrf.user.constants.attribute.ECRFUserMainAttributes"%>
+<%@ page import="ecrf.user.constants.attribute.ECRFUserCRFAttributes"%>
 
 <%@ page import="ecrf.user.model.Researcher"%>
 <%@ page import="ecrf.user.model.CRF"%>

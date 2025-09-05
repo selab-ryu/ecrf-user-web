@@ -1,3 +1,6 @@
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portal.kernel.events.LifecycleEvent"%>
+<%@page import="com.liferay.portal.kernel.cache.thread.local.Lifecycle"%>
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html/main/view-site_jsp"); %>
@@ -6,6 +9,8 @@
 	SiteDisplayContext siteDisplayContext = new SiteDisplayContext(renderRequest, renderResponse);
 	boolean signedIn = themeDisplay.isSignedIn();
 	if(!signedIn) _log.info("not logged in");
+	
+	String crfNamespace = "_"+ECRFUserPortletKeys.CRF+"_";
 %>
 
 <style>
@@ -81,8 +86,15 @@
 			List<CRF> mySiteCRFList = CRFLocalServiceUtil.getCRFByGroupId(group.getGroupId()); 
 			//_log.info(crfList.size());
 			
+			Map<String, String[]> urlParams = new HashMap<>();
+			urlParams.put(crfNamespace+ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, new String[] {ECRFUserMVCCommand.RENDER_LIST_CRF_DATA});
+			
 			for(int i=0; i<mySiteCRFList.size(); i++ ) {
 				CRF crf = mySiteCRFList.get(i);
+				
+				long crfId = crf.getCrfId();
+				urlParams.put(crfNamespace+ECRFUserCRFAttributes.CRF_ID, new String[] {String.valueOf(crfId)});
+				
 				DataType dataType = DataTypeLocalServiceUtil.getDataType(crf.getDatatypeId());
 				if(Validator.isNotNull(dataType)) {
 					//_log.info("datatype check");
@@ -103,6 +115,14 @@
 					}
 					
 					dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName();
+					
+					PortletURL portletURL = PortalUtil.getControlPanelPortletURL(request, group, ECRFUserPortletKeys.CRF, scopeGroupId, 0, PortletRequest.RENDER_PHASE);
+					//portletURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, ECRFUserMVCCommand.RENDER_LIST_CRF_DATA);
+					portletURL.setParameters(urlParams);	
+					_log.info("Get Control Panel Portlet URL : " + portletURL.toString());
+					
+					String crfDataListURL = PortalUtil.getControlPanelFullURL(group.getGroupId(), ECRFUserPortletKeys.CRF, urlParams);
+					//_log.info("child site control panel url : " + crfDataListURL);
 					
 					/*
 					if(isEmpty) {
