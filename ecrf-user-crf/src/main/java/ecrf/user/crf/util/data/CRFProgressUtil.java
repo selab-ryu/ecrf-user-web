@@ -230,6 +230,8 @@ public class CRFProgressUtil {
 	}
 	
 	private int calculateActiveTermsNum(JSONObject activeTermsPackage, int totalLength) {
+		// 재귀함수로 group item 개수 확인
+		
 		int calculatedLength = totalLength;	// 전체 개수
 		Iterator<String> activeTermIter = activeTermsPackage.keys();
 		Iterator<String> answerTermIter = answerForm.keys();

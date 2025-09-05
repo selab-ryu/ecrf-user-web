@@ -247,6 +247,8 @@ _log.info("url : " + baseURL.toString());
 				<%
 					String progressBarCss = "progressBar";				
 					String progressSrc = renderRequest.getContextPath() + "/img/empty_progress.png";
+					progressPercentage = "0%";	// clear value for each row
+					
 					if(hasCRF){
 						List<LinkCRF> linkList = LinkCRFLocalServiceUtil.getLinkCRFByG_S_C(scopeGroupId, rowSubjectId, crfId);
 						if(linkList.size() > 0){
