@@ -603,6 +603,12 @@
     .search-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/search_crf_data_icon.png); }
     .search-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/search_crf_data_icon.png); }
 
+    .teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_data_list_icon.png); }
+    .dh-sidebar.active .teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }
+    .dh-sidebar.inactive .teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
+    .teeth-data-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }
+    .teeth-data-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
+
     .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_query_icon.png); }
     .dh-sidebar.active .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
     .dh-sidebar.inactive .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }

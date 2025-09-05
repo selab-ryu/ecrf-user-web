@@ -1,0 +1,104 @@
+.ecrf-user-teeth {
+	.region {
+		position: absolute;
+		border: 2px solid black;
+		opacity: 0.5;
+		cursor: pointer;
+		z-index: 10;
+	}
+     
+    #imageWrapper {
+		position: relative;
+		width: auto;
+		max-width: none;
+		margin: 0 auto;
+		
+		aspect-ratio: 2806 / 834;
+	}
+        
+        
+	#radioButtonWrapper {
+		text-align: center;
+		margin-top: 20px;
+		padding: 10px;
+		border: 1px solid #ccc;
+		display: inline-block;
+		
+		label {
+			margin: 0 15px;
+			font-size: 1.8rem;
+			padding: 10px;
+			display: inline-flex;
+			align-items: center;
+		}	
+		
+		input[type="radio"] {
+			transform: scale(1.5);
+			margin-right: 5px;
+		}
+	}
+        
+	#historyContainer {
+		margin-top: 30px;
+		
+		h4 {
+			margin-bottom: 5px;
+		}
+		
+		ul {
+			margin-top: 0;
+			margin-bottom: 15px;
+			padding-left: 20px;
+		}
+	}
+        
+	#tooltipContainer, #tooltipContainer th, #tooltipContainer td {
+		white-space: nowrap;
+	}
+	
+	.info-table{
+		font-size: 1rem;
+		border-collapse: collapse;
+		width: 100%;
+		table-layout: fixed;
+	}
+	.info-table td{
+		border: 1px solid rgba(200,200,200,0.7);
+		padding: 8px;
+		vertical-align: top;
+		word-wrap: break-word;
+	}
+	
+	.number-label {
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 1.6rem;
+		font-weight: bold;
+		pointer-events: none;
+	}
+	
+	.state-label {
+		position: absolute;
+		text-align: center;
+		font-size: 1.5rem;
+		font-weight: bold;
+		pointer-events: none;
+    }
+    
+	.history-label {
+		position: absolute;
+		text-align: center;
+		font-size: 1.2rem;
+		pointer-events: none;
+    }
+    
+	.selection-box {
+		position: absolute;              
+		border: 1px dashed #000;                
+		background-color: rgba(0, 0, 255, 0.2);  
+		pointer-events: none;                      
+    }
+	
+}
