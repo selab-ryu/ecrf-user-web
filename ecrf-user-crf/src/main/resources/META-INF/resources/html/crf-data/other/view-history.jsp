@@ -8,6 +8,10 @@
 
 	String menu = ECRFUserMenuConstants.LIST_HISTORY;
 	
+	long historyId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.HISTORY_ID);
+	
+	_log.info("history id : " + historyId);
+	
 	Date createDate = (Date)renderRequest.getAttribute(ECRFUserAttributes.CREATE_DATE);	
 	String[][] termList = (String[][])renderRequest.getAttribute(ECRFUserCRFDataAttributes.TERM_LIST);
 	Subject subject = (Subject)renderRequest.getAttribute(ECRFUserCRFDataAttributes.SUBJECT);	
@@ -120,9 +124,22 @@
 							<img class="back-icon" />					
 							<span><liferay-ui:message key="ecrf-user.button.back"/></span>
 						</button>
+						
+						<c:if test="<%=isAdmin %>">
+						<liferay-portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_LOAD_CRF_DATA %>" var="loadCRFDataURL">
+							<portlet:param name="<%=ECRFUserCRFDataAttributes.HISTORY_ID %>" value="<%=String.valueOf(historyId) %>" />
+							<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+						</liferay-portlet:actionURL>
+						
+						<button id="<portlet:namespace/>loadData" type="button" class="dh-icon-button update-btn marTr w200" onclick="location.href='<%=loadCRFDataURL%>'">
+			      			<img class="update-icon"/>
+							<span><liferay-ui:message key="ecrf-user.button.load-crf-data"/></span>
+						</button>
+						</c:if>
+						
 					</aui:button-row>
 				</aui:col>
-			</aui:row>				
+			</aui:row>
 		</aui:container>
 	</div>
 </div>
