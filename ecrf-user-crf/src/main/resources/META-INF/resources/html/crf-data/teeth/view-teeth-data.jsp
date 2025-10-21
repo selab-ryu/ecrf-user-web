@@ -100,24 +100,27 @@
 
 <portlet:renderURL var="ViewTotalTeethURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_TEETH_DATA%>" />
-	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subjectId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subjectId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.LINK_ID %>" value="<%=String.valueOf(linkId) %>" />
 	<portlet:param name="menu" value="<%=ECRFUserMenuConstants.VIEW_TEETH_DATA %>" />	
 	<portlet:param name="viewType" value="0" />	
 </portlet:renderURL>
 
 <portlet:renderURL var="ViewPermanentTeethURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_TEETH_DATA%>" />
-	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subjectId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subjectId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.LINK_ID %>" value="<%=String.valueOf(linkId) %>" />
 	<portlet:param name="menu" value="<%=ECRFUserMenuConstants.VIEW_TEETH_DATA %>" />	
 	<portlet:param name="viewType" value="1" />	
 </portlet:renderURL>
 
 <portlet:renderURL var="ViewDeciduousTeethURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_TEETH_DATA%>" />
-	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
-	<portlet:param name="<%=ECRFUserSubjectAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subjectId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.SUBJECT_ID %>" value="<%=String.valueOf(subjectId) %>" />
+	<portlet:param name="<%=ECRFUserCRFDataAttributes.LINK_ID %>" value="<%=String.valueOf(linkId) %>" />
 	<portlet:param name="menu" value="<%=ECRFUserMenuConstants.VIEW_TEETH_DATA %>" />	
 	<portlet:param name="viewType" value="2" />	
 </portlet:renderURL>

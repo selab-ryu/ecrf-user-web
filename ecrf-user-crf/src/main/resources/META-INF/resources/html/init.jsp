@@ -136,11 +136,10 @@
 <%@ page import="ecrf.user.crf.security.permission.resource.CRFHistoryModelPermission" %>
 
 <%@ page import="com.sx.icecap.service.DataTypeLocalServiceUtil"%>
-<%@page import="com.sx.icecap.service.StructuredDataLocalServiceUtil"%>
+<%@ page import="com.sx.icecap.service.StructuredDataLocalServiceUtil"%>
 
 <%@ page import="com.sx.constant.StationXWebKeys"%>
 <%@ page import="com.sx.icecap.constant.*" %>
-
 
 <%@ page import="ecrf.user.crf.util.SearchUtil"%>
 
