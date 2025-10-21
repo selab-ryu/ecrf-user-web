@@ -1,8 +1,0 @@
-Bundle-Name: ecrf-user-teeth
-Bundle-SymbolicName: ecrf.user.teeth
-Bundle-Version: 1.0.0
-Export-Package: ecrf.user.teeth.constants
--privatepackage: \
-	ecrf.user.constants,\
-	com.sx.icecap.constant,\
-	ecrf.user.model.custom

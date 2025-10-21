@@ -1,8 +1,0 @@
-eclipse.preferences.version=1
-encoding//src/main/java/ecrf/user/teeth/command/render/DeciduousTeethViewRenderCommand.java=UTF-8
-encoding//src/main/java/ecrf/user/teeth/command/render/HistoryPopupRenderCommand.java=UTF-8
-encoding//src/main/java/ecrf/user/teeth/command/render/TeethviewRenderCommand.java=UTF-8
-encoding//src/main/java/ecrf/user/teeth/command/resource/GetTeethHistoryResourceCommand.java=UTF-8
-encoding//src/main/java/ecrf/user/teeth/command/resource/ToolTipResourceCommand.java=UTF-8
-encoding//src/main/java/ecrf/user/teeth/command/resource/addTeethTreatmentResourceCommand.java=UTF-8
-encoding//src/main/java/ecrf/user/teeth/dto/DisplayHistory.java=UTF-8
