@@ -40,12 +40,14 @@ public class CRFProgressUtil {
 		int progressPercent = 0;
 		JSONArray crfForm = getCRFForm();
 		if(Validator.isNotNull(crfForm)) {
-			int totalLength = crfForm.length();	// 전체 term 개수
-			JSONObject activeTermsPackage = getActiveTermPackage(crfForm);	// ative term 개수 계산
+			int totalLength = crfForm.length();	// total term count
+			JSONObject activeTermsPackage = getActiveTermPackage(crfForm);	// ative term count
 			
-			// 임시 제거
-			// totalLength = calculateActiveTermsNum(activeTermsPackage, totalLength); // 전체 term 개수에서 active term 개수 정리
-			// 답변 개수 / 전체 개수
+			// temp method
+			// minus active term count from total term count
+			// totalLength = calculateActiveTermsNum(activeTermsPackage, totalLength); 
+
+			// answer item count / total term count
 			progressPercent = answerForm.length() * 100 / totalLength ;
 		}
 		
@@ -230,27 +232,28 @@ public class CRFProgressUtil {
 	}
 	
 	private int calculateActiveTermsNum(JSONObject activeTermsPackage, int totalLength) {
-		// 재귀함수로 group item 개수 확인
+		// recursive function for calculate group's item count
 		
-		int calculatedLength = totalLength;	// 전체 개수
+		int calculatedLength = totalLength;	// total term count
 		Iterator<String> activeTermIter = activeTermsPackage.keys();
 		Iterator<String> answerTermIter = answerForm.keys();
 		List<String> activeTermNames = new ArrayList<String>();
 		List<String> answerTermNames = new ArrayList<String>();
-		while(activeTermIter.hasNext()) {	// active term key List 생성
+		while(activeTermIter.hasNext()) {	// active term key List
 			String activeTermKey = activeTermIter.next();
 			activeTermNames.add(activeTermKey);
 		}
 		
-		while(answerTermIter.hasNext()) {	// 답변 데이터 term key List 생성
+		while(answerTermIter.hasNext()) {	// answer term key List
 			String answerTermKey = answerTermIter.next();
 			answerTermNames.add(answerTermKey);
 		}
 		
-		for(String activeTermName : activeTermNames) {			// active term 개수 만큼 반복
-			for(String answerTermName: answerTermNames) {	// 답변 term 개수 만큼 반복
-				if(activeTermName.equals(answerTermName)){	// active term 과 답변 term이 동일하면
-					calculatedLength -= activeTermsPackage.getJSONObject(activeTermName).getInt("length");	// 전체 개수에서 해당 active term의 자식만큼 제거
+		for(String activeTermName : activeTermNames) {			// iterate by active terms
+			for(String answerTermName: answerTermNames) {	// iterate by answer terms
+				if(activeTermName.equals(answerTermName)){	// if active temr == answer term
+					// minus active term's child term count from total term count
+					calculatedLength -= activeTermsPackage.getJSONObject(activeTermName).getInt("length");
 				}
 			}
 		}

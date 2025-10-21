@@ -130,6 +130,39 @@
 	</div>
 	</c:if>
 	
+	<%
+	boolean isTeethShow = false;
+	_log.info("sidbar crf id check : " + crfId);
+	
+	// check crf name and set teeth show flag
+	if(dataTypeId > 0) {
+		DataType currentDT = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+		if(Validator.isNotNull(currentDT)) {
+			String dtName = currentDT.getDataTypeName();
+			_log.info(dtName);
+			
+			if(dtName.equals("ym_dental_crf")) {
+				isTeethShow = true;
+			}
+		}
+	}
+	
+	_log.info("is teeth show : " + isTeethShow);
+	
+	List<String> teethDataListMenu = new ArrayList<>();
+	teethDataListMenu.add(ECRFUserMenuConstants.LIST_TEETH_DATA);
+	teethDataListMenu.add(ECRFUserMenuConstants.VIEW_TEETH_DATA);
+	%>
+	
+	<c:if test="<%=isTeethShow %>">
+	<div>
+		<a id="teethMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, TagAttrUtil.TYPE_MENU, teethDataListMenu.toArray(new String[0]))%>" href="<%=moveTeethDataURL%>">
+       		<img class="teeth-data-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-data.teeth-data" /></span>
+		</a>
+	</div>
+	</c:if>
+	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY_LIST) %>">
 	<div>
 		<a id="historyListMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, ECRFUserMenuConstants.LIST_HISTORY, TagAttrUtil.TYPE_MENU)%>" href="<%=moveCRFDataHistoryListURL%>">
@@ -153,35 +186,6 @@
 		<a id="searchDataMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, ECRFUserMenuConstants.SEARCH_CRF_DATA, TagAttrUtil.TYPE_MENU)%>" href="<%=moveSearchCRFDataURL%>">
        		<img class="search-crf-icon" />
 			<span><liferay-ui:message key="ecrf-user.menu.crf-data.search-data" /></span>
-		</a>
-	</div>
-	</c:if>
-	
-	<%
-	boolean isTeethShow = false;
-	_log.info("sidbar crf id check : " + crfId);
-	
-	// check crf name and set teeth show flag
-	if(dataTypeId > 0) {
-		DataType currentDT = DataTypeLocalServiceUtil.getDataType(dataTypeId);
-		if(Validator.isNotNull(currentDT)) {
-			String dtName = currentDT.getDataTypeName();
-			_log.info(dtName);
-			
-			if(dtName.equals("ym_dental_crf")) {
-				isTeethShow = true;
-			}
-		}
-	}
-	
-	_log.info("is teeth show : " + isTeethShow);
-	%>
-	
-	<c:if test="<%=isTeethShow %>">
-	<div>
-		<a id="teethMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, ECRFUserMenuConstants.LIST_TEETH_DATA, TagAttrUtil.TYPE_MENU)%>" href="<%=moveTeethDataURL%>">
-       		<img class="teeth-data-icon" />
-			<span><liferay-ui:message key="ecrf-user.menu.crf-data.teeth-data" /></span>
 		</a>
 	</div>
 	</c:if>

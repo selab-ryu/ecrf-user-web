@@ -2,134 +2,134 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 .ecrf-user, .ecrf-user-crf-data, .ecrf-user-crf-query, .ecrf-user-crf {	
-    /* override css */
-    font-family: Roboto, "Nanum Gothic", sans-serif, "Noto Sans KR";
+	/* override css */
+	font-family: Roboto, "Nanum Gothic", sans-serif, "Noto Sans KR";
 	
-    .description-pre {
-        font-family:inherit;
-        font-size: 1rem;
-        margin-top:10px;
-        padding: 12px;
-        
-        border: 1.5px solid rgb(200,200,200, 0.5);
-        border-left:none;
-        border-right:none;
-    }
-
-	a[disable=true] {
-    	pointer-events: none;
+	.description-pre {
+		font-family:inherit;
+		font-size: 1rem;
+		margin-top:10px;
+		padding: 12px;
+		
+		border: 1.5px solid rgb(200,200,200, 0.5);
+		border-left:none;
+		border-right:none;
 	}
 
-    .searchcontainer-content .table thead th,
-    .table thead th, .table-list thead td, .table-list thead th {
-        background-color: rgb(95,115,190);
-        color: rgb(255,255,255);
-        font-weight:400;
-    }
+	a[disable=true] {
+		pointer-events: none;
+	}
 
-    .search-option {
-        border-color: #E7E7ED!important;
-    }	
+	.searchcontainer-content .table thead th,
+	.table thead th, .table-list thead td, .table-list thead th {
+		background-color: rgb(95,115,190);
+		color: rgb(255,255,255);
+		font-weight:400;
+	}
 
-    table { border-collapse : collapse; font-size : 0.9rem!important;}	
+	.search-option {
+		border-color: #E7E7ED!important;
+	}	
 
-    .row { align-items: stretch; }
-    
-    .form-control {
-        background-color:#FCFCFC;
-        border-color:#72AEE6;
-    }
+	table { border-collapse : collapse; font-size : 0.9rem!important;}	
 
-    .radius-shadow-container div.main-content-card {
-        min-height: 0px;
-    }
-    
-    /* override css */
+	.row { align-items: stretch; }
+	
+	.form-control {
+		background-color:#FCFCFC;
+		border-color:#72AEE6;
+	}
+
+	.radius-shadow-container div.main-content-card {
+		min-height: 0px;
+	}
+	
+	/* override css */
 	
 	/* custom css */
 	
-    .pad1R { padding:1rem; }
-    .pad1r { padding:1rem; }
-    .padTr { padding-top: 1rem; }
-    .padBr { padding-bottom: 1rem; }
-    
-    .padV5 { padding-top:5px; padding-bottom:5px; }
-    .padVr { padding-top:1rem; padding-bottom:1rem; }
-    
-    .pad8 { padding:8px!important; }
-    .pad16 { padding:16px; }
-    .padT20 { padding-top:20px; }
-    
-    .mar1r {margin: 1rem; }   
-    .marLr { margin-left: 1rem; }
-    .marRr { margin-right: 1rem; }
-    .marTr { margin-top: 1rem; }
-    .marBr { margin-bottom: 1rem; }
-    .marTrh { margin-top:0.5rem; }
-    .marBrh { margin-bottom:0.5rem; }
-    .mar2Tr { margin-top: 2rem; }
-    
-    .marBr-date { margin-bottom:1.5rem; }
-    
-    .mar16px { margin:16px; }
-    
-    .marT10 { margin-top:10px; }
-    .marT20 { margin-top:20px;}
-    .marT25 { margin-top:25px;}
-    .marT30 { margin-top:30px; }
-    .marB10 { margin-bottom:10px; }
-    .marB20 { margin-bottom: 20px; }
-    .marR4 { margin-right:4px; }
-    .marR8 { margin-right:8px; }
-    .marR10 { margin-right:10px; }
-    .marR16 { margin-right:16px; }
-    .marL4 { margin-left:4px; }
-    .marL8 { margin-left:8px; }
-    .marL10 { margin-left:10px; }
-    
-    .marV5 { margin-top:5px; margin-bottom:5px; }
-    .marVr { margin-top:1rem; margin-bottom:1rem; }
-    
-    .marH0 { margin-right:0px; margin-left:0px; }
-    .mar0 {margin:0px;}
-    
-    .lh14 {line-height:14px;}
-    .lh2r {line-height:2rem;}
-    .lh2_4r {line-height:2.4rem;}
-    
-    .h1r {height:1rem;}
-    .h2r {height:2rem;}
-    .h2_4r {height:2.4rem;}
-    
-    .h20 {height:20px;}
-    .h24 {height:24px;}
-    .h32 {height:32px;}
-    .h35 {height:35px;}
-    .h36 {height:36px;}
-    .h40 {height:40px;}
-    
-    .w80 {width:80px;}
-    .w110 {width:110px;}
-    .w120 {width:120px;}
-    .w130 {width:130px;}
-    .w140 {width:140px;}
-    .w150 {width:150px;}
-    .w180 {width:180px;}
-    .w200 {width:200px;}
-    .w220 {width:220px;}
-    .w240 {width:240px;}
-    
-    .br20 {border-radius:20px;}
-    
-    .fs-1-r { font-size:1rem; }
+	.pad1R { padding:1rem; }
+	.pad1r { padding:1rem; }
+	.padTr { padding-top: 1rem; }
+	.padBr { padding-bottom: 1rem; }
+	
+	.padV5 { padding-top:5px; padding-bottom:5px; }
+	.padVr { padding-top:1rem; padding-bottom:1rem; }
+	
+	.pad8 { padding:8px!important; }
+	.pad16 { padding:16px; }
+	.padT20 { padding-top:20px; }
+	
+	.mar1r {margin: 1rem; }   
+	.marLr { margin-left: 1rem; }
+	.marRr { margin-right: 1rem; }
+	.marTr { margin-top: 1rem; }
+	.marBr { margin-bottom: 1rem; }
+	.marTrh { margin-top:0.5rem; }
+	.marBrh { margin-bottom:0.5rem; }
+	.mar2Tr { margin-top: 2rem; }
+	
+	.marBr-date { margin-bottom:1.5rem; }
+	
+	.mar16px { margin:16px; }
+	
+	.marT10 { margin-top:10px; }
+	.marT20 { margin-top:20px;}
+	.marT25 { margin-top:25px;}
+	.marT30 { margin-top:30px; }
+	.marB10 { margin-bottom:10px; }
+	.marB20 { margin-bottom: 20px; }
+	.marR4 { margin-right:4px; }
+	.marR8 { margin-right:8px; }
+	.marR10 { margin-right:10px; }
+	.marR16 { margin-right:16px; }
+	.marL4 { margin-left:4px; }
+	.marL8 { margin-left:8px; }
+	.marL10 { margin-left:10px; }
+	
+	.marV5 { margin-top:5px; margin-bottom:5px; }
+	.marVr { margin-top:1rem; margin-bottom:1rem; }
+	
+	.marH0 { margin-right:0px; margin-left:0px; }
+	.mar0 {margin:0px;}
+	
+	.lh14 {line-height:14px;}
+	.lh2r {line-height:2rem;}
+	.lh2_4r {line-height:2.4rem;}
+	
+	.h1r {height:1rem;}
+	.h2r {height:2rem;}
+	.h2_4r {height:2.4rem;}
+	
+	.h20 {height:20px;}
+	.h24 {height:24px;}
+	.h32 {height:32px;}
+	.h35 {height:35px;}
+	.h36 {height:36px;}
+	.h40 {height:40px;}
+	
+	.w80 {width:80px;}
+	.w110 {width:110px;}
+	.w120 {width:120px;}
+	.w130 {width:130px;}
+	.w140 {width:140px;}
+	.w150 {width:150px;}
+	.w180 {width:180px;}
+	.w200 {width:200px;}
+	.w220 {width:220px;}
+	.w240 {width:240px;}
+	
+	.br20 {border-radius:20px;}
+	
+	.fs-1-r { font-size:1rem; }
 
-    .one-line-ellipsis {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        word-break: break-all;
-    }
-    
+	.one-line-ellipsis {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		word-break: break-all;
+	}
+	
 	.vertical-middle { vertical-align:middle; }
 	
 	.policy-container {
@@ -141,90 +141,90 @@
 	}
 	
 	.breadcrumb {
-	    padding: 0;
-	    margin-bottom: 0.5rem;
+		padding: 0;
+		margin-bottom: 0.5rem;
 	}
 	
 	.center {
-	    display:flex;
-	    justify-content: center;
+		display:flex;
+		justify-content: center;
 	}
 	
 	.min-width{
-	    width: min-content;
+		width: min-content;
 	}
 
 	.field-pad { padding: 10px; }
 
-    .center-table,
-    .center-table thead tr,
-    .center-table thead th,
-    .center-table tbody tr,
-    .center-table tbody td
-    { text-align: center !important; }
+	.center-table,
+	.center-table thead tr,
+	.center-table thead th,
+	.center-table tbody tr,
+	.center-table tbody td
+	{ text-align: center !important; }
 
-    .thead-gray>tr>th 
-    {
-        background-color:#2271b1;
-        color:white;
-        font-size:0.9rem
-    }
+	.thead-gray>tr>th 
+	{
+		background-color:#2271b1;
+		color:white;
+		font-size:0.9rem
+	}
 
-    .vertical-middle {
-        display:flex;
-        align-items:center;
-    }  
+	.vertical-middle {
+		display:flex;
+		align-items:center;
+	}  
 
-    .input-top-margin-container {
-        input {
-            margin-top:1rem;
-            margin-bottom:1rem;
-        }
+	.input-top-margin-container {
+		input {
+			margin-top:1rem;
+			margin-bottom:1rem;
+		}
 
-        select {
-            margin-top:1rem;
-            margin-bottom:1rem;
-        }
-    }
+		select {
+			margin-top:1rem;
+			margin-bottom:1rem;
+		}
+	}
 
-    .form-group { margin-bottom:1rem; }
+	.form-group { margin-bottom:1rem; }
 
-    .row-first {
-        border-top: solid 1.5px #aaaaaa;
-        border-bottom: solid 1px #cccccc;
-    }
-    .row-middle { border-bottom: solid 1px #cccccc; }
-    .row-other { border-bottom: solid 1px #cccccc; }
-    .row-last { border-top: solid 1.5px #aaaaaa; }
-    /* custom css */
-    
-    
-    /* need to integrate */
-    .crf-max-width {
+	.row-first {
+		border-top: solid 1.5px #aaaaaa;
+		border-bottom: solid 1px #cccccc;
+	}
+	.row-middle { border-bottom: solid 1px #cccccc; }
+	.row-other { border-bottom: solid 1px #cccccc; }
+	.row-last { border-top: solid 1.5px #aaaaaa; }
+	/* custom css */
+	
+	
+	/* need to integrate */
+	.crf-max-width {
 		width: 100px;
 		word-break:keep-all;
 		word-wrap:break-word;
 	}
 
-    .table-hover tbody tr:hover, 
-    .table-hover tbody tr:hover td {
-        background-color: #f0f5ff!important;
-        color: #272833;
-    }
+	.table-hover tbody tr:hover, 
+	.table-hover tbody tr:hover td {
+		background-color: #f0f5ff!important;
+		color: #272833;
+	}
 
-    .table-striped tbody tr:nth-of-type(odd),
-    .table-striped tbody tr:nth-of-type(odd) td {
-        background-color: #FFF;
-    }
-    
-    .update {
-    	color: #940000;
+	.table-striped tbody tr:nth-of-type(odd),
+	.table-striped tbody tr:nth-of-type(odd) td {
+		background-color: #FFF;
+	}
+	
+	.update {
+		color: #940000;
 		background-color: #E0E0E0;
 		text-decoration: none;
-    }
-       	
+	}
+	   	
 	.crfHistory {background-color: #bebebe;}
-    .crfHistory td{border: 1px solid #aaaaaa;}
+	.crfHistory td{border: 1px solid #aaaaaa;}
 	
 
 	.top-border { border-top: 1px solid #dcdcde; }
@@ -232,97 +232,97 @@
 	
 	.button-top-align { margin: 25px 0 0 0; }
 
-    .borTr {border-top: 1rem;}
-    .page-header-mar {margin-top: 10px; margin-bottom: 10px; }
+	.borTr {border-top: 1rem;}
+	.page-header-mar {margin-top: 10px; margin-bottom: 10px; }
 
 	@media (min-width: 768px) {
 		.md-marBr { margin-bottom:1rem; }
 	}
-    
-    .groupName {
-        display: flex;
-        margin-top: 20px;
-        background-color: #8580BC;
-        color: white;
-        font-weight: bold;
-    }
+	
+	.groupName {
+		display: flex;
+		margin-top: 20px;
+		background-color: #8580BC;
+		color: white;
+		font-weight: bold;
+	}
 
-    .subGroupName{
-        background-color: #cfcaf7;
-        font-weight: bold;
-    }
+	.subGroupName{
+		background-color: #cfcaf7;
+		font-weight: bold;
+	}
 
-    .queryBaseColor{color: white;}
-    .queryAlertColor{color: red; }
-    .queryIncompleteColor{color: yellow;}
-    .queryCompleteColor{color: blue;}
+	.queryBaseColor{color: white;}
+	.queryAlertColor{color: red; }
+	.queryIncompleteColor{color: yellow;}
+	.queryCompleteColor{color: blue;}
 
-    .sectionName {
-        background-color: #eee;
-        text-align: center;
-    }
+	.sectionName {
+		background-color: #eee;
+		text-align: center;
+	}
 
-    .answerNode {
-        text-align: center;
-        cursor: pointer;
-    }
+	.answerNode {
+		text-align: center;
+		cursor: pointer;
+	}
 
-    .graphSelection {
-        color: #F47A5C!important;
-    }
-    
+	.graphSelection {
+		color: #F47A5C!important;
+	}
+	
 	.radio { display: inline-block; }
 	.form-inline { display: inline-block; }
 	
-    .round-container { border: 1px solid #aaaaaa; border-radius:3px; }
-    .title-span { font-size:1.25rem; font-weight:bold; }
-    .header-title-span { font-size:1.25rem; font-weight:bold; }
-    .sub-title-span { font-size:1rem; font-weight:bold; color: #424242;  }
+	.round-container { border: 1px solid #aaaaaa; border-radius:3px; }
+	.title-span { font-size:1.25rem; font-weight:bold; }
+	.header-title-span { font-size:1.25rem; font-weight:bold; }
+	.sub-title-span { font-size:1rem; font-weight:bold; color: #424242;  }
 
 	.crf-header-title {
-	    margin-bottom: 8px;
-    	font-size: 1.5rem;
-    	font-weight: 600;
-    }
-
-    .panel-content p,
-    .panel-content span
-    { color: #424242; }
-
-    .sub-title-bottom-border { border-bottom: 1px solid #dcdcde; margin-bottom: 1rem; }
-
-    .title-cell { background-color: #f9f9f9; border-right: 1px solid #dcdcde; font-weight:bold; }
-    .title-middle-cell { background-color: #f9f9f9; border-left: 1px solid #dcdcde; border-right: 1px solid #dcdcde; font-weight:bold; }
-    
-    .right-border-gray { border-right: 1px solid rgb(200,200,200); }
-
-    .header-hr { border-top-color: rgba(255, 255, 255, 0.5); }
-
-    mark {
-    	font-weight:600;
-    	color:#0b63ce;
+		margin-bottom: 8px;
+		font-size: 1.5rem;
+		font-weight: 600;
 	}
-    /* need to integrate */
+
+	.panel-content p,
+	.panel-content span
+	{ color: #424242; }
+
+	.sub-title-bottom-border { border-bottom: 1px solid #dcdcde; margin-bottom: 1rem; }
+
+	.title-cell { background-color: #f9f9f9; border-right: 1px solid #dcdcde; font-weight:bold; }
+	.title-middle-cell { background-color: #f9f9f9; border-left: 1px solid #dcdcde; border-right: 1px solid #dcdcde; font-weight:bold; }
+	
+	.right-border-gray { border-right: 1px solid rgb(200,200,200); }
+
+	.header-hr { border-top-color: rgba(255, 255, 255, 0.5); }
+
+	mark {
+		font-weight:600;
+		color:#0b63ce;
+	}
+	/* need to integrate */
 	
 	/* side navigation style */
-    /* Page content. The value of the margin-left property should match the value of the sidebar's width property */        
+	/* Page content. The value of the margin-left property should match the value of the sidebar's width property */        
 	div.page-content {
-	    padding:16px 16px 16px 180px; 
-	    max-width:2000px;
+		padding:16px 16px 16px 180px; 
+		max-width:2000px;
 	}
 	
 	div.page-content-sub {
-	    padding:16px 16px 16px 187px; 
-	    max-width:2000px;
+		padding:16px 16px 16px 187px; 
+		max-width:2000px;
 	}
 	
 	.side-menu {
 	   	margin-top: 16px;
-	    margin-left: 12px;
-	    padding: 4px;
-	    width: 155px;
-	    position: absolute;
-	    overflow: auto;
+		margin-left: 12px;
+		padding: 4px;
+		width: 155px;
+		position: absolute;
+		overflow: auto;
 		min-width: 155px;
 		line-height: 1rem;
 		background-color:white;
@@ -331,720 +331,720 @@
 	
 	.dh-sidebar {
 		display: inline-flex;
-        align-items: center;
-        justify-content: left;
-        
-        gap: 16px;
-        width: 100%;
-        padding: 0px 10px 0px 10px;
-        border: none;
-        font-size: 15px;
-        font-weight: 400;
-        cursor: pointer;		      
-        text-decoration: none!important;
-        margin-bottom: 3px;
-        border-bottom: 1px solid #888;
-        height: 3rem;
+		align-items: center;
+		justify-content: left;
+		
+		gap: 16px;
+		width: 100%;
+		padding: 0px 10px 0px 10px;
+		border: none;
+		font-size: 15px;
+		font-weight: 400;
+		cursor: pointer;		      
+		text-decoration: none!important;
+		margin-bottom: 3px;
+		border-bottom: 1px solid #888;
+		height: 3rem;
 	}
 
 	.sidebar-not-move {
-    	cursor: not-allowed;
-    	position: relative;
-    } 
+		cursor: not-allowed;
+		position: relative;
+	} 
 	
 	.dh-sidebar img{
 		width: 28px;
 		height: 28px;
 		object-fit: contain;
 	}
-    .dh-sidebar span{
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align:left;
-    }
-    
+	.dh-sidebar span{
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-align:left;
+	}
+	
 	.menu-main { background: linear-gradient(to right, rgb(75,95,190) 46px, rgb(95,115,190) 46px); cursor: default; }    
 
-    .sub-menu { background: linear-gradient(to right, rgb(180,180,180) 46px, rgb(200,200,200) 46px); }
-    .sub-menu:hover { background: linear-gradient(to right, rgb(200,200,200) 46px, rgb(220,220,220) 46px); }
-    .sub-menu.active { background: linear-gradient(to right, rgb(80,140,255) 46px, rgb(80,160,255) 46px); }
-    .sub-menu.active:hover { background: linear-gradient(to right, rgb(100,160,255) 46px, rgb(100,180,255) 46px); }
-    .sub-menu.inactive { background: linear-gradient(to right, rgb(90,90,90) 46px, rgb(115,115,115) 46px); }
+	.sub-menu { background: linear-gradient(to right, rgb(180,180,180) 46px, rgb(200,200,200) 46px); }
+	.sub-menu:hover { background: linear-gradient(to right, rgb(200,200,200) 46px, rgb(220,220,220) 46px); }
+	.sub-menu.active { background: linear-gradient(to right, rgb(80,140,255) 46px, rgb(80,160,255) 46px); }
+	.sub-menu.active:hover { background: linear-gradient(to right, rgb(100,160,255) 46px, rgb(100,180,255) 46px); }
+	.sub-menu.inactive { background: linear-gradient(to right, rgb(90,90,90) 46px, rgb(115,115,115) 46px); }
 
-    .menu-main span
-    { color:rgb(255,255,255); }
+	.menu-main span
+	{ color:rgb(255,255,255); }
 
-    .sub-menu span
-    { color:rgb(0,0,0); }
+	.sub-menu span
+	{ color:rgb(0,0,0); }
 
-    .sub-menu.active span 
-    { color: rgb(255,255,255); }
+	.sub-menu.active span 
+	{ color: rgb(255,255,255); }
 
-    .sub-menu.inactive span 
-    { color: rgb(255,255,255); }
+	.sub-menu.inactive span 
+	{ color: rgb(255,255,255); }
 
-    //.side-menu div:nth-child(2)>a {margin-top:0px;}
+	//.side-menu div:nth-child(2)>a {margin-top:0px;}
 
-    .left-top-cut-border { clip-path: polygon(10% 0%, 70% 0%, 100% 0, 100% 100%, 70% 100%, 30% 100%, 1% 100%, 1% 20%); }
+	.left-top-cut-border { clip-path: polygon(10% 0%, 70% 0%, 100% 0, 100% 100%, 70% 100%, 30% 100%, 1% 100%, 1% 20%); }
 
-    .current-crf { 
-    	width:96%;
-    	padding:6px 10px;
-    	margin:4px;
-    	
-    	border-radius:4px;
-    	background-color:rgb(95,115,190);
-    	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-    	
-    	font-size:1rem;
-    	font-weight:400;
-    	line-height:1.2rem;
-    	color:white;
-    }
-    
-    .click-div { 
-        cursor:pointer; 
-        color:white; 
-        border-bottom: 1px solid lightgray;
-        margin-top:4px;
-        padding-bottom:4px;
-    }
+	.current-crf { 
+		width:96%;
+		padding:6px 10px;
+		margin:4px;
+		
+		border-radius:4px;
+		background-color:rgb(95,115,190);
+		box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+		
+		font-size:1rem;
+		font-weight:400;
+		line-height:1.2rem;
+		color:white;
+	}
+	
+	.click-div { 
+		cursor:pointer; 
+		color:white; 
+		border-bottom: 1px solid lightgray;
+		margin-top:4px;
+		padding-bottom:4px;
+	}
 
-    /* side navigation style */
+	/* side navigation style */
 
-    
+	
 	/** icon class **/
 
-    /* icon style */
+	/* icon style */
 	.dh-icon {
 		display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 130px;
-        gap: 8px;
-        padding: 6px 8px;
-        border: none;
-        border-radius: 4px;
-        font-size: 0.875rem;
-        cursor: pointer;		      
-        text-decoration: none!important;
+		align-items: center;
+		justify-content: center;
+		width: 130px;
+		gap: 8px;
+		padding: 6px 8px;
+		border: none;
+		border-radius: 4px;
+		font-size: 0.875rem;
+		cursor: pointer;		      
+		text-decoration: none!important;
 	}
 	.dh-icon img{
 		height: 24px;
 		object-fit: contain;
 	}
-    .dh-icon span{
-        color: white;
-        white-space: nowrap;
-        font-weight: bold;
-        padding-top: 2px;
-    }
+	.dh-icon span{
+		color: white;
+		white-space: nowrap;
+		font-weight: bold;
+		padding-top: 2px;
+	}
 	/* icon style */
 
-    /* project menu */
+	/* project menu */
 	.project-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/project_icon.png); }
-    .dh-sidebar.active .project-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/project_icon.png); }
-    .project-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/project_icon.png); }
-    .project-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/project_icon.png); }
-    
+	.dh-sidebar.active .project-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/project_icon.png); }
+	.project-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/project_icon.png); }
+	.project-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/project_icon.png); }
+	
 	.project-info-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/project_info_icon.png); }
-    .dh-sidebar.active .project-info-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/project_info_icon.png); }
-    .dh-sidebar.inactive .project-info-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/project_info_icon.png); }
-    .project-info-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/project_info_icon.png); }
-    .project-info-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/project_info_icon.png); }
-    
-    .exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/exp_group_icon.png); }
-    .dh-sidebar.active .exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/exp_group_icon.png); }
-    .dh-sidebar.inactive .exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_icon.png); }
-    .exp-group-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/exp_group_icon.png); }
-    .exp-group-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_icon.png); }
-    
-    .exp-group-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/exp_group_list_icon.png); }
-    .dh-sidebar.active .exp-group-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/exp_group_list_icon.png); }
-    .dh-sidebar.inactive .exp-group-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_list_icon.png); }
-    .exp-group-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/exp_group_list_icon.png); }
-    .exp-group-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_list_icon.png); }
-    
-    .add-exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_exp_group_icon.png); }
-    .dh-sidebar.active .add-exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_exp_group_icon.png); }
-    .dh-sidebar.inactive .add-exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_exp_group_icon.png); }
-    .add-exp-group-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_exp_group_icon.png); }
-    .add-exp-group-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_exp_group_icon.png); }
-    /* approval menu */
+	.dh-sidebar.active .project-info-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/project_info_icon.png); }
+	.dh-sidebar.inactive .project-info-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/project_info_icon.png); }
+	.project-info-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/project_info_icon.png); }
+	.project-info-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/project_info_icon.png); }
+	
+	.exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/exp_group_icon.png); }
+	.dh-sidebar.active .exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/exp_group_icon.png); }
+	.dh-sidebar.inactive .exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_icon.png); }
+	.exp-group-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/exp_group_icon.png); }
+	.exp-group-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_icon.png); }
+	
+	.exp-group-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/exp_group_list_icon.png); }
+	.dh-sidebar.active .exp-group-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/exp_group_list_icon.png); }
+	.dh-sidebar.inactive .exp-group-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_list_icon.png); }
+	.exp-group-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/exp_group_list_icon.png); }
+	.exp-group-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/exp_group_list_icon.png); }
+	
+	.add-exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_exp_group_icon.png); }
+	.dh-sidebar.active .add-exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_exp_group_icon.png); }
+	.dh-sidebar.inactive .add-exp-group-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_exp_group_icon.png); }
+	.add-exp-group-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_exp_group_icon.png); }
+	.add-exp-group-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_exp_group_icon.png); }
+	/* approval menu */
 
 	
-    /* researcher menu */
-    .researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/researcher_icon.png); }
-    .dh-sidebar.active .researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_icon.png); }
-    .dh-sidebar.inactive .researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_icon.png); }
-    .researcher-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_icon.png); }
-    .researcher-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_icon.png); }
+	/* researcher menu */
+	.researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/researcher_icon.png); }
+	.dh-sidebar.active .researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_icon.png); }
+	.dh-sidebar.inactive .researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_icon.png); }
+	.researcher-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_icon.png); }
+	.researcher-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_icon.png); }
 
-    .researcher-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/researcher_list_icon.png); }
-    .dh-sidebar.active .researcher-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_list_icon.png); }
-    .dh-sidebar.inactive .researcher-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_list_icon.png); }
-    .researcher-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_list_icon.png); }
-    .researcher-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_list_icon.png); }
-    
-    .add-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_researcher_icon.png); }
-    .dh-sidebar.active .add-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_researcher_icon.png); }
-    .dh-sidebar.inactive .add-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_researcher_icon.png); }
-    .add-researcher-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_researcher_icon.png); }
-    .add-researcher-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_researcher_icon.png); }
-    
+	.researcher-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/researcher_list_icon.png); }
+	.dh-sidebar.active .researcher-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_list_icon.png); }
+	.dh-sidebar.inactive .researcher-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_list_icon.png); }
+	.researcher-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_list_icon.png); }
+	.researcher-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_list_icon.png); }
+	
+	.add-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_researcher_icon.png); }
+	.dh-sidebar.active .add-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_researcher_icon.png); }
+	.dh-sidebar.inactive .add-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_researcher_icon.png); }
+	.add-researcher-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_researcher_icon.png); }
+	.add-researcher-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_researcher_icon.png); }
+	
 
-    /* subject menu */
-    .subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/subject_icon.png); }
-    .dh-sidebar.active .subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/subject_icon.png); }
-    .dh-sidebar.inactive .subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_icon.png); }
-    .subject-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/subject_icon.png); }
-    .subject-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_icon.png); }
+	/* subject menu */
+	.subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/subject_icon.png); }
+	.dh-sidebar.active .subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/subject_icon.png); }
+	.dh-sidebar.inactive .subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_icon.png); }
+	.subject-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/subject_icon.png); }
+	.subject-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_icon.png); }
 
-    .subject-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/subject_list_icon.png); }
-    .dh-sidebar.active .subject-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/subject_list_icon.png); }
-    .dh-sidebar.inactive .subject-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_list_icon.png); }
-    .subject-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/subject_list_icon.png); }
-    .subject-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_list_icon.png); }
-    
-    .add-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_subject_icon.png); }
-    .dh-sidebar.active .add-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_subject_icon.png); }
-    .dh-sidebar.inactive .add-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_subject_icon.png); }
-    .add-subject-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_subject_icon.png); }
-    .add-subject-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_subject_icon.png); }
-    
+	.subject-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/subject_list_icon.png); }
+	.dh-sidebar.active .subject-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/subject_list_icon.png); }
+	.dh-sidebar.inactive .subject-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_list_icon.png); }
+	.subject-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/subject_list_icon.png); }
+	.subject-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/subject_list_icon.png); }
+	
+	.add-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_subject_icon.png); }
+	.dh-sidebar.active .add-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_subject_icon.png); }
+	.dh-sidebar.inactive .add-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_subject_icon.png); }
+	.add-subject-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_subject_icon.png); }
+	.add-subject-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_subject_icon.png); }
+	
 
-    /* crf menu */
-    .crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_icon.png); }
-    .dh-sidebar.active .crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_icon.png); }
-    .dh-sidebar.inactive .crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_icon.png); }
-    .crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_icon.png); }
-    .crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_icon.png); }
-    .dh-icon-button:hover .crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_icon.png); }
+	/* crf menu */
+	.crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_icon.png); }
+	.dh-sidebar.active .crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_icon.png); }
+	.dh-sidebar.inactive .crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_icon.png); }
+	.crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_icon.png); }
+	.crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_icon.png); }
+	.dh-icon-button:hover .crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_icon.png); }
 
-    .crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_list_icon.png); }
-    .dh-sidebar.active .crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_list_icon.png); }
-    .dh-sidebar.inactive .crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_list_icon.png); }
-    .crf-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_list_icon.png); } 
-    .crf-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_list_icon.png); } 
-    .dh-icon-button:hover .crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_list_icon.png); } 
+	.crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_list_icon.png); }
+	.dh-sidebar.active .crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_list_icon.png); }
+	.dh-sidebar.inactive .crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_list_icon.png); }
+	.crf-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_list_icon.png); } 
+	.crf-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_list_icon.png); } 
+	.dh-icon-button:hover .crf-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_list_icon.png); } 
 
-    .create-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/create_crf_icon.png); }
-    .dh-sidebar.active .create-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/create_crf_icon.png); }
-    .dh-sidebar.inactive .create-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/create_crf_icon.png); }
-    .create-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/create_crf_icon.png); }
-    .create-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/create_crf_icon.png); }
-    .dh-icon-button:hover .create-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/create_crf_icon.png); }
+	.create-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/create_crf_icon.png); }
+	.dh-sidebar.active .create-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/create_crf_icon.png); }
+	.dh-sidebar.inactive .create-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/create_crf_icon.png); }
+	.create-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/create_crf_icon.png); }
+	.create-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/create_crf_icon.png); }
+	.dh-icon-button:hover .create-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/create_crf_icon.png); }
 
-    .add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_crf_icon.png); }
-    .dh-sidebar.active .add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_crf_icon.png); }
-    .dh-sidebar.inactive .add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_crf_icon.png); }
-    .add-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_crf_icon.png); } 
-    .add-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_crf_icon.png); } 
-    .dh-icon-button:hover .add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_crf_icon.png); } 
+	.add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_crf_icon.png); }
+	.dh-sidebar.active .add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_crf_icon.png); }
+	.dh-sidebar.inactive .add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_crf_icon.png); }
+	.add-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_crf_icon.png); } 
+	.add-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_crf_icon.png); } 
+	.dh-icon-button:hover .add-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_crf_icon.png); } 
 
-    .update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/update_crf_icon.png); }
-    .dh-sidebar.active .update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_crf_icon.png); }
-    .dh-sidebar.inactive .update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_crf_icon.png); }
-    .update-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_crf_icon.png); }   
-    .update-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_crf_icon.png); }   
-    .dh-icon-button:hover .update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_crf_icon.png); }
+	.update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/update_crf_icon.png); }
+	.dh-sidebar.active .update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_crf_icon.png); }
+	.dh-sidebar.inactive .update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_crf_icon.png); }
+	.update-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_crf_icon.png); }   
+	.update-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_crf_icon.png); }   
+	.dh-icon-button:hover .update-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_crf_icon.png); }
 
-    .crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_form_icon.png); }
-    .dh-sidebar.active .crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_form_icon.png); }
-    .dh-sidebar.inactive .crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_form_icon.png); }
-    .crf-form-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_form_icon.png); }  
-    .crf-form-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_form_icon.png); }  
-    .dh-icon-button:hover .crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_form_icon.png); }  
+	.crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_form_icon.png); }
+	.dh-sidebar.active .crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_form_icon.png); }
+	.dh-sidebar.inactive .crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_form_icon.png); }
+	.crf-form-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_form_icon.png); }  
+	.crf-form-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_form_icon.png); }  
+	.dh-icon-button:hover .crf-form-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_form_icon.png); }  
 
-    .crf-builder-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_builder_icon.png); }
-    .dh-sidebar.active .crf-builder-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_builder_icon.png); }
-    .dh-sidebar.inactive .crf-builder-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_builder_icon.png); }
-    .crf-builder-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_builder_icon.png); }  
-    .crf-builder-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_builder_icon.png); }  
-    .dh-icon-button:hover .crf-builder-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_builder_icon.png); }  
+	.crf-builder-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_builder_icon.png); }
+	.dh-sidebar.active .crf-builder-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_builder_icon.png); }
+	.dh-sidebar.inactive .crf-builder-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_builder_icon.png); }
+	.crf-builder-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_builder_icon.png); }  
+	.crf-builder-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_builder_icon.png); }  
+	.dh-icon-button:hover .crf-builder-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_builder_icon.png); }  
 
-    .crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_data_icon.png); }
-    .dh-sidebar.active .crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_icon.png); }
-    .dh-sidebar.inactive .crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_icon.png); }
-    .crf-data-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_icon.png); }  
-    .crf-data-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_icon.png); }  
-    .dh-icon-button:hover .crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_icon.png); }  
-    
-    .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_query_icon.png); }
-    .dh-sidebar.active .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
-    .dh-sidebar.inactive .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
-    .crf-query-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
-    .crf-query-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
-    .dh-icon-button:hover .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
+	.crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_data_icon.png); }
+	.dh-sidebar.active .crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_icon.png); }
+	.dh-sidebar.inactive .crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_icon.png); }
+	.crf-data-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_icon.png); }  
+	.crf-data-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_icon.png); }  
+	.dh-icon-button:hover .crf-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_icon.png); }  
+	
+	.crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_query_icon.png); }
+	.dh-sidebar.active .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
+	.dh-sidebar.inactive .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
+	.crf-query-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
+	.crf-query-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
+	.dh-icon-button:hover .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
 
-    .data-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_data_list_icon.png); }
-    .dh-sidebar.active .data-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }
-    .dh-sidebar.inactive .data-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
-    .data-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }    
-    .data-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }   
+	.data-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_data_list_icon.png); }
+	.dh-sidebar.active .data-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }
+	.dh-sidebar.inactive .data-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
+	.data-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }    
+	.data-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }   
 
-    .data-history-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/data_history_icon.png); }
-    .dh-sidebar.active .data-history-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/data_history_icon.png); }
-    .dh-sidebar.inactive .data-history-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/data_history_icon.png); }
-    .data-history-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/data_history_icon.png); }   
-    .data-history-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/data_history_icon.png); }   
-    
-    .excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/excel_download_icon.png); }
-    .dh-sidebar.active .excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/excel_download_icon.png); }
-    .dh-sidebar.inactive .excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/excel_download_icon.png); }
-    .excel-download-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/excel_download_icon.png); }
-    .excel-download-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/excel_download_icon.png); }
-    .dh-icon-button:hover .excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/excel_download_icon.png); }
+	.data-history-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/data_history_icon.png); }
+	.dh-sidebar.active .data-history-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/data_history_icon.png); }
+	.dh-sidebar.inactive .data-history-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/data_history_icon.png); }
+	.data-history-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/data_history_icon.png); }   
+	.data-history-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/data_history_icon.png); }   
+	
+	.excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/excel_download_icon.png); }
+	.dh-sidebar.active .excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/excel_download_icon.png); }
+	.dh-sidebar.inactive .excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/excel_download_icon.png); }
+	.excel-download-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/excel_download_icon.png); }
+	.excel-download-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/excel_download_icon.png); }
+	.dh-icon-button:hover .excel-download-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/excel_download_icon.png); }
 
-    .search-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/search_crf_data_icon.png); }
-    .dh-sidebar.active .search-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/search_crf_data_icon.png); }
-    .dh-sidebar.inactive .search-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/search_crf_data_icon.png); }
-    .search-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/search_crf_data_icon.png); }
-    .search-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/search_crf_data_icon.png); }
+	.search-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/search_crf_data_icon.png); }
+	.dh-sidebar.active .search-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/search_crf_data_icon.png); }
+	.dh-sidebar.inactive .search-crf-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/search_crf_data_icon.png); }
+	.search-crf-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/search_crf_data_icon.png); }
+	.search-crf-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/search_crf_data_icon.png); }
 
-    .teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_data_list_icon.png); }
-    .dh-sidebar.active .teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }
-    .dh-sidebar.inactive .teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
-    .teeth-data-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }
-    .teeth-data-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
+	.teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_data_list_icon.png); }
+	.dh-sidebar.active .teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }
+	.dh-sidebar.inactive .teeth-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
+	.teeth-data-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_data_list_icon.png); }
+	.teeth-data-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_data_list_icon.png); }
 
-    .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_query_icon.png); }
-    .dh-sidebar.active .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
-    .dh-sidebar.inactive .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
-    .crf-query-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
-    .crf-query-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
+	.crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/crf_query_icon.png); }
+	.dh-sidebar.active .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
+	.dh-sidebar.inactive .crf-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
+	.crf-query-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/crf_query_icon.png); }
+	.crf-query-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/crf_query_icon.png); }
 
-    .query-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/query_list_icon.png); }
-    .dh-sidebar.active .query-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/query_list_icon.png); }
-    .dh-sidebar.inactive .query-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/query_list_icon.png); }
-    .query-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/query_list_icon.png); }
-    .query-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/query_list_icon.png); }
-    
-    .update-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/update_query_icon.png); }
-    .dh-sidebar.active .update-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_query_icon.png); }
-    .dh-sidebar.inactive .update-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_query_icon.png); }
-    .update-query-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_query_icon.png); }
-    .update-query-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_query_icon.png); }
-
-
-    /* button icon */
-    .view-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/view_icon.png); }
-    .view-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/view_icon.png); }
-    .view-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/view_icon.png); }
-    .dh-icon-button:hover .view-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/view_icon.png); }
-
-    .add-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_icon.png); }
-    .add-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_icon.png); }
-    .add-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_icon.png); }
-    .dh-icon-button:hover .add-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_icon.png); }
-
-    .update-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/update_icon.png); }
-    .update-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_icon.png); }
-    .update-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_icon.png); }
-    .dh-icon-button:hover .update-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_icon.png); }
-    .dh-icon-button:hover .update-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_icon.png); }
-
-    .save-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/save_icon.png); }
-    .save-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/save_icon.png); }
-    .save-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/save_icon.png); }
-    .dh-icon-button:hover .save-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/save_icon.png); }
-
-    .delete-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/delete_icon.png); }
-    .delete-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/delete_icon.png); }
-    .delete-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/delete_icon.png); }
-    .dh-icon-button:hover .delete-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/delete_icon.png); }
-
-    .back-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/back_icon.png); }
-    .back-icon.black-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/black/back_icon.png); }
-    .back-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/back_icon.png); }
-    .back-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/back_icon.png); }
-    .dh-icon-button:hover .back-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/back_icon.png); }
-
-    .cancel-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/cancel_icon.png); }
-    .dh-icon-button:hover .cancel-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/cancel_icon.png); }
-
-    .import-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/import_data_icon.png); }
-    .dh-icon-button:hover .import-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/import_data_icon.png); }
-
-    .import-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/import_subject_icon.png); }
-    .dh-icon-button:hover .import-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/import_subject_icon.png); }
-
-    .manage-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/researcher_list_icon.png); }
-    .manage-researcher-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_list_icon.png); }
-    .manage-researcher-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_list_icon.png); }
-    .dh-icon-button:hover .manage-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_list_icon.png); }
-
-    .manage-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/manage_subject_icon.png); }
-    .manage-subject-icon.ictive { content: url(/o/ecrf.user.dynamic.include/img/icon/active/manage_subject_icon.png); }
-    .manage-subject-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/manage_subject_icon.png); }
-    .dh-icon-button:hover .manage-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/manage_subject_icon.png); }
-    
-    .manage-update-lock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/manage_update_lock_icon.png); }
-    .manage-update-lock-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/manage_update_lock_icon.png); }
-    .manage-update-lock-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/manage_update_lock_icon.png); }
-    .dh-icon-button:hover .manage-update-lock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/manage_update_lock_icon.png); }
-
-    .db-lock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/db_lock_icon.png); }
-    .db-lock-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/db_lock_icon.png); }
-    .db-lock-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/db_lock_icon.png); }
-    .dh-icon-button:hover .db-lock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/db_lock_icon.png); }
-
-    .db-unlock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/db_unlock_icon.png); }
-    .db-unlock-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/db_unlock_icon.png); }
-    .db-unlock-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/db_unlock_icon.png); }
-    .dh-icon-button:hover .db-unlock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/db_unlock_icon.png); }
-
-    .audit-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/audit_icon.png); }
-    .audit-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/audit_icon.png); }
-    .audit-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/audit_icon.png); }
-    .dh-icon-button:hover .audit-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/audit_icon.png); }
-    
-    .review-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/review_icon.png); }
-    .review-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/review_icon.png); }
-    .review-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/review_icon.png); }
-    .dh-icon-button:hover .review-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/review_icon.png); }
-
-    .approve-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/approve_icon.png); }
-    .approve-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/approve_icon.png); }
-    .approve-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/approve_icon.png); }
-    .dh-icon-button:hover .approve-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/approve_icon.png); }
-
-    .reject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/reject_icon.png); }
-    .reject-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/reject_icon.png); }
-    .reject-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/reject_icon.png); }
-    .dh-icon-button:hover .reject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/reject_icon.png); }                                                                                                                                      
-
-    .search-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/search_icon.png); }
-    .dh-icon-button.active .search-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/search_icon.png); }
-
-    .clear-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/clear_icon.png); }
-    .dh-icon-button.active .clear-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/clear_icon.png); }
-
-    .up-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/up_icon.png); }
-    .dh-icon-button:hover .up-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/up_icon.png); }
-
-    .down-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/down_icon.png); }
-    .dh-icon-button:hover .down-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/down_icon.png); }
-
-    .close-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/close_icon.png); }
-    .dh-icon-button:hover .close-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/close_icon.png); }
+	.query-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/query_list_icon.png); }
+	.dh-sidebar.active .query-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/query_list_icon.png); }
+	.dh-sidebar.inactive .query-list-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/query_list_icon.png); }
+	.query-list-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/query_list_icon.png); }
+	.query-list-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/query_list_icon.png); }
+	
+	.update-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/update_query_icon.png); }
+	.dh-sidebar.active .update-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_query_icon.png); }
+	.dh-sidebar.inactive .update-query-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_query_icon.png); }
+	.update-query-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_query_icon.png); }
+	.update-query-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_query_icon.png); }
 
 
-    .bar-graph-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/graph/bar_graph_icon.png); }
-    .bar-graph-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/graph/line_graph_icon.png); }
+	/* button icon */
+	.view-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/view_icon.png); }
+	.view-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/view_icon.png); }
+	.view-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/view_icon.png); }
+	.dh-icon-button:hover .view-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/view_icon.png); }
 
-    .clickable-icon { cursor:pointer; }
+	.add-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/add_icon.png); }
+	.add-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_icon.png); }
+	.add-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/add_icon.png); }
+	.dh-icon-button:hover .add-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/add_icon.png); }
+
+	.update-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/update_icon.png); }
+	.update-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_icon.png); }
+	.update-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_icon.png); }
+	.dh-icon-button:hover .update-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/update_icon.png); }
+	.dh-icon-button:hover .update-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/update_icon.png); }
+
+	.save-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/save_icon.png); }
+	.save-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/save_icon.png); }
+	.save-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/save_icon.png); }
+	.dh-icon-button:hover .save-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/save_icon.png); }
+
+	.delete-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/delete_icon.png); }
+	.delete-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/delete_icon.png); }
+	.delete-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/delete_icon.png); }
+	.dh-icon-button:hover .delete-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/delete_icon.png); }
+
+	.back-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/back_icon.png); }
+	.back-icon.black-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/black/back_icon.png); }
+	.back-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/back_icon.png); }
+	.back-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/back_icon.png); }
+	.dh-icon-button:hover .back-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/back_icon.png); }
+
+	.cancel-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/cancel_icon.png); }
+	.dh-icon-button:hover .cancel-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/cancel_icon.png); }
+
+	.import-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/import_data_icon.png); }
+	.dh-icon-button:hover .import-data-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/import_data_icon.png); }
+
+	.import-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/import_subject_icon.png); }
+	.dh-icon-button:hover .import-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/import_subject_icon.png); }
+
+	.manage-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/researcher_list_icon.png); }
+	.manage-researcher-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_list_icon.png); }
+	.manage-researcher-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/researcher_list_icon.png); }
+	.dh-icon-button:hover .manage-researcher-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/researcher_list_icon.png); }
+
+	.manage-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/manage_subject_icon.png); }
+	.manage-subject-icon.ictive { content: url(/o/ecrf.user.dynamic.include/img/icon/active/manage_subject_icon.png); }
+	.manage-subject-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/manage_subject_icon.png); }
+	.dh-icon-button:hover .manage-subject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/manage_subject_icon.png); }
+	
+	.manage-update-lock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/manage_update_lock_icon.png); }
+	.manage-update-lock-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/manage_update_lock_icon.png); }
+	.manage-update-lock-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/manage_update_lock_icon.png); }
+	.dh-icon-button:hover .manage-update-lock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/manage_update_lock_icon.png); }
+
+	.db-lock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/db_lock_icon.png); }
+	.db-lock-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/db_lock_icon.png); }
+	.db-lock-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/db_lock_icon.png); }
+	.dh-icon-button:hover .db-lock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/db_lock_icon.png); }
+
+	.db-unlock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/db_unlock_icon.png); }
+	.db-unlock-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/db_unlock_icon.png); }
+	.db-unlock-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/db_unlock_icon.png); }
+	.dh-icon-button:hover .db-unlock-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/db_unlock_icon.png); }
+
+	.audit-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/audit_icon.png); }
+	.audit-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/audit_icon.png); }
+	.audit-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/audit_icon.png); }
+	.dh-icon-button:hover .audit-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/audit_icon.png); }
+	
+	.review-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/review_icon.png); }
+	.review-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/review_icon.png); }
+	.review-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/review_icon.png); }
+	.dh-icon-button:hover .review-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/review_icon.png); }
+
+	.approve-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/approve_icon.png); }
+	.approve-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/approve_icon.png); }
+	.approve-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/approve_icon.png); }
+	.dh-icon-button:hover .approve-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/approve_icon.png); }
+
+	.reject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/reject_icon.png); }
+	.reject-icon.active { content: url(/o/ecrf.user.dynamic.include/img/icon/active/reject_icon.png); }
+	.reject-icon.inactive { content: url(/o/ecrf.user.dynamic.include/img/icon/white/reject_icon.png); }
+	.dh-icon-button:hover .reject-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/reject_icon.png); }                                                                                                                                      
+
+	.search-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/search_icon.png); }
+	.dh-icon-button.active .search-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/search_icon.png); }
+
+	.clear-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/clear_icon.png); }
+	.dh-icon-button.active .clear-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/clear_icon.png); }
+
+	.up-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/up_icon.png); }
+	.dh-icon-button:hover .up-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/up_icon.png); }
+
+	.down-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/down_icon.png); }
+	.dh-icon-button:hover .down-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/down_icon.png); }
+
+	.close-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/normal/close_icon.png); }
+	.dh-icon-button:hover .close-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/active/close_icon.png); }
+
+
+	.bar-graph-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/graph/bar_graph_icon.png); }
+	.bar-graph-icon { content: url(/o/ecrf.user.dynamic.include/img/icon/graph/line_graph_icon.png); }
+
+	.clickable-icon { cursor:pointer; }
 
 	/** icon class **/
 	
 
-    /* icon button style */
-    .dh-icon-button{
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;		      
-        text-decoration: none!important;
-        font-size: 0.875rem;
-        font-weight: 400;
-        padding: 6px 8px;
-    }
-    .dh-icon-button img{
+	/* icon button style */
+	.dh-icon-button{
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;		      
+		text-decoration: none!important;
+		font-size: 0.875rem;
+		font-weight: 400;
+		padding: 6px 8px;
+	}
+	.dh-icon-button img{
 		height: 24px;
 		object-fit: contain;
 	}
-    .dh-icon-button span{
-        color: rgb(0,0,0);
-    }
-    .dh-icon-button:hover span{
-        color: rgb(255,255,255);
-    }
+	.dh-icon-button span{
+		color: rgb(0,0,0);
+	}
+	.dh-icon-button:hover span{
+		color: rgb(255,255,255);
+	}
 
-    .dh-icon-button.submit-btn {
-        font-size: 0.95rem;
-        padding: 4px 8px;
-        align-content: center;
-        flex-wrap: wrap;      
-    }
+	.dh-icon-button.submit-btn {
+		font-size: 0.95rem;
+		padding: 4px 8px;
+		align-content: center;
+		flex-wrap: wrap;      
+	}
 
-    .dh-icon-button.inactive{
-        background-color: rgb(115,115,115);
-        cursor: not-allowed;		      
-    }
-    
-    .dh-icon-button.inactive span{
-        color:rgb(255,255,255);
-    }
+	.dh-icon-button.inactive{
+		background-color: rgb(115,115,115);
+		cursor: not-allowed;		      
+	}
+	
+	.dh-icon-button.inactive span{
+		color:rgb(255,255,255);
+	}
 
-    .dh-icon-button.white-text span {
-        color: rgb(255,255,255);
-    }
+	.dh-icon-button.white-text span {
+		color: rgb(255,255,255);
+	}
 
-    .dh-icon-button:focus { outline: 1px solid rgb(200,200,200);  }
+	.dh-icon-button:focus { outline: 1px solid rgb(200,200,200);  }
 
-    .dh-icon-button.br20 {border-radius:20px;}
-
-
-    .dh-icon-button.search-btn
-    { background-color: rgb(95, 115, 190); }    
-    .dh-icon-button.search-btn:hover
-    { background-color: rgb(105, 125, 200); }
-
-    .dh-icon-button.clear-btn
-    { background-color: rgb(255,175,25); }
-    .dh-icon-button.clear-btn:hover
-    { background-color: rgb(255,185,35); }
-
-    .dh-icon-button.review-btn,
-    .dh-icon-button.approve-btn
-    { background-color: rgb(200,200,200); }
-    .dh-icon-button.review-btn:hover,    
-    .dh-icon-button.approve-btn:hover
-    { background-color: rgb(65, 90, 220); }
-
-    .dh-icon-button.save-btn
-    { background-color: rgb(200,200,200); }
-    .dh-icon-button.save-btn:hover
-    { background-color: rgb(0,200,140); }
-
-    .dh-icon-button.db-lock-btn,
-    .dh-icon-button.crf-info-btn,
-    .dh-icon-button.crf-form-btn,
-    .dh-icon-button.crf-data-btn,
-    .dh-icon-button.crf-query-btn,
-    .dh-icon-button.audit-trail-btn
-    { background-color: rgb(200,200,200); }
-    .dh-icon-button.db-lock-btn:hover,
-    .dh-icon-button.crf-info-btn:hover,
-    .dh-icon-button.crf-form-btn:hover,
-    .dh-icon-button.crf-data-btn:hover,
-    .dh-icon-button.crf-query-btn:hover,
-    .dh-icon-button.audit-trail-btn:hover
-    { background-color: rgb(80,160,255); }
-
-    .dh-icon-button.add-btn,
-    .dh-icon-button.update-btn,
-    .dh-icon-button.up-btn,
-    .dh-icon-button.down-btn
-    { background-color: rgb(200,200,200); }
-    .dh-icon-button.add-btn:hover,
-    .dh-icon-button.update-btn:hover,
-    .dh-icon-button.up-btn:hover,
-    .dh-icon-button.down-btn:hover
-    { background-color: rgb(80,160,255); }
-
-    .dh-icon-button.close-btn,
-    .dh-icon-button.reject-btn,
-    .dh-icon-button.delete-btn,
-    .dh-icon-button.delete-all-crf-data-btn
-    { background-color: rgb(200,200,200); }
-    .dh-icon-button.close-btn:hover,
-    .dh-icon-button.reject-btn:hover,
-    .dh-icon-button.delete-btn:hover,
-    .dh-icon-button.delete-all-crf-data-btn:hover
-    { background-color: rgb(255,175,25); }
-
-    .dh-icon-button.back-btn,
-    .dh-icon-button.cancel-btn
-    { background-color: rgb(200,200,200); }
-    .dh-icon-button.back-btn:hover,
-    .dh-icon-button.cancel-btn:hover
-    { background-color: rgb(150,150,150); }
-
-    .dh-icon-button.manage-btn,
-    .dh-icon-button.import-data-btn,
-    .dh-icon-button.import-subject-btn
-    { background-color: rgb(200,200,200); }
-    .dh-icon-button.manage-btn:hover,
-    .dh-icon-button.import-data-btn:hover,
-    .dh-icon-button.import-subject-btn:hover
-    { background-color: rgb(80,160,255); }
-
-    /* icon button style */
+	.dh-icon-button.br20 {border-radius:20px;}
 
 
-    /* progress bar */
-    
-    .empty-progress { content: url(/o/ecrf.user.dynamic.include/img/progress/empty_progress.png); }
+	.dh-icon-button.search-btn
+	{ background-color: rgb(95, 115, 190); }    
+	.dh-icon-button.search-btn:hover
+	{ background-color: rgb(105, 125, 200); }
 
-    .complete-progress { content: url(/o/ecrf.user.dynamic.include/img/progress/complete_progress.png); }
-    .complete-autoquery-error { content: url(/o/ecrf.user.dynamic.include/img/progress/complete_autoquery_error.png); }
+	.dh-icon-button.clear-btn
+	{ background-color: rgb(255,175,25); }
+	.dh-icon-button.clear-btn:hover
+	{ background-color: rgb(255,185,35); }
 
-    .incomplete-error { content: url(/o/ecrf.user.dynamic.include/img/progress/incomplete_error.png); }
-    .incomplete-autoquery-error { content: url(/o/ecrf.user.dynamic.include/img/progress/iincomplete_autoquery_error.png); }
+	.dh-icon-button.review-btn,
+	.dh-icon-button.approve-btn
+	{ background-color: rgb(200,200,200); }
+	.dh-icon-button.review-btn:hover,    
+	.dh-icon-button.approve-btn:hover
+	{ background-color: rgb(65, 90, 220); }
+
+	.dh-icon-button.save-btn
+	{ background-color: rgb(200,200,200); }
+	.dh-icon-button.save-btn:hover
+	{ background-color: rgb(0,200,140); }
+
+	.dh-icon-button.db-lock-btn,
+	.dh-icon-button.crf-info-btn,
+	.dh-icon-button.crf-form-btn,
+	.dh-icon-button.crf-data-btn,
+	.dh-icon-button.crf-query-btn,
+	.dh-icon-button.audit-trail-btn
+	{ background-color: rgb(200,200,200); }
+	.dh-icon-button.db-lock-btn:hover,
+	.dh-icon-button.crf-info-btn:hover,
+	.dh-icon-button.crf-form-btn:hover,
+	.dh-icon-button.crf-data-btn:hover,
+	.dh-icon-button.crf-query-btn:hover,
+	.dh-icon-button.audit-trail-btn:hover
+	{ background-color: rgb(80,160,255); }
+
+	.dh-icon-button.add-btn,
+	.dh-icon-button.update-btn,
+	.dh-icon-button.up-btn,
+	.dh-icon-button.down-btn
+	{ background-color: rgb(200,200,200); }
+	.dh-icon-button.add-btn:hover,
+	.dh-icon-button.update-btn:hover,
+	.dh-icon-button.up-btn:hover,
+	.dh-icon-button.down-btn:hover
+	{ background-color: rgb(80,160,255); }
+
+	.dh-icon-button.close-btn,
+	.dh-icon-button.reject-btn,
+	.dh-icon-button.delete-btn,
+	.dh-icon-button.delete-all-crf-data-btn
+	{ background-color: rgb(200,200,200); }
+	.dh-icon-button.close-btn:hover,
+	.dh-icon-button.reject-btn:hover,
+	.dh-icon-button.delete-btn:hover,
+	.dh-icon-button.delete-all-crf-data-btn:hover
+	{ background-color: rgb(255,175,25); }
+
+	.dh-icon-button.back-btn,
+	.dh-icon-button.cancel-btn
+	{ background-color: rgb(200,200,200); }
+	.dh-icon-button.back-btn:hover,
+	.dh-icon-button.cancel-btn:hover
+	{ background-color: rgb(150,150,150); }
+
+	.dh-icon-button.manage-btn,
+	.dh-icon-button.import-data-btn,
+	.dh-icon-button.import-subject-btn
+	{ background-color: rgb(200,200,200); }
+	.dh-icon-button.manage-btn:hover,
+	.dh-icon-button.import-data-btn:hover,
+	.dh-icon-button.import-subject-btn:hover
+	{ background-color: rgb(80,160,255); }
+
+	/* icon button style */
 
 
-    /* progress bar */
-    
-    /* need to delete */
-    .dh-icon-button-submit{
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        align-content: center;
-        flex-wrap: wrap;      
-        gap: 8px;
-        padding: 4px 8px;
-        border: none;
-        border-radius: 4px;
-        font-size: 0.95rem;
-        cursor: pointer;		      
-        text-decoration: none!important;
-        width: 110px;
-        height: 36px;
-    }
-    
-    .dh-icon-button-submit img{
+	/* progress bar */
+	
+	.empty-progress { content: url(/o/ecrf.user.dynamic.include/img/progress/empty_progress.png); }
+
+	.complete-progress { content: url(/o/ecrf.user.dynamic.include/img/progress/complete_progress.png); }
+	.complete-autoquery-error { content: url(/o/ecrf.user.dynamic.include/img/progress/complete_autoquery_error.png); }
+
+	.incomplete-error { content: url(/o/ecrf.user.dynamic.include/img/progress/incomplete_error.png); }
+	.incomplete-autoquery-error { content: url(/o/ecrf.user.dynamic.include/img/progress/iincomplete_autoquery_error.png); }
+
+
+	/* progress bar */
+	
+	/* need to delete */
+	.dh-icon-button-submit{
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		align-content: center;
+		flex-wrap: wrap;      
+		gap: 8px;
+		padding: 4px 8px;
+		border: none;
+		border-radius: 4px;
+		font-size: 0.95rem;
+		cursor: pointer;		      
+		text-decoration: none!important;
+		width: 110px;
+		height: 36px;
+	}
+	
+	.dh-icon-button-submit img{
 		height: 24px;
 		object-fit: contain;
 	}
-     
-    .dh-icon-button-submit span{
-        color:white;
-        font-weight:bold;
-    }
-    
+	 
+	.dh-icon-button-submit span{
+		color:white;
+		font-weight:bold;
+	}
+	
    	.dh-icon-button-submit-search {
    		width:100px;
-        background-color: #5f73ff;
-    }
-    .dh-icon-button-submit-search:hover{
-        background-color: #3d51dd;
-    }
-    
-    .dh-icon-button-submit-clear {
-    	width:100px;    
-        background-color: #ef6d6d;
-    }
-    .dh-icon-button-submit-clear:hover{
-        background-color: #cd4b4b;
-    }
-    
-    .dh-icon-button-submit-add {
-        background-color: #5f73ff;
-    }
-    .dh-icon-button-submit-add:hover{
-        background-color: #3d51dd;
-    }
-    
-    .dh-icon-button-submit-update {
+		background-color: #5f73ff;
+	}
+	.dh-icon-button-submit-search:hover{
+		background-color: #3d51dd;
+	}
+	
+	.dh-icon-button-submit-clear {
+		width:100px;    
+		background-color: #ef6d6d;
+	}
+	.dh-icon-button-submit-clear:hover{
+		background-color: #cd4b4b;
+	}
+	
+	.dh-icon-button-submit-add {
+		background-color: #5f73ff;
+	}
+	.dh-icon-button-submit-add:hover{
+		background-color: #3d51dd;
+	}
+	
+	.dh-icon-button-submit-update {
    		background-color: #5f73ff;
-    }
-    .dh-icon-button-submit-update:hover {
-    	background-color: #3d51dd;
-    }
-    
-    .dh-icon-button-submit-delete {
-    background-color: #ea5353;
-    }
-    .dh-icon-button-submit-delete:hover {
-    background-color: #c83131;
-    }
-    
-    .dh-icon-button-submit-cancel {
-    	border: 1px solid #aaa;
-    	background-color: #FFF;
-    }
-    .dh-icon-button-submit-cancel:hover {
-    background-color: #DDD;
-    }
-    
-    .dh-icon-button-submit-import {
-    	border: 1px solid #aaa;
-    	background-color: #FFF;
-    	width: 175px;
-    }
-    .dh-icon-button-submit-import:hover {
-    	background-color: #DDD;
-    }
-    
-    .dh-icon-button-submit-save {
-    	border: 1px solid #999;
-    	background-color: #DDD;
-    }
-    .dh-icon-button-submit-import:hover {
-    	background-color: #aaa;
-    }
-    
-    
-    .dh-icon-button-submit-manage {
-    	margin-top: 3px;
-    	margin-bottom: 8px;
-    	margin-left: 5px;
-    	border: 1px solid #aaa;
-    	background-color: #EEE;
-    	width: 240px;
-    }
-    .dh-icon-button-submit-manage span{
-    	color: black;
-    }
-     .dh-icon-button-submit-manage:hover {
-    	background-color: #CCC;
-    }
-    
-    .dh-icon-button-submit-review {
+	}
+	.dh-icon-button-submit-update:hover {
+		background-color: #3d51dd;
+	}
+	
+	.dh-icon-button-submit-delete {
+	background-color: #ea5353;
+	}
+	.dh-icon-button-submit-delete:hover {
+	background-color: #c83131;
+	}
+	
+	.dh-icon-button-submit-cancel {
+		border: 1px solid #aaa;
+		background-color: #FFF;
+	}
+	.dh-icon-button-submit-cancel:hover {
+	background-color: #DDD;
+	}
+	
+	.dh-icon-button-submit-import {
+		border: 1px solid #aaa;
+		background-color: #FFF;
+		width: 175px;
+	}
+	.dh-icon-button-submit-import:hover {
+		background-color: #DDD;
+	}
+	
+	.dh-icon-button-submit-save {
+		border: 1px solid #999;
+		background-color: #DDD;
+	}
+	.dh-icon-button-submit-import:hover {
+		background-color: #aaa;
+	}
+	
+	
+	.dh-icon-button-submit-manage {
+		margin-top: 3px;
+		margin-bottom: 8px;
+		margin-left: 5px;
+		border: 1px solid #aaa;
+		background-color: #EEE;
+		width: 240px;
+	}
+	.dh-icon-button-submit-manage span{
+		color: black;
+	}
+	 .dh-icon-button-submit-manage:hover {
+		background-color: #CCC;
+	}
+	
+	.dh-icon-button-submit-review {
    		background-color: #5f73ff;
-    }		  
-    .dh-icon-button-submit-review:hover {
-    	background-color: #3d51dd;
-    }
+	}		  
+	.dh-icon-button-submit-review:hover {
+		background-color: #3d51dd;
+	}
 
-    .dh-icon-button-submit-data {
-    	width: 140px;
-    	background-color: #8c78ff;
-    }		  
-    .dh-icon-button-submit-data:hover {
-    background-color: #6a56dd;
-    }
-    
-    .dh-icon-button-submit-form {
-    	width: 140px;
-        background-color: #F4A460;
-    }
-    .dh-icon-button-submit-form:hover {
-        background-color: #D28240;
-    }
+	.dh-icon-button-submit-data {
+		width: 140px;
+		background-color: #8c78ff;
+	}		  
+	.dh-icon-button-submit-data:hover {
+	background-color: #6a56dd;
+	}
+	
+	.dh-icon-button-submit-form {
+		width: 140px;
+		background-color: #F4A460;
+	}
+	.dh-icon-button-submit-form:hover {
+		background-color: #D28240;
+	}
 
-    .dh-icon-button-submit-query {
-        background-color: #2F5597;
-        width: 140px;
-    }
-    .dh-icon-button-submit-query:hover {
-        background-color: #0d3375;
-    }
-    
-    /* icon button style */
-	    
-    
-    /* vertical-index */
-    .vertical-index {
-        text-align:center;
-        white-space:nowrap;
-        -webkit-transform: rotate(60deg);
-        -moz-transform: rotate(60deg);
-        -ms-transform: rotate(60deg);
-        -o-transform: rotate(60deg);
-        transform: rotate(60deg);
-        
-    }
-    .vertical-index p {
-        margin:0 -100% ;
-        display:inline-block;
-        font-weight:600;
-    }
-    .vertical-index p:before{
-        content:'';
-        width:0;
-        padding-top:100%;/* takes width as reference, + 10% for faking some extra padding */
-        display:inline-block;
-        vertical-align:middle;
-    }
-    /* vertical-index */  
-    
+	.dh-icon-button-submit-query {
+		background-color: #2F5597;
+		width: 140px;
+	}
+	.dh-icon-button-submit-query:hover {
+		background-color: #0d3375;
+	}
+	
+	/* icon button style */
+		
+	
+	/* vertical-index */
+	.vertical-index {
+		text-align:center;
+		white-space:nowrap;
+		-webkit-transform: rotate(60deg);
+		-moz-transform: rotate(60deg);
+		-ms-transform: rotate(60deg);
+		-o-transform: rotate(60deg);
+		transform: rotate(60deg);
+		
+	}
+	.vertical-index p {
+		margin:0 -100% ;
+		display:inline-block;
+		font-weight:600;
+	}
+	.vertical-index p:before{
+		content:'';
+		width:0;
+		padding-top:100%;/* takes width as reference, + 10% for faking some extra padding */
+		display:inline-block;
+		vertical-align:middle;
+	}
+	/* vertical-index */  
+	
 	/* DataTable pagination hover */
 	.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
 		background: transparent;
@@ -1059,5 +1059,506 @@
 	.page-item.active .page-link {
 		cursor:pointer;
 	}    
-    /* DataTable pagination hover */
+	/* DataTable pagination hover */
+	
+	/* Teeth Module CSS */
+	.ecrf-user-teeth {
+		.info-box {
+			border-radius: 6px;
+			border: 2px solid #666;
+						
+			.row>div {
+				padding: 8px;
+			}
+			
+			.div-border-top {
+				border-top: 1px solid #666;
+			}
+			
+			.div-border-bottom {
+				border-bottom: 1px solid #666;
+			}
+			
+			.div-border-left {
+				border-left: 1px solid #666;
+			}
+			
+			.div-border-right {
+				border-right: 1px solid #666;
+			}
+		}
+
+		.region {
+			position: absolute;
+			border: 2px solid black;
+			opacity: 0.5;
+			cursor: pointer;
+			z-index: 10;
+		}
+		
+		.imageWrapper {
+			position: relative;
+			width: auto;
+			max-width: none;
+			margin: 0 auto;
+		}
+		
+		#radioButtonWrapper {
+			text-align: center;
+			margin-top: 20px;
+			padding: 10px;
+			border: 1px solid #ccc;
+			display: inline-block;
+			
+			label {
+				margin: 0 15px;
+				font-size: 1.8rem;
+				padding: 10px;
+				display: inline-flex;
+				align-items: center;
+			}	
+			
+			input[type="radio"] {
+				transform: scale(1.5);
+				margin-right: 5px;
+			}
+		}
+		
+		#historyContainer {
+			margin-top: 30px;
+			
+			h4 {
+				margin-bottom: 5px;
+			}
+			
+			ul {
+				margin-top: 0;
+				margin-bottom: 15px;
+				padding-left: 20px;
+			}
+		}
+		
+		#tooltipContainer, #tooltipContainer th, #tooltipContainer td {
+			white-space: nowrap;
+		}
+		
+		.info-table{
+			font-size: 1rem;
+			border-collapse: collapse;
+			width: 100%;
+			table-layout: fixed;
+		}
+
+		.info-table td{
+			border: 1px solid rgba(200,200,200,0.7);
+			padding: 8px;
+			vertical-align: top;
+			word-wrap: break-word;
+		}
+		
+		.number-label {
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 1.2rem;
+			font-weight: bold;
+			pointer-events: none;
+		}
+		
+		.state-label {
+			position: absolute;
+			text-align: center;
+			font-size: 1rem;
+			font-weight: bold;
+			pointer-events: none;
+		}
+		
+		.history-label {
+			position: absolute;
+			text-align: center;
+			font-size: 1rem;
+			pointer-events: none;
+		}
+		
+		.selection-box {
+			position: absolute;              
+			border: 1px dashed #000;                
+			background-color: rgba(0, 0, 255, 0.2);  
+			pointer-events: none;                      
+		}
+	}
+
+	.add-teeth {
+		#historyContainer {
+			margin-top: 30px;
+		}
+	
+		#historyContainer h4 {
+			margin-bottom: 5px;
+		}
+	
+		#historyContainer ul {
+			margin-top: 0;
+			margin-bottom: 15px;
+			padding-left: 20px;
+		}
+	
+		.treatment-row {
+			display: flex;
+			flex-direction: column;    /* <- 추가 */
+			align-items: flex-start;   /* 왼쪽 정렬 */
+			gap: 20px;                 /* 박스 사이 간격 */
+			margin-top: 10px;
+		}
+		
+		.treatment-column {
+			display: flex;
+			align-items: stretch;
+			justify-content: flex-start;
+			gap: 15px;
+			margin-top: 20px;
+			flex-wrap: wrap;
+		}
+		  
+		.treatment-box {
+			border: 1px solid #ccc;
+			padding: 6px;
+			min-width: 200px;
+			width: 1050px; /* 고정된 너비 설정 */
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start; /* 박스가 커지더라도 내용은 위에 고정 */
+			flex-grow: 0;
+			flex-shrink: 0;
+			height: auto;
+		}
+	   
+	   .treatment-box-date {
+			border: 1px solid #ccc;
+			padding: 10px;
+			min-width: 200px;
+			width: 1160px; /* 고정된 너비 설정 */
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start; /* 박스가 커지더라도 내용은 위에 고정 */
+			flex-grow: 0;
+			flex-shrink: 0;
+			height: auto;
+		}
+	   
+		.option-group label {
+			display: inline-flex;     /* 가로 안에서 inline 배치 */
+			align-items: center;
+			margin: 0;                /* gap으로 간격 제어 */
+		}
+	
+		.option-group {
+			display: flex;            /* <- 변경 */
+			flex-wrap: wrap;          /* 줄바꿈 허용 */
+			flex-direction: row;      /* 가로 정렬 */
+			gap: 15px;                /* 옵션들 사이 간격 */
+		}
+	
+		.separator {
+			border-top: 2px solid #ccc;
+			margin: 10px 0;
+		}
+		  
+		table.custom-table-outer {
+			width: 1160px;
+			border-collapse: collapse;
+			text-align: left; 
+		}
+	   
+		.custom-table-outer th,
+		.custom-table-outer td {
+			border: 1px solid #ccc;
+			padding: 10px;
+			vertical-align: middle;
+			font-size: 15px;
+		}
+		
+		.custom-table-outer th {
+			text-align: center;  /* th 요소들만 가운데 정렬 */
+		}
+	   
+		.custom-table-outer label {
+			display: block;  /* 라벨을 블록으로 처리하여 세로로 나열 */
+			margin: 0 5px;
+		}  
+		  
+		table.custom-table {
+			width: 1050px;
+			border-collapse: collapse;
+			text-align: left; 
+		}
+	   
+		.custom-table th,
+		.custom-table td {
+			border: 1px solid #ccc;
+			padding: 6px;
+			vertical-align: middle;
+			font-size: 15px;
+		}
+		
+		.custom-table th {
+			text-align: center;  /* th 요소들만 가운데 정렬 */
+		}
+	   
+		.custom-table label {
+			display: block;  /* 라벨을 블록으로 처리하여 세로로 나열 */
+			margin: 0 5px;
+		}
+		
+		#radioButtonWrapper {
+			display: inline-flex;
+			flex-direction: row;
+			gap: 20px;
+		}
+	   
+		#radioButtonWrapper p {
+			margin: 0;
+			font-weight: bold;
+			vertical-align: middle;  /* 텍스트가 수평 정렬되도록 */
+		}
+	   
+		#radioButtonWrapper label {
+			display: inline-flex;
+			align-items: center;
+			margin: 0;
+		}
+		
+		.inline-section {
+			display: flex;                   /* 같은 비율로 균등 분할 */
+			align-items: center;
+			gap: 8px;
+			padding: 6px;
+			box-sizing: border-box;
+		}
+		
+		.inline-section:first-child {
+			flex: 1;
+		}
+		
+		.inline-section:last-child {
+			flex: 2;
+		}
+		
+		.inline-section p {
+			margin-right: 5px;
+			white-space: nowrap;
+		}
+		
+		.with-border {
+			border-left: 1px solid #ccc;
+		}
+		
+		.mar-r-2 { margin-right:2px;}
+	}
+
+	.edit-treatment {
+		.info-container {
+			padding-top:10px;
+			.field-wrapper {
+				label, p {
+					font-size: 1rem;
+				}
+			}
+
+		}
+
+		.treatment-btn {
+			margin: 5px;
+			padding: 10px;
+			cursor: pointer;
+		}
+		#imageWrapper {
+			position: relative;
+			max-width: 90%;
+			margin: 0 auto;
+		}
+		
+		#patientImage {
+			width: 100%;
+			height: auto;
+			display: block;
+			user-select: none;
+		}
+		
+		.region {
+			position: absolute;
+			border: 2px solid black;
+			opacity: 0.5;
+			cursor: pointer;
+			z-index: 10;
+		}
+		
+		#historyContainer {
+			margin-top: 30px;
+		}
+		
+		#historyContainer h4 {
+			margin-bottom: 5px;
+		}
+		
+		#historyContainer ul {
+			margin-top: 0;
+			margin-bottom: 15px;
+			padding-left: 20px;
+		}
+		
+		.treatment-row {
+			display: flex;
+			flex-direction: column;    /* <- 추가 */
+			align-items: flex-start;   /* 왼쪽 정렬 */
+			gap: 20px;                 /* 박스 사이 간격 */
+			margin-top: 10px;
+		}
+		
+		.treatment-column {
+			display: flex;
+			align-items: stretch;
+			justify-content: flex-start;
+			gap: 30px;
+			margin-top: 20px;
+			flex-wrap: wrap;
+		
+		}
+		
+		.treatment-box {
+			border: 1px solid #ccc;
+			padding: 6px;
+			min-width: 200px;
+			width: 1050px; /* 고정된 너비 설정 */
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start; /* 박스가 커지더라도 내용은 위에 고정 */
+			flex-grow: 0;
+			flex-shrink: 0;
+			height: auto;
+		}
+		
+		.treatment-box-date {
+			border: 1px solid #ccc;
+			padding: 10px;
+			min-width: 200px;
+			width: 1160px; /* 고정된 너비 설정 */
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start; /* 박스가 커지더라도 내용은 위에 고정 */
+			flex-grow: 0;
+			flex-shrink: 0;
+			height: auto;
+		}
+		
+		.option-group label {
+			display: inline-flex;     /* 가로 안에서 inline 배치 */
+			align-items: center;
+			margin: 0;                /* gap으로 간격 제어 */
+		}
+		
+		.option-group {
+			display: flex;            /* <- 변경 */
+			flex-wrap: wrap;          /* 줄바꿈 허용 */
+			flex-direction: row;      /* 가로 정렬 */
+			gap: 15px;                /* 옵션들 사이 간격 */
+		}
+		
+		.separator {
+			border-top: 2px solid #ccc;
+			margin: 10px 0;
+		}
+		
+		table.custom-table-outer {
+			width: 1160px;
+			border-collapse: collapse;
+			text-align: left; 
+		}
+		
+		.custom-table-outer th,
+		.custom-table-outer td {
+			border: 1px solid #ccc;
+			padding: 10px;
+			vertical-align: middle;
+			font-size: 15px;
+		}
+		
+		.custom-table-outer th {
+			text-align: center;  /* th 요소들만 가운데 정렬 */
+		}
+		
+		.custom-table-outer label {
+			display: block;  /* 라벨을 블록으로 처리하여 세로로 나열 */
+			margin: 0 5px;
+		}  
+		
+		table.custom-table {
+			width: 1050px;
+			border-collapse: collapse;
+			text-align: left; 
+		}
+		
+		.custom-table th,
+		.custom-table td {
+			border: 1px solid #ccc;
+			padding: 6px;
+			vertical-align: middle;
+			font-size: 15px;
+		}
+		
+		.custom-table th {
+			text-align: center;  /* th 요소들만 가운데 정렬 */
+		}
+		
+		.custom-table label {
+			display: block;  /* 라벨을 블록으로 처리하여 세로로 나열 */
+			margin: 0 5px;
+		}
+		
+		#radioButtonWrapper {
+			display: inline-flex;
+			flex-direction: row;
+			gap: 20px;
+		}
+		
+		#radioButtonWrapper p {
+			margin: 0;
+			font-weight: bold;
+			vertical-align: middle;  /* 텍스트가 수평 정렬되도록 */
+		}
+		
+		#radioButtonWrapper label {
+			display: inline-flex;
+			align-items: center;
+			margin: 0;
+		}
+		
+		.inline-section {
+			display: flex;                   /* 같은 비율로 균등 분할 */
+			align-items: center;
+			gap: 8px;
+			padding: 6px;
+			box-sizing: border-box;
+		}
+		
+		.inline-section:first-child {
+			flex: 1;
+		}
+		
+		.inline-section:last-child {
+			flex: 2;
+		}
+		
+		.inline-section p {
+			margin-right: 5px;
+			white-space: nowrap;
+		}
+		
+		.with-border {
+			border-left: 1px solid #ccc;
+		}
+			
+		.mar-r-2 { margin-right:2px;}
+	}
 }

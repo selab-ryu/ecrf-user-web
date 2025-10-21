@@ -80,7 +80,7 @@
 
 <div class="ecrf-user-teeth">
 	<h1>Teeth Image Demo</h1>
-
+	
 	<!-- Add 연산용 내부 div -->
 	<div style="display: none;">
 		Selected Tooth: <span id="selectedButtonsLabel"></span><br />
@@ -126,7 +126,7 @@
 		<aui:button-row>
 			<aui:button id="addBtn" type="button" cssClass="btn btn-primary" name="addBtn" value="<%=LanguageUtil.get(request, "teethview.button.addTreatment") %>" onClick="<%=addBtnOnClickStr%>" />
 			<aui:button type="button" cssClass="btn btn-primary" value="<%=LanguageUtil.get(request, "teethview.button.viewDeciduousAudit") %>" onClick="openViewAuditModal()" />
-			<aui:button type="button" cssClass="btn btn-secondary" value="<%=LanguageUtil.get(request, "teethview.button.viewPermanentTeeth") %>" onClick="<%= ViewPermanentTeethURL.toString() %>" />
+			<aui:button type="button" cssClass="btn btn-secondary" value="teethview.button.viewPermanentTeeth" onClick="<%= ViewPermanentTeethURL.toString() %>" />
 			<aui:button type="button" cssClass="btn btn-secondary" value="<%=LanguageUtil.get(request, "teethview.button.viewAllTeeth") %>" onClick="<%= ViewTotalTeethURL.toString() %>" />
 		</aui:button-row>
 	</div>

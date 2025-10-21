@@ -1,16 +1,14 @@
 package ecrf.user.crf.command.render.data.teeth;
 
-import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.sx.icecap.model.StructuredData;
 import com.sx.icecap.service.DataTypeLocalService;
+
+import java.util.List;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -29,6 +27,9 @@ import ecrf.user.model.Subject;
 import ecrf.user.service.CRFLocalService;
 import ecrf.user.service.LinkCRFLocalService;
 import ecrf.user.service.SubjectLocalService;
+import teeth.model.TreatmentHistory;
+import teeth.service.TreatmentHistoryLocalService;
+
 
 @Component(
 	    immediate = true,
@@ -46,7 +47,8 @@ public class ViewTeethDataRenderCommand implements MVCRenderCommand {
 		System.out.println("Render CRF View");
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
+		long groupId = themeDisplay.getScopeGroupId();
+				
 		long subjectId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.SUBJECT_ID, 0);
 		long crfId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.CRF_ID, 0);
 		long linkId = ParamUtil.getLong(renderRequest, ECRFUserCRFDataAttributes.LINK_ID, 0);
@@ -69,7 +71,7 @@ public class ViewTeethDataRenderCommand implements MVCRenderCommand {
 					renderRequest.setAttribute(ECRFUserCRFDataAttributes.LINK_ID, linkId);
 				}
 				
-				int crfDataCount = _linkCRFLocalService.countLinkCRFByG_S_C(themeDisplay.getScopeGroupId(), subjectId, crfId);
+				int crfDataCount = _linkCRFLocalService.countLinkCRFByG_S_C(groupId, subjectId, crfId);
 			}	
 		
 		} catch (Exception e) {
@@ -91,7 +93,38 @@ public class ViewTeethDataRenderCommand implements MVCRenderCommand {
 		
 		renderRequest.setAttribute(ECRFUserCRFDataAttributes.CRF_ID, crfId);
 		
+		List<TreatmentHistory> HistoryList = _treatmentHisotryLocalService.getTreatmentsByG_C_P_L(groupId, crfId, subjectId, linkId);
+		
+		boolean isPermanent = false;
+		try
+		{
+			// Permanent (11~18, 21~28, 31~38, 41~48) checkPermanent=true
+			processTeethRange(renderRequest, groupId, crfId, subjectId, linkId, 11, 48, true, isPermanent);
+
+			// Deciduous (51~55, 61~65, 71~75, 81~85) checkPermaenet=false
+			processTeethRange(renderRequest, groupId, crfId, subjectId, linkId, 51, 85, false, isPermanent);
+			
+			renderRequest.setAttribute("HistoryList", HistoryList);
+		}
+		catch(Exception e)
+		{
+			_log.info("Error During TeethView!");
+		}
+		
 		return ECRFUserJspPaths.JSP_VIEW_TEETH_DATA;
+	}
+	
+	private void processTeethRange(RenderRequest renderRequest, long groupId, long crfId, long patientID, long linkId, long from, long to, boolean checkPermanent, boolean isPermanent)
+	{
+		for(long i = from; i <= to; i++)
+		{
+			List<TreatmentHistory> HT = _treatmentHisotryLocalService.getTreatmentsByG_C_P_L_TN(groupId, crfId, patientID, linkId, i);
+			if (checkPermanent && !HT.isEmpty()) 
+			{
+				isPermanent = true;
+			}
+			renderRequest.setAttribute("teeth" + i, HT);
+		}
 	}
 
 	private Log _log = LogFactoryUtil.getLog(ViewTeethDataRenderCommand.class);
@@ -107,5 +140,8 @@ public class ViewTeethDataRenderCommand implements MVCRenderCommand {
 
 	@Reference
 	private DataTypeLocalService _dataTypeLocalService;
+	
+	@Reference
+	private TreatmentHistoryLocalService _treatmentHisotryLocalService;
 
 }

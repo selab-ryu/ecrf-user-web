@@ -314,11 +314,7 @@ _log.info("url : " + baseURL.toString());
 					// change render command name by ui layout
 					int uiLayoutId = CRFLocalServiceUtil.getCRF(crfId).getDefaultUILayout();
 					String commandName = ECRFUserMVCCommand.RENDER_VIEW_TEETH_DATA;
-					
-					if(uiLayoutId == UILayout.TABLE.getNum() || uiLayoutId == UILayout.VERTICAL.getNum()){
-						commandName = ECRFUserMVCCommand.RENDER_CRF_VIEWER;
-					}
-					
+										
 					// check data count & get link id when only one data exist
 					List<LinkCRF> links = LinkCRFLocalServiceUtil.getLinkCRFByC_S(crfId, rowSubjectId);
 					

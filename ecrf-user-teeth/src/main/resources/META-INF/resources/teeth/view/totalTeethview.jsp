@@ -3,7 +3,7 @@
 <%!Log _log = LogFactoryUtil.getLog("/teeth/deciduousTeethview.jsp");%>
 
 <style>
-  #imageWrapper {
+  .imageWrapper {
     position: relative;
     width: auto;
     max-width: none;

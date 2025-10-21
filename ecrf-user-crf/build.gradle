@@ -5,6 +5,8 @@ dependencies {
 	compileOnly project(":modules:ecrf-user:ecrf-user-api")
 	compileOnly project(":modules:ecrf-user-web:ecrf-user-panel-category")
 	
+	compileOnly project(":modules:teeth-yonsei:teeth-api")
+	
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
 	compileOnly group: 'com.liferay.portal', name: 'com.liferay.portal.impl'
 	compileOnly group: "com.liferay.portal", name: "com.liferay.util.taglib"
