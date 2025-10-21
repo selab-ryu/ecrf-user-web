@@ -211,7 +211,7 @@
 							<span style="color:rgba(0,0,255,1)"><liferay-ui:message key="ecrf-user.crf-data.teeth.info.table.blue.name" /></span><liferay-ui:message key="ecrf-user.crf-data.teeth.info.table.blue.description" />
 						</aui:col>
 						<aui:col md="4" cssClass="div-border-bottom div-border-right">
-							<span style="color:rgba(255,165,0,1)"><liferay-ui:message key="ecrf-user.crf-data.teeth.info.table.yellow.name" /></span><liferay-ui:message key="ecrf-user.crf-data.teeth.info.table.blue.description" />
+							<span style="color:rgba(255,165,0,1)"><liferay-ui:message key="ecrf-user.crf-data.teeth.info.table.yellow.name" /></span><liferay-ui:message key="ecrf-user.crf-data.teeth.info.table.yellow.description" />
 						</aui:col>
 						<aui:col md="4" cssClass="div-border-bottom">
 							<span style="color:rgba(0,128,0,1)"><liferay-ui:message key="ecrf-user.crf-data.teeth.info.table.green.name" /></span><liferay-ui:message key="ecrf-user.crf-data.teeth.info.table.green.description" />

@@ -247,7 +247,7 @@ _log.info("url : " + baseURL.toString());
 				<liferay-ui:search-container-column-text
 					name="ecrf-user.list.serial-id"
 				>
-					<p ><%=String.valueOf(rowSubject.getSerialId()) %></p>
+					<%=String.valueOf(rowSubject.getSerialId()) %>
 				</liferay-ui:search-container-column-text>
 				
 				<portlet:renderURL var="viewURL">
