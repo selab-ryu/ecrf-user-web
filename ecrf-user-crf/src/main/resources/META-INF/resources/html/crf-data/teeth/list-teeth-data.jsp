@@ -93,7 +93,7 @@ _log.info("url : " + baseURL.toString());
 			<liferay-ui:message key="ecrf-user.general.crf-title-x" arguments="<%=titleDT.getDisplayName(themeDisplay.getLocale()) %>" />
 		</div>
 	
-		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-data.title.list-teeth" />
+		<liferay-ui:header backURL="<%=redirect %>" title="ecrf-user.crf-data.title.list-teeth-data" />
 		
 		<aui:form action="${searchURL}" name="searchOptionFm" autocomplete="off" cssClass="marBr">
 			<aui:container cssClass="radius-shadow-container">
