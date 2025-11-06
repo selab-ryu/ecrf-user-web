@@ -120,7 +120,7 @@
 					PortletURL portletURL = PortalUtil.getControlPanelPortletURL(request, group, ECRFUserPortletKeys.CRF, scopeGroupId, 0, PortletRequest.RENDER_PHASE);
 					//portletURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, ECRFUserMVCCommand.RENDER_LIST_CRF_DATA);
 					portletURL.setParameters(urlParams);	
-					_log.info("Get Control Panel Portlet URL : " + portletURL.toString());
+					//_log.info("Get Control Panel Portlet URL : " + portletURL.toString());
 					
 					String crfDataListURL = PortalUtil.getControlPanelFullURL(group.getGroupId(), ECRFUserPortletKeys.CRF, urlParams);
 					//_log.info("child site control panel url : " + crfDataListURL);
