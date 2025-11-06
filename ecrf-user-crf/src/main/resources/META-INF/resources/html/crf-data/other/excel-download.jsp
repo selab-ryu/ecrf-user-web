@@ -211,7 +211,7 @@
 		    
 		    <!-- Option to choose whether to divide the selected Term by Sheet -->
 		    <aui:container>
-		    	<aui:row cssClass="vertical-middle">		    		
+		    	<aui:row cssClass="vertical-middle hide">		    		
 		    		<span class="sub-title-span marR16"><liferay-ui:message key="ecrf-user.crf-data.sheet-divide"/></span>
 	    			
     				<input type="radio" id="group" name="divideOption" class="marR8" value="group">
@@ -687,20 +687,21 @@
 
 	function getListPrint(listVal, listOptions) {
 		let result = "";
-		if(listVal) {
-			let listPrintOption = $('input[name="listPrint"]:checked').val();
-			
-			console.log(listPrintOption);
-			// multi selection handling
-			if(typeof(listVal) === 'object'){ 
-				let sb = [];
-				for(const val of listVal) {
-					sb.push(getListPrintByPrintOption(val, listOptions, listPrintOption));
-				}
-				result = sb.join(", ");
-			} else if(typeof(listVal) === 'string'){	// old version data handling				
-				result = getListPrintByPrintOption(listVal, listOptions, listPrintOption);
+		if(!listVal) return result;
+		
+		let listPrintOption = $('input[name="listPrint"]:checked').val();
+		
+		// multi selection handling
+		if(typeof(listVal) === 'object'){ 
+			let sb = [];
+			for(const val of listVal) {
+				// empty object check
+				if(val !== '') sb.push(getListPrintByPrintOption(val, listOptions, listPrintOption));
 			}
+			// empty check
+			if(sb.length > 0) result = sb.join(", ");
+		} else if(typeof(listVal) === 'string'){	// old version data handling				
+			result = getListPrintByPrintOption(listVal, listOptions, listPrintOption);
 		}
 
 		return result;
@@ -1068,13 +1069,15 @@
 							const currnetTermName = checkedList[k].value;
 
                 			if(currnetTermName in answerData[i]){	// set value when exist
-                				Data_answer = answerData[i][checkedList[k].value];
+                				Data_answer = answerData[i][currnetTermName];
 								
 								// 25-10-21: termType == 'List' -> value / value(label) / label
 								const currentTerm = inspectionData.find(v => v.termName === currnetTermName); 
 								if(currentTerm.termType == 'List'){
-									let listVal = answerData[i][checkedList[k].value];
+									let listVal = answerData[i][currnetTermName];
 									let listOptions = currentTerm.options;
+									// empty string array check
+									//console.log(typeof(listVal), currentTerm, listVal, listOptions)
 
 									Data_answer = getListPrint(listVal, listOptions);
 								}
