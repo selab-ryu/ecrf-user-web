@@ -21,7 +21,8 @@
 
 <liferay-ui:error embed="<%= false %>" key="membershipAlreadyRequested" message="membership-was-already-requested" />
 
-<div class="ecrf-user pad1R">
+<div class="ecrf-user">
+<div class="mar1r">
 
 <liferay-ui:header title="ecrf-user.main.title.view-my-site" />
 
@@ -240,4 +241,38 @@
 	
 </liferay-ui:search-container>
 
+<portlet:renderURL var="viewRequestSelfSiteURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_REQUEST_SELF_SITE %>" />
+</portlet:renderURL>
+
+<div>
+	<aui:button type="button" name="downloadManual" cssClass="btn-primary marR10" value="ecrf-user.main.download-manual" />
+	<aui:button type="button" name="requestSelfSite" cssClass="btn-primary" value="ecrf-user.main.request-self-site" onClick="<%=viewRequestSelfSiteURL %>" />
 </div>
+
+</div>
+</div>
+
+<script>
+  document.getElementById('<portlet:namespace/>downloadManual').addEventListener('click', async () => {
+    const url = '/o/ecrf.user.main/files/SMART-CRF_User_Guide_Manual.pdf';
+
+    // 교차 출처면 서버에서 CORS(Access-Control-Allow-Origin) 허용이 필요
+    const res = await fetch(url, { mode: 'cors' });
+    if (!res.ok) { alert('파일을 가져오지 못했습니다.'); return; }
+
+    const blob = await res.blob(); // application/pdf
+    const objectUrl = URL.createObjectURL(blob);
+
+    // a 태그를 생성해 강제 클릭
+    const a = document.createElement('a');
+    a.href = objectUrl;
+    a.download = 'smart-crf user manual.pdf'; // 원하는 저장 파일명
+    document.body.appendChild(a);
+    a.click();
+
+    // 정리
+    a.remove();
+    URL.revokeObjectURL(objectUrl);
+  });
+</script>
