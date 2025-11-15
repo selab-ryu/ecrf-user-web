@@ -17,11 +17,14 @@ long siteGroupId = ParamUtil.getLong(renderRequest, ECRFUserMainAttributes.SITE_
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_VIEW_SITE %>" />
 </portlet:renderURL>
 
+<portlet:actionURL name="<%=ECRFUserMVCCommand.ACTION_ADD_SELF_SITE_REQUEST %>" var="addRequestURL"> 
+</portlet:actionURL>
+
 <div class="ecrf-user" style="margin:1rem">
 
 <liferay-ui:header backURL="<%=viewSiteURL %>" title="ecrf-user.main.title.request-self-site" />
 
-<aui:form name="fm" action="" method="POST">
+<aui:form name="fm" action="<%=addRequestURL%>" method="POST" autocomplete="off">
 
 <aui:container cssClass="radius-shadow-container">
 	<aui:row>
@@ -41,7 +44,9 @@ long siteGroupId = ParamUtil.getLong(renderRequest, ECRFUserMainAttributes.SITE_
 				label="ecrf-user.main.email"
 				required="true"
 				value="<%=Validator.isNull(curUser) ? StringPool.DASH : curUser.getEmailAddress() %>"
-			/>
+			>
+				<aui:validator name="email"></aui:validator>
+			</aui:input>
 		</aui:col>
 	</aui:row>
 	
@@ -100,7 +105,7 @@ long siteGroupId = ParamUtil.getLong(renderRequest, ECRFUserMainAttributes.SITE_
 	<aui:row>
 		<aui:col>
 			<aui:button-row>
-				<aui:button type="button" cssClass="btn-primary" name="request" value="ecrf-user.button.main.request" onClick="<%=viewSiteURL %>" />
+				<aui:button type="submit" cssClass="btn-primary" name="request" value="ecrf-user.button.main.request" />
 				<aui:button type="button" name="back" value="ecrf-user.button.main.back" onClick="<%=viewSiteURL %>" />
 			</aui:button-row>
 		</aui:col>
@@ -109,3 +114,16 @@ long siteGroupId = ParamUtil.getLong(renderRequest, ECRFUserMainAttributes.SITE_
 </aui:container>
 </aui:form>
 </div>
+
+<script>
+$(document).ready(function() {
+	var options = {
+		onKeyPress: function(phone, e, field, options) {
+		    var masks = ['000-0000-0000', '000-000-0000'];
+		    var mask = (phone.length>9) ? masks[0] : masks[1];
+		    field.mask(mask, options);
+		}
+	};
+	$("#<portlet:namespace/>phone").mask("000-000-0000", options);
+});
+</script>

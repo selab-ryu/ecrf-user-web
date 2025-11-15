@@ -245,9 +245,16 @@
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_REQUEST_SELF_SITE %>" />
 </portlet:renderURL>
 
+<portlet:renderURL var="listSelfSiteRequestURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SELF_SITE_REQUEST %>" />
+</portlet:renderURL>
+
 <div>
 	<aui:button type="button" name="downloadManual" cssClass="btn-primary marR10" value="ecrf-user.main.download-manual" />
-	<aui:button type="button" name="requestSelfSite" cssClass="btn-primary" value="ecrf-user.main.request-self-site" onClick="<%=viewRequestSelfSiteURL %>" />
+	<aui:button type="button" name="requestSelfSite" cssClass="btn-primary marR10" value="ecrf-user.main.request-self-site" onClick="<%=viewRequestSelfSiteURL %>" />
+	<c:if test="<%=isAdmin %>">
+	<aui:button type="button" name="listSelfSiteRequest" cssClass="btn-primary" value="ecrf-user.main.list-self-site-request" onClick="<%=listSelfSiteRequestURL %>" />
+	</c:if>
 </div>
 
 </div>
