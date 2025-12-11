@@ -102,12 +102,12 @@ public class ViewCRFDataRenderCommand implements MVCRenderCommand {
 			dataTypeEx.printStackTrace();
 		}
 		
-		String strcutureData = "";
+		String structuredData = "";
 		// get crf data (structured data)
 		if(sdId > 0) {
 			try {
-				String structuredData = _dataTypeLocalService.getStructuredData(sdId);				
-				renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA, strcutureData);
+				structuredData = _dataTypeLocalService.getStructuredData(sdId);				
+				renderRequest.setAttribute(ECRFUserCRFDataAttributes.STRUCTURED_DATA, structuredData);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

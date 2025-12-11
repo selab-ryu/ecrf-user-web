@@ -26,6 +26,7 @@
 	_log.info("linkCRF : " + linkCRF);
 	//_log.info("dataStructure : " + dataStructure);
 	
+	_log.info("structured data : " + structuredData);
 	_log.info("redirect : " + redirect);
 	
 	boolean isUpdate = false;
@@ -135,6 +136,13 @@ $(document).ready(function(){
 	
 	let dataStructure = <%= dataStructure %>;
 	let structuredData = <%= Validator.isNotNull(structuredData) %> ? JSON.parse('<%= structuredData %>') : null;
+	
+	console.log("structured data : ", structuredData);
+	
+	if( structuredData ){
+		$('#'+sdPortletKey+'dataContent').val( JSON.stringify(structuredData) );
+		//console.log( 'dataContent check on view-crf-data: ', $('#'+sdPortletKey+'dataContent').val() );
+	}
 	
 	let SX_CRF =  StationX(  sdPortletKey, 
 			'<%= defaultLocale.toString() %>',
