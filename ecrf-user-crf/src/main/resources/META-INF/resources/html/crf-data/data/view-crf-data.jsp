@@ -135,9 +135,14 @@ $(document).ready(function(){
 	$("#"+sdPortletKey+"btnDelete").hide();
 	
 	let dataStructure = <%= dataStructure %>;
-	let structuredData = <%= Validator.isNotNull(structuredData) %> ? JSON.parse('<%= structuredData %>') : null;
 	
-	console.log("structured data : ", structuredData);
+	let sdJsonStr = '<%= structuredData %>';
+	// for new line character
+	let escapedString = sdJsonStr.replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+	//console.log("escaped", escapedString);
+	let structuredData = <%= Validator.isNotNull(structuredData) %> ? JSON.parse(escapedString) : null;
+	
+	//console.log("structured data : ", structuredData);
 	
 	if( structuredData ){
 		$('#'+sdPortletKey+'dataContent').val( JSON.stringify(structuredData) );
