@@ -211,7 +211,7 @@
 		    
 		    <!-- Option to choose whether to divide the selected Term by Sheet -->
 		    <aui:container>
-		    	<aui:row cssClass="vertical-middle">		    		
+		    	<aui:row cssClass="vertical-middle hide">		    		
 		    		<span class="sub-title-span marR16"><liferay-ui:message key="ecrf-user.crf-data.sheet-divide"/></span>
 	    			
     				<input type="radio" id="group" name="divideOption" class="marR8" value="group">
@@ -219,6 +219,19 @@
 		    		
     				<input type="radio" id="whole" name="divideOption" class="marR8" value="whole" checked = "checked">
 			    	<label for="whole">No Divide Group</label>
+		    	</aui:row>
+
+				<aui:row cssClass="vertical-middle hide">
+		    		<span class="sub-title-span marR16"><liferay-ui:message key="ecrf-user.crf-data.list-print-type"/></span>
+	    			
+    				<input type="radio" id="valueOnly" name="listPrint" class="marR8" value="0" checked>
+		    		<label for="valueOnly" class="marR16">Value only</label>
+
+    				<input type="radio" id="valueLabel" name="listPrint" class="marR8" value="1">
+					<label for="valueLabel" class="marR16">Value(Label)</label>
+
+    				<input type="radio" id="labelOnly" name="listPrint" class="marR8" value="2">
+					<label for="labelOnly">Label Only</label>
 		    	</aui:row>
 		    					
 		    	<aui:row cssClass="marTr">
@@ -284,12 +297,16 @@
 			upperDepthCheckbox.checked = true;
 		}
 		else{
-			upperDepthCheckbox.checked = false;
+			if(upperDepthCheckbox) {	//25-10-21: error occured when upperDepthCheckbox is not exist
+				upperDepthCheckbox.checked = false;
+			}
 		}
 
 		// If the subclassification is examined, the middle classification is also examined.
-		if(upperDepthCheckbox.id.includes('B')){
-			isAll(upperDepthCheckbox.id);
+		if(upperDepthCheckbox) { 	//25-10-21: error occured when upperDepthCheckbox is not exist
+			if(upperDepthCheckbox.id.includes('B')){
+				isAll(upperDepthCheckbox.id);
+			}
 		}
 	}
 	
@@ -300,6 +317,24 @@
         	list_ordered[obj[i].order - 1] = obj[i];
         }
         return list_ordered;
+	}
+	
+	function checkTermType(name) {
+		let type = "";
+		let term = null;
+		let inspectionData = JSON.parse(JSON.stringify(<%=json%>)).terms;
+		
+		for(var i = 0; i < inspectionData.length; i++){
+			if(inspectionData[i].termName === name){
+				term = inspectionData[i];
+			}
+		}
+		
+		if(term) {
+			type = term.termType;
+		}
+			
+		return type;
 	}
 	
 	// Graph Part
@@ -391,19 +426,29 @@
     			+ termFunc
     			+ '"/>';
 		}
-        			
-        contentText += '<label class="'
-        			+ classLabel
-        			+'" onClick="renderGraph(this);" for ="'
-        			+ termLabel
-        			+ '" name = "' 
-        			+ termName
-        			+ '">' 
+        
+		let type = checkTermType(termName);
+		let labelStyle = "";
+
+		// Paint the element(Term); List => Red / Numeric => Blue
+		if(type === "List") { labelStyle = "color: red!important;"; }
+		
+		if(type === "Numeric") { labelStyle = "color: blue!important;"; }
+
+        contentText += '<label class="'+ classLabel + '" '
+        			+' for ="'+ termLabel + '" '
+        			+ 'name = "'+ termName + '" '
+        			+ 'style="'+labelStyle + '" '
+        			+ '">'
         			+ displayName
-        			+ '<span class = "tooltip">'
-        			+ displayName
-        			+ '</span></label>';
-        			
+        			+ '<span class = "tooltip">' + displayName + '</span>'
+        			+ '</label>';
+        
+        // check term type
+        if(type === "List" || type === "Numeric"){
+        	contentText += '<img name="'+termName+'" class="clickable-icon bar-graph-icon marL4 marR4" width="14" height="14" onclick="renderGraph(this);"/>';
+        }
+        
         return contentText;
 	}
 
@@ -582,18 +627,6 @@
 		}
     }
     document.getElementById("searchText").innerHTML = contentText;
-    
-    // Paint the element(Term); List => Red / Numeric => Blue
-    for(var i = 0; i < inspectionData.length; i++){
-		if(inspectionData[i].termType === "List"){
-			var eleTerm = document.getElementsByName(inspectionData[i].termName);
-			eleTerm[0].setAttribute("style", "color: red!important;");
-		}
-		else if(inspectionData[i].termType === "Numeric"){
-			var eleTerm = document.getElementsByName(inspectionData[i].termName);
-			eleTerm[0].setAttribute("style", "color: blue!important;");
-		}
-	}
 </script>
 
 <script>
@@ -634,6 +667,45 @@
 </script>
 
 <script>
+	function getListPrintByPrintOption(value, options, printOption='1') {
+		let str = "";
+		let option = options.find(op => op.value == value);
+
+		switch(printOption) {
+			case '0':
+				str = value;
+			case '1':
+				str = value + "("+option.label.en_US+")";
+			case '2':
+				str = option.label.en_US;
+			default:
+				str = value + "("+option.label.en_US+")";
+				break;
+		}
+		return str;
+	}
+
+	function getListPrint(listVal, listOptions) {
+		let result = "";
+		if(!listVal) return result;
+		
+		let listPrintOption = $('input[name="listPrint"]:checked').val();
+		
+		// multi selection handling
+		if(typeof(listVal) === 'object'){ 
+			let sb = [];
+			for(const val of listVal) {
+				// empty object check
+				if(val !== '') sb.push(getListPrintByPrintOption(val, listOptions, listPrintOption));
+			}
+			// empty check
+			if(sb.length > 0) result = sb.join(", ");
+		} else if(typeof(listVal) === 'string'){	// old version data handling				
+			result = getListPrintByPrintOption(listVal, listOptions, listPrintOption);
+		}
+
+		return result;
+	}
 
 	// Make the Excel File And Download
 	function makeExcel(){
@@ -867,6 +939,8 @@
         		
     			if(termFirst.termType == 'Grid'){
     				lenGrid = Object.keys(termFirst.columnDefs).length;
+					// merge is overflowed when doesnt set header column when grid
+					nameFinal = termFirst.displayName.en_US;
         		}
     			
     			for(var j = 0; j < lenGrid; j++){
@@ -923,6 +997,10 @@
             	}
             	
             	for(var i = 0; i < (deleteIndex - 1); i++){
+					// 25-10-21: visit_date is handled at arrInfo
+					if(isVisit && checkedList[i].value == 'visit_date') {
+						continue;
+					}
     				var term_first = inspectionData.find(v => v.termName === checkedList[i].value);
 
             		if(term_first.termType == 'Grid'){
@@ -960,11 +1038,12 @@
     				var length_grid_max = 0;
     				
     				for(var j = 0; j < (deleteIndex - 1); j++){
-    					if(inspectionData.find(v => v.termName === checkedList[j].value).termType == 'Grid'){
-    						if(checkedList[j].value in answerData[i]){
+						const currnetTermName = checkedList[j].value;
+    					if(inspectionData.find(v => v.termName === currnetTermName).termType == 'Grid'){
+    						if(currnetTermName in answerData[i]){
     							
-    							if(length_grid_max < Object.keys(answerData[i][checkedList[j].value]).length){
-        							length_grid_max = Object.keys(answerData[i][checkedList[j].value]).length;
+    							if(length_grid_max < Object.keys(answerData[i][currnetTermName]).length){
+        							length_grid_max = Object.keys(answerData[i][currnetTermName]).length;
         						}
     						}
     						else{
@@ -975,6 +1054,7 @@
     						}
     					}
     				}
+
     				// insert real data per grid max length
     				for(var j = 0; j < length_grid_max; j++){
     					arrRow = [];
@@ -986,12 +1066,27 @@
                 		// The method of putting data in each type is different, so it is processed as follows
                 		for(var k = 0; k < (deleteIndex - 1); k++){
                 			var Data_answer = "";
-                			if(checkedList[k].value in answerData[i]){
-                				Data_answer = answerData[i][checkedList[k].value];
+							const currnetTermName = checkedList[k].value;
+
+                			if(currnetTermName in answerData[i]){	// set value when exist
+                				Data_answer = answerData[i][currnetTermName];
+								
+								// 25-10-21: termType == 'List' -> value / value(label) / label
+								const currentTerm = inspectionData.find(v => v.termName === currnetTermName); 
+								if(currentTerm.termType == 'List'){
+									let listVal = answerData[i][currnetTermName];
+									let listOptions = currentTerm.options;
+									// empty string array check
+									//console.log(typeof(listVal), currentTerm, listVal, listOptions)
+
+									Data_answer = getListPrint(listVal, listOptions);
+								}
+								// 25-10-21: termType == 'List' -> value / value(label) / label
                 			}
                 			else{
-                				if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
-                					var no_answer = Object.keys(inspectionData.find(v => v.termName === checkedList[k].value).columnDefs).length;
+								// add blank as grid column length
+                				if(inspectionData.find(v => v.termName === currnetTermName).termType == 'Grid'){
+                					var no_answer = Object.keys(inspectionData.find(v => v.termName === currnetTermName).columnDefs).length;
                     				for(var l = 0; l < no_answer; l++){
                     					arrRow.push("");
                     				}
@@ -1001,12 +1096,13 @@
                 				}
                 				continue;
                 			}
-        					if(j == 0){
-        						if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Date'){
+
+        					if(j == 0){	// grid 1st row
+        						if(inspectionData.find(v => v.termName === currnetTermName).termType == 'Date'){
         							Data_answer = getDateData(Data_answer);
         						}
-        						else if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
-        							var gridInfo = inspectionData.find(v => v.termName === checkedList[k].value).columnDefs;
+        						else if(inspectionData.find(v => v.termName === currnetTermName).termType == 'Grid'){
+        							var gridInfo = inspectionData.find(v => v.termName === currnetTermName).columnDefs;
         							var list_key = Object.keys(gridInfo);
         							var list_order = [];
         							for(var l = 0; l < list_key.length; l++){
@@ -1022,9 +1118,9 @@
         						
         						arrRow.push(Data_answer);
         					}
-        					else{
-        						if(inspectionData.find(v => v.termName === checkedList[k].value).termType == 'Grid'){
-        							var gridInfo = inspectionData.find(v => v.termName === checkedList[k].value).columnDefs;
+        					else{	// grid 2~n row
+        						if(inspectionData.find(v => v.termName === currnetTermName).termType == 'Grid'){
+        							var gridInfo = inspectionData.find(v => v.termName === currnetTermName).columnDefs;
         							var list_key = Object.keys(gridInfo);
         							if(j < Object.keys(Data_answer).length){
         								var list_order = [];
@@ -1033,7 +1129,20 @@
             							}
             							for(var l = 0; l < list_order.length; l++){
             								var strIndex = (j + 1).toString();
-            								arrRow.push(Data_answer[strIndex][list_order[l]]);
+
+											// 25-10-21: termType == 'List' -> value / value(label) / label
+											const columnTermName = list_order[l];
+											const columnTerm = gridInfo[columnTermName];
+
+											if( columnTerm && columnTerm.termType === 'List' ) {
+												const columnVal = Data_answer[strIndex][columnTermName];	// list => "3", only single value
+												const listOptions = columnTerm.options;
+
+												arrRow.push(getListPrint(columnVal, listOptions));
+											}
+											 else {
+												arrRow.push(Data_answer[strIndex][columnTermName]);	
+											}
             							}
         							}
         							else{
@@ -1066,13 +1175,26 @@
             		for(var j = 0; j < (deleteIndex - 1); j++){
             			var Obj_PatientAnswer = answerData[i];
             			var Data_answer ="";
-            			if(checkedList[j].value == 'visit_date' && isVisit){
+						const currentTermName = checkedList[j].value;
+            			if(currentTermName == 'visit_date' && isVisit){
             				continue;
             			}
-            			Data_answer = getProperty(Obj_PatientAnswer, checkedList[j].value);
+            			Data_answer = getProperty(Obj_PatientAnswer, currentTermName);
+
+						// 25-10-21: termType == 'List' -> value(label);
+
+						if(inspectionData.find(v => v.termName === currentTermName).termType == 'List'){
+							let listVal = getProperty(Obj_PatientAnswer, currentTermName);
+							let listTerm = inspectionData.find(v => v.termName === currentTermName);
+							let listOptions = listTerm.options;
+							//console.log(listTerm, listVal, listOptions);
+							
+							Data_answer = getListPrint(listVal, listOptions);
+						}
+						// 25-10-21: termType == 'List' -> value(label);
 
             			// termType == 'Date' -> milliseconds to date
-            			if(inspectionData.find(v => v.termName === checkedList[j].value).termType == 'Date'){
+            			if(inspectionData.find(v => v.termName === currentTermName).termType == 'Date'){
             				Data_answer = getDateData(Data_answer);
             			}
             			
@@ -1089,7 +1211,7 @@
     			console.log("9.2 End");
     			
     		}
-        	
+
         	// Name each sheet, put the aoa variable in Excel, and put the aoa variable in the sheet
         	var excelHandler = {
                     getSheetName : function(){
@@ -1114,10 +1236,13 @@
          	if(<%=isSearch%>){
          		if(isGrid){
          			console.log("isSearch = yes, isGrid = yes");
+					// subject info and visit date
          			for(var i = 0; i < arrInfo.length; i++){
                         let test = { s: {c: i, r: 2}, e: {c: i, r: 5}};
                         merge.push(test);
                     }
+
+					// depth 1 ~ 3
          			for(var i = 2; i < 5; i++){
          				let mergeResult =[];
          				let start = 0;
@@ -1129,26 +1254,33 @@
          					}
          				}
          				
-         				if(i == 1){
+         				if(i == 2) {
          					mergeResult.splice(0, arrInfo.length);
          				}
-         				else if(i == 2){
+         				else if(i == 3) {
          					mergeResult.splice(0, 1);
-         				}
+         				} 
+						else if(i == 4) {	// 25-10-21: for grid, need to remove first one => [0,4] (infoArr)
+							mergeResult.splice(0, 1);
+						}
          				
              			for(var j = 0; j < mergeResult.length; j++){
-             				var merge_range = { s: {c: mergeResult[j][0], r: i}, e: {c: mergeResult[j][1], r: i}};
-                    		merge.push(merge_range);
+							if(mergeResult[j][0] != mergeResult[j][1]) {	// 25-10-21: if not merge just one cell
+								var merge_range = { s: {c: mergeResult[j][0], r: i}, e: {c: mergeResult[j][1], r: i}};
+								merge.push(merge_range);
+							}
              			}
          			}
          		}
          		else{
          			console.log("isSearch = yes, isGrid = no");
+					// subject info and visit date
          			for(var i = 0; i < arrInfo.length; i++){
                         let test = { s: {c: i, r: 2}, e: {c: i, r: 4}};
                         merge.push(test);
                     }
          			
+					// depth 1 ~ 3
          			for(var i = 2; i < 4; i++){
          				let mergeResult =[];
          				let start = 0;
@@ -1168,8 +1300,10 @@
          				}
          				
              			for(var j = 0; j < mergeResult.length; j++){
-             				var merge_range = { s: {c: mergeResult[j][0], r: i}, e: {c: mergeResult[j][1], r: i}};
-                    		merge.push(merge_range);
+             				if(mergeResult[j][0] != mergeResult[j][1]) {	// 25-10-21: if not merge just one cell
+								var merge_range = { s: {c: mergeResult[j][0], r: i}, e: {c: mergeResult[j][1], r: i}};
+								merge.push(merge_range);
+							}
              			}
          			}
          		}
@@ -1177,11 +1311,13 @@
          	else{
          		if(isGrid){
          			console.log("isSearch = no, isGrid = yes");
+					// subject info, and visit date
          			for(var i = 0; i < arrInfo.length; i++){
                         let test = { s: {c: i, r: 1}, e: {c: i, r: 4}};
                         merge.push(test);
                     }
          			
+					// depth 1~3
          			for(var i = 1; i < 4; i++){
          				let mergeResult =[];
          				let start = 0;
@@ -1193,26 +1329,33 @@
          					}
          				}
          				
-         				if(i == 1){
+         				if(i == 1) {
          					mergeResult.splice(0, arrInfo.length);
          				}
-         				else if(i == 2){
+         				else if(i == 2) {
          					mergeResult.splice(0, 1);
-         				}
+         				} 
+						else if(i == 3) {	// 25-10-21: for grid need to remove first one => [0,4] (infoArr)
+							mergeResult.splice(0, 1);
+						}
          				
              			for(var j = 0; j < mergeResult.length; j++){
-             				var merge_range = { s: {c: mergeResult[j][0], r: i}, e: {c: mergeResult[j][1], r: i}};
-                    		merge.push(merge_range);
+							if(mergeResult[j][0] != mergeResult[j][1]) {	// 25-10-21: if not merge just one cell
+								var merge_range = { s: {c: mergeResult[j][0], r: i}, e: {c: mergeResult[j][1], r: i}};
+								merge.push(merge_range);
+							}
              			}
          			}
          		}
          		else{
          			console.log("isSearch = no, isGrid = no");
+					// subject info and visit date
          			for(var i = 0; i < arrInfo.length; i++){
                         let test = { s: {c: i, r: 1}, e: {c: i, r: 3}};
                         merge.push(test);
                     }
          			
+					// depth 1~3
          			for(var i = 1; i < 3; i++){
          				let mergeResult =[];
          				let start = 0;
@@ -1232,13 +1375,15 @@
          				}
          				
              			for(var j = 0; j < mergeResult.length; j++){
-             				var merge_range = { s: {c: mergeResult[j][0], r: i}, e: {c: mergeResult[j][1], r: i}};
-                    		merge.push(merge_range);
+             				if(mergeResult[j][0] != mergeResult[j][1]) {	// 25-10-21: if not merge just one cell
+								var merge_range = { s: {c: mergeResult[j][0], r: i}, e: {c: mergeResult[j][1], r: i}};
+								merge.push(merge_range);
+							}
              			}
          			}
          		}
          	}
-            
+
          	// If you put all the coordinate information, cell merge.
             newWorksheet["!merges"] = merge;
          	
@@ -1277,7 +1422,6 @@
 </script>
 
 <script>
-
 	var hw = document.getElementById('btn_1');
 	hw.addEventListener('click', makeExcel);
 </script>

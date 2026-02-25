@@ -1,3 +1,7 @@
 eclipse.preferences.version=1
+encoding//src/main/java/ecrf/user/crf/command/render/data/teeth/HistoryPopupRenderCommand.java=UTF-8
 encoding//src/main/java/ecrf/user/crf/command/render/form/PDFDownloadRenderCommand.java=UTF-8
+encoding//src/main/java/ecrf/user/crf/command/resource/teeth/GetTeethHistoryResourceCommand.java=UTF-8
+encoding//src/main/java/ecrf/user/crf/command/resource/teeth/addTeethTreatmentResourceCommand.java=UTF-8
+encoding//src/main/java/ecrf/user/crf/util/data/DisplayHistory.java=UTF-8
 encoding//src/main/resources/META-INF/resources/html/crf/update-crf.jsp=UTF-8

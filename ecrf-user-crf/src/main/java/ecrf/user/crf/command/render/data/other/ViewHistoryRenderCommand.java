@@ -148,6 +148,7 @@ public class ViewHistoryRenderCommand implements MVCRenderCommand {
 			renderRequest.setAttribute(ECRFUserCRFDataAttributes.TERM_LIST, termList);
 			renderRequest.setAttribute(ECRFUserCRFDataAttributes.SUBJECT, subject);
 			renderRequest.setAttribute(ECRFUserAttributes.CREATE_DATE, createDate);
+			renderRequest.setAttribute(ECRFUserCRFDataAttributes.HISTORY_ID, historyId);
 		}
 
 		return ECRFUserJspPaths.JSP_CRF_DATA_VIEW_HISTORY;

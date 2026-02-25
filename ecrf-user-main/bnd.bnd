@@ -2,6 +2,8 @@ Bundle-Name: ecrf-user-main
 Bundle-SymbolicName: ecrf.user.main
 Bundle-Version: 1.0.0
 
+Web-ContextPath: /ecrf.user.main
+
 -privatepackage: \
 	ecrf.user.constants,\
 	ecrf.user.model.custom,\

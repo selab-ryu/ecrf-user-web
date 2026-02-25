@@ -191,7 +191,7 @@ public class UpdateCRFDataActionCommand extends BaseMVCActionCommand{
 				if(prevHistory.getStructuredDataId() == sdId) break;
 			}
 			
-			_historyLocalService.addCRFHistory(subject.getName(), subjectId, subject.getSerialId(), sd.getPrimaryKey(), crfId, prevHistory.getCurrentJSON(), answers.toJSONString(), 0, "1.0.0", crfHistoryServiceContext);
+			_historyLocalService.addCRFHistory(subject.getName(), subjectId, subject.getSerialId(), sd.getPrimaryKey(), crfId, prevHistory.getCurrentJSON(), answers.toJSONString(), 1, "1.0.0", crfHistoryServiceContext);
 			_queryLocalService.checkQuery(sd.getPrimaryKey(), crfForm, answers, subjectId, crfId, queryServiceContext);
 		}
 		

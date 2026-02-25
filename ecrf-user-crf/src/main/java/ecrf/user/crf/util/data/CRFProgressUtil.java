@@ -40,9 +40,14 @@ public class CRFProgressUtil {
 		int progressPercent = 0;
 		JSONArray crfForm = getCRFForm();
 		if(Validator.isNotNull(crfForm)) {
-			int totalLength = crfForm.length();
-			JSONObject activeTermsPackage = getActiveTermPackage(crfForm);
-			totalLength = calculateActiveTermsNum(activeTermsPackage, totalLength);
+			int totalLength = crfForm.length();	// total term count
+			JSONObject activeTermsPackage = getActiveTermPackage(crfForm);	// ative term count
+			
+			// temp method
+			// minus active term count from total term count
+			// totalLength = calculateActiveTermsNum(activeTermsPackage, totalLength); 
+
+			// answer item count / total term count
 			progressPercent = answerForm.length() * 100 / totalLength ;
 		}
 		
@@ -227,23 +232,27 @@ public class CRFProgressUtil {
 	}
 	
 	private int calculateActiveTermsNum(JSONObject activeTermsPackage, int totalLength) {
-		int calculatedLength = totalLength;
+		// recursive function for calculate group's item count
+		
+		int calculatedLength = totalLength;	// total term count
 		Iterator<String> activeTermIter = activeTermsPackage.keys();
 		Iterator<String> answerTermIter = answerForm.keys();
 		List<String> activeTermNames = new ArrayList<String>();
 		List<String> answerTermNames = new ArrayList<String>();
-		while(activeTermIter.hasNext()) {
+		while(activeTermIter.hasNext()) {	// active term key List
 			String activeTermKey = activeTermIter.next();
 			activeTermNames.add(activeTermKey);
 		}
 		
-		while(answerTermIter.hasNext()) {
+		while(answerTermIter.hasNext()) {	// answer term key List
 			String answerTermKey = answerTermIter.next();
 			answerTermNames.add(answerTermKey);
 		}
-		for(String activeTermName : activeTermNames) {
-			for(String answerTermName: answerTermNames) {
-				if(activeTermName.equals(answerTermName)){
+		
+		for(String activeTermName : activeTermNames) {			// iterate by active terms
+			for(String answerTermName: answerTermNames) {	// iterate by answer terms
+				if(activeTermName.equals(answerTermName)){	// if active temr == answer term
+					// minus active term's child term count from total term count
 					calculatedLength -= activeTermsPackage.getJSONObject(activeTermName).getInt("length");
 				}
 			}
