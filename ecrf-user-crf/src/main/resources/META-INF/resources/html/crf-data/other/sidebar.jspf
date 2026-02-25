@@ -40,6 +40,10 @@
 	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
 </portlet:renderURL>
 
+<portlet:renderURL var="moveTeethDataURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_TEETH_DATA %>" />
+	<portlet:param name="<%=ECRFUserCRFAttributes.CRF_ID %>" value="<%=String.valueOf(crfId) %>" />
+</portlet:renderURL>
 
 <portlet:renderURL var="moveCRFQueryListURL">
 	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME %>" value="<%=ECRFUserMVCCommand.RENDER_LIST_CRF_QUERY %>" />
@@ -123,6 +127,39 @@
 	</div>
 	</c:if>
 	
+	<%
+	boolean isTeethShow = false;
+	_log.info("sidbar crf id check : " + crfId);
+	
+	// check crf name and set teeth show flag
+	if(dataTypeId > 0) {
+		DataType currentDT = DataTypeLocalServiceUtil.getDataType(dataTypeId);
+		if(Validator.isNotNull(currentDT)) {
+			String dtName = currentDT.getDataTypeName();
+			_log.info(dtName);
+			
+			if(dtName.equals("ym_dental_crf")) {
+				isTeethShow = true;
+			}
+		}
+	}
+	
+	_log.info("is teeth show : " + isTeethShow);
+	
+	List<String> teethDataListMenu = new ArrayList<>();
+	teethDataListMenu.add(ECRFUserMenuConstants.LIST_TEETH_DATA);
+	teethDataListMenu.add(ECRFUserMenuConstants.VIEW_TEETH_DATA);
+	%>
+	
+	<c:if test="<%=isTeethShow %>">
+	<div>
+		<a id="teethMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, TagAttrUtil.TYPE_MENU, teethDataListMenu.toArray(new String[0]))%>" href="<%=moveTeethDataURL%>">
+       		<img class="teeth-data-icon" />
+			<span><liferay-ui:message key="ecrf-user.menu.crf-data.teeth-data" /></span>
+		</a>
+	</div>
+	</c:if>
+	
 	<c:if test="<%=CRFPermission.contains(permissionChecker, scopeGroupId, ECRFUserActionKeys.VIEW_CRF_HISTORY_LIST) %>">
 	<div>
 		<a id="historyListMenu" class="dh-sidebar left-top-cut-border sub-menu<%=TagAttrUtil.active(menu, ECRFUserMenuConstants.LIST_HISTORY, TagAttrUtil.TYPE_MENU)%>" href="<%=moveCRFDataHistoryListURL%>">
@@ -149,7 +186,6 @@
 		</a>
 	</div>
 	</c:if>
-	
 	
 	<div>
 		<a class="dh-sidebar menu-main active" name="CRFQuery" href="javascript:void(0);">
@@ -196,7 +232,7 @@
 	<!-- crf list on side menu => move to that crf -->
 	<div>
 		<div class="current-crf">
-			<strong><liferay-ui:message key="ecrf-user.menu.all-crf" /></strong>
+			<strong><liferay-ui:message key="ecrf-user.menu.crf-list" /></strong>
 			<%for(int i=0; i<allCRFList.size(); i++) { %>
 			<%
 				CRF tempCRF = allCRFList.get(i);

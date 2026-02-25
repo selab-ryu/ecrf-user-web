@@ -180,7 +180,7 @@ if(isSearch) {
 								<img class="search-icon" />
 								<span><liferay-ui:message key="ecrf-user.button.search" /></span>
 							</button>
-							<button id="<portlet:namespace/>clear" type="button" class="br20 dh-icon-button submit-btn clear-btn white-text w130 h40 active" onclick=".location.href='<%=clearSearchURL%>'">
+							<button id="<portlet:namespace/>clear" type="button" class="br20 dh-icon-button submit-btn clear-btn white-text w130 h40 active" onclick="location.href='<%=clearSearchURL%>'">
 								<img class="clear-icon" />							
 								<span><liferay-ui:message key="ecrf-user.button.clear" /></span>
 							</button>

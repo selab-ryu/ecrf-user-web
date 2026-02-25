@@ -5,11 +5,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -30,6 +27,7 @@ import ecrf.user.constants.ECRFUserPortletKeys;
 import ecrf.user.constants.attribute.ECRFUserCRFDataAttributes;
 import ecrf.user.model.CRFHistory;
 import ecrf.user.service.CRFHistoryLocalService;
+import ecrf.user.service.CRFLocalService;
 
 @Component(
 	    immediate = true,
@@ -60,6 +58,21 @@ public class DialogAuditTrailRenderCommand implements MVCRenderCommand {
 
 		_log.info("history list size : " + crfHistoryList.size());
 		
+		
+		JSONArray formArr = null;
+		long dataTypeId = 0;
+				
+		if(crfId > 0) {
+			try {
+				dataTypeId = _crfLocalService.getDataTypeId(crfId);
+				String crfFormStr = _dataTypeLocalService.getDataTypeStructure(dataTypeId);
+				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(crfFormStr);
+				formArr = jsonObject.getJSONArray("terms");
+			} catch (Exception e) {
+				throw new PortletException("Cannot find subject : " + subjectId);
+			}
+		}
+				
 		JSONObject currentHistory = null;
 		JSONObject previousHistory = null;
 		String actionType = "";
@@ -76,15 +89,24 @@ public class DialogAuditTrailRenderCommand implements MVCRenderCommand {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			JSONObject curTerm = searchArrObj(formArr, "termName", termName);
+			String termType = curTerm.getString("termType");
+			
 			if(currentHistory.has(termName) && !previousHistory.has(termName)) {
 				actionType = "add";
 				specificTerm.put("displayName", displayName);
 				specificTerm.put("modifiedDate", crfHistoryList.get(i).getCreateDate());
 				specificTerm.put("curValue", currentHistory.getString(termName));
+				if(termType.equals("List")) {
+					String val = getOptionValue(currentHistory.getString(termName));
+					// TODO: get list option's label
+				}
 				String userEmail = PortalUtil.getUserEmailAddress(userId);
 				specificTerm.put("userName", crfHistoryList.get(i).getUserName());
 				specificTerm.put("userId", userEmail);
 				specificTerm.put("preValue", "");
+				specificTerm.put("preLabel", "");
 				specificTerm.put("actionType", actionType);
 				specificTermArr.put(specificTerm);
 			}else if(currentHistory.has(termName) && previousHistory.has(termName)) {
@@ -108,7 +130,36 @@ public class DialogAuditTrailRenderCommand implements MVCRenderCommand {
 		return ECRFUserJspPaths.JSP_DIALOG_CRF_DATA_AUDIT;
 	} 
 	
+	// pre-process list options value
+	private String getOptionValue(String value) {
+		// remove [, ], \"
+		value = value.replaceAll("\"", "");
+		value = value.replaceAll("\\[", "");
+		value = value.replaceAll("\\]", "");
+		value.trim();
+		
+		return value;
+	}
+	
+	// get option's label
+	private String getOptionLabel(JSONObject term, String value) {
+		return "";
+	}
+	
+	private JSONObject searchArrObj(JSONArray arr, String key, String value) {		
+		for (int i = 0; i < arr.length(); i++) {
+            JSONObject jsonObject = arr.getJSONObject(i);
+            if (jsonObject.has(key) && jsonObject.getString(key).equals(value)) {
+                return jsonObject;
+            }
+        }
+		return null;
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(DialogAuditTrailRenderCommand.class);
+	
+	@Reference
+	private CRFLocalService _crfLocalService;
 	
 	@Reference
 	private CRFHistoryLocalService _crfHistoryLocalService;

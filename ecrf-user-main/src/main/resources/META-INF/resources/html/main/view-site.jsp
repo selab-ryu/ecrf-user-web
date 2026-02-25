@@ -1,3 +1,6 @@
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portal.kernel.events.LifecycleEvent"%>
+<%@page import="com.liferay.portal.kernel.cache.thread.local.Lifecycle"%>
 <%@ include file="../init.jsp" %>
 
 <%! private static Log _log = LogFactoryUtil.getLog("html/main/view-site_jsp"); %>
@@ -6,6 +9,8 @@
 	SiteDisplayContext siteDisplayContext = new SiteDisplayContext(renderRequest, renderResponse);
 	boolean signedIn = themeDisplay.isSignedIn();
 	if(!signedIn) _log.info("not logged in");
+	
+	String crfNamespace = "_"+ECRFUserPortletKeys.CRF+"_";
 %>
 
 <style>
@@ -16,7 +21,8 @@
 
 <liferay-ui:error embed="<%= false %>" key="membershipAlreadyRequested" message="membership-was-already-requested" />
 
-<div class="ecrf-user pad1R">
+<div class="ecrf-user">
+<div class="mar1r">
 
 <liferay-ui:header title="ecrf-user.main.title.view-my-site" />
 
@@ -81,8 +87,15 @@
 			List<CRF> mySiteCRFList = CRFLocalServiceUtil.getCRFByGroupId(group.getGroupId()); 
 			//_log.info(crfList.size());
 			
+			Map<String, String[]> urlParams = new HashMap<>();
+			urlParams.put(crfNamespace+ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, new String[] {ECRFUserMVCCommand.RENDER_LIST_CRF_DATA});
+			
 			for(int i=0; i<mySiteCRFList.size(); i++ ) {
 				CRF crf = mySiteCRFList.get(i);
+				
+				long crfId = crf.getCrfId();
+				urlParams.put(crfNamespace+ECRFUserCRFAttributes.CRF_ID, new String[] {String.valueOf(crfId)});
+				
 				DataType dataType = DataTypeLocalServiceUtil.getDataType(crf.getDatatypeId());
 				if(Validator.isNotNull(dataType)) {
 					//_log.info("datatype check");
@@ -103,6 +116,14 @@
 					}
 					
 					dataTypePrint = (i+1) + StringPool.PERIOD + StringPool.SPACE + dataType.getDisplayName();
+					
+					PortletURL portletURL = PortalUtil.getControlPanelPortletURL(request, group, ECRFUserPortletKeys.CRF, scopeGroupId, 0, PortletRequest.RENDER_PHASE);
+					//portletURL.setParameter(ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME, ECRFUserMVCCommand.RENDER_LIST_CRF_DATA);
+					portletURL.setParameters(urlParams);	
+					//_log.info("Get Control Panel Portlet URL : " + portletURL.toString());
+					
+					String crfDataListURL = PortalUtil.getControlPanelFullURL(group.getGroupId(), ECRFUserPortletKeys.CRF, urlParams);
+					//_log.info("child site control panel url : " + crfDataListURL);
 					
 					/*
 					if(isEmpty) {
@@ -220,4 +241,45 @@
 	
 </liferay-ui:search-container>
 
+<portlet:renderURL var="viewRequestSelfSiteURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_REQUEST_SELF_SITE %>" />
+</portlet:renderURL>
+
+<portlet:renderURL var="listSelfSiteRequestURL">
+	<portlet:param name="<%=ECRFUserWebKeys.MVC_RENDER_COMMAND_NAME%>" value="<%=ECRFUserMVCCommand.RENDER_LIST_SELF_SITE_REQUEST %>" />
+</portlet:renderURL>
+
+<div>
+	<aui:button type="button" name="downloadManual" cssClass="btn-primary marR10" value="ecrf-user.main.download-manual" />
+	<aui:button type="button" name="requestSelfSite" cssClass="btn-primary marR10" value="ecrf-user.main.request-self-site" onClick="<%=viewRequestSelfSiteURL %>" />
+	<c:if test="<%=isAdmin %>">
+	<aui:button type="button" name="listSelfSiteRequest" cssClass="btn-primary" value="ecrf-user.main.list-self-site-request" onClick="<%=listSelfSiteRequestURL %>" />
+	</c:if>
 </div>
+
+</div>
+</div>
+
+<script>
+  document.getElementById('<portlet:namespace/>downloadManual').addEventListener('click', async () => {
+    const url = '/o/ecrf.user.main/files/SMART-CRF_User_Guide_Manual.pdf';
+
+    // 교차 출처면 서버에서 CORS(Access-Control-Allow-Origin) 허용이 필요
+    const res = await fetch(url, { mode: 'cors' });
+    if (!res.ok) { alert('파일을 가져오지 못했습니다.'); return; }
+
+    const blob = await res.blob(); // application/pdf
+    const objectUrl = URL.createObjectURL(blob);
+
+    // a 태그를 생성해 강제 클릭
+    const a = document.createElement('a');
+    a.href = objectUrl;
+    a.download = 'smart-crf user manual.pdf'; // 원하는 저장 파일명
+    document.body.appendChild(a);
+    a.click();
+
+    // 정리
+    a.remove();
+    URL.revokeObjectURL(objectUrl);
+  });
+</script>
